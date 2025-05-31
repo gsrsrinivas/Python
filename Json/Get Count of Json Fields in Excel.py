@@ -4,7 +4,7 @@ import json
 
 
 # Read the Excel file
-df = pd.read_excel('path/to/your_file.xlsx')
+df = pd.read_excel('../Files Input/json_data.xlsx')
 json_field_count = 0
 
 

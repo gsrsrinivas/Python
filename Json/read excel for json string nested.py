@@ -3,7 +3,7 @@ import json
 from collections import defaultdict
 
 # Read the Excel file
-df = pd.read_excel('path/to/your_file.xlsx')
+df = pd.read_excel('../Files Input/json_data.xlsx')
 
 # Store key and value types per column
 column_key_types = defaultdict(set)

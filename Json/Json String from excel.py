@@ -11,7 +11,7 @@ file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
 parent_folder = Path.cwd().parent
 folder_path = parent_folder / "Src Files Json"
 # Set your input and output folder paths
-output_folder = folder_path / "OutPutFiles"
+output_folder = folder_path / "Files Output"
 output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
 
 input_path = folder_path

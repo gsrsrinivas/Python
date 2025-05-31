@@ -28,4 +28,4 @@ sample_data = [json.dumps(generate_sample_json(i)) for i in range(1, 101)]
 
 # Create a DataFrame and save to Excel
 df = pd.DataFrame({"json_data": sample_data})
-df.to_excel("100_sample_json_strings.xlsx", index=False)
+df.to_excel("../Files Output/100_sample_json_strings.xlsx", index=False)

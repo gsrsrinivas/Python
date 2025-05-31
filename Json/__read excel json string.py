@@ -8,7 +8,9 @@ print(f"input folder path and output folder path are\n{in_path}\n{out_path}")
 
 import pandas as pd
 
-df = pd.read_excel(r'C:\Users\gsrsr\Documents\pythonProject\Files InPut\nested_json_as_string_1000.xlsx')  # Replace with your file path
+input_file_path = r'../Files Input\nested_json_as_string_1000.xlsx'
+print(f"input file path is:{input_file_path}")
+df = pd.read_excel(input_file_path)  # Replace with your file path
 import json
 
 def is_json(val):
@@ -43,5 +45,5 @@ for col in df.columns:
             continue
 
 result_df = pd.DataFrame(records)
-result_df.to_excel('2025-05-31--12-00-00--json_key_value_types.xlsx', index=False)
+result_df.to_excel('../Files Output/2025-05-31--12-00-00--json_key_value_types.xlsx', index=False)
 print(result_df)

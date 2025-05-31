@@ -4,12 +4,12 @@ import os
 from collections import defaultdict
 
 # Set your input and output file paths
-input_folder = 'path/to/your/folder'
-input_filename = 'your_file.xlsx'
+input_folder = '../Files Input'
+input_filename = 'json_data.xlsx'
 output_filename = 'json_types_summary.xlsx'
 
 input_path = os.path.join(input_folder, input_filename)
-output_path = os.path.join(input_folder, output_filename)
+output_path = os.path.join("../Files Output", output_filename)
 
 # Read the Excel file
 df = pd.read_excel(input_path)

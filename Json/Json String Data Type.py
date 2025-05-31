@@ -93,6 +93,6 @@ def process_folder_with_type_tracking(folder_path, output_excel):
 
 # Example usage:
 # Replace this with the actual folder path
-folder_path = "C:/Users/gsrsr/Downloads/Json Files"
-output_df = process_folder_with_type_tracking(folder_path,folder_path+"/OutputFiles/2025-05-30--07-40-00--json_nested_type_summary.xlsx")
+folder_path = "../Files Input"
+output_df = process_folder_with_type_tracking(folder_path,folder_path+"/Files Output/2025-05-30--07-40-00--json_nested_type_summary.xlsx")
 print(output_df)

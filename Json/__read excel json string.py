@@ -43,5 +43,5 @@ for col in df.columns:
             continue
 
 result_df = pd.DataFrame(records)
-result_df.to_excel('json_key_value_types.xlsx', index=False)
+result_df.to_excel('2025-05-31--12-00-00--json_key_value_types.xlsx', index=False)
 print(result_df)

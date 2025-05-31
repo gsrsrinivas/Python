@@ -8,7 +8,7 @@ print(f"input folder path and output folder path are\n{in_path}\n{out_path}")
 
 import pandas as pd
 
-input_file_path = r'../Files Input\nested_json_as_string_1000.xlsx'
+input_file_path = r'../Files Input/nested_json_as_string_1000.xlsx'
 print(f"input file path is:{input_file_path}")
 df = pd.read_excel(input_file_path)  # Replace with your file path
 import json

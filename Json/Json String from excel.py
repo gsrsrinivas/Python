@@ -1,21 +1,23 @@
 import pandas as pd
 import json
+from collections import defaultdict
+## --------------------------------------------------------------------------------------------- ##
 import os
 from pathlib import Path
-from collections import defaultdict
 from datetime import datetime, timedelta
 
 file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
-
-# parent_folder = os.path.abspath(os.path.join(os.getcwd(), ".."))  # Moves up one folder
-parent_folder = Path.cwd().parent  # Gets the parent directory of the current working directory
-
-folder_path = parent_folder / "Source Files Json"
+# Gets the parent directory of the current working directory
+parent_folder = Path.cwd().parent
+folder_path = parent_folder / "Src Files Json"
 # Set your input and output folder paths
-input_folder = folder_path
-output_folder = input_folder / "OutPutFiles"
+output_folder = folder_path / "OutPutFiles"
 output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
+
+input_path = folder_path
 output_path = os.path.join(output_folder, output_filename)
+## --------------------------------------------------------------------------------------------- ##
+
 
 def flatten_json(data, parent_key=''):
     """
@@ -75,9 +77,9 @@ def collect_types(obj):
 all_results = []
 
 # Loop through all Excel files in the folder
-for filename in os.listdir(input_folder):
+for filename in os.listdir(input_path):
     if filename.endswith('.xlsx') and not filename.startswith('~$'):  # Skip temporary files
-        file_path = os.path.join(input_folder, filename)
+        file_path = os.path.join(input_path, filename)
         df = pd.read_excel(file_path)
         column_key_types = defaultdict(set)
         column_value_types = defaultdict(set)

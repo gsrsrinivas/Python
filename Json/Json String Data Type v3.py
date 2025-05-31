@@ -1,3 +1,4 @@
+# getting error
 import os
 import pandas as pd
 import json
@@ -97,5 +98,5 @@ def process_folder(folder_path):
 
 
 # Example usage:
-folder_path = "C:/Users/gsrsr/Downloads/Json Files"  # Update this with the actual folder path
+folder_path = "C:/Users/gsrsr/Documents/pythonProject/Files InPut"  # Update this with the actual folder path
 process_folder(folder_path)

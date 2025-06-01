@@ -23,9 +23,13 @@ def generate_sample_json(index):
         "available": random.choice([True, False])
     }
 
-# Create 100 samples
-sample_data = [json.dumps(generate_sample_json(i)) for i in range(1, 101)]
+def generate_sample_json_example():
+    # Create 100 samples
+    sample_data = [json.dumps(generate_sample_json(i)) for i in range(1, 101)]
 
-# Create a DataFrame and save to Excel
-df = pd.DataFrame({"json_data": sample_data})
-df.to_excel("../Files Output/100_sample_json_strings.xlsx", index=False)
+    # Create a DataFrame and save to Excel
+    df = pd.DataFrame({"json_data": sample_data})
+    df.to_excel("../Files Output/100_sample_json_strings.xlsx", index=False)
+
+if __name__ == "__main__":
+    generate_sample_json_example()

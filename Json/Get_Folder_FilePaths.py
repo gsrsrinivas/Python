@@ -1,4 +1,5 @@
 import os
+import json
 from Get_Input_Output_Paths import get_file_paths
 
 def list_files_by_extensions(folder_path, extensions=('.csv', '.xlsx', '.xls', '.parquet')):
@@ -15,12 +16,16 @@ def list_files_by_extensions(folder_path, extensions=('.csv', '.xlsx', '.xls', '
                 matched_files.append(os.path.join(root, file))
     return matched_files
 
-# Example usage:
-if __name__ == "__main__":
-    import json
+def list_files_by_extensions_example():
+    # Example usage:
     folder, _ = get_file_paths()
     # folder = 'your_folder_path_here'
     ext = ('.csv', '.xlsx','.xls', '.parquet')
     files = list_files_by_extensions(folder, ext)
     files_format = json.dumps(files, indent=2)
     print(files_format)
+
+if __name__ == "__main__":
+    list_files_by_extensions_example()
+
+

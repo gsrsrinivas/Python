@@ -1,3 +1,5 @@
+import json
+
 def remove_none(obj):
     """
     Recursively remove None values from lists and dicts (including custom [{"key":..., "value":...}] format).
@@ -46,20 +48,21 @@ def custom_format(obj):
     else:
         return str(obj)
 
-# Example usage:
-import json
+def remove_none_example():
+    # Example usage:
+    input_json = '''[
+        {"key": "a", "value": 1},
+        {"key": "b", "value": [
+            {"key": "c", "value": 2},
+            {"key": "d", "value": [3,4,5]},
+            {"key": "e", "value": null}
+        ]},
+        {"key": "f", "value": null}
+    ]'''
+    parsed = json.loads(input_json)
+    cleaned = remove_none(parsed)
+    output_str = custom_format(cleaned)
+    print(output_str)
 
-input_json = '''[
-    {"key": "a", "value": 1},
-    {"key": "b", "value": [
-        {"key": "c", "value": 2},
-        {"key": "d", "value": [3,4,5]},
-        {"key": "e", "value": null}
-    ]},
-    {"key": "f", "value": null}
-]'''
-
-parsed = json.loads(input_json)
-cleaned = remove_none(parsed)
-output_str = custom_format(cleaned)
-print(output_str)
+if __name__ == "__main__":
+    remove_none_example()

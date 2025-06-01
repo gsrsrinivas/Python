@@ -8,19 +8,21 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import os
 
+def get_input_output_paths():
+    file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
+    # Gets the parent directory of the current working directory
+    parent_folder = Path.cwd().parent
+    folder_path = parent_folder / "Src Files Json"
+    output_folder = folder_path / "Files Output"
+    output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
 
-file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
-# Gets the parent directory of the current working directory
-parent_folder = Path.cwd().parent
-folder_path = parent_folder / "Src Files Json"
-output_folder = folder_path / "Files Output"
-output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
+    input_path = folder_path
+    output_path = os.path.join(output_folder, output_filename)
 
-input_path = folder_path
-output_path = os.path.join(output_folder, output_filename)
+    return input_path, output_path
 
-# read the file and output the data as Data Frame.
 def read_file(file_path, file_types):
+    # read the file and output the data as Data Frame.
     if file_types == 'csv':
         df = pd.read_csv(file_path)
     elif file_types == 'excel':
@@ -33,8 +35,7 @@ def read_file(file_path, file_types):
         raise ValueError("Unsupported file type")
     return df
 
-## --------------------------------------------------------------------------------------------- ##
-
+    ## --------------------------------------------------------------------------------------------- ##
 
 def infer_types_recursive(obj, prefix='', type_map=None):
     if type_map is None:
@@ -96,8 +97,9 @@ def process_folder(folder_path, file_type, json_column):
             print(f"  Error processing file: {e}")
     return pd.DataFrame(all_results)
 
-if __name__ == '__main__':
+def process_folder_example():
     # ==== USER INPUTS ====
+    input_path, output_path = get_input_output_paths()
     folder_path = input_path      # Folder containing your files
     file_type = 'csv'               # 'csv', 'excel', 'txt', or 'parquet'
     json_column = 'location'        # Name of the column containing JSON
@@ -109,3 +111,6 @@ if __name__ == '__main__':
         print(f"\nSummary written to {output_excel}")
     else:
         print("No results to write.")
+
+if __name__ == '__main__':
+    process_folder_example()

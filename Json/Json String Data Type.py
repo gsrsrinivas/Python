@@ -4,8 +4,6 @@ import json
 import pandas as pd
 from collections import defaultdict
 
-import json
-
 def clean_json_structure(json_data):
     """ Recursively remove None values while ensuring proper key-value pairing """
     if isinstance(json_data, str):
@@ -30,10 +28,9 @@ def clean_json_structure(json_data):
         return result  # Return structured dictionary instead of JSON string
 
     if isinstance(json_data, dict):
-        return {k: recursive_clean_json(v) for k, v in json_data.items() if v is not None}  # Handle nested dicts
+        return {k: clean_json_structure(v) for k, v in json_data.items() if v is not None}  # Handle nested dicts
 
     return json_data  # Return as-is for primitive types
-
 
 def flatten_json(obj, parent_key='', sep='.'):
     """Recursively flattens nested JSON into dotted keys."""
@@ -91,8 +88,12 @@ def process_folder_with_type_tracking(folder_path, output_excel):
     print(f"✅ Exported type summary to: {output_excel}")
     return df
 
-# Example usage:
-# Replace this with the actual folder path
-folder_path = "../Files Input"
-output_df = process_folder_with_type_tracking(folder_path,folder_path+"/Files Output/2025-05-30--07-40-00--json_nested_type_summary.xlsx")
-print(output_df)
+def process_folder_with_type_tracking_example():
+    # Example usage:
+    # Replace this with the actual folder path
+    folder_path = "../Files Input"
+    output_df = process_folder_with_type_tracking(folder_path,folder_path+"/Files Output/2025-05-30--07-40-00--json_nested_type_summary.xlsx")
+    print(output_df)
+
+if __name__ == "__main__":
+    process_folder_with_type_tracking_example()

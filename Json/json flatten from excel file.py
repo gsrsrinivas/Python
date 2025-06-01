@@ -23,29 +23,33 @@ def flatten_json(y, prefix=''):
 def infer_types(flat_dict):
     return {k: type(v).__name__ for k, v in flat_dict.items()}
 
-# --- USER INPUTS ---
-excel_file = r'../Files Output/json_data.xlsx'
-json_column = 'json_data'  # The column name containing your nested JSON
+def json_data_types_example():
+    # --- USER INPUTS ---
+    excel_file = r'../Files Output/json_data.xlsx'
+    json_column = 'json_data'  # The column name containing your nested JSON
 
-# --- READ EXCEL ---
-df = pd.read_excel(excel_file)
+    # --- READ EXCEL ---
+    df = pd.read_excel(excel_file)
 
-# --- PROCESS EACH ROW ---
-all_types = []
-for idx, row in df.iterrows():
-    json_str = row[json_column]
-    try:
-        data = json.loads(json_str)
-        flat = flatten_json(data)
-        types = infer_types(flat)
-        for key, dtype in types.items():
-            all_types.append({'Row': idx+1, 'Key': key, 'Type': dtype})
-    except Exception as e:
-        all_types.append({'Row': idx+1, 'Key': 'ERROR', 'Type': str(e)})
+    # --- PROCESS EACH ROW ---
+    all_types = []
+    for idx, row in df.iterrows():
+        json_str = row[json_column]
+        try:
+            data = json.loads(json_str)
+            flat = flatten_json(data)
+            types = infer_types(flat)
+            for key, dtype in types.items():
+                all_types.append({'Row': idx+1, 'Key': key, 'Type': dtype})
+        except Exception as e:
+            all_types.append({'Row': idx+1, 'Key': 'ERROR', 'Type': str(e)})
 
-# --- CREATE SUMMARY TABLE ---
-summary_df = pd.DataFrame(all_types)
-print(summary_df)
+    # --- CREATE SUMMARY TABLE ---
+    summary_df = pd.DataFrame(all_types)
+    print(summary_df)
 
-# Optionally, write to Excel
-summary_df.to_excel('../Files Output/2025-05-31--12-00-00--json_key_types_per_row.xlsx', index=False)
+    # Optionally, write to Excel
+    summary_df.to_excel('../Files Output/2025-05-31--12-00-00--json_key_types_per_row.xlsx', index=False)
+
+if __name__ == '__main__':
+    json_data_types_example()

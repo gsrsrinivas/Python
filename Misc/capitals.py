@@ -45,7 +45,11 @@ def prepare_statement_property(text):
 
     return " ".join(capitalized_words)
 
-# Example Usage
-text = "Thistestpropertywithmisspeledwords"
-result = prepare_statement_property(text)
-print(f"'{text}' -> '{result}'")
+def prepare_statement_property_example():
+    # Example Usage
+    text = "Thistestpropertywithmisspeledwords"
+    result = prepare_statement_property(text)
+    print(f"'{text}' -> '{result}'")
+
+if __name__ == "__main__":
+    prepare_statement_property_example()

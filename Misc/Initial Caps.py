@@ -39,13 +39,16 @@ def initial_caps_with_spaces(text):
 
     return " ".join(capitalized_words)
 
-# Example Usage
-print(initial_caps_with_spaces("niftymidcap"))
-print(initial_caps_with_spaces("nsebank"))
-print(initial_caps_with_spaces("aBCdEFg"))
-print(initial_caps_with_spaces("test123example"))
-print(initial_caps_with_spaces("123testExample"))
-print(initial_caps_with_spaces("testexample"))
-print(initial_caps_with_spaces("...testEXAMPLE..."))
-print(initial_caps_with_spaces("niftyMIDcap"))
+def initial_caps_with_spaces_examples():
+    # Example Usage
+    print(initial_caps_with_spaces("niftymidcap"))
+    print(initial_caps_with_spaces("nsebank"))
+    print(initial_caps_with_spaces("aBCdEFg"))
+    print(initial_caps_with_spaces("test123example"))
+    print(initial_caps_with_spaces("123testExample"))
+    print(initial_caps_with_spaces("testexample"))
+    print(initial_caps_with_spaces("...testEXAMPLE..."))
+    print(initial_caps_with_spaces("niftyMIDcap"))
 
+if __name__ == "__main__":
+    initial_caps_with_spaces_examples()

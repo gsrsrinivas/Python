@@ -25,12 +25,16 @@ def extract_data_types(cleaned_json):
         data_types[key] = ", ".join(set(type(v).__name__ for v in values))
     return data_types
 
-# Example usage:
-json_input = '[{"key":"code","value":{"str_value":"XYZ123","int_value":null}},{"key":"city","value":{"str_value":{"addr":"asdf","pincode":500019},"int_value":null}}]'
-parsed_data = json.loads(json_input)
+def extract_data_types_example():
+    # Example usage:
+    json_input = '[{"key":"code","value":{"str_value":"XYZ123","int_value":null}},{"key":"city","value":{"str_value":{"addr":"asdf","pincode":500019},"int_value":null}}]'
+    parsed_data = json.loads(json_input)
 
-cleaned_json = clean_json_structure(parsed_data)
-print("Cleaned JSON:", json.dumps(cleaned_json, indent=2))
+    cleaned_json = clean_json_structure(parsed_data)
+    print("Cleaned JSON:", json.dumps(cleaned_json, indent=2))
 
-data_types = extract_data_types(cleaned_json)
-print("Data Types:", data_types)
+    data_types = extract_data_types(cleaned_json)
+    print("Data Types:", data_types)
+
+if __name__ == "__main__":
+    extract_data_types_example()

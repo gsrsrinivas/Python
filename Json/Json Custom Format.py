@@ -1,3 +1,5 @@
+import json
+
 def custom_format(obj):
     """
     Recursively convert a list of {"key":..., "value":...} dicts into the custom string format.
@@ -18,10 +20,12 @@ def custom_format(obj):
     else:
         return str(obj)
 
-# Example usage:
-import json
+def custom_format_example():
+    # Example usage:
+    input_json ='[{"key": "a", "value": "asd"}, {"key": "b", "value": [{"c": 2}, {"d": [3,4,5]}]}]'
+    parsed = json.loads(input_json)
+    output_str = custom_format(parsed)
+    print(output_str)
 
-input_json ='[{"key": "a", "value": "asd"}, {"key": "b", "value": [{"c": 2}, {"d": [3,4,5]}]}]'
-parsed = json.loads(input_json)
-output_str = custom_format(parsed)
-print(output_str)
+if __name__ == "__main__":
+    custom_format_example()

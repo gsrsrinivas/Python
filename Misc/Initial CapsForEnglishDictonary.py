@@ -40,15 +40,19 @@ def prepare_statement_property(text):
 
     return "".join(capitalized_words)
 
-# Example Usage
-text1 = "this is a test property with misspeled words"
-text2 = "multiple spaces andCapitalization"
-text3 = "no spaces at all"
-text4 = "a verylongwordthatisbadlyspelled"
-text5 = ""
+def prepare_statement_property_examples():
+    # Example Usage
+    text1 = "this is a test property with misspeled words"
+    text2 = "multiple spaces andCapitalization"
+    text3 = "no spaces at all"
+    text4 = "a verylongwordthatisbadlyspelled"
+    text5 = ""
 
-print(f"'{text1}' -> '{prepare_statement_property(text1)}'")
-print(f"'{text2}' -> '{prepare_statement_property(text2)}'")
-print(f"'{text3}' -> '{prepare_statement_property(text3)}'")
-print(f"'{text4}' -> '{prepare_statement_property(text4)}'")
-print(f"'{text5}' -> '{prepare_statement_property(text5)}'")
+    print(f"'{text1}' -> '{prepare_statement_property(text1)}'")
+    print(f"'{text2}' -> '{prepare_statement_property(text2)}'")
+    print(f"'{text3}' -> '{prepare_statement_property(text3)}'")
+    print(f"'{text4}' -> '{prepare_statement_property(text4)}'")
+    print(f"'{text5}' -> '{prepare_statement_property(text5)}'")
+
+if __name__ == "__main__":
+    prepare_statement_property_examples()

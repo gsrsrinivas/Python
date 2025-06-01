@@ -1,3 +1,5 @@
+import json
+
 def custom_nested_format(obj):
     """
     Recursively format [{"key":..., "value":...}] as {key:value}, with nested lists/dicts.
@@ -39,23 +41,33 @@ def format_flattened(items):
     """
     return ','.join(f'{{{k}:{v}}}' if not isinstance(v, list) else f'{{{k}:{v}}}' for k, v in items)
 
-import json
+def custom_nested_format_example():
+    input_json = '''[
+        {"key": "a", "value": 1},
+        {"key": "b", "value": [
+            {"key": "c", "value": 2},
+            {"key": "d", "value": [3,4,5]}
+        ]}
+    ]'''
+    parsed = json.loads(input_json)
+    # 1. Custom Nested Format
+    nested_str = custom_nested_format(parsed)
+    print(nested_str)  # Output: {a:1},{b:[{c:2},{d:[3,4,5]}]}
 
-input_json = '''[
-    {"key": "a", "value": 1},
-    {"key": "b", "value": [
-        {"key": "c", "value": 2},
-        {"key": "d", "value": [3,4,5]}
-    ]}
-]'''
+def format_flattened_example():
+    input_json = '''[
+        {"key": "a", "value": 1},
+        {"key": "b", "value": [
+            {"key": "c", "value": 2},
+            {"key": "d", "value": [3,4,5]}
+        ]}
+    ]'''
+    parsed = json.loads(input_json)
+    # 2. Flattened Recursive Format
+    flat_items = flatten_json(parsed)
+    flat_str = format_flattened(flat_items)
+    print(flat_str)  # Output: {a:1},{b.c:2},{b.d:[3,4,5]}
 
-parsed = json.loads(input_json)
-
-# 1. Custom Nested Format
-nested_str = custom_nested_format(parsed)
-print(nested_str)  # Output: {a:1},{b:[{c:2},{d:[3,4,5]}]}
-
-# 2. Flattened Recursive Format
-flat_items = flatten_json(parsed)
-flat_str = format_flattened(flat_items)
-print(flat_str)  # Output: {a:1},{b.c:2},{b.d:[3,4,5]}
+if __name__ == "__main__":
+    custom_nested_format_example()
+    format_flattened_example()

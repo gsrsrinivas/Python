@@ -32,7 +32,6 @@ def clean_json_structure(json_data):
 
     return json.dumps(json_data, sort_keys=True)  # Ensure valid JSON output
 
-
 def process_json(json_data, data_types):
     """ Parse JSON string, clean its structure, and track data types """
     if isinstance(json_data, str):
@@ -47,7 +46,6 @@ def process_json(json_data, data_types):
             data_types[key].add(type(value).__name__)
 
     return json_data
-
 
 def process_file(filepath, distinct_rows, data_types):
     """ Process a single CSV or Excel file """
@@ -67,7 +65,6 @@ def process_file(filepath, distinct_rows, data_types):
                 processed_row[col] = json.dumps(json_data, sort_keys=True)
         if processed_row:
             distinct_rows.add(tuple(processed_row.items()))  # Keep distinct rows
-
 
 def process_folder(folder_path):
     """ Process all files in the folder and clean JSON structures """
@@ -91,7 +88,10 @@ def process_folder(folder_path):
     for key, types in data_types.items():
         print(f"{key}: {', '.join(types)}")
 
+def process_folder_example():
+    # Example usage:
+    folder_path = "../Files Input"  # Update this with the actual folder path
+    process_folder(folder_path)
 
-# Example usage:
-folder_path = "../Files Input"  # Update this with the actual folder path
-process_folder(folder_path)
+if __name__ == "__main__":
+    process_folder_example()

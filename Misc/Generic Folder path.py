@@ -1,31 +1,22 @@
 import os
-
-folder_path = os.path.join(os.getcwd(), "my_folder")  # Joins the current working directory with the folder name
-print(folder_path)
-
-'''----------------------------------------------------------------------------------'''
 from pathlib import Path
 
-folder_path = Path.cwd() / "my_folder"  # Creates a path object for a folder in the current directory
-print(folder_path)
+def generic_folder_paths_examples():
+    folder_path = os.path.join(os.getcwd(), "my_folder")  # Joins the current working directory with the folder name
+    print(folder_path)
+    '''----------------------------------------------------------------------------------'''
+    folder_path = Path.cwd() / "my_folder"  # Creates a path object for a folder in the current directory
+    print(folder_path)
+    '''----------------------------------------------------------------------------------'''
+    home_directory = Path.home()  # Gets the user's home directory
+    folder_path = home_directory / "Documents" / "my_folder"
+    print(folder_path)
+    '''----------------------------------------------------------------------------------'''
+    parent_folder = Path.cwd().parent  # Gets the parent directory of the current working directory
+    print(parent_folder)
+    '''----------------------------------------------------------------------------------'''
+    parent_folder = os.path.abspath(os.path.join(os.getcwd(), ".."))  # Moves up one folder
+    print(parent_folder)
 
-'''----------------------------------------------------------------------------------'''
-import os
-from pathlib import Path
-
-home_directory = Path.home()  # Gets the user's home directory
-folder_path = home_directory / "Documents" / "my_folder"
-print(folder_path)
-
-'''----------------------------------------------------------------------------------'''
-
-from pathlib import Path
-
-parent_folder = Path.cwd().parent  # Gets the parent directory of the current working directory
-print(parent_folder)
-
-'''----------------------------------------------------------------------------------'''
-import os
-
-parent_folder = os.path.abspath(os.path.join(os.getcwd(), ".."))  # Moves up one folder
-print(parent_folder)
+if __name__ == "__main__":
+    generic_folder_paths_examples()

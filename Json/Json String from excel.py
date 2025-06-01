@@ -6,19 +6,6 @@ import os
 from pathlib import Path
 from datetime import datetime, timedelta
 
-file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
-# Gets the parent directory of the current working directory
-parent_folder = Path.cwd().parent
-folder_path = parent_folder / "Src Files Json"
-# Set your input and output folder paths
-output_folder = folder_path / "Files Output"
-output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
-
-input_path = folder_path
-output_path = os.path.join(output_folder, output_filename)
-## --------------------------------------------------------------------------------------------- ##
-
-
 def flatten_json(data, parent_key=''):
     """
     Recursively flattens input JSON array of {"key":..., "value":...} objects,
@@ -53,9 +40,8 @@ def flatten_json(data, parent_key=''):
                 result[new_key] = value
     return data
 
-
-# Helper function to recursively collect types of keys and values in JSON objects/lists
 def collect_types(obj):
+    # Helper function to recursively collect types of keys and values in JSON objects/lists
     key_types = set()
     value_types = set()
     if isinstance(obj, dict):
@@ -73,41 +59,56 @@ def collect_types(obj):
             value_types.update(sub_values)
     return key_types, value_types
 
-# Prepare to collect results from all files
-all_results = []
+def collect_flatten_example():
+    file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
+    # Gets the parent directory of the current working directory
+    parent_folder = Path.cwd().parent
+    folder_path = parent_folder / "Src Files Json"
+    # Set your input and output folder paths
+    output_folder = folder_path / "Files Output"
+    output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
 
-# Loop through all Excel files in the folder
-for filename in os.listdir(input_path):
-    if filename.endswith('.xlsx') and not filename.startswith('~$'):  # Skip temporary files
-        file_path = os.path.join(input_path, filename)
-        df = pd.read_excel(file_path)
-        column_key_types = defaultdict(set)
-        column_value_types = defaultdict(set)
-        for col in df.columns:
-            for cell in df[col]:
-                if isinstance(cell, str):
-                    try:
-                        parsed_json = json.loads(cell)
-                        parsed = flatten_json(parsed_json)
-                        key_types, value_types = collect_types(parsed)
-                        column_key_types[col].update(key_types)
-                        column_value_types[col].update(value_types)
-                    except Exception as e:
-                        print(e)
-                        continue
-        for col in df.columns:
-            all_results.append({
-                'File': filename,
-                'Column': col,
-                'JSON Key Types': ', '.join(sorted(column_key_types[col])),
-                'JSON Value Types': ', '.join(sorted(column_value_types[col]))
-            })
+    input_path = folder_path
+    output_path = os.path.join(output_folder, output_filename)
+    ##---------------------------------------------------------------------------------------------##
 
-# Convert results to DataFrame and save
-summary_df = pd.DataFrame(all_results)
-summary_df.to_excel(output_path, index=False)
+    # Prepare to collect results from all files
+    all_results = []
 
-print(f"Summary of all files saved to: {output_path}")
+    # Loop through all Excel files in the folder
+    for filename in os.listdir(input_path):
+        if filename.endswith('.xlsx') and not filename.startswith('~$'):  # Skip temporary files
+            file_path = os.path.join(input_path, filename)
+            df = pd.read_excel(file_path)
+            column_key_types = defaultdict(set)
+            column_value_types = defaultdict(set)
+            for col in df.columns:
+                for cell in df[col]:
+                    if isinstance(cell, str):
+                        try:
+                            parsed_json = json.loads(cell)
+                            parsed = flatten_json(parsed_json)
+                            key_types, value_types = collect_types(parsed)
+                            column_key_types[col].update(key_types)
+                            column_value_types[col].update(value_types)
+                        except Exception as e:
+                            print(e)
+                            continue
+            for col in df.columns:
+                all_results.append({
+                    'File': filename,
+                    'Column': col,
+                    'JSON Key Types': ', '.join(sorted(column_key_types[col])),
+                    'JSON Value Types': ', '.join(sorted(column_value_types[col]))
+                })
 
-'''----------------------------------------------------------------------------------'''
+    # Convert results to DataFrame and save
+    summary_df = pd.DataFrame(all_results)
+    summary_df.to_excel(output_path, index=False)
 
+    print(f"Summary of all files saved to: {output_path}")
+
+    '''----------------------------------------------------------------------------------'''
+
+if __name__ == "__main__":
+    collect_flatten_example()

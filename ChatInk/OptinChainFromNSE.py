@@ -1,6 +1,8 @@
 import json
+
 import pandas as pd
 import requests
+
 
 def option_chain_from_nse():
     # URL for fetching option chain data
@@ -38,6 +40,7 @@ def option_chain_from_nse():
     df.to_csv(f'C:/Users/gsrsr/Downloads/{symbol}_option_chain.csv', index=False)
 
     print(f"Option chain data for {symbol} is saved to {symbol}_option_chain.csv")
+
 
 if __name__ == "__main__":
     option_chain_from_nse()

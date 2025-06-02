@@ -1,9 +1,11 @@
 import json
-import pandas as pd
 import random
 
-# Helper to create a nested JSON-like structure
+import pandas as pd
+
+
 def generate_sample_json(index):
+    """ Helper to create a nested JSON-like structure"""
     return {
         "id": index,
         "name": f"Item {index}",
@@ -19,9 +21,11 @@ def generate_sample_json(index):
                 }
             }
         },
-        "tags": [random.choice(["electronics", "home", "garden", "sports", "fashion"]) for _ in range(random.randint(2, 5))],
+        "tags": [random.choice(["electronics", "home", "garden", "sports", "fashion"]) for _ in
+                 range(random.randint(2, 5))],
         "available": random.choice([True, False])
     }
+
 
 def generate_sample_json_example():
     # Create 100 samples
@@ -30,6 +34,7 @@ def generate_sample_json_example():
     # Create a DataFrame and save to Excel
     df = pd.DataFrame({"json_data": sample_data})
     df.to_excel("../Files Output/100_sample_json_strings.xlsx", index=False)
+
 
 if __name__ == "__main__":
     generate_sample_json_example()

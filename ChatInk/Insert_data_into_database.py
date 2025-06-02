@@ -1,6 +1,7 @@
 import pandas as pd
 import pyodbc
 
+
 def insert_data_into_database():
     # Read data from Excel file
     excel_file = f'C:/Users/gsrsr/Downloads/ChartInk-Stocks.xlsx'
@@ -24,7 +25,9 @@ def insert_data_into_database():
 
     # Iterate over the DataFrame and insert data into the SQL Server table
     for index, row in df.iterrows():
-        cursor.execute(insert_query, row['sr#'], row['stock name'], row['symbol'], row['Links'], row['% Chg'], row['price'], row['volume'],row['Indicator'], row['TimeLine'], row['Direction'], row['Segment'], row['Batch_No'])
+        cursor.execute(insert_query, row['sr#'], row['stock name'], row['symbol'], row['Links'], row['% Chg'],
+                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['Segment'],
+                       row['Batch_No'])
 
     # Commit the transaction
     conn.commit()
@@ -34,6 +37,7 @@ def insert_data_into_database():
     conn.close()
 
     print('Data inserted successfully!')
+
 
 if __name__ == "__main__":
     insert_data_into_database()

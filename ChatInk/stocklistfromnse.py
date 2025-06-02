@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def stock_list_from_nse():
     url = "https://www.nseindia.com/option-chain"
     headers = {
@@ -18,6 +19,7 @@ def stock_list_from_nse():
     # symbols = [option.text for option in soup.find_all('option') if option.get('value')]
     symbols = [option.get('value') for option in soup.find_all('option') if option.get('value')]
     print(symbols)
+
 
 if __name__ == "__main__":
     stock_list_from_nse()

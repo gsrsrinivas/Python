@@ -1,8 +1,10 @@
 # getting error
-import os
-import pandas as pd
 import json
+import os
 from collections import defaultdict
+
+import pandas as pd
+
 
 def clean_json_structure(json_data):
     """ Recursively remove None values and restructure JSON into key-value pairs """
@@ -22,6 +24,7 @@ def clean_json_structure(json_data):
             return data
 
     return json.dumps(recursive_clean(json_data), sort_keys=True)  # Ensure JSON output is clean
+
 
 def process_json(json_data, data_types):
     """ Parse and recursively process nested JSON, tracking data types """
@@ -50,6 +53,7 @@ def process_json(json_data, data_types):
     track_types(json_data)
     return json_data
 
+
 def process_file(filepath, distinct_rows, data_types):
     """ Process a single CSV or Excel file """
     file_ext = os.path.splitext(filepath)[-1].lower()
@@ -69,7 +73,8 @@ def process_file(filepath, distinct_rows, data_types):
         if processed_row:
             distinct_rows.add(tuple(processed_row.items()))  # Keep distinct rows
 
-def process_folder(folder_path):
+
+def process_folder_input(folder_path):
     """ Process all files in the folder and clean nested JSON structures """
     distinct_rows = set()
     data_types = defaultdict(set)
@@ -92,10 +97,12 @@ def process_folder(folder_path):
     for key, types in data_types.items():
         print(f"{key}: {', '.join(types)}")
 
-def process_folder_examples():
+
+def process_folder_input_examples():
     # Example usage:
     folder_path = "../Files Input"  # Update this with the actual folder path
-    process_folder(folder_path)
+    process_folder_input(folder_path)
+
 
 if __name__ == '__main__':
-    process_folder_examples()
+    process_folder_input_examples()

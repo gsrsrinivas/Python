@@ -1,7 +1,9 @@
 import os
-import ffmpeg
-# from ffmpeg import run, input, output
 
+import ffmpeg
+
+
+# from ffmpeg import run, input, output
 def merge_files_ffmeg():
     folder_path = "C:/Users/gsrsr/Downloads"
     output_file = "merged_output.mp3"
@@ -19,6 +21,7 @@ def merge_files_ffmeg():
     ffmpeg.input("input.txt", format="concat", safe=0).output(output_file, codec="copy").run()
 
     print("MP3 files merged successfully!")
+
 
 if __name__ == "__main__":
     merge_files_ffmeg()

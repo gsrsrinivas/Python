@@ -1,7 +1,9 @@
 import json
+
 import pandas as pd
 
-def flatten_json(data, parent_key=''):
+
+def flatten_json_list(data, parent_key=''):
     """
     Recursively flattens input JSON array of {"key":..., "value":...} objects,
     prefixing nested keys with their parent key (dot notation).
@@ -15,7 +17,7 @@ def flatten_json(data, parent_key=''):
             new_key = f"{parent_key}.{key}" if parent_key else key
             # If value is a list, flatten recursively and prefix keys
             if isinstance(value, list):
-                nested = flatten_json(value, new_key)
+                nested = flatten_json_list(value, new_key)
                 result.update(nested)
             # If value is a dict with str_value/int_value, pick the non-null one
             elif isinstance(value, dict):
@@ -28,12 +30,13 @@ def flatten_json(data, parent_key=''):
                         result[new_key] = value['int_value']
                 else:
                     # If dict but not str_value/int_value, flatten recursively
-                    nested = flatten_json([{'key': k, 'value': v} for k, v in value.items()], new_key)
+                    nested = flatten_json_list([{'key': k, 'value': v} for k, v in value.items()], new_key)
                     result.update(nested)
             else:
                 # If value is a primitive
                 result[new_key] = value
     return result
+
 
 def flatten_json_safe(json_string):
     """
@@ -44,13 +47,14 @@ def flatten_json_safe(json_string):
         return json_string
     try:
         data = json.loads(json_string)
-        flat = flatten_json(data)
+        flat = flatten_json_list(data)
         if not flat:
             return json_string
         return flat
     except Exception as e:
         print(e)
         return json_string
+
 
 def smart_cast(val):
     """Cast value to its actual Python type if possible, else return as string."""
@@ -75,6 +79,7 @@ def smart_cast(val):
         pass
     # Fallback: use original value and its type
     return val, type(val).__name__
+
 
 def flatten_top_level(data):
     rows = []
@@ -101,6 +106,7 @@ def flatten_top_level(data):
                 v2, dtype = smart_cast(value)
                 rows.append((key, v2, dtype))
     return rows
+
 
 def flatten_top_level_example():
     # Example JSON string
@@ -174,6 +180,7 @@ def flatten_top_level_example():
     output_result = flatten_top_level(output)
     # print(f"Flatten_json function output_result\n{output_result}")
     # print(f"Flatten_json function output\n{output}\n{json.dumps(output, indent=2)}")
+
 
 if __name__ == "__main__":
     flatten_top_level_example()

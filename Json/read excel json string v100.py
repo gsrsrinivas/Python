@@ -1,12 +1,12 @@
-import pandas as pd
-import json
-from collections import defaultdict
-import os
 import glob
-## --------------------------------------------------------------------------------------------- ##
-from datetime import datetime, timedelta
-from pathlib import Path
+import json
 import os
+from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+
 
 def get_input_output_paths():
     file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
@@ -20,6 +20,7 @@ def get_input_output_paths():
     output_path = os.path.join(output_folder, output_filename)
 
     return input_path, output_path
+
 
 def read_file(file_path, file_types):
     # read the file and output the data as Data Frame.
@@ -36,6 +37,7 @@ def read_file(file_path, file_types):
     return df
 
     ## --------------------------------------------------------------------------------------------- ##
+
 
 def infer_types_recursive(obj, prefix='', type_map=None):
     if type_map is None:
@@ -56,6 +58,7 @@ def infer_types_recursive(obj, prefix='', type_map=None):
             infer_types_recursive(item, prefix + '[]', type_map)
     return type_map
 
+
 def infer_json_key_types(df, json_column):
     type_map = defaultdict(set)
     for idx, val in df[json_column].dropna().items():
@@ -68,6 +71,7 @@ def infer_json_key_types(df, json_column):
         except Exception as e:
             print(f"Error parsing row {idx}: {e}")
     return type_map
+
 
 def process_folder(folder_path, file_type, json_column):
     ext_map = {'csv': '*.csv', 'excel': '*.xlsx', 'txt': '*.txt', 'parquet': '*.parquet'}
@@ -97,12 +101,13 @@ def process_folder(folder_path, file_type, json_column):
             print(f"  Error processing file: {e}")
     return pd.DataFrame(all_results)
 
+
 def process_folder_example():
     # ==== USER INPUTS ====
     input_path, output_path = get_input_output_paths()
-    folder_path = input_path      # Folder containing your files
-    file_type = 'csv'               # 'csv', 'excel', 'txt', or 'parquet'
-    json_column = 'location'        # Name of the column containing JSON
+    folder_path = input_path  # Folder containing your files
+    file_type = 'csv'  # 'csv', 'excel', 'txt', or 'parquet'
+    json_column = 'location'  # Name of the column containing JSON
     output_excel = output_path
 
     result_df = process_folder(folder_path, file_type, json_column)
@@ -111,6 +116,7 @@ def process_folder_example():
         print(f"\nSummary written to {output_excel}")
     else:
         print("No results to write.")
+
 
 if __name__ == '__main__':
     process_folder_example()

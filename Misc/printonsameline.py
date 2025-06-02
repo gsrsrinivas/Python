@@ -1,6 +1,6 @@
 import sys
 import time
-from time import sleep
+
 
 def sleep_time():
     # Initial print statement
@@ -17,6 +17,7 @@ def sleep_time():
     sys.stdout.flush()
 
     print()  # Move to a new line
+
 
 if __name__ == "__main__":
     sleep_time()

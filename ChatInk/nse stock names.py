@@ -4,5 +4,6 @@ def nse_equity():
     stock_list = nse_eq("TCS")
     print(stock_list)
 
+
 if __name__ == "__main__":
     nse_equity()

@@ -1,4 +1,6 @@
+# pip install pandas pyarrow openpyxl
 import json
+
 
 def remove_nulls(value):
     """ this function removes all the null pairs from a json string recursively
@@ -12,6 +14,7 @@ def remove_nulls(value):
         return [remove_nulls(item) for item in value if item is not None]
     else:
         return value
+
 
 def remove_nulls_example():
     # Example usage:
@@ -39,6 +42,7 @@ def remove_nulls_example():
     result_json_str = json.dumps(cleaned_data, indent=2)
     print(result_json_str)
 
+
 def flatten_key_value_json(obj, parent_key=""):
     """ this function flattens the json string either it is a list or dict
         and returns as a dict
@@ -61,12 +65,13 @@ def flatten_key_value_json(obj, parent_key=""):
                 flat_dict[k] = v
         else:
             # If not a key-value dict, process all items
-            for subk, subv in obj.items():
-                flat_dict.update(flatten_key_value_json(subv, parent_key=subk))
+            for sub_k, sub_v in obj.items():
+                flat_dict.update(flatten_key_value_json(sub_v, parent_key=sub_k))
     elif isinstance(obj, list):
         for item in obj:
             flat_dict.update(flatten_key_value_json(item, parent_key=parent_key))
     return flat_dict
+
 
 def flatten_key_value_json_example():
     # Example usage: starts here for the flatten_key_value_json fn
@@ -82,7 +87,7 @@ def flatten_key_value_json_example():
         }
     }
     flat = flatten_key_value_json(nested_json)
-    # print(flat)
+    print(flat)
     # eg 2
     nested_json = {
         "key": "user",
@@ -104,7 +109,7 @@ def flatten_key_value_json_example():
         ]
     }
     flat = flatten_key_value_json(nested_json)
-    # print(flat)
+    print(flat)
     # eg 3
     json_obj = '[{"key": "code", "value": {"str_value": "XYZ123"}}, {"key": "code", "value": {"int_value": "123"}}]'
     json_obj = json.loads(json_obj)
@@ -113,6 +118,6 @@ def flatten_key_value_json_example():
 
     # Example usage: ends here for the flatten_key_value_json fn
 
+
 if __name__ == "__main__":
     flatten_key_value_json_example()
-

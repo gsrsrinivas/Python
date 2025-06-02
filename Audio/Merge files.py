@@ -1,6 +1,7 @@
-from pydub import AudioSegment
-import glob
 import os
+
+from pydub import AudioSegment
+
 
 def merge_files():
     folder_path = r"C:\Users\gsrsr\Downloads"
@@ -23,7 +24,7 @@ def merge_files():
         if file_extension == ".mp3":
             filepath = folder_path + "\\" + file
             print(filepath)
-            audio = AudioSegment.from_mp3(folder_path+"\\"+file)
+            audio = AudioSegment.from_mp3(folder_path + "\\" + file)
             i = i + 1
             if i == 1:
                 merged_audio = audio
@@ -38,6 +39,7 @@ def merge_files():
     merged_audio.export("merged_output.mp3", format="mp3")
 
     print("MP3 files merged successfully!")
+
 
 if __name__ == "__main__":
     merge_files()

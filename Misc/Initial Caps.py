@@ -2,6 +2,7 @@
 import re
 import string
 
+
 def initial_caps_with_spaces(text):
     """Capitalizes the first letter of each word and inserts spaces."""
 
@@ -10,7 +11,7 @@ def initial_caps_with_spaces(text):
 
     # Split using regex to find word boundaries (uppercase letters or start of string)
     words = re.findall(r'[A-Z]?[a-z0-9]*', text)
-    words = [word for word in words if word] #remove empty strings.
+    words = [word for word in words if word]  # remove empty strings.
 
     capitalized_words = []
 
@@ -36,8 +37,8 @@ def initial_caps_with_spaces(text):
 
         capitalized_words.append(prefix_punctuation + capitalized_word + suffix_punctuation)
 
-
     return " ".join(capitalized_words)
+
 
 def initial_caps_with_spaces_examples():
     # Example Usage
@@ -49,6 +50,7 @@ def initial_caps_with_spaces_examples():
     print(initial_caps_with_spaces("testexample"))
     print(initial_caps_with_spaces("...testEXAMPLE..."))
     print(initial_caps_with_spaces("niftyMIDcap"))
+
 
 if __name__ == "__main__":
     initial_caps_with_spaces_examples()

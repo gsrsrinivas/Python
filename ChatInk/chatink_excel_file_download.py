@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup as bs
 
+
 def chatink_excel_file_download():
     data = {
         'scan_clause': '( {cash} ( ( {cash} ( [0] 4 hour macd line( 26,12,9 ) >= [0] 4 hour macd signal( 26,12,9 ) and [0] 4 hour macd line( 26,12,9 ) >= [-1] 4 hour macd line( 26 , 12 , 9 ) and [0] 1 hour macd line( 26,12,9 ) >= [0] 1 hour macd signal( 26,12,9 ) and [0] 1 hour macd line( 26,12,9 ) >= [-1] 1 hour macd line( 26 , 12 , 9 ) and [0] 15 minute macd line( 26,12,9 ) >= [0] 15 minute macd signal( 26,12,9 ) and [0] 15 minute macd line( 26,12,9 ) >= [-1] 15 minute macd line( 26 , 12 , 9 ) ) ) and( {cash} ( ( {cash} ( [0] 15 minute slow stochastic %k( 14 , 3 ) >= [0] 15 minute slow stochastic %d( 14 , 3 ) and [0] 15 minute slow stochastic %k( 14 , 3 ) >= [-1] 15 minute slow stochastic %k( 14 , 3 ) ) ) or [0] 15 minute rsi( 14 ) >= [-1] 15 minute rsi( 14 ) ) ) and( {cash} ( [0] 15 minute adx di positive( 14 ) >= [0] 15 minute adx di negative( 14 ) and [0] 15 minute adx( 14 ) >= [-1] 15 minute adx( 14 ) ) ) and( {cash} ( [0] 15 minute volume >= [0] 15 minute "sum( close * volume, 20 ) / sum( volume ,20 )" and [0] 15 minute ema( [0] 15 minute close , 5 ) >= [0] 15 minute ema( [0] 15 minute close , 13 ) and [0] 15 minute ema( [0] 15 minute close , 5 ) >= [0] 15 minute ema( [0] 15 minute close , 26 ) and [0] 15 minute ema( [0] 15 minute close , 13 ) >= [0] 15 minute ema( [0] 15 minute close , 26 ) and [0] 15 minute ema( [0] 15 minute close , 50 ) >= [0] 15 minute ema( [0] 15 minute close , 100 ) and [0] 15 minute ema( [0] 15 minute close , 50 ) >= [0] 15 minute ema( [0] 15 minute close , 200 ) and [0] 15 minute ema( [0] 15 minute close , 100 ) >= [0] 15 minute ema( [0] 15 minute close , 200 ) ) ) and( {cash} ( [0] 15 minute upper bollinger band( 20 , 3 ) >= [-1] 15 minute upper bollinger band( 20 , 3 ) and [0] 15 minute lower bollinger band( 20 , 3 ) <= [-1] 15 minute lower bollinger band( 20 , 3 ) and [0] 15 minute upper bollinger band( 20 , 2 ) >= [-1] 15 minute upper bollinger band( 20 , 2 ) and [0] 15 minute lower bollinger band( 20 , 2 ) <= [-1] 15 minute lower bollinger band( 20 , 2 ) ) ) ) )'
@@ -17,9 +18,12 @@ def chatink_excel_file_download():
         df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
         # print(f"{df}")
         # Rename columns
-        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        df.rename(
+            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+                     'close': 'price'}, inplace=True)
         # insert new column timeframe
-        df.insert(7, 'TimeFrame', 'Bullish 15 Minutes of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)
+        df.insert(7, 'TimeFrame', 'Bullish 15 Minutes of Triple Screen, Technical Analysis Scanner',
+                  allow_duplicates=True)
         # print(df)
         df_15 = df
         # df.to_excel('C:/Users/gsrsr/Downloads/bullish-15-minutes-of-triple-screen.xlsx', index=False)
@@ -41,7 +45,9 @@ def chatink_excel_file_download():
         df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
         # print(f"{df}")
         # Rename columns
-        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        df.rename(
+            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+                     'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish Hourly of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)
         # print(df)
@@ -67,9 +73,12 @@ def chatink_excel_file_download():
         df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
         # print(f"{df}")
         # Rename columns
-        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        df.rename(
+            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+                     'close': 'price'}, inplace=True)
         # insert new column timeframe
-        df.insert(7, 'TimeFrame', 'Bullish 4 Hourly of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)
+        df.insert(7, 'TimeFrame', 'Bullish 4 Hourly of Triple Screen, Technical Analysis Scanner',
+                  allow_duplicates=True)
         # print(df)
         df_4 = df
         df_4 = pd.concat([df_4, df_1], ignore_index=True)
@@ -93,9 +102,12 @@ def chatink_excel_file_download():
         df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
         # print(f"{df}")
         # Rename columns
-        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        df.rename(
+            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+                     'close': 'price'}, inplace=True)
         # insert new column timeframe
-        df.insert(7, 'TimeFrame', 'Bullish Daily of Triple Screen System, Technical Analysis Scanner', allow_duplicates=True)
+        df.insert(7, 'TimeFrame', 'Bullish Daily of Triple Screen System, Technical Analysis Scanner',
+                  allow_duplicates=True)
         # print(df)
         df_d = df
         df_d = pd.concat([df_d, df_4], ignore_index=True)
@@ -119,7 +131,9 @@ def chatink_excel_file_download():
         df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
         # print(f"{df}")
         # Rename columns
-        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        df.rename(
+            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+                     'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish Weekly of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)
         # print(df)
@@ -145,7 +159,9 @@ def chatink_excel_file_download():
         df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
         # print(f"{df}")
         # Rename columns
-        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        df.rename(
+            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+                     'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish Monthly of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)
         # print(df)
@@ -157,6 +173,7 @@ def chatink_excel_file_download():
 
     print("complete bullish-monthly-of-triple-screen")
     # ############################################################################################
+
 
 if __name__ == "__main__":
     chatink_excel_file_download()

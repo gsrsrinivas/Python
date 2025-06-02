@@ -1,5 +1,7 @@
 import os
+
 from pydub import AudioSegment
+
 
 def merge_audio():
     folder_path = r"C:\Users\gsrsr\Downloads"
@@ -20,6 +22,7 @@ def merge_audio():
     merged_audio.export("merged_output.mp3", format="mp3")
 
     print("MP3 files merged successfully!")
+
 
 if __name__ == "__main__":
     merge_audio()

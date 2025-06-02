@@ -1,6 +1,8 @@
-import pandas as pd
 import json
 from collections import defaultdict
+
+import pandas as pd
+
 
 def find_tag_types(obj):
     """Recursively find all 'tag' fields and return their types."""
@@ -14,6 +16,7 @@ def find_tag_types(obj):
         for item in obj:
             tag_types.update(find_tag_types(item))
     return tag_types
+
 
 def find_tag_types_example():
     # Read the Excel file
@@ -40,6 +43,7 @@ def find_tag_types_example():
             print(f"Column '{col}' does not contain any nested JSON 'tag' fields.")
 
     '''----------------------------------------------------------------------------------'''
+
 
 if __name__ == "__main__":
     find_tag_types_example()

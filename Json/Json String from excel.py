@@ -1,10 +1,11 @@
-import pandas as pd
 import json
-from collections import defaultdict
-## --------------------------------------------------------------------------------------------- ##
 import os
+from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
-from datetime import datetime, timedelta
+
+import pandas as pd
+
 
 def flatten_json(data, parent_key=''):
     """
@@ -40,6 +41,7 @@ def flatten_json(data, parent_key=''):
                 result[new_key] = value
     return data
 
+
 def collect_types(obj):
     # Helper function to recursively collect types of keys and values in JSON objects/lists
     key_types = set()
@@ -58,6 +60,7 @@ def collect_types(obj):
             key_types.update(sub_keys)
             value_types.update(sub_values)
     return key_types, value_types
+
 
 def collect_flatten_example():
     file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
@@ -109,6 +112,7 @@ def collect_flatten_example():
     print(f"Summary of all files saved to: {output_path}")
 
     '''----------------------------------------------------------------------------------'''
+
 
 if __name__ == "__main__":
     collect_flatten_example()

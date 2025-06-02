@@ -1,5 +1,7 @@
-import enchant
 import re
+
+import enchant
+
 
 def prepare_statement_property(text):
     """
@@ -22,7 +24,7 @@ def prepare_statement_property(text):
 
     # Split the string based on uppercase letters (word boundaries)
     words = re.findall(r'[A-Z]?[a-z0-9]*', text_no_spaces)
-    words = [word for word in words if word] #remove empty strings
+    words = [word for word in words if word]  # remove empty strings
 
     corrected_words = []
     for word in words:
@@ -33,12 +35,13 @@ def prepare_statement_property(text):
             if suggestions:
                 corrected_words.append(suggestions[0])  # Use the first suggestion
             else:
-                 corrected_words.append(word) #if no suggestions, keep original
+                corrected_words.append(word)  # if no suggestions, keep original
 
     # Capitalize the first letter of each corrected word and join them
     capitalized_words = [word[0].upper() + word[1:].lower() for word in corrected_words]
 
     return "".join(capitalized_words)
+
 
 def prepare_statement_property_examples():
     # Example Usage
@@ -53,6 +56,7 @@ def prepare_statement_property_examples():
     print(f"'{text3}' -> '{prepare_statement_property(text3)}'")
     print(f"'{text4}' -> '{prepare_statement_property(text4)}'")
     print(f"'{text5}' -> '{prepare_statement_property(text5)}'")
+
 
 if __name__ == "__main__":
     prepare_statement_property_examples()

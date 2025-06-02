@@ -7,8 +7,7 @@ import json
 import os
 
 def get_data_frame():
-    ##------------------------------------------------------------------------------------------------##
-    # get the folder path and file path for processing
+    """ get the folder path and file path for processing"""
     in_path, out_path = get_file_paths()
     # print(f"input folder path and output folder path are\n{in_path}\n{out_path}")
     # get the file path extension
@@ -20,9 +19,9 @@ def get_data_frame():
         df = read_file(each_file, ext)
         # print(f"file details are as follows:\n{df}")
     return df
-    ##------------------------------------------------------------------------------------------------##
 
 def remove_nulls(val):
+    """ this is working fine"""
     if isinstance(val, dict):
         return {k: remove_nulls(v) for k, v in val.items() if v is not None}
     elif isinstance(val, list):
@@ -31,6 +30,7 @@ def remove_nulls(val):
         return val
 
 def flatten_key_value_json(obj, parent_key=''):
+    """ this function is returning empty dict for non list values"""
     flat_dict = {}
     if isinstance(obj, dict):
         k = obj.get('key')
@@ -71,6 +71,7 @@ def get_types(value):
     return types
 
 def iterate_through_excel_column():
+    """ iterate all the rows and column in a excel file"""
     df = get_data_frame()
     # (excel_col, key) -> set of types
     col_key_types = defaultdict(set)

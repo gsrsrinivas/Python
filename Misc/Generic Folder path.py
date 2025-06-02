@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+
 def generic_folder_paths_examples():
     folder_path = os.path.join(os.getcwd(), "my_folder")  # Joins the current working directory with the folder name
     print(folder_path)
@@ -17,6 +18,7 @@ def generic_folder_paths_examples():
     '''----------------------------------------------------------------------------------'''
     parent_folder = os.path.abspath(os.path.join(os.getcwd(), ".."))  # Moves up one folder
     print(parent_folder)
+
 
 if __name__ == "__main__":
     generic_folder_paths_examples()

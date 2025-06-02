@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
-from pathlib import Path
 import os
+from datetime import datetime
+from pathlib import Path
+
 
 def get_file_paths():
     # get the timestamp
@@ -20,6 +21,7 @@ def get_file_paths():
     output_path = os.path.join(output_folder, output_filename)
     return input_path, output_path
     ## --------------------------------------------------------------------------------------------- ##
+
 
 if __name__ == "__main__":
     in_path, out_path = get_file_paths()

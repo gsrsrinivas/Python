@@ -1,5 +1,7 @@
-import enchant
 import re
+
+import enchant
+
 
 def prepare_statement_property(text):
     """
@@ -22,7 +24,7 @@ def prepare_statement_property(text):
         if d.check(words):
             print(words)
             proper_string += words + " "
-            if len(words) >2:
+            if len(words) > 2:
                 words = ''
         else:
             print('false')
@@ -45,11 +47,13 @@ def prepare_statement_property(text):
 
     return " ".join(capitalized_words)
 
+
 def prepare_statement_property_example():
     # Example Usage
     text = "Thistestpropertywithmisspeledwords"
     result = prepare_statement_property(text)
     print(f"'{text}' -> '{result}'")
+
 
 if __name__ == "__main__":
     prepare_statement_property_example()

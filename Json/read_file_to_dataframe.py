@@ -3,8 +3,8 @@ from Get_Input_Output_Paths import get_file_paths
 from Get_Folder_FilePaths import list_files_by_extensions
 import os
 
-# read the file and output the data as Data Frame.
 def read_file(file_path, file_types):
+    """ read the file and output the data as Data Frame."""
     if file_types == '.csv':
         df = pd.read_csv(file_path)
     elif file_types == '.txt':
@@ -18,8 +18,6 @@ def read_file(file_path, file_types):
     else:
         raise ValueError("Unsupported file type")
     return df
-
-    ## --------------------------------------------------------------------------------------------- ##
 
 def read_file_example():
     in_path, out_path = get_file_paths()

@@ -1,5 +1,7 @@
-import pandas as pd
 import os
+
+import pandas as pd
+
 
 def combine_csv_files():
     # Directory containing the CSV files
@@ -21,6 +23,7 @@ def combine_csv_files():
 
     # Save the combined dataframe to a new CSV file
     combined_df.to_csv(f'{directory}__combined_file.csv', index=False)
+
 
 if __name__ == "__main__":
     combine_csv_files()

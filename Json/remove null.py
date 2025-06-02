@@ -1,6 +1,11 @@
 import json
 
 def remove_nulls(value):
+    """ this function removes all the null pairs from a json string recursively
+    and the out is same as input
+    :param value:
+    :return:
+    """
     if isinstance(value, dict):
         return {k: remove_nulls(v) for k, v in value.items() if v is not None}
     elif isinstance(value, list):
@@ -10,7 +15,7 @@ def remove_nulls(value):
 
 def remove_nulls_example():
     # Example usage:
-    json_str = '''
+    json_str = """
     {
         "customer_id": 12345,
         "name": "Jordan",
@@ -27,7 +32,7 @@ def remove_nulls_example():
         },
         "addresses": [null, {"street": "123 Elm St", "city": "Springfield"}]
     }
-    '''
+    """
 
     data = json.loads(json_str)
     cleaned_data = remove_nulls(data)

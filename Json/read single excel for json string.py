@@ -1,6 +1,8 @@
-import pandas as pd
 import json
 from collections import defaultdict
+
+import pandas as pd
+
 
 def get_json_tag_data_type_example():
     # Read the Excel file
@@ -36,6 +38,7 @@ def get_json_tag_data_type_example():
             print(f"Column '{col}' does not contain any JSON objects with a 'tag' field.")
 
     '''----------------------------------------------------------------------------------'''
+
 
 if __name__ == "__main__":
     get_json_tag_data_type_example()

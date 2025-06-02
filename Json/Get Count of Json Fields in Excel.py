@@ -1,9 +1,11 @@
 # pip install pandas openpyxl
-import pandas as pd
 import json
 
-# Function to check if a value is a JSON object or array
+import pandas as pd
+
+
 def is_json(val):
+    """ Function to check if a value is a JSON object or array"""
     if not isinstance(val, str):
         return False
     try:
@@ -11,6 +13,7 @@ def is_json(val):
         return isinstance(obj, (dict, list))
     except (ValueError, TypeError):
         return False
+
 
 def is_json_example():
     # Read the Excel file
@@ -22,6 +25,7 @@ def is_json_example():
 
     print(f"Number of JSON fields in the Excel file: {json_field_count}")
     '''----------------------------------------------------------------------------------'''
+
 
 if __name__ == "__main__":
     is_json_example()

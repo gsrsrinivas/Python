@@ -1,7 +1,9 @@
-import pandas as pd
 import json
 import os
 from collections import defaultdict
+
+import pandas as pd
+
 
 def collect_types(obj):
     """Recursively collect types of keys and values in JSON objects/lists."""
@@ -20,6 +22,7 @@ def collect_types(obj):
             key_types.update(sub_keys)
             value_types.update(sub_values)
     return key_types, value_types
+
 
 def get_json_data_types_store_in_excel_file():
     # Set your input and output file paths
@@ -65,6 +68,6 @@ def get_json_data_types_store_in_excel_file():
 
     '''----------------------------------------------------------------------------------'''
 
+
 if __name__ == "__main__":
     get_json_data_types_store_in_excel_file()
-

@@ -1,11 +1,10 @@
 ## from copilot
-import os
-import pandas as pd
 import json
+import os
 from collections import defaultdict
 
+import pandas as pd
 
-import json
 
 def clean_json_structure(json_data):
     """ Remove None values and correctly map key-value pairs """
@@ -32,7 +31,8 @@ def clean_json_structure(json_data):
 
     return json.dumps(json_data, sort_keys=True)  # Ensure valid JSON output
 
-def process_json(json_data, data_types):
+
+def process_json_rows(json_data, data_types):
     """ Parse JSON string, clean its structure, and track data types """
     if isinstance(json_data, str):
         try:
@@ -41,13 +41,14 @@ def process_json(json_data, data_types):
             return None  # Ignore invalid JSON
 
     json_data = clean_json_structure(json_data)  # Clean and restructure JSON
-    if isinstance(json_data,dict):
+    if isinstance(json_data, dict):
         for key, value in json_data.items():
             data_types[key].add(type(value).__name__)
 
     return json_data
 
-def process_file(filepath, distinct_rows, data_types):
+
+def process_file_csv_xl(filepath, distinct_rows, data_types):
     """ Process a single CSV or Excel file """
     file_ext = os.path.splitext(filepath)[-1].lower()
     if file_ext == '.csv':
@@ -60,13 +61,14 @@ def process_file(filepath, distinct_rows, data_types):
     for _, row in df.iterrows():
         processed_row = {}
         for col in df.columns:
-            json_data = process_json(row[col], data_types)
+            json_data = process_json_rows(row[col], data_types)
             if json_data:
                 processed_row[col] = json.dumps(json_data, sort_keys=True)
         if processed_row:
             distinct_rows.add(tuple(processed_row.items()))  # Keep distinct rows
 
-def process_folder(folder_path):
+
+def process_folders(folder_path):
     """ Process all files in the folder and clean JSON structures """
     distinct_rows = set()
     data_types = defaultdict(set)
@@ -74,24 +76,27 @@ def process_folder(folder_path):
     for filename in os.listdir(folder_path):
         filepath = os.path.join(folder_path, filename)
         if os.path.isfile(filepath):
-            process_file(filepath, distinct_rows, data_types)
+            process_file_csv_xl(filepath, distinct_rows, data_types)
 
     # Convert distinct rows to DataFrame
     output_data = [dict(row) for row in distinct_rows]
     output_df = pd.DataFrame(output_data)
 
     # Save results
-    output_df.to_csv(folder_path+"/Files Output/2025-05-30--07-40-00--processed_output.csv", index=False)  # Save without index
+    output_df.to_csv(folder_path + "/Files Output/2025-05-30--07-40-00--processed_output.csv",
+                     index=False)  # Save without index
 
     # Print tracked data types across processed JSON
     print("Tracked Data Types in Processed JSON:")
     for key, types in data_types.items():
         print(f"{key}: {', '.join(types)}")
 
-def process_folder_example():
+
+def process_folders_example():
     # Example usage:
     folder_path = "../Files Input"  # Update this with the actual folder path
-    process_folder(folder_path)
+    process_folders(folder_path)
+
 
 if __name__ == "__main__":
-    process_folder_example()
+    process_folders_example()

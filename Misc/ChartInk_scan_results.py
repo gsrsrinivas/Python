@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+
 def chartink_scan_results():
     # Define the scan URL and the scan clause
     scan_url = 'https://chartink.com/screener/bullish-15-minutes-of-triple-screen2'
@@ -29,6 +30,7 @@ def chartink_scan_results():
         df.to_excel('chartink_scan_results.xlsx', index=False)
 
     print("Scan results saved to 'chartink_scan_results.xlsx'")
+
 
 if __name__ == "__main__":
     chartink_scan_results()

@@ -10,7 +10,30 @@ from pathlib import Path
 import pandas as pd
 
 
+def get_input_output_paths():
+    """ it returns the folder path and output file path which is available inside the input folder path"""
+    file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
+    # Gets the parent directory of the current working directory
+    parent_folder = Path.cwd().parent
+    folder_path = parent_folder / "Files Input"
+    output_folder = folder_path / "Files Output"
+    output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
+
+    input_path = folder_path
+    output_path = os.path.join(output_folder, output_filename)
+
+    return input_path, output_path
+
+
+def get_input_output_paths_example():
+    input_folder_path, output_path = get_input_output_paths()
+    print(f"{input_folder_path}\n{output_path}")
+
+
 def get_file_paths():
+    """ this is working fine
+    this function returns the input folder and output file path name with timestamp.
+    """
     # get the timestamp
     file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
     # Gets the parent directory of the current working directory
@@ -29,8 +52,13 @@ def get_file_paths():
     return input_path, output_path
 
 
+def get_file_paths_example():
+    input_folder_path, output_path = get_file_paths()
+    print(f"{input_folder_path}\n{output_path}")
+
+
 def list_files_by_extensions(folder_path, extensions=('.csv', '.xlsx', '.xls', '.parquet')):
-    """
+    """ this is working fine
     Returns a list of file paths in the folder (and subfolders) matching the given extensions.
     :param folder_path: str, path to the folder
     :param extensions: tuple or list, e.g. ('.csv', '.xlsx', '.parquet')
@@ -53,6 +81,272 @@ def list_files_by_extensions_example():
     files_format = json.dumps(files, indent=2)
     print(files_format)
 
+
+def read_parquet_to_df_example():
+    # Read the Parquet file into a DataFrame
+    df = pd.read_parquet('../Files Input/json_data.parquet')
+    # Write the DataFrame to an Excel file
+    df.to_excel('../Files Output/your_file.xlsx', index=False)
+
+
+def read_all_file(file_path, file_types):
+    """ read all types of file and output the data as Data Frame"""
+    if file_types == '.csv':
+        df = pd.read_csv(file_path)
+    elif file_types == '.txt':
+        df = pd.read_csv(file_path, delimiter='\t')
+    elif file_types == '.xlsx':
+        df = pd.read_excel(file_path, dtype=str)  # Read everything as string
+    elif file_types == '.xls':
+        df = pd.read_excel(file_path)
+    elif file_types == '.parquet':
+        df = pd.read_parquet(file_path)
+    else:
+        raise ValueError("Unsupported file type")
+    return df
+
+
+def read_all_file_example():
+    in_path, out_path = get_file_paths()
+    file_list = list_files_by_extensions(in_path)
+    for each_file in file_list:
+        _, ext = os.path.splitext(each_file)
+        df1 = read_all_file(each_file, ext)
+        print(f"file details are as follows:\n{df1}")
+
+
+def get_data_frame():
+    """ get the folder path and file path for processing"""
+    in_path, out_path = get_file_paths()
+    # print(f"input folder path and output folder path are\n{in_path}\n{out_path}")
+    # get the file path extension
+    file_list = list_files_by_extensions(in_path, extensions="json_data.xlsx")
+    # get each file path from folder
+    df = pd.DataFrame()
+    for each_file in file_list:
+        _, ext = os.path.splitext(each_file)
+        df = read_all_file(each_file, ext)
+        # print(f"file details are as follows:\n{df}")
+    return df
+
+
+def is_json(val):
+    """ Function to check if a value is a JSON object or array"""
+    if not isinstance(val, str):
+        return False
+    try:
+        obj = json.loads(val)
+        return isinstance(obj, (dict, list))
+    except (ValueError, TypeError):
+        return False
+
+
+def json_col_count_example(df):
+    json_field_count = 0
+    # Iterate over all cells in the DataFrame
+    for col in df.columns:
+        json_field_count += df[col].apply(is_json).sum()
+    print(f"Number of JSON fields count is: {json_field_count}")
+
+
+def is_json_example():
+    # Read the Excel file
+    df = pd.read_excel(f'../Files Input/nested_json_as_string_1000.xlsx')
+    json_field_count = 0
+    # Iterate over all cells in the DataFrame
+    for col in df.columns:
+        json_field_count += df[col].apply(is_json).sum()
+    print(f"Number of JSON fields in the Excel file: {json_field_count}")
+
+
+def iterate_through_excel_column():
+    """ iterate all the rows and column in an Excel file"""
+    df = get_data_frame()
+    # (excel_col, key) -> set of types
+    col_key_types = defaultdict(set)
+
+    for col in df.columns:
+        # json_obj = ""
+        for cell in df[col].dropna():
+            try:
+                print(f"excel column value: {cell} \nand data type {type(cell).__name__}")
+                json_obj = str(cell)
+                print(f"json object converted to string: {json_obj}")
+                json_obj = json.loads(json_obj)
+                print(f"json object converted to json: {json_obj}")
+                json_obj = remove_nulls(json_obj)
+                print(f"removed null from json: {json_obj}")
+            except Exception as e:
+                print(f"error message is: {e}")
+                continue  # Skip invalid JSON
+            print(f"json variable has value: {json_obj}")
+            if isinstance(json_obj, dict):
+                for k, v in json_obj.items():
+                    types = get_types(v)
+                    col_key_types[(col, k)].update(types)
+
+    # Prepare output
+    output = []
+    for (col, k), types in col_key_types.items():
+        output.append({
+            'col name': col,
+            'key': k,
+            'data type': ','.join(sorted(types))
+        })
+
+    # Create DataFrame and display without index
+    out_df = pd.DataFrame(output)
+    print(out_df.to_string(index=False))
+
+
+def remove_nulls(val):
+    """ this is working fine
+        this will return same data type list /dict by removing the null pairs recursively
+    """
+    if isinstance(val, dict):
+        return {k: remove_nulls(v) for k, v in val.items() if v is not None}
+    elif isinstance(val, list):
+        return [remove_nulls(item) for item in val if item is not None]
+    else:
+        return val
+
+
+def remove_nulls_example():
+    # Example usage:
+    json_str = """
+    {
+        "customer_id": 12345,
+        "name": "Jordan",
+        "email": null,
+        "phone": "555-1234",
+        "address": null,
+        "contact_info": {
+            "email": null,
+            "phone": "555-1234",
+            "social_media": {
+                "facebook": null,
+                "twitter": "@jordan123"
+            }
+        },
+        "addresses": [null, {"street": "123 Elm St", "city": "Springfield"}]
+    }
+    """
+
+    data = json.loads(json_str)
+    cleaned_data = remove_nulls(data)
+    result_json_str = json.dumps(cleaned_data, indent=2)
+    print(result_json_str)
+
+
+def flatten_list_only_top_level_giving_output_directly(data):
+    rows = []
+    if isinstance(data, list):
+        for item in data:
+            key = item.get('key')
+            value = item.get('value')
+            if key is None or value is None:
+                continue
+            # If value is a dict, add all non-null values as separate rows
+            if isinstance(value, dict):
+                for k, v in value.items():
+                    if v is not None:
+                        v2, dtype = smart_cast(v)
+                        rows.append((key, v2, dtype))
+            # If value is a list, flatten each element
+            elif isinstance(value, list):
+                for v in value:
+                    if v is not None:
+                        v2, dtype = smart_cast(v)
+                        rows.append((key, v2, dtype))
+            # If value is a primitive and not None
+            elif value is not None:
+                v2, dtype = smart_cast(value)
+                rows.append((key, v2, dtype))
+    return rows
+
+
+def flatten_top_level_giving_output_directly_example():
+    # Example JSON string
+    """
+    [
+        {"key":"code","value":{"str_value":"XYZ123","int_value":null, "float_value":"12.5", "bool_value":"true"}},
+        {"key":"code","value":{"str_value":null,"int_value":"123", "float_value":null, "bool_value":"false"}},
+        {"key":"desc","value":{"en":"Test","fr":null}},
+        {"key":"active","value":true},
+        {"key":"empty","value":null}
+    ]
+    """
+    json_str = '[{"key":"code","value":{"str_value":"XYZ123","int_value":null}},{"key":"code","value":{"str_value":null,"int_value":"123"}}]'
+
+    # Parse and flatten
+    data = json.loads(json_str)
+    flat_rows = flatten_list_only_top_level_giving_output_directly(data)
+
+    # Combine rows at key level
+    combined = {}
+    for key, value, dtype in flat_rows:
+        if key not in combined:
+            combined[key] = {'value': [], 'value data type': []}
+        combined[key]['value'].append(str(value))
+        combined[key]['value data type'].append(dtype)
+
+    # Prepare final rows
+    final_rows = []
+    for key, vals in combined.items():
+        final_rows.append((
+            key,
+            ', '.join(vals['value']),
+            ', '.join(vals['value data type'])
+        ))
+
+    # Build DataFrame
+    df = pd.DataFrame(final_rows, columns=['key', 'value', 'value data type'])
+
+    # Save to Excel
+    excel_filename = '../Files Output/key_value_type_combined_output.xlsx'
+    df.to_excel(excel_filename, index=False)
+
+    print(f"Data saved to {excel_filename}")
+    print(df)
+
+    # Valid nested JSON array
+    # json_str = '[{"key":"a","value":[{"key":"b","value":{"str_value":"hello"}},{"key":"c","value":{"int_value":42}}]}]'
+    json_str = '[{"key":"code","value":{"str_value":"XYZ123","int_value":null}},{"key":"code","value":{"str_value":null,"int_value":"123"}}]'
+    print(flatten_list_only_top_level_giving_output_directly(json_str))  # {'a.b': 'hello', 'a.c': 42}
+
+    # Empty input
+    print(flatten_list_only_top_level_giving_output_directly(""))  # Output: ""
+
+    # Invalid JSON
+    print(flatten_list_only_top_level_giving_output_directly("not json"))  # Output: "not json"
+
+    # JSON that flattens to empty
+    print(flatten_list_only_top_level_giving_output_directly("[]"))  # Output: "[]"
+
+    # Example with nested input
+    input_json = '''[
+        {"key":"code","value":{"str_value":"XYZ123","int_value":null}},
+        {"key":"code1","value":{"str_value":null,"int_value":"123"}},
+        {"key":"details","value":[
+            {"key":"sub code","value":{"str_value":"A1","int_value":null}},
+            {"key":"sub value","value":{"str_value":null,"int_value":"456"}}
+        ]}
+    ]'''
+
+    output = flatten_list_only_top_level_giving_output_directly(input_json)
+    output_result = flatten_list_only_top_level_giving_output_directly(output)
+    print(f"Flatten_json function output_result\n{output_result}")
+    print(f"Flatten_json function output\n{output}\n{json.dumps(output, indent=2)}")
+
+
+def format_flattened_convert_list_to_dict(items):
+    """
+    Format list of (key, value) tuples as {key:value} and it is nota recursive one
+    """
+    return ','.join(f'{{{k}:{v}}}' if not isinstance(v, list) else f'{{{k}:{v}}}' for k, v in items)
+
+
+##------------------------------------------------
 
 def json_loads_example():
     my_list = '["apple", "banana", "cherry"]'
@@ -110,61 +404,49 @@ def recursive_json_parse_example():
     print(parsed_2)
 
 
-def flatten_key_value_json(obj, parent_key=''):
-    print(f"object value is {obj}")
-    flat_dict = {}
-    print(f"flat_dict value {flat_dict}")
-    if isinstance(obj, dict):
-        k = obj.get('key')
-        v = obj.get('value')
-        if k is not None:
-            if isinstance(v, dict) or isinstance(v, list):
-                nested = flatten_key_value_json(v, parent_key=k)
-                for nk, nv in nested.items():
-                    combined_key = f"{k}.{nk}" if nk else k
-                    flat_dict[combined_key] = nv
-            else:
-                flat_dict[k] = v
-        else:
-            for sub_k, sub_v in obj.items():
-                flat_dict.update(flatten_key_value_json(sub_v, parent_key=sub_k))
-    elif isinstance(obj, list):
-        for item in obj:
-            flat_dict.update(flatten_key_value_json(item, parent_key=parent_key))
-    return flat_dict
+def smart_cast(val):
+    """Cast value to its actual Python type if possible, else return as string."""
+    # Handle bool
+    if isinstance(val, str):
+        if val.lower() == 'true':
+            return True, 'bool'
+        if val.lower() == 'false':
+            return False, 'bool'
+    # Handle int
+    try:
+        if isinstance(val, str) and val.isdigit():
+            return int(val), 'int'
+    except Exception as e:
+        print(f"error message is {e}")
+        pass
+    # Handle float
+    try:
+        if isinstance(val, str) and '.' in val:
+            float_val = float(val)
+            return float_val, 'float'
+    except Exception as e:
+        print(f"{e}")
+        pass
+    # Fallback: use original value and its type
+    return val, type(val).__name__
 
 
-def flatten_key_value_json_example():
-    json_obj = '[{"key": "code", "value": {"str_value": "XYZ123"}}, {"key": "code", "value": {"int_value": "123"}}]'
-    data = json.loads(json_obj)
-    json_dict = flatten_key_value_json(data)
-    print(json_dict)
-
-
-def read_file(file_path, file_types):
-    """ read the file and output the data as Data Frame."""
-    if file_types == '.csv':
-        df = pd.read_csv(file_path)
-    elif file_types == '.txt':
-        df = pd.read_csv(file_path, delimiter='\t')
-    elif file_types == '.xlsx':
-        df = pd.read_excel(file_path, dtype=str)  # Read everything as string
-    elif file_types == '.xls':
-        df = pd.read_excel(file_path)
-    elif file_types == '.parquet':
-        df = pd.read_parquet(file_path)
+def get_types(value):
+    """Recursively get all data types in a JSON value."""
+    types = set()
+    if isinstance(value, dict):
+        types.add('dict')
+        for v in value.values():
+            types.update(get_types(v))
+    elif isinstance(value, list):
+        types.add('list')
+        for item in value:
+            types.update(get_types(item))
+    elif value is None:
+        types.add('NoneType')
     else:
-        raise ValueError("Unsupported file type")
-    return df
-
-
-def read_file_example():
-    in_path, out_path = get_file_paths()
-    file_list = list_files_by_extensions(in_path)
-    for each_file in file_list:
-        _, ext = os.path.splitext(each_file)
-        df1 = read_file(each_file, ext)
-        print(f"file details are as follows:\n{df1}")
+        types.add(type(value).__name__)
+    return types
 
 
 def get_json_tag_data_type_example():
@@ -182,7 +464,8 @@ def get_json_tag_data_type_example():
             obj = json.loads(cell_val)
             if isinstance(obj, dict) and 'tag' in obj:
                 return type(obj['tag']).__name__
-        except Exception:
+        except Exception as e:
+            print(f"{e}")
             return None
         return None
 
@@ -199,49 +482,6 @@ def get_json_tag_data_type_example():
             print(f"Column '{col}' has 'tag' field data types: {types}")
         else:
             print(f"Column '{col}' does not contain any JSON objects with a 'tag' field.")
-
-
-def read_parquet_example():
-    # Read the Parquet file into a DataFrame
-    df = pd.read_parquet('../Files Input/json_data.parquet')
-    # Write the DataFrame to an Excel file
-    df.to_excel('../Files Output/your_file.xlsx', index=False)
-    '''----------------------------------------------------------------------------------'''
-
-
-def flatten_json(data, parent_key=''):
-    """
-    Recursively flattens input JSON array of {"key":..., "value":...} objects,
-    prefixing nested keys with their parent key (dot notation).
-    """
-    if isinstance(data, list):
-        result = {}
-        for item in data:
-            key = item.get('key')
-            value = item.get('value')
-            # Build the new key with dot notation if parent_key exists
-            new_key = f"{parent_key}.{key}" if parent_key else key
-            # If value is a list, flatten recursively and prefix keys
-            if isinstance(value, list):
-                nested = flatten_json(value, new_key)
-                result.update(nested)
-            # If value is a dict with str_value/int_value, pick the non-null one
-            elif isinstance(value, dict):
-                if 'str_value' in value and value['str_value'] is not None:
-                    result[new_key] = value['str_value']
-                elif 'int_value' in value and value['int_value'] is not None:
-                    try:
-                        result[new_key] = int(value['int_value'])
-                    except Exception:
-                        result[new_key] = value['int_value']
-                else:
-                    # If dict but not str_value/int_value, flatten recursively
-                    nested = flatten_json([{'key': k, 'value': v} for k, v in value.items()], new_key)
-                    result.update(nested)
-            else:
-                # If value is a primitive
-                result[new_key] = value
-    return data
 
 
 def collect_types(obj):
@@ -262,58 +502,6 @@ def collect_types(obj):
             key_types.update(sub_keys)
             value_types.update(sub_values)
     return key_types, value_types
-
-
-def collect_flatten_example():
-    file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
-    # Gets the parent directory of the current working directory
-    parent_folder = Path.cwd().parent
-    folder_path = parent_folder / "Src Files Json"
-    # Set your input and output folder paths
-    output_folder = folder_path / "Files Output"
-    output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
-
-    input_path = folder_path
-    output_path = os.path.join(output_folder, output_filename)
-    ##---------------------------------------------------------------------------------------------##
-
-    # Prepare to collect results from all files
-    all_results = []
-
-    # Loop through all Excel files in the folder
-    for filename in os.listdir(input_path):
-        if filename.endswith('.xlsx') and not filename.startswith('~$'):  # Skip temporary files
-            file_path = os.path.join(input_path, filename)
-            df = pd.read_excel(file_path)
-            column_key_types = defaultdict(set)
-            column_value_types = defaultdict(set)
-            for col in df.columns:
-                for cell in df[col]:
-                    if isinstance(cell, str):
-                        try:
-                            parsed_json = json.loads(cell)
-                            parsed = flatten_json(parsed_json)
-                            key_types, value_types = collect_types(parsed)
-                            column_key_types[col].update(key_types)
-                            column_value_types[col].update(value_types)
-                        except Exception as e:
-                            print(e)
-                            continue
-            for col in df.columns:
-                all_results.append({
-                    'File': filename,
-                    'Column': col,
-                    'JSON Key Types': ', '.join(sorted(column_key_types[col])),
-                    'JSON Value Types': ', '.join(sorted(column_value_types[col]))
-                })
-
-    # Convert results to DataFrame and save
-    summary_df = pd.DataFrame(all_results)
-    summary_df.to_excel(output_path, index=False)
-
-    print(f"Summary of all files saved to: {output_path}")
-
-    '''----------------------------------------------------------------------------------'''
 
 
 def get_json_data_types_store_in_excel_file():
@@ -340,7 +528,8 @@ def get_json_data_types_store_in_excel_file():
                     key_types, value_types = collect_types(parsed)
                     column_key_types[col].update(key_types)
                     column_value_types[col].update(value_types)
-                except Exception:
+                except Exception as e:
+                    print(e)
                     continue
 
     # Prepare results for saving
@@ -357,22 +546,6 @@ def get_json_data_types_store_in_excel_file():
     summary_df.to_excel(output_path, index=False)
 
     print(f"Summary saved to: {output_path}")
-
-    '''----------------------------------------------------------------------------------'''
-
-
-def get_input_output_paths():
-    file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
-    # Gets the parent directory of the current working directory
-    parent_folder = Path.cwd().parent
-    folder_path = parent_folder / "Src Files Json"
-    output_folder = folder_path / "Files Output"
-    output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
-
-    input_path = folder_path
-    output_path = os.path.join(output_folder, output_filename)
-
-    return input_path, output_path
 
 
 def infer_types_recursive(obj, prefix='', type_map=None):
@@ -422,7 +595,7 @@ def process_folder(folder_path, file_type, json_column):
         file_name = os.path.basename(file_path)
         print(f"Processing file: {file_name}")
         try:
-            df = read_file(file_path, file_type)
+            df = read_all_file(file_path, file_type)
             if json_column not in df.columns:
                 print(f"  Column '{json_column}' not found. Columns: {list(df.columns)}")
                 continue
@@ -440,7 +613,7 @@ def process_folder(folder_path, file_type, json_column):
 
 def process_folder_example():
     # ==== USER INPUTS ====
-    input_path, output_path = get_input_output_paths()
+    input_path, output_path = get_file_paths()
     folder_path = input_path  # Folder containing your files
     file_type = 'csv'  # 'csv', 'excel', 'txt', or 'parquet'
     json_column = 'location'  # Name of the column containing JSON
@@ -488,7 +661,8 @@ def get_json_data_types_example():
                     key_types, value_types = collect_types_for_dict(parsed)
                     column_key_types[col].update(key_types)
                     column_value_types[col].update(value_types)
-                except Exception:
+                except Exception as e:
+                    print(f"{e}")
                     continue
 
     # Print results
@@ -526,7 +700,8 @@ def find_tag_types_example():
                     parsed = json.loads(cell)
                     tag_types = find_tag_types(parsed)
                     column_tag_types[col].update(tag_types)
-                except Exception:
+                except Exception as e:
+                    print(e)
                     continue
 
     # Print results
@@ -796,318 +971,11 @@ def clean_json_structure_recursively(json_data):
     return json_data  # Return as-is for primitive types
 
 
-def flatten_json_list_dict(obj, parent_key='', sep='.'):
-    """Recursively flattens nested JSON into dotted keys."""
-    items = {}
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            new_key = f"{parent_key}{sep}{k}" if parent_key else k
-            items.update(flatten_json_list_dict(v, new_key, sep=sep))
-    elif isinstance(obj, list):
-        for i, item in enumerate(obj):
-            new_key = f"{parent_key}[]" if parent_key else "[]"
-            items.update(flatten_json_list_dict(item, new_key, sep=sep))
-    else:
-        items[parent_key] = obj
-    return items
-
-
-def process_file_type(file_path, type_map):
-    ext = os.path.splitext(file_path)[1].lower()
-    try:
-        df = pd.read_excel(file_path) if ext == '.xlsx' else pd.read_csv(file_path)
-    except Exception as e:
-        print(f"❌ Error reading {file_path}: {e}")
-        return
-
-    for _, row in df.iterrows():
-        for col in df.columns:
-            cell = row[col]
-            if isinstance(cell, str):
-                try:
-                    cell = clean_json_structure_recursively(cell)
-                    parsed = json.loads(cell)
-                    flat = flatten_json_list_dict(parsed)
-                    for key, val in flat.items():
-                        type_str = type(val).__name__
-                        type_map[(os.path.basename(file_path), col, key)].add(type_str)
-                except Exception:
-                    continue
-
-
-def process_folder_with_type_tracking(folder_path, output_excel):
-    type_map = defaultdict(set)
-
-    for f_name in os.listdir(folder_path):
-        if f_name.endswith('.xlsx') or f_name.endswith('.csv'):
-            file_path = os.path.join(folder_path, f_name)
-            process_file_type(file_path, type_map)
-
-    # Convert to DataFrame
-    rows = [
-        {"Filename": f, "Column": c, "JSON Key": k, "Types": ", ".join(sorted(types))}
-        for (f, c, k), types in type_map.items()
-    ]
-
-    df = pd.DataFrame(rows).sort_values(by=["Filename", "Column", "JSON Key"])
-    df.to_excel(output_excel, index=False)
-    print(f"✅ Exported type summary to: {output_excel}")
-    return df
-
-
-def process_folder_with_type_tracking_example():
-    # Example usage:
-    # Replace this with the actual folder path
-    folder_path = "../Files Input"
-    output_df = process_folder_with_type_tracking(folder_path,
-                                                  folder_path + "/Files Output/2025-05-30--07-40-00--json_nested_type_summary.xlsx")
-    print(output_df)
-
-
-def remove_none(obj):
-    """
-    Recursively remove None values from lists and dicts (including custom [{"key":..., "value":...}] format).
-    """
-    if isinstance(obj, list):
-        cleaned = []
-        for item in obj:
-            cleaned_item = remove_none(item)
-            if cleaned_item is not None:
-                cleaned.append(cleaned_item)
-        return cleaned
-    elif isinstance(obj, dict):
-        # Special case for {"key":..., "value":...} format
-        if set(obj.keys()) == {"key", "value"}:
-            if obj["value"] is None:
-                return None
-            cleaned_value = remove_none(obj["value"])
-            if cleaned_value is None or cleaned_value == [] or cleaned_value == {}:
-                return None
-            return {"key": obj["key"], "value": cleaned_value}
-        # General dict
-        cleaned = {}
-        for k, v in obj.items():
-            cleaned_v = remove_none(v)
-            if cleaned_v is not None:
-                cleaned[k] = cleaned_v
-        return cleaned if cleaned else None
-    else:
-        return obj
-
-
-def custom_format(obj):
-    """
-    Recursively convert a list of {"key":..., "value":...} dicts into the custom {key,value} string format.
-    """
-    if obj is None:
-        return ''
-    if isinstance(obj, list):
-        # Only include non-empty items
-        items = [custom_format(item) for item in obj if item is not None and custom_format(item) != '']
-        return '[' + ','.join(items) + ']' if any(items) else ''
-    elif isinstance(obj, dict) and set(obj.keys()) == {"key", "value"}:
-        key = obj["key"]
-        value = obj["value"]
-        formatted_value = custom_format(value)
-        return f'{{{key},{formatted_value}}}' if formatted_value != '' else ''
-    else:
-        return str(obj)
-
-
-def remove_none_example():
-    # Example usage:
-    input_json = '''[
-        {"key": "a", "value": 1},
-        {"key": "b", "value": [
-            {"key": "c", "value": 2},
-            {"key": "d", "value": [3,4,5]},
-            {"key": "e", "value": null}
-        ]},
-        {"key": "f", "value": null}
-    ]'''
-    parsed = json.loads(input_json)
-    cleaned = remove_none(parsed)
-    output_str = custom_format(cleaned)
-    print(output_str)
-
-
-def custom_nested_format(obj):
-    """
-    Recursively format [{"key":..., "value":...}] as {key:value}, with nested lists/dicts.
-    """
-    if isinstance(obj, list):
-        if all(isinstance(item, dict) and set(item.keys()) == {"key", "value"} for item in obj):
-            return ','.join(custom_nested_format(item) for item in obj)
-        else:
-            return '[' + ','.join(custom_nested_format(item) for item in obj) + ']'
-    elif isinstance(obj, dict) and set(obj.keys()) == {"key", "value"}:
-        key = obj["key"]
-        value = obj["value"]
-        formatted_value = custom_nested_format(value)
-        return f'{{{key}:{formatted_value}}}'
-    else:
-        return str(obj)
-
-
-def flatten_json_parsed(obj, parent_key=''):
-    """
-    Recursively flatten [{"key":..., "value":...}] into dot notation.
-    Returns a list of (key, value) tuples.
-    """
-    items = []
-    if isinstance(obj, list):
-        for item in obj:
-            if isinstance(item, dict) and set(item.keys()) == {"key", "value"}:
-                k = item["key"]
-                v = item["value"]
-                new_key = f"{parent_key}.{k}" if parent_key else k
-                if isinstance(v, list) and all(isinstance(i, dict) and set(i.keys()) == {"key", "value"} for i in v):
-                    items.extend(flatten_json_parsed(v, new_key))
-                else:
-                    items.append((new_key, v))
-    return items
-
-
-def format_flattened(items):
-    """
-    Format list of (key, value) tuples as {key:value}
-    """
-    return ','.join(f'{{{k}:{v}}}' if not isinstance(v, list) else f'{{{k}:{v}}}' for k, v in items)
-
-
-def custom_nested_format_example():
-    input_json = '''[
-        {"key": "a", "value": 1},
-        {"key": "b", "value": [
-            {"key": "c", "value": 2},
-            {"key": "d", "value": [3,4,5]}
-        ]}
-    ]'''
-    parsed = json.loads(input_json)
-    # 1. Custom Nested Format
-    nested_str = custom_nested_format(parsed)
-    print(nested_str)  # Output: {a:1},{b:[{c:2},{d:[3,4,5]}]}
-
-
-def format_flattened_example():
-    input_json = '''[
-        {"key": "a", "value": 1},
-        {"key": "b", "value": [
-            {"key": "c", "value": 2},
-            {"key": "d", "value": [3,4,5]}
-        ]}
-    ]'''
-    parsed = json.loads(input_json)
-    # 2. Flattened Recursive Format
-    flat_items = flatten_json_parsed(parsed)
-    flat_str = format_flattened(flat_items)
-    print(flat_str)  # Output: {a:1},{b.c:2},{b.d:[3,4,5]}
-
-
-def flatten_json_dict_lst(y, prefix=''):
-    out = {}
-    if isinstance(y, dict):
-        for k, v in y.items():
-            full_key = f"{prefix}.{k}" if prefix else k
-            if isinstance(v, dict):
-                out.update(flatten_json_dict_lst(v, full_key))
-            elif isinstance(v, list):
-                out[full_key] = 'list'
-                for idx, item in enumerate(v):
-                    out.update(flatten_json_dict_lst(item, f"{full_key}[{idx}]"))
-            else:
-                out[full_key] = v
-    elif isinstance(y, list):
-        for idx, item in enumerate(y):
-            out.update(flatten_json_dict_lst(item, f"{prefix}[{idx}]"))
-    return out
-
-
 def infer_types(flat_dict):
     return {k: type(v).__name__ for k, v in flat_dict.items()}
 
 
-def json_data_types_example():
-    # --- USER INPUTS ---
-    excel_file = r'../Files Output/json_data.xlsx'
-    json_column = 'json_data'  # The column name containing your nested JSON
-
-    # --- READ EXCEL ---
-    df = pd.read_excel(excel_file)
-
-    # --- PROCESS EACH ROW ---
-    all_types = []
-    for idx, row in df.iterrows():
-        json_str = row[json_column]
-        try:
-            data = json.loads(json_str)
-            flat = flatten_json_dict_lst(data)
-            types = infer_types(flat)
-            for key, dtype in types.items():
-                all_types.append({'Row': idx + 1, 'Key': key, 'Type': dtype})
-        except Exception as e:
-            all_types.append({'Row': idx + 1, 'Key': 'ERROR', 'Type': str(e)})
-
-    # --- CREATE SUMMARY TABLE ---
-    summary_df = pd.DataFrame(all_types)
-    print(summary_df)
-
-    # Optionally, write to Excel
-    summary_df.to_excel('../Files Output/2025-05-31--12-00-00--json_key_types_per_row.xlsx', index=False)
-
-
-def custom_format_recursive(obj):
-    """
-    Recursively convert a list of {"key":..., "value":...} dicts into the custom string format.
-    """
-    if isinstance(obj, list):
-        # Check if this is a list of {"key":..., "value":...} dicts
-        if all(isinstance(item, dict) and set(item.keys()) == {"key", "value"} for item in obj):
-            return ','.join(custom_format_recursive(item) for item in obj)
-        else:
-            # It's a list of primitives or other lists
-            return '[' + ','.join(custom_format_recursive(item) for item in obj) + ']'
-    elif isinstance(obj, dict) and set(obj.keys()) == {"key", "value"}:
-        key = obj["key"]
-        value = obj["value"]
-        # Recursively format the value
-        formatted_value = custom_format_recursive(value)
-        return f'{{{key},{formatted_value}}}'
-    else:
-        return str(obj)
-
-
-def custom_format_recursive_example():
-    # Example usage:
-    input_json = '[{"key": "a", "value": "asd"}, {"key": "b", "value": [{"c": 2}, {"d": [3,4,5]}]}]'
-    parsed = json.loads(input_json)
-    output_str = custom_format_recursive(parsed)
-    print(output_str)
-
-
-def is_json(val):
-    """ Function to check if a value is a JSON object or array"""
-    if not isinstance(val, str):
-        return False
-    try:
-        obj = json.loads(val)
-        return isinstance(obj, (dict, list))
-    except (ValueError, TypeError):
-        return False
-
-
-def is_json_example():
-    # Read the Excel file
-    df = pd.read_excel(f'../Files Input/nested_json_as_string_1000.xlsx')
-    json_field_count = 0
-    # Iterate over all cells in the DataFrame
-    for col in df.columns:
-        json_field_count += df[col].apply(is_json).sum()
-
-    print(f"Number of JSON fields in the Excel file: {json_field_count}")
-    '''----------------------------------------------------------------------------------'''
-
-
+##----------------------------------------------------------------------------------------------------------------------
 def generate_sample_json(index):
     """ Helper to create a nested JSON-like structure"""
     return {
@@ -1140,267 +1008,5 @@ def generate_sample_json_example():
     df.to_excel("../Files Output/100_sample_json_strings.xlsx", index=False)
 
 
-def flatten_key_value_json_dict_list(obj, parent_key=''):
-    flat_dict = {}
-    if isinstance(obj, dict):
-        k = obj.get('key')
-        v = obj.get('value')
-        if k is not None:
-            if isinstance(v, dict) or isinstance(v, list):
-                nested = flatten_key_value_json_dict_list(v, parent_key=k)
-                for nk, nv in nested.items():
-                    # If parent_key exists, combine keys
-                    combined_key = f"{k}.{nk}" if nk else k
-                    flat_dict[combined_key] = nv
-            else:
-                flat_dict[k] = v
-        else:
-            # If not a key-value dict, process all items
-            for sub_k, sub_v in obj.items():
-                flat_dict.update(flatten_key_value_json_dict_list(sub_v, parent_key=sub_k))
-    elif isinstance(obj, list):
-        for item in obj:
-            flat_dict.update(flatten_key_value_json_dict_list(item, parent_key=parent_key))
-    return flat_dict
+##----------------------------------------------------------------------------------------------------------------------
 
-
-def flatten_key_value_json_dict_list_example():
-    # Example usage:
-    nested_json = {
-        "key": "user",
-        "value": [
-            {
-                "key": "profile",
-                "value": {
-                    "key": "name",
-                    "value": "Jordan"
-                }
-            },
-            {
-                "key": "contact",
-                "value": {
-                    "key": "phone",
-                    "value": "555-1234"
-                }
-            }
-        ]
-    }
-
-    flat = flatten_key_value_json_dict_list(nested_json)
-    print(flat)
-
-    nested_json = {
-        "key": "user",
-        "value": {
-            "key": "profile",
-            "value": {
-                "key": "name",
-                "value": "Jordan"
-            }
-        }
-    }
-
-    flat = flatten_key_value_json_dict_list(nested_json)
-    print(flat)
-
-    nested_json = {
-        "key": "user",
-        "value": [
-            {
-                "key": "profile",
-                "value": {
-                    "key": "name",
-                    "value": "Jordan"
-                }
-            },
-            {
-                "key": "contact",
-                "value": {
-                    "key": "phone",
-                    "value": "555-1234"
-                }
-            }
-        ]
-    }
-
-    flat = flatten_key_value_json_dict_list(nested_json)
-    print(flat)
-
-
-def flatten_json_list(data, parent_key=''):
-    """
-    Recursively flattens input JSON array of {"key":..., "value":...} objects,
-    prefixing nested keys with their parent key (dot notation).
-    """
-    result = {}
-    if isinstance(data, list):
-        for item in data:
-            key = item.get('key')
-            value = item.get('value')
-            # Build the new key with dot notation if parent_key exists
-            new_key = f"{parent_key}.{key}" if parent_key else key
-            # If value is a list, flatten recursively and prefix keys
-            if isinstance(value, list):
-                nested = flatten_json_list(value, new_key)
-                result.update(nested)
-            # If value is a dict with str_value/int_value, pick the non-null one
-            elif isinstance(value, dict):
-                if 'str_value' in value and value['str_value'] is not None:
-                    result[new_key] = value['str_value']
-                elif 'int_value' in value and value['int_value'] is not None:
-                    try:
-                        result[new_key] = int(value['int_value'])
-                    except Exception:
-                        result[new_key] = value['int_value']
-                else:
-                    # If dict but not str_value/int_value, flatten recursively
-                    nested = flatten_json_list([{'key': k, 'value': v} for k, v in value.items()], new_key)
-                    result.update(nested)
-            else:
-                # If value is a primitive
-                result[new_key] = value
-    return result
-
-
-def flatten_json_safe(json_string):
-    """
-    Attempts to parse and flatten a JSON string using flatten_json.
-    Returns the input as-is if input is empty, invalid, or flattening yields empty.
-    """
-    if not json_string or not isinstance(json_string, str) or not json_string.strip():
-        return json_string
-    try:
-        data = json.loads(json_string)
-        flat = flatten_json_list(data)
-        if not flat:
-            return json_string
-        return flat
-    except Exception as e:
-        print(e)
-        return json_string
-
-
-def smart_cast(val):
-    """Cast value to its actual Python type if possible, else return as string."""
-    # Handle bool
-    if isinstance(val, str):
-        if val.lower() == 'true':
-            return True, 'bool'
-        if val.lower() == 'false':
-            return False, 'bool'
-    # Handle int
-    try:
-        if isinstance(val, str) and val.isdigit():
-            return int(val), 'int'
-    except Exception:
-        pass
-    # Handle float
-    try:
-        if isinstance(val, str) and '.' in val:
-            float_val = float(val)
-            return float_val, 'float'
-    except Exception:
-        pass
-    # Fallback: use original value and its type
-    return val, type(val).__name__
-
-
-def flatten_top_level(data):
-    rows = []
-    if isinstance(data, list):
-        for item in data:
-            key = item.get('key')
-            value = item.get('value')
-            if key is None or value is None:
-                continue
-            # If value is a dict, add all non-null values as separate rows
-            if isinstance(value, dict):
-                for k, v in value.items():
-                    if v is not None:
-                        v2, dtype = smart_cast(v)
-                        rows.append((key, v2, dtype))
-            # If value is a list, flatten each element
-            elif isinstance(value, list):
-                for v in value:
-                    if v is not None:
-                        v2, dtype = smart_cast(v)
-                        rows.append((key, v2, dtype))
-            # If value is a primitive and not None
-            elif value is not None:
-                v2, dtype = smart_cast(value)
-                rows.append((key, v2, dtype))
-    return rows
-
-
-def flatten_top_level_example():
-    # Example JSON string
-    """
-    [
-        {"key":"code","value":{"str_value":"XYZ123","int_value":null, "float_value":"12.5", "bool_value":"true"}},
-        {"key":"code","value":{"str_value":null,"int_value":"123", "float_value":null, "bool_value":"false"}},
-        {"key":"desc","value":{"en":"Test","fr":null}},
-        {"key":"active","value":true},
-        {"key":"empty","value":null}
-    ]
-    """
-    json_str = '[{"key":"code","value":{"str_value":"XYZ123","int_value":null}},{"key":"code","value":{"str_value":null,"int_value":"123"}}]'
-
-    # Parse and flatten
-    data = json.loads(json_str)
-    flat_rows = flatten_top_level(data)
-
-    # Combine rows at key level
-    combined = {}
-    for key, value, dtype in flat_rows:
-        if key not in combined:
-            combined[key] = {'value': [], 'value data type': []}
-        combined[key]['value'].append(str(value))
-        combined[key]['value data type'].append(dtype)
-
-    # Prepare final rows
-    final_rows = []
-    for key, vals in combined.items():
-        final_rows.append((
-            key,
-            ', '.join(vals['value']),
-            ', '.join(vals['value data type'])
-        ))
-
-    # Build DataFrame
-    df = pd.DataFrame(final_rows, columns=['key', 'value', 'value data type'])
-
-    # Save to Excel
-    excel_filename = '../Files Output/key_value_type_combined_output.xlsx'
-    df.to_excel(excel_filename, index=False)
-
-    print(f"Data saved to {excel_filename}")
-    print(df)
-
-    # Valid nested JSON array
-    # json_str = '[{"key":"a","value":[{"key":"b","value":{"str_value":"hello"}},{"key":"c","value":{"int_value":42}}]}]'
-    json_str = '[{"key":"code","value":{"str_value":"XYZ123","int_value":null}},{"key":"code","value":{"str_value":null,"int_value":"123"}}]'
-    print(flatten_top_level(json_str))  # {'a.b': 'hello', 'a.c': 42}
-
-    # Empty input
-    print(flatten_top_level(""))  # Output: ""
-
-    # Invalid JSON
-    print(flatten_top_level("not json"))  # Output: "not json"
-
-    # JSON that flattens to empty
-    print(flatten_top_level("[]"))  # Output: "[]"
-
-    # Example with nested input
-    input_json = '''[
-        {"key":"code","value":{"str_value":"XYZ123","int_value":null}},
-        {"key":"code1","value":{"str_value":null,"int_value":"123"}},
-        {"key":"details","value":[
-            {"key":"sub code","value":{"str_value":"A1","int_value":null}},
-            {"key":"sub value","value":{"str_value":null,"int_value":"456"}}
-        ]}
-    ]'''
-
-    output = flatten_top_level(input_json)
-    output_result = flatten_top_level(output)
-    print(f"Flatten_json function output_result\n{output_result}")
-    print(f"Flatten_json function output\n{output}\n{json.dumps(output, indent=2)}")

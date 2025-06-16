@@ -9,9 +9,9 @@ def get_file_paths():
     # Gets the parent directory of the current working directory
     parent_folder = Path.cwd().parent
     # get the source file folder
-    folder_path = parent_folder / "Files Input"
+    folder_path = parent_folder / "Input"
     # get the output folder
-    output_folder = parent_folder / "Files Output"
+    output_folder = parent_folder / "Output"
     # get the output file name along with timestamp
     output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
 

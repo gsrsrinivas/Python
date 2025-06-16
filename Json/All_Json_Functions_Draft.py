@@ -15,8 +15,8 @@ def get_input_output_paths():
     file_timestamp = datetime.now().strftime("%Y-%m-%d--%H-%M-%S--")
     # Gets the parent directory of the current working directory
     parent_folder = Path.cwd().parent
-    folder_path = parent_folder / "Files Input"
-    output_folder = folder_path / "Files Output"
+    folder_path = parent_folder / "Input"
+    output_folder = folder_path / "Output"
     output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
 
     input_path = folder_path
@@ -39,9 +39,9 @@ def get_file_paths():
     # Gets the parent directory of the current working directory
     parent_folder = Path.cwd().parent
     # get the source file folder
-    folder_path = parent_folder / "Files Input"
+    folder_path = parent_folder / "Input"
     # get the output folder
-    output_folder = parent_folder / "Files Output"
+    output_folder = parent_folder / "Output"
     # get the output file name along with timestamp
     output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
 
@@ -84,9 +84,9 @@ def list_files_by_extensions_example():
 
 def read_parquet_to_df_example():
     # Read the Parquet file into a DataFrame
-    df = pd.read_parquet('../Files Input/json_data.parquet')
+    df = pd.read_parquet('../In_Out/Input/json_data.parquet')
     # Write the DataFrame to an Excel file
-    df.to_excel('../Files Output/your_file.xlsx', index=False)
+    df.to_excel('../Output/your_file.xlsx', index=False)
 
 
 def read_all_file(file_path, file_types):
@@ -151,7 +151,7 @@ def json_col_count_example(df):
 
 def is_json_example():
     # Read the Excel file
-    df = pd.read_excel(f'../Files Input/nested_json_as_string_1000.xlsx')
+    df = pd.read_excel(f'../Input/nested_json_as_string_1000.xlsx')
     json_field_count = 0
     # Iterate over all cells in the DataFrame
     for col in df.columns:
@@ -303,7 +303,7 @@ def flatten_top_level_giving_output_directly_example():
     df = pd.DataFrame(final_rows, columns=['key', 'value', 'value data type'])
 
     # Save to Excel
-    excel_filename = '../Files Output/key_value_type_combined_output.xlsx'
+    excel_filename = '../In_Out/Output/2025-05-31--12-00-00--key_value_type_combined_output.xlsx'
     df.to_excel(excel_filename, index=False)
 
     print(f"Data saved to {excel_filename}")
@@ -451,7 +451,7 @@ def get_types(value):
 
 def get_json_tag_data_type_example():
     # Read the Excel file
-    df = pd.read_excel('../Files Input/json_data.xlsx')
+    df = pd.read_excel('../Input/json_data.xlsx')
 
     # Dictionary to store data types of 'tag' field per column
     column_tag_types = defaultdict(set)
@@ -506,12 +506,12 @@ def collect_types(obj):
 
 def get_json_data_types_store_in_excel_file():
     # Set your input and output file paths
-    input_folder = '../Files Input'
+    input_folder = '../Input'
     input_filename = 'json_data.xlsx'
     output_filename = 'json_types_summary.xlsx'
 
     input_path = os.path.join(input_folder, input_filename)
-    output_path = os.path.join("../Files Output", output_filename)
+    output_path = os.path.join("../In_Out/Output", output_filename)
 
     # Read the Excel file
     df = pd.read_excel(input_path)
@@ -629,7 +629,7 @@ def process_folder_example():
 
 def get_json_data_types_example():
     # Read the Excel file
-    df = pd.read_excel('../Files Input/json_data.xlsx')
+    df = pd.read_excel('../Input/json_data.xlsx')
 
     # Store key and value types per column
     column_key_types = defaultdict(set)
@@ -797,7 +797,7 @@ def process_folder_input(folder_path):
     output_df = pd.DataFrame(output_data)
 
     # Save results
-    output_df.to_csv(os.path.join(folder_path, "Files Output", "2025-05-30--07-40-00--processed_output.csv"),
+    output_df.to_csv(os.path.join(folder_path, "Output", "2025-05-30--07-40-00--processed_output.csv"),
                      index=False)  # Save without index
 
     # Print tracked data types across processed JSON
@@ -808,7 +808,7 @@ def process_folder_input(folder_path):
 
 def process_folder_input_examples():
     # Example usage:
-    folder_path = "../Files Input"  # Update this with the actual folder path
+    folder_path = "../In_Out/Input"  # Update this with the actual folder path
     process_folder_input(folder_path)
 
 
@@ -926,7 +926,7 @@ def process_folders(folder_path):
     output_df = pd.DataFrame(output_data)
 
     # Save results
-    output_df.to_csv(folder_path + "/Files Output/2025-05-30--07-40-00--processed_output.csv",
+    output_df.to_csv(folder_path + "/Output/2025-05-30--07-40-00--processed_output.csv",
                      index=False)  # Save without index
 
     # Print tracked data types across processed JSON
@@ -937,7 +937,7 @@ def process_folders(folder_path):
 
 def process_folders_example():
     # Example usage:
-    folder_path = "../Files Input"  # Update this with the actual folder path
+    folder_path = "../In_Out/Input"  # Update this with the actual folder path
     process_folders(folder_path)
 
 
@@ -1005,7 +1005,7 @@ def generate_sample_json_example():
 
     # Create a DataFrame and save to Excel
     df = pd.DataFrame({"json_data": sample_data})
-    df.to_excel("../Files Output/100_sample_json_strings.xlsx", index=False)
+    df.to_excel("../Output/100_sample_json_strings.xlsx", index=False)
 
 
 ##----------------------------------------------------------------------------------------------------------------------

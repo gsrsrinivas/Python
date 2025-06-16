@@ -26,12 +26,12 @@ def collect_types(obj):
 
 def get_json_data_types_store_in_excel_file():
     # Set your input and output file paths
-    input_folder = '../Files Input'
+    input_folder = '../Input'
     input_filename = 'json_data.xlsx'
     output_filename = 'json_types_summary.xlsx'
 
     input_path = os.path.join(input_folder, input_filename)
-    output_path = os.path.join("../Files Output", output_filename)
+    output_path = os.path.join("../In_Out/Output", output_filename)
 
     # Read the Excel file
     df = pd.read_excel(input_path)

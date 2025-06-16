@@ -6,7 +6,7 @@ import pandas as pd
 
 def get_json_data_types_example():
     # Read the Excel file
-    df = pd.read_excel('../Files Input/json_data.xlsx')
+    df = pd.read_excel('../Input/json_data.xlsx')
 
     # Store key and value types per column
     column_key_types = defaultdict(set)

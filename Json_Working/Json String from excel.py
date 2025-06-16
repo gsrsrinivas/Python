@@ -68,7 +68,7 @@ def collect_flatten_example():
     parent_folder = Path.cwd().parent
     folder_path = parent_folder / "Src Files Json"
     # Set your input and output folder paths
-    output_folder = folder_path / "Files Output"
+    output_folder = folder_path / "Output"
     output_filename = f"{file_timestamp}json_types_summary_all_files.xlsx"
 
     input_path = folder_path

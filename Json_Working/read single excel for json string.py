@@ -6,7 +6,7 @@ import pandas as pd
 
 def get_json_tag_data_type_example():
     # Read the Excel file
-    df = pd.read_excel('../Files Input/json_data.xlsx')
+    df = pd.read_excel('../Input/json_data.xlsx')
 
     # Dictionary to store data types of 'tag' field per column
     column_tag_types = defaultdict(set)

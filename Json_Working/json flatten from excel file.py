@@ -28,7 +28,7 @@ def infer_types(flat_dict):
 
 def json_data_types_example():
     # --- USER INPUTS ---
-    excel_file = r'../Files Output/json_data.xlsx'
+    excel_file = r'../In_Out/Output/json_data.xlsx'
     json_column = 'json_data'  # The column name containing your nested JSON
 
     # --- READ EXCEL ---
@@ -52,7 +52,7 @@ def json_data_types_example():
     print(summary_df)
 
     # Optionally, write to Excel
-    summary_df.to_excel('../Files Output/2025-05-31--12-00-00--json_key_types_per_row.xlsx', index=False)
+    summary_df.to_excel('../Output/2025-05-31--12-00-00--json_key_types_per_row.xlsx', index=False)
 
 
 if __name__ == '__main__':

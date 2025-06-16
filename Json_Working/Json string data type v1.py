@@ -83,7 +83,7 @@ def process_folders(folder_path):
     output_df = pd.DataFrame(output_data)
 
     # Save results
-    output_df.to_csv(folder_path + "/Files Output/2025-05-30--07-40-00--processed_output.csv",
+    output_df.to_csv(folder_path + "/Output/2025-05-30--07-40-00--processed_output.csv",
                      index=False)  # Save without index
 
     # Print tracked data types across processed JSON
@@ -94,7 +94,7 @@ def process_folders(folder_path):
 
 def process_folders_example():
     # Example usage:
-    folder_path = "../Files Input"  # Update this with the actual folder path
+    folder_path = "../In_Out/Input"  # Update this with the actual folder path
     process_folders(folder_path)
 
 

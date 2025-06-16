@@ -33,7 +33,7 @@ def generate_sample_json_example():
 
     # Create a DataFrame and save to Excel
     df = pd.DataFrame({"json_data": sample_data})
-    df.to_excel("../Files Output/100_sample_json_strings.xlsx", index=False)
+    df.to_excel("../Output/100_sample_json_strings.xlsx", index=False)
 
 
 if __name__ == "__main__":

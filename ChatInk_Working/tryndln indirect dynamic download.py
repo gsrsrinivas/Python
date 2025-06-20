@@ -5,7 +5,7 @@ import time
 import os
 
 # Set up Chrome options to specify the download directory
-download_dir = os.path.abspath("downloads")
+download_dir = os.path.abspath("Output")
 os.makedirs(download_dir, exist_ok=True)
 chrome_options = webdriver.ChromeOptions()
 prefs = {'download.default_directory': download_dir}

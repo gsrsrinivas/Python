@@ -727,13 +727,13 @@ def chat_ink_excel_file_download_and_insert_into_db():
                     # df_all = df
                     df_all = pd.DataFrame()
                 df_all = pd.concat([df_all, df], ignore_index=True)
-                # df.to_excel('C:/Users/gsrsr/downloads/bullish-15-minutes-of-triple-screen.xlsx', index=False)
+                # df.to_excel('C:/Users/gsrsr/Output/bullish-15-minutes-of-triple-screen.xlsx', index=False)
             print(f"complete '{tf_l[i]}' for {each_segment_list}")
     print(f"\ndownloading data from the website is complete.")
     # print(f"\nStarted writing to excel file\n")
     df_all = df_all.fillna(0)
     # write to Excel file
-    # df_all.to_excel('C:/Users/gsrsr/downloads/ChartInk-Stocks.xlsx', index=False)
+    # df_all.to_excel('C:/Users/gsrsr/Output/ChartInk-Stocks.xlsx', index=False)
     # print("download to excel file complete")
     # ##################################################################################################################
     print(f'started inserting into the database table')

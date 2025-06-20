@@ -1,8 +1,8 @@
+# pip install --upgrade pandas --target="C:\Program Files\Python312\Lib\site-packages"
 import sys
 import time
-from pathlib import Path
 from datetime import datetime
-# pip install --upgrade pandas --target="C:\Program Files\Python312\Lib\site-packages"
+
 import pandas as pd
 import pyodbc
 import requests
@@ -10,112 +10,158 @@ from bs4 import BeautifulSoup as Bs
 
 
 def print_start_timestamp():
-    start_date = datetime.now()
+    # ##################################################################################################################
+    # Start time
     start_time = time.time()
+    # Start datetime
+    start_date = datetime.now()
+    start_date_formated = start_date.strftime('%Y-%m-%d')
+    print(f"Start date of script is: {start_date_formated} "
+          f"and time is: {datetime.fromtimestamp(start_time).strftime("%H:%M:%S")}")
+    # ##################################################################################################################
+    # Sample timestamps
+    morning_timestamp = "07:29:58"
+    evening_timestamp = "15:45:01"
+    current_timestamp = start_date.strftime("%H:%M:%S")
 
-    date_str = start_date.strftime('%Y-%m-%d')
-    time_str = start_date.strftime('%H:%M:%S')
-    print(f"Start date of script: {date_str} and time: {time_str}")
-    # Define trading hours
-    trading_start = datetime.strptime(f"{date_str} 07:30:00", "%Y-%m-%d %H:%M:%S")
-    trading_end = datetime.strptime(f"{date_str} 15:30:00", "%Y-%m-%d %H:%M:%S")
+    # Convert timestamps to datetime objects
+    dt1 = datetime.strptime(f"{start_date_formated} {morning_timestamp}", "%Y-%m-%d %H:%M:%S")
+    dt2 = datetime.strptime(f"{start_date_formated} {evening_timestamp}", "%Y-%m-%d %H:%M:%S")
+    dt3 = datetime.strptime(f"{start_date_formated} {current_timestamp}", "%Y-%m-%d %H:%M:%S")
+    # Calculate the difference
+    morning_time_difference = dt3 - dt1  # >0
+    evening_time_difference = dt3 - dt2  # <0
 
-    if trading_start <= start_date <= trading_end:
-        print(f"Current Time: {time_str} is within trading hours (07:30 to 15:30). Continuing the program.")
+    # Get the difference in hours and minutes
+    total_seconds_in_morning = morning_time_difference.total_seconds()
+    total_seconds_in_evening = evening_time_difference.total_seconds()
+
+    if total_seconds_in_morning > 0 > total_seconds_in_evening:
+        print(f"Current Time: {current_timestamp} is within the trading Hours i.e., 7:30 am to 15:30 pm "
+              f"so continuing the program")
         return start_date, start_time, "continue"
     else:
-        print(f"Current Time: {time_str} is outside trading hours (07:30 to 15:30). Exiting the program.")
+        print(f"Current Time: {current_timestamp} is outside of trading Hours i.e., 7:30 am to 15:30 pm "
+              f"so existing the program")
         time.sleep(15)
-        return None, None, "exit"
+        return start_date, start_time, "exit"
+    # ##################################################################################################################
 
 
 def print_end_timestamp(start_date, start_time):
+    # ##################################################################################################################
+    # End time
     end_time = time.time()
+    # End time
     end_date = datetime.now()
     end_date_formated = end_date.strftime('%Y-%m-%d')
-    end_time_formatted = end_date.strftime('%H:%M:%S')
-    elapsed_seconds = end_time - start_time
-    print(f"End date of script: {end_date_formated} and time: {end_time_formatted}")
-    elapsed_duration = end_date - start_date
-    print(f"total time to complete in seconds: {elapsed_seconds:.2f}\nconverted to datetime format: {elapsed_duration}\n")
+    # Elapsed time in seconds
+    elapsed_time = end_time - start_time
+    # Elapsed datetime
+    print(f"End date of script is: {end_date_formated} "
+          f"and time is: {datetime.fromtimestamp(end_time).strftime("%H:%M:%S")}")
+    elapsed_datetime = end_date - start_date
+    print(f"total time to complete in seconds: {elapsed_time}\nconverted to datetime format: {elapsed_datetime}\n")
     time.sleep(15)
+    # ##################################################################################################################
 
 
 def insert_into_database_tables(df_all):
+    # ##################################################################################################################
     print(f'started inserting into the database table')
     df_all = df_all.fillna(0)
     # Define connection string to SQL Server with Windows Authentication
-    conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
+    conn_str = ('DRIVER={ODBC Driver 17 for SQL Server};'
+                'SERVER=DESKTOP-EP99LTB;'
+                'DATABASE=Stocks_Analysis;'
+                'Trusted_Connection=yes;')
+    # Establish connection to SQL Server
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+    print(f'connection is established')
     # Define the insert statement
     insert_query = '''INSERT INTO _sis.Cash_Stocks(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
-    input_folder_path = f"C:/Users/gsrsr/Documents/SQL Server Management Studio/Analysis of Stocks/Analysis of Stocks"
-    file_paths = {
-        "analysis_insert": Path(f"{input_folder_path}/InsertScript.sql"),
-        "report_update": Path(f"{input_folder_path}/update_Report_Queries.sql")
-    }
-    # Establish connection to SQL Server
-    with pyodbc.connect(conn_str) as conn:
-        cursor = conn.cursor()
-        print(f'connection is established')
-        records = df_all[[
-            'sr#', 'stock name', 'symbol', 'Links', '% Chg',
-            'price', 'volume', 'Indicator', 'TimeLine',
-            'Direction', 'Segment', 'Batch_No'
-        ]].values.tolist()
-        cursor.executemany(insert_query, records)
-        conn.commit()
-        print(f"{len(records)} records inserted in Cash_Stocks table using batch insert!")
-        # Execute both SQL Script files
-        for label, path in file_paths.items():
-            print(f"Executing {label} SQL script")
-            with open(path, 'r', encoding='utf-8') as file_path:
-                cursor.execute(file_path.read())
-            conn.commit()
-            print(f"{label.replace('_', ' ').capitalize()} committed")
-    print("All operations completed")
+    # Iterate over the DataFrame and insert data into the SQL Server table
+    for index, row in df_all.iterrows():
+        cursor.execute(insert_query, row['sr#'], row['stock name'], row['symbol'], row['Links'], row['% Chg'],
+                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['Segment'],
+                       row['Batch_No'])
+        sys.stdout.write(f"\r{index} records inserted out of {df_all.shape[0] - 1}")
+        sys.stdout.flush()
+    print(f'\nCommiting the records in Cash_Stocks table')
+    # Commit the transaction
+    conn.commit()
+    # print(f'Closing the connections')
+    # Close the connection
+    # cursor.close()
+    # conn.close()
+    print('Data inserted successfully!')
+    # ##################################################################################################################
+    print(f'Analysing the inserted data and inserting into report table')
+    # Read SQL script file
+    script_file = 'C:/Users/gsrsr/Documents/SQL Server Management Studio/Analysis of Stocks/Analysis of Stocks/InsertScript.sql'
+    with open(script_file, 'r') as file:
+        sql_script = file.read()
+    # Execute SQL script
+    print(f'start: executing the sql queries')
+    cursor.execute(sql_script)
+    print(f'end: executing the sql queries')
+    print(f'Commiting the records in Analyse_Stocks')
+    conn.commit()
+    # ##################################################################################################################
+    print(f'update the Analysis records in report table')
+    # Read SQL script file
+    script_file = 'C:/Users/gsrsr/Documents/SQL Server Management Studio/Analysis of Stocks/Analysis of Stocks/update_Report_Queries.sql'
+    with open(script_file, 'r') as file:
+        sql_script = file.read()
+    # Execute SQL script
+    cursor.execute(sql_script)
+    print(f'Commiting the records in Analyse_Stocks for reporting')
+    conn.commit()
+    # ##################################################################################################################
+    print(f'Closing the connections')
+    # Close the connection
+    cursor.close()
+    conn.close()
 
 
 def download_chart_ink_technical_analysis_scanner(data_each_list):
-    """Fetches technical analysis data from Chart ink based on provided scan parameters."""
-    key, data = next(iter(data_each_list.items()))
-    with requests.Session() as session:
-        # Step 1: Fetch CSRF token
-        response = session.get('https://chartink.com/screener/watch-list-stocks-5')
-        soup = Bs(response.content, 'lxml')
-        csrf_token = soup.select_one('[name=csrf-token]')['content']
-        session.headers['X-CSRF-TOKEN'] = csrf_token
-        # Step 2: Submit scan data
-        response = session.post('https://chartink.com/screener/process', data=data)
-        result = response.json()
-        # Step 3: Check for errors
-        print(f"Scan error:{result["scan_error"]} for rule: {key} with data: {data}") if "scan_error" in result else None
-        # Step 4: Convert to DataFrame
-        return pd.DataFrame(result.get('data', []))
+    with requests.Session() as s:
+        key, data = next(iter(data_each_list.items()))
+        # for _, value in data_each_list.items():
+        #     data = value
+        # r = s.get(url_list[i])
+        r = s.get('https://chartink.com/screener/watch-list-stocks-5')
+        soup = Bs(r.content, 'lxml')
+        s.headers['X-CSRF-TOKEN'] = soup.select_one('[name=csrf-token]')['content']
+        r = s.post('https://chartink.com/screener/process', data=data).json()
+        print(f"Value: {r["scan_error"]} for rule: {key} {data}") if "scan_error" in r else None
+        df = pd.DataFrame(r['data'])
+        return df
 
 
 def insert_new_columns_in_data_frame(df,tf_l_i,each_segment_list,start_date):
-    """
-        Reorders, renames, and appends additional metadata columns to the stock DataFrame.
-    """
-    if df.empty:
-        return df
-    # Reorder columns by name to avoid hardcoded indexes
-    expected_order = ['sr', 'nsecode', 'name', 'bsecode', 'per_chg', 'close', 'volume']
-    df = df[expected_order]
-    # Rename columns
-    df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
-    # Extract and clean metadata  # insert new columns
-    indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
-    batch_no = start_date.strftime('%Y%m%d')
-    # Insert new metadata columns
-    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction, each_segment_list, batch_no]
+    # reorder columns
+    if len(df) > 0:
+        df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
+        # Rename columns
+        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links',
+                           'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        # insert new columns
+        part1, part2, part3 = tf_l_i.split('__')
+        df.insert(7, 'Indicator', part1.replace("_"," "), allow_duplicates=True)
+        df.insert(8, 'TimeLine', part2.replace("_"," "), allow_duplicates=True)
+        df.insert(9, 'Direction', part3.replace("_"," "), allow_duplicates=True)
+        df.insert(10, 'Segment', each_segment_list, allow_duplicates=True)
+        df.insert(11, 'Batch_No', start_date.strftime('%Y%m%d'), allow_duplicates=True)
     return df
 
 
 def chat_ink_excel_file_download_and_insert_into_db():
     start_date, start_time, status = print_start_timestamp()
     sys.exit() if status == "exit" else None
+    # chart ink rule condition to download the stocks
     data_list = [
         # {'all_stocks' : {'scan_clause': '( {segments_filter} ( latest close >= 0 ) )'}},
         {'macd__yearly__crosses_above' : {'scan_clause': '( {segments_filter} ( yearly macd line( 26 , 12 , 9 ) >= yearly macd signal( 26 , 12 , 9 ) ) )'}},
@@ -418,6 +464,7 @@ def chat_ink_excel_file_download_and_insert_into_db():
         {'28_year__yearly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 28 years ago close <= 29 years ago close ) )'}},
         {'29_year__yearly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 29 years ago close <= 30 years ago close ) )'}},
         {'30_year__yearly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 30 years ago close <= 31 years ago close ) )'}},
+
         {' 0_quarter__quarterly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (    quarterly close    >=  1 quarter ago close  ) )'}},
         {' 1_quarter__quarterly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (  1 quarter ago close  >=  2 quarters ago close ) )'}},
         {' 2_quarter__quarterly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (  2 quarters ago close >=  3 quarters ago close ) )'}},
@@ -480,6 +527,7 @@ def chat_ink_excel_file_download_and_insert_into_db():
         {'28_quarter__quarterly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 28 quarters ago close <= 29 quarters ago close ) )'}},
         {'29_quarter__quarterly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 29 quarters ago close <= 30 quarters ago close ) )'}},
         {'30_quarter__quarterly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 30 quarters ago close <= 31 quarters ago close ) )'}},
+
         {' 0_month__monthly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (    monthly close    >=  1 month ago close  ) )'}},
         {' 1_month__monthly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (  1 month ago close  >=  2 months ago close ) )'}},
         {' 2_month__monthly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (  2 months ago close >=  3 months ago close ) )'}},
@@ -542,6 +590,7 @@ def chat_ink_excel_file_download_and_insert_into_db():
         {'28_month__monthly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 28 months ago close <= 29 months ago close ) )'}},
         {'29_month__monthly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 29 months ago close <= 30 months ago close ) )'}},
         {'30_month__monthly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 30 months ago close <= 31 months ago close ) )'}},
+
         {' 0_week__weekly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (    weekly close    >=  1 week ago close  ) )'}},
         {' 1_week__weekly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (  1 week ago close  >=  2 weeks ago close ) )'}},
         {' 2_week__weekly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (  2 weeks ago close >=  3 weeks ago close ) )'}},
@@ -604,6 +653,7 @@ def chat_ink_excel_file_download_and_insert_into_db():
         {'28_week__weekly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 28 weeks ago close <= 29 weeks ago close ) )'}},
         {'29_week__weekly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 29 weeks ago close <= 30 weeks ago close ) )'}},
         {'30_week__weekly__less_than_equal_to'    : {'scan_clause': '( {segments_filter} ( 30 weeks ago close <= 31 weeks ago close ) )'}},
+
         {' 0_day__daily__greater_than_equal_to'   : {'scan_clause': '( {segments_filter} ( latest close     >= 1 day ago close   ) )'}},
         {' 1_day__daily__greater_than_equal_to'   : {'scan_clause': '( {segments_filter} ( 1 day ago close  >= 2 days ago close  ) )'}},
         {' 2_day__daily__greater_than_equal_to' : {'scan_clause': '( {segments_filter} ( 2 day ago close  >= 3 days ago close  ) )'}},
@@ -666,6 +716,7 @@ def chat_ink_excel_file_download_and_insert_into_db():
         {'28_day__daily__less_than_equal_to' : {'scan_clause': '( {segments_filter} ( 28 day ago close <= 29 days ago close ) )'}},
         {'29_day__daily__less_than_equal_to' : {'scan_clause': '( {segments_filter} ( 29 day ago close <= 30 days ago close ) )'}},
         {'30_day__daily__less_than_equal_to' : {'scan_clause': '( {segments_filter} ( 30 day ago close <= 31 days ago close ) )'}},
+
         {' 0_4_hour__4_hourly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (   [0] 4 hour close >=  [-1] 4 hour close ) )'}},
         {' 1_4_hour__4_hourly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (   [1] 4 hour close >=  [-2] 4 hour close ) )'}},
         {' 2_4_hour__4_hourly__greater_than_equal_to' : {'scan_clause': '( {segments_filter} (   [2] 4 hour close >=  [-3] 4 hour close ) )'}},
@@ -853,7 +904,6 @@ def chat_ink_excel_file_download_and_insert_into_db():
         {'28_15_minute__15_minute__less_than_equal_to'    : {'scan_clause': '( {segments_filter} (  [28] 15 minute close <= [-29] 15 minute close ) )'}},
         {'29_15_minute__15_minute__less_than_equal_to'    : {'scan_clause': '( {segments_filter} (  [29] 15 minute close <= [-30] 15 minute close ) )'}},
         {'30_15_minute__15_minute__less_than_equal_to'    : {'scan_clause': '( {segments_filter} (  [30] 15 minute close <= [-31] 15 minute close ) )'}},
-
     ]
     segments = {'Cash': 'cash',
                 # 'Nifty 500':'57960','BankNifty':'136699','ETFs':'166311','Futures':'33489','Gold ETFs':'167068','Indices':'45603','Mid-Cap 50':'136492','Nifty 100':'33619','Nifty 200':'46553','Nifty 50':'33492','Nifty 500 Multi Cap 50:25:25':'1090574','Nifty and BankNifty':'109630','Nifty Large Mid-Cap 250':'1090573','Nifty Micro Cap 250':'1090582','Nifty Mid-Cap 100':'1090585','Nifty Mid-Cap 150':'1090588','Nifty Mid-Cap 50':'1090591','Nifty Mid-Cap Select':'1090579','Nifty Mid-Small Cap 400':'1090575','Nifty Next 50':'1116352','Nifty Small Cap 100':'1090587','Nifty Small Cap 250':'1090572','Nifty Small Cap 50':'1090568','Silver ETFs':'1195362',
@@ -869,18 +919,13 @@ def chat_ink_excel_file_download_and_insert_into_db():
             key = next(iter(data_each_list))  # Gets the first key
         # end - iterate through the segments for one single url
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
-            df = insert_new_columns_in_data_frame(df,key,each_segment_list,start_date)
+            df = insert_new_columns_in_data_frame(df, key, each_segment_list, start_date)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            # print(f"complete '{key.replace("__",";").replace("_"," ")}' for {each_segment_list} segment as of {datetime.now()}")
+            print(f"complete '{key.replace("__",";").replace("_"," ")}' for {each_segment_list}")
     print(f"\ndownloading data from the website is complete.")
-    # folder_path = "../In_Out/Output"
-    # print("write to Excel file")
-    # df_all.to_excel(f'{folder_path}/ChartInk-Stocks.xlsx', index=False)
-    # print("download to excel file complete")
     insert_into_database_tables(df_all)
     print_end_timestamp(start_date, start_time)
 
 
 if __name__ == "__main__":
     chat_ink_excel_file_download_and_insert_into_db()
-

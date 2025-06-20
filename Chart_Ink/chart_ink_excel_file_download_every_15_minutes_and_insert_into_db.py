@@ -385,7 +385,7 @@ def chat_ink_xls2db():
         {'30_15_minute__15_minute__less_than_equal_to'    : {'scan_clause': '( {segments_filter} (  [30] 15 minute close <= [-31] 15 minute close ) )'}},
     ]
     table_names = ["Cash_15minutes_Stocks","InsertScript_15minutes","update_Report_15minutes_Queries"]
-    chat_ink_excel_file_download_and_insert_into_db(data_list, table_names, start_date)
+    chart_ink_excel_file_download_and_insert_into_db(data_list, table_names, start_date)
 
     print_end_timestamp(start_date, start_time)
 

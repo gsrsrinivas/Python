@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup as Bs
 
 
-def chat_ink_excel_file_download_and_insert_into_db():
+def chart_ink_excel_file_download_and_insert_into_db():
     # pip install --upgrade pandas --target="C:\Program Files\Python312\Lib\site-packages"
     # ##################################################################################################################
     # Start time
@@ -810,4 +810,4 @@ def chat_ink_excel_file_download_and_insert_into_db():
 
 
 if __name__ == "__main__":
-    chat_ink_excel_file_download_and_insert_into_db()
+    chart_ink_excel_file_download_and_insert_into_db()

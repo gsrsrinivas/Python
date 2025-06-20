@@ -113,7 +113,7 @@ def insert_new_columns_in_data_frame(df,tf_l_i,each_segment_list,start_date):
     return df
 
 
-def chat_ink_excel_file_download_and_insert_into_db():
+def chart_ink_excel_file_download_and_insert_into_db():
     start_date, start_time, status = print_start_timestamp()
     sys.exit() if status == "exit" else None
     data_list = [
@@ -882,5 +882,5 @@ def chat_ink_excel_file_download_and_insert_into_db():
 
 
 if __name__ == "__main__":
-    chat_ink_excel_file_download_and_insert_into_db()
+    chart_ink_excel_file_download_and_insert_into_db()
 

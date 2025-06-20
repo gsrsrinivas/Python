@@ -111,7 +111,7 @@ def insert_new_columns_in_data_frame(df,tf_l_i,each_segment_list,start_date):
     return df
 
 
-def chat_ink_excel_file_download_and_insert_into_db(data_list, table_names, start_date):
+def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names, start_date):
     segments = {'Cash': 'cash',
                 # 'Nifty 500':'57960','BankNifty':'136699','ETFs':'166311','Futures':'33489','Gold ETFs':'167068','Indices':'45603','Mid-Cap 50':'136492','Nifty 100':'33619','Nifty 200':'46553','Nifty 50':'33492','Nifty 500 Multi Cap 50:25:25':'1090574','Nifty and BankNifty':'109630','Nifty Large Mid-Cap 250':'1090573','Nifty Micro Cap 250':'1090582','Nifty Mid-Cap 100':'1090585','Nifty Mid-Cap 150':'1090588','Nifty Mid-Cap 50':'1090591','Nifty Mid-Cap Select':'1090579','Nifty Mid-Small Cap 400':'1090575','Nifty Next 50':'1116352','Nifty Small Cap 100':'1090587','Nifty Small Cap 250':'1090572','Nifty Small Cap 50':'1090568','Silver ETFs':'1195362',
                 }

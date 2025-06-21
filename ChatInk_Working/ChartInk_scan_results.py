@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def chartink_scan_results():
+def chart_ink_scan_results():
     # Define the scan URL and the scan clause
     scan_url = 'https://chartink.com/screener/bullish-15-minutes-of-triple-screen2'
     # scan_clause = '( {cash} ( latest close > 10 and latest tema(latest close,10) > latest tema( latest close,20) and latest volume > 50000 and market cap > 500) )'
@@ -27,10 +27,10 @@ def chartink_scan_results():
         df = pd.DataFrame(results)
 
         # Save the DataFrame to an Excel file
-        df.to_excel('chartink_scan_results.xlsx', index=False)
+        df.to_excel('chart_ink_scan_results.xlsx', index=False)
 
-    print("Scan results saved to 'chartink_scan_results.xlsx'")
+    print("Scan results saved to 'chart_ink_scan_results.xlsx'")
 
 
 if __name__ == "__main__":
-    chartink_scan_results()
+    chart_ink_scan_results()

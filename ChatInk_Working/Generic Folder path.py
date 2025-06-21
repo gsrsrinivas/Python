@@ -3,6 +3,11 @@ from pathlib import Path
 
 
 def generic_folder_paths_examples():
+    """
+    This script demonstrates how to work with generic folder paths in Python using both the os module and pathlib.
+    It includes examples of creating folder paths relative to the current working directory, the user's home directory,
+    and the parent directory.
+    """
     folder_path = os.path.join(os.getcwd(), "my_folder")  # Joins the current working directory with the folder name
     print(folder_path)
     '''----------------------------------------------------------------------------------'''

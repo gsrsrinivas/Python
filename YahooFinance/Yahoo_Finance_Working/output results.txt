@@ -1,0 +1,905 @@
+1 Failed download:
+['BANKNIFTY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for BANKNIFTY.NS with period 5d and interval 15m.
+
+1 Failed download:
+['BANKNIFTY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for BANKNIFTY.NS with period 5d and interval 1h.
+
+1 Failed download:
+['BANKNIFTY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for BANKNIFTY.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['BANKNIFTY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for BANKNIFTY.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['BANKNIFTY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for BANKNIFTY.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['BANKNIFTY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for BANKNIFTY.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['BANKNIFTY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['CNXNIFTYJUNIOR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['CNXNIFTYJUNIOR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CNXNIFTYJUNIOR.NS with period 5d and interval 1h.
+
+1 Failed download:
+['CNXNIFTYJUNIOR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CNXNIFTYJUNIOR.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['CNXNIFTYJUNIOR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CNXNIFTYJUNIOR.NS with period 3mo and interval 1d.
+No data found for CNXNIFTYJUNIOR.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['CNXNIFTYJUNIOR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['CNXNIFTYJUNIOR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CNXNIFTYJUNIOR.NS with period 1y and interval 1wk.
+No data found for CNXNIFTYJUNIOR.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['CNXNIFTYJUNIOR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CNXPHARMA.NS with period 5d and interval 15m.
+
+1 Failed download:
+['CNXPHARMA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+1 Failed download:
+['CNXPHARMA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for CNXPHARMA.NS with period 5d and interval 1h.
+No data found for CNXPHARMA.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['CNXPHARMA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for CNXPHARMA.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['CNXPHARMA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for CNXPHARMA.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['CNXPHARMA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+
+1 Failed download:
+['CNXPHARMA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+No data found for CNXPHARMA.NS with period 1y and interval 1wk.
+No data found for CNXPHARMA.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['CNXPHARMA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+
+1 Failed download:
+['CNXPSE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for CNXPSE.NS with period 5d and interval 15m.
+No data found for CNXPSE.NS with period 5d and interval 1h.
+
+1 Failed download:
+['CNXPSE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for CNXPSE.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['CNXPSE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for CNXPSE.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['CNXPSE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for CNXPSE.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['CNXPSE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+
+1 Failed download:
+['CNXPSE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+No data found for CNXPSE.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['CNXPSE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+No data found for CNXPSE.NS with period 5y and interval 1mo.
+
+No data found for NIFTY100.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTY100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for NIFTY100.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTY100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for NIFTY100.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTY100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+
+1 Failed download:
+['NIFTY100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for NIFTY100.NS with period 3mo and interval 1d.
+No data found for NIFTY100.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTY100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+
+1 Failed download:
+['NIFTY100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+No data found for NIFTY100.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTY100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+No data found for NIFTY100.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTY50VALUE30.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50VALUE30.NS with period 5d and interval 15m.
+No data found for NIFTY50VALUE30.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTY50VALUE30.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTY50VALUE30.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50VALUE30.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTY50VALUE30.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50VALUE30.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTY50VALUE30.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50VALUE30.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTY50VALUE30.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50VALUE30.NS with period 1y and interval 1wk.
+No data found for NIFTY50VALUE30.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTY50VALUE30.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYFINSERVICE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYFINSERVICE.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYFINSERVICE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYFINSERVICE.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYFINSERVICE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYFINSERVICE.NS with period 1mo and interval 4h.
+No data found for NIFTYFINSERVICE.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYFINSERVICE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYFINSERVICE.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYFINSERVICE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYFINSERVICE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYFINSERVICE.NS with period 1y and interval 1wk.
+No data found for NIFTYFINSERVICE.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYFINSERVICE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYMICROCAP250.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMICROCAP250.NS with period 5d and interval 15m.
+No data found for NIFTYMICROCAP250.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYMICROCAP250.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMICROCAP250.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYMICROCAP250.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYMICROCAP250.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMICROCAP250.NS with period 3mo and interval 1d.
+No data found for NIFTYMICROCAP250.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYMICROCAP250.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMICROCAP250.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYMICROCAP250.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYMICROCAP250.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMICROCAP250.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYOILANDGAS.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYOILANDGAS.NS with period 5d and interval 15m.
+No data found for NIFTYOILANDGAS.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYOILANDGAS.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+No data found for NIFTYOILANDGAS.NS with period 1mo and interval 4h.
+['NIFTYOILANDGAS.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYOILANDGAS.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYOILANDGAS.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYOILANDGAS.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYOILANDGAS.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYOILANDGAS.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYOILANDGAS.NS with period 1y and interval 1wk.
+No data found for NIFTYOILANDGAS.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYOILANDGAS.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYPSUBANK.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYPSUBANK.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYPSUBANK.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYPSUBANK.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYPSUBANK.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYPSUBANK.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYPSUBANK.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYPSUBANK.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYPSUBANK.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYPSUBANK.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYPSUBANK.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYPSUBANK.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYPSUBANK.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYPSUBANK.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['SUVENPHAR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for SUVENPHAR.NS with period 5d and interval 15m.
+No data found for SUVENPHAR.NS with period 5d and interval 1h.
+
+1 Failed download:
+['SUVENPHAR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+1 Failed download:
+['SUVENPHAR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for SUVENPHAR.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['ATFL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for ATFL.NS with period 5d and interval 15m.
+
+1 Failed download:
+['ATFL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for ATFL.NS with period 5d and interval 1h.
+
+1 Failed download:
+['ATFL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for ATFL.NS with period 1mo and interval 4h.
+No data found for ATFL.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['ATFL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['ATFL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for ATFL.NS with period 6mo and interval 1wk.
+No data found for ATFL.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['ATFL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['ATFL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for ATFL.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['CNXENERGY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+1 Failed download:
+['CNXENERGY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for CNXENERGY.NS with period 5d and interval 1h.
+No data found for CNXENERGY.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['CNXENERGY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+
+1 Failed download:
+['CNXENERGY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for CNXENERGY.NS with period 3mo and interval 1d.
+No data found for CNXENERGY.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['CNXENERGY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+No data found for CNXENERGY.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['CNXENERGY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+
+1 Failed download:
+['CNXENERGY.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+No data found for CNXENERGY.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['CNXINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for CNXINFRA.NS with period 5d and interval 15m.
+
+1 Failed download:
+['CNXINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for CNXINFRA.NS with period 5d and interval 1h.
+
+1 Failed download:
+['CNXINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for CNXINFRA.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['CNXINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for CNXINFRA.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['CNXINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+No data found for CNXINFRA.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['CNXINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+No data found for CNXINFRA.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['CNXINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+No data found for CNXINFRA.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['HIL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for HIL.NS with period 5d and interval 15m.
+
+1 Failed download:
+['HIL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for HIL.NS with period 5d and interval 1h.
+
+1 Failed download:
+['HIL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for HIL.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['HIL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for HIL.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['HIL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for HIL.NS with period 6mo and interval 1wk.
+No data found for HIL.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['HIL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['HIL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for HIL.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTY50DIVPOINT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50DIVPOINT.NS with period 5d and interval 15m.
+No data found for NIFTY50DIVPOINT.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTY50DIVPOINT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTY50DIVPOINT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50DIVPOINT.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTY50DIVPOINT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50DIVPOINT.NS with period 3mo and interval 1d.
+No data found for NIFTY50DIVPOINT.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTY50DIVPOINT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTY50DIVPOINT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50DIVPOINT.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTY50DIVPOINT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTY50DIVPOINT.NS with period 5y and interval 1mo.
+No data found for NIFTYAUTO.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYAUTO.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for NIFTYAUTO.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYAUTO.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+1 Failed download:
+['NIFTYAUTO.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for NIFTYAUTO.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYAUTO.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for NIFTYAUTO.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYAUTO.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+No data found for NIFTYAUTO.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYAUTO.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+No data found for NIFTYAUTO.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYAUTO.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+No data found for NIFTYAUTO.NS with period 5y and interval 1mo.
+No data found for NIFTYCONSUMPTION.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYCONSUMPTION.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCONSUMPTION.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYCONSUMPTION.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYCONSUMPTION.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCONSUMPTION.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYCONSUMPTION.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCONSUMPTION.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYCONSUMPTION.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCONSUMPTION.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYCONSUMPTION.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCONSUMPTION.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYCONSUMPTION.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCONSUMPTION.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYTATA25CAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYTATA25CAP.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYTATA25CAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYTATA25CAP.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYTATA25CAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYTATA25CAP.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYTATA25CAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYTATA25CAP.NS with period 3mo and interval 1d.
+No data found for NIFTYTATA25CAP.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYTATA25CAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYTATA25CAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYTATA25CAP.NS with period 1y and interval 1wk.
+No data found for NIFTYTATA25CAP.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYTATA25CAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['SUULD.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for SUULD.NS with period 5d and interval 15m.
+
+1 Failed download:
+['SUULD.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for SUULD.NS with period 5d and interval 1h.
+
+No data found for SECURCRED.NS with period 5d and interval 15m.
+
+1 Failed download:
+['SECURCRED.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for SECURCRED.NS with period 5d and interval 1h.
+
+1 Failed download:
+['SECURCRED.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+1 Failed download:
+['SECURCRED.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for SECURCRED.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['IRIS-RE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for IRIS-RE.NS with period 5d and interval 15m.
+
+1 Failed download:
+['IRIS-RE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for IRIS-RE.NS with period 5d and interval 1h.
+No data found for IRIS-RE.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['IRIS-RE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['IRIS-RE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for IRIS-RE.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['IRIS-RE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for IRIS-RE.NS with period 6mo and interval 1wk.
+No data found for IRIS-RE.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['IRIS-RE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['IRIS-RE.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for IRIS-RE.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['CAREERP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CAREERP.NS with period 5d and interval 15m.
+
+1 Failed download:
+['CAREERP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CAREERP.NS with period 5d and interval 1h.
+
+1 Failed download:
+['CAREERP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CAREERP.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['CAREERP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CAREERP.NS with period 3mo and interval 1d.
+No data found for CAREERP.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['CAREERP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['CAREERP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for CAREERP.NS with period 1y and interval 1wk.
+No data found for CAREERP.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['CAREERP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+
+No data found for CNXMIDCAP.NS with period 5d and interval 15m.
+
+1 Failed download:
+['CNXMIDCAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for CNXMIDCAP.NS with period 5d and interval 1h.
+
+1 Failed download:
+['CNXMIDCAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+1 Failed download:
+['CNXMIDCAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for CNXMIDCAP.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['CNXMIDCAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for CNXMIDCAP.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['CNXMIDCAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+No data found for CNXMIDCAP.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['CNXMIDCAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+No data found for CNXMIDCAP.NS with period 1y and interval 1wk.
+No data found for CNXMIDCAP.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['CNXMIDCAP.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+
+1 Failed download:
+['INDIAVIX.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for INDIAVIX.NS with period 5d and interval 15m.
+No data found for INDIAVIX.NS with period 5d and interval 1h.
+
+1 Failed download:
+['INDIAVIX.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+1 Failed download:
+['INDIAVIX.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for INDIAVIX.NS with period 1mo and interval 4h.
+No data found for INDIAVIX.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['INDIAVIX.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for INDIAVIX.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['INDIAVIX.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo)')
+
+1 Failed download:
+['INDIAVIX.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y)')
+No data found for INDIAVIX.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['INDIAVIX.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y)')
+No data found for INDIAVIX.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['ISEC.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for ISEC.NS with period 5d and interval 15m.
+
+1 Failed download:
+['ISEC.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for ISEC.NS with period 5d and interval 1h.
+
+1 Failed download:
+['ISEC.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for ISEC.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['ISEC.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo)')
+No data found for ISEC.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['IWEL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for IWEL.NS with period 5d and interval 15m.
+
+1 Failed download:
+['IWEL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for IWEL.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYCAPITALMKT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCAPITALMKT.NS with period 5d and interval 15m.
+No data found for NIFTYCAPITALMKT.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYCAPITALMKT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYCAPITALMKT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCAPITALMKT.NS with period 1mo and interval 4h.
+No data found for NIFTYCAPITALMKT.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYCAPITALMKT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCAPITALMKT.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYCAPITALMKT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYCAPITALMKT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCAPITALMKT.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYCAPITALMKT.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYCAPITALMKT.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYGROWSECT15.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGROWSECT15.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYGROWSECT15.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGROWSECT15.NS with period 5d and interval 1h.
+No data found for NIFTYGROWSECT15.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYGROWSECT15.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGROWSECT15.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYGROWSECT15.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYGROWSECT15.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGROWSECT15.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYGROWSECT15.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGROWSECT15.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYGROWSECT15.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGROWSECT15.NS with period 5y and interval 1mo.
+
+No data found for NIFTYGS10YR.NS with period 3mo and interval 1d.
+
+No data found for NIFTYGS10YR.NS with period 1y and interval 1wk.
+
+No data found for NIFTYGS15YRPLUS.NS with period 3mo and interval 1d.
+No data found for NIFTYGS15YRPLUS.NS with period 6mo and interval 1wk.
+No data found for NIFTYGS15YRPLUS.NS with period 1y and interval 1wk.
+No data found for NIFTYGS15YRPLUS.NS with period 5y and interval 1mo.
+No data found for NIFTYGS813YR.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYGS813YR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGS813YR.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYGS813YR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYGS813YR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGS813YR.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYGS813YR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGS813YR.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYGS813YR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGS813YR.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYGS813YR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGS813YR.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYGS813YR.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYGS813YR.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYM150QLTY50.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYM150QLTY50.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYM150QLTY50.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYM150QLTY50.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYM150QLTY50.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYM150QLTY50.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYM150QLTY50.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYM150QLTY50.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYM150QLTY50.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYM150QLTY50.NS with period 6mo and interval 1wk.
+No data found for NIFTYM150QLTY50.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYM150QLTY50.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYM150QLTY50.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYM150QLTY50.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+
+
+1 Failed download:
+['NIFTYMIDSMALLCAP400.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMIDSMALLCAP400.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYMIDSMALLCAP400.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMIDSMALLCAP400.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYMIDSMALLCAP400.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMIDSMALLCAP400.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYMIDSMALLCAP400.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMIDSMALLCAP400.NS with period 3mo and interval 1d.
+No data found for NIFTYMIDSMALLCAP400.NS with period 6mo and interval 1wk.
+
+1 Failed download:
+['NIFTYMIDSMALLCAP400.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYMIDSMALLCAP400.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMIDSMALLCAP400.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYMIDSMALLCAP400.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMIDSMALLCAP400.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYMS400MQ100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMS400MQ100.NS with period 5d and interval 15m.
+No data found for NIFTYMS400MQ100.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYMS400MQ100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYMS400MQ100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMS400MQ100.NS with period 1mo and interval 4h.
+No data found for NIFTYMS400MQ100.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYMS400MQ100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYMS400MQ100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMS400MQ100.NS with period 6mo and interval 1wk.
+No data found for NIFTYMS400MQ100.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYMS400MQ100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['NIFTYMS400MQ100.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMS400MQ100.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYMULTIINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMULTIINFRA.NS with period 5d and interval 15m.
+
+1 Failed download:
+['NIFTYMULTIINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMULTIINFRA.NS with period 5d and interval 1h.
+
+1 Failed download:
+['NIFTYMULTIINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMULTIINFRA.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['NIFTYMULTIINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=3mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMULTIINFRA.NS with period 3mo and interval 1d.
+
+1 Failed download:
+['NIFTYMULTIINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMULTIINFRA.NS with period 6mo and interval 1wk.
+No data found for NIFTYMULTIINFRA.NS with period 1y and interval 1wk.
+
+1 Failed download:
+['NIFTYMULTIINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")')
+No data found for NIFTYMULTIINFRA.NS with period 5y and interval 1mo.
+
+1 Failed download:
+['NIFTYMULTIINFRA.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5y) (Yahoo error = "No data found, symbol may be delisted")')
+
+1 Failed download:
+['RBL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for RBL.NS with period 5d and interval 15m.
+
+1 Failed download:
+['RBL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for RBL.NS with period 5d and interval 1h.
+
+1 Failed download:
+['RBL.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=1mo)')
+No data found for RBL.NS with period 1mo and interval 4h.
+
+1 Failed download:
+['TECHIN.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+No data found for TECHIN.NS with period 5d and interval 15m.
+No data found for TECHIN.NS with period 5d and interval 1h.
+
+1 Failed download:
+['TECHIN.NS']: YFPricesMissingError('possibly delisted; no price data found  (period=5d)')
+
+Thumbnails saved in "thumbnails" directory.
+Script completed successfully.
+End date of script: 2025-06-27 and time: 10:34:58
+total time to complete in seconds: 4618.09
+converted to datetime format: 1:16:58.087923
+
+Process finished with exit code 0

@@ -146,7 +146,7 @@ def flatten_top_level_example():
     df = pd.DataFrame(final_rows, columns=['key', 'value', 'value data type'])
 
     # Save to Excel
-    excel_filename = '../In_Out/Output/2025-05-31--12-00-00--key_value_type_combined_output.xlsx'
+    excel_filename = '../Json_In_Out/Output/2025-05-31--12-00-00--key_value_type_combined_output.xlsx'
     df.to_excel(excel_filename, index=False)
 
     print(f"Data saved to {excel_filename}")

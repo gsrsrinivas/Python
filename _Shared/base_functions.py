@@ -1,11 +1,15 @@
-from bs4 import BeautifulSoup as Bs
+import os
+import sys
+import time
 from datetime import datetime
 from pathlib import Path
+
 import pandas as pd  # pip install --upgrade pandas --target="C:\Program Files\Python312\Lib\site-packages"
-import requests
 import pyodbc
-import time
-import sys
+import requests
+from bs4 import BeautifulSoup as Bs
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file and add to sys.path
 
 
 def print_start_timestamp():
@@ -35,8 +39,24 @@ def print_end_timestamp(start_date, start_time):
     elapsed_seconds = end_time - start_time
     print(f"End date of script: {end_date_formated} and time: {end_time_formatted}")
     elapsed_duration = end_date - start_date
-    print(f"total time to complete in seconds: {elapsed_seconds:.2f}\nconverted to datetime format: {elapsed_duration}\n")
+    print(
+        f"total time to complete in seconds: {elapsed_seconds:.2f}\nconverted to datetime format: {elapsed_duration}\n")
     time.sleep(15)
+
+
+def get_database_connection():
+    """
+    get the database connection and check if it is successful.
+    Returns the variable with database connection otherwise return null.
+    """
+    try:
+        conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
+        with pyodbc.connect(conn_str) as conn:
+            print("Database connection successful.")
+            return conn
+    except pyodbc.Error as e:
+        print(f"Database connection failed: {e}")
+        return None
 
 
 def insert_into_database_tables(df_all, table_names):
@@ -87,12 +107,13 @@ def download_chart_ink_technical_analysis_scanner(data_each_list):
         response = session.post('https://chartink.com/screener/process', data=data)
         result = response.json()
         # Step 3: Check for errors
-        print(f"Scan error:{result["scan_error"]} for rule: {key} with data: {data}") if "scan_error" in result else None
+        print(
+            f"Scan error:{result["scan_error"]} for rule: {key} with data: {data}") if "scan_error" in result else None
         # Step 4: Convert to DataFrame
         return pd.DataFrame(result.get('data', []))
 
 
-def insert_new_columns_in_data_frame(df,tf_l_i,each_segment_list,start_date):
+def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, start_date):
     """
         Reorders, renames, and appends additional metadata columns to the stock DataFrame.
     """
@@ -102,12 +123,14 @@ def insert_new_columns_in_data_frame(df,tf_l_i,each_segment_list,start_date):
     expected_order = ['sr', 'nsecode', 'name', 'bsecode', 'per_chg', 'close', 'volume']
     df = df[expected_order]
     # Rename columns
-    df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+    df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+                       'close': 'price'}, inplace=True)
     # Extract and clean metadata  # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
     batch_no = start_date.strftime('%Y%m%d')
     # Insert new metadata columns
-    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction, each_segment_list, batch_no]
+    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction,
+                                                                                each_segment_list, batch_no]
     return df
 
 
@@ -121,14 +144,15 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names, sta
         old_str = 'segments_filter'
         for each_segment_list in segments:
             new_str = segments[each_segment_list]
-            data_each_list = {key: {k: val.replace(old_str, new_str)} for key, value in data_each_list.items() for k, val in value.items()}
+            data_each_list = {key: {k: val.replace(old_str, new_str)} for key, value in data_each_list.items() for
+                              k, val in value.items()}
             old_str = new_str
             key = next(iter(data_each_list))  # Gets the first key
-        # end - iterate through the segments for one single url
+            # end - iterate through the segments for one single url
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
-            df = insert_new_columns_in_data_frame(df,key,each_segment_list,start_date)
+            df = insert_new_columns_in_data_frame(df, key, each_segment_list, start_date)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            print(f"complete '{key.replace("__",";").replace("_"," ")}' for {each_segment_list} segment as of {datetime.now()}")
+            print(
+                f"complete '{key.replace("__", ";").replace("_", " ")}' for {each_segment_list} segment as of {datetime.now()}")
     print(f"\ndownloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
-

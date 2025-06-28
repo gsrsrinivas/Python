@@ -1,4 +1,7 @@
-from _shared.base_functions import *
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent dir of this file and add to sys.path
+from _Shared.base_functions import *
 
 
 def chat_ink_xls2db():

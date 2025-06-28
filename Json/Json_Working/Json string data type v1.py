@@ -94,7 +94,7 @@ def process_folders(folder_path):
 
 def process_folders_example():
     # Example usage:
-    folder_path = "../In_Out/Input"  # Update this with the actual folder path
+    folder_path = "../Json_In_Out/Input"  # Update this with the actual folder path
     process_folders(folder_path)
 
 

@@ -84,7 +84,7 @@ def list_files_by_extensions_example():
 
 def read_parquet_to_df_example():
     # Read the Parquet file into a DataFrame
-    df = pd.read_parquet('../In_Out/Input/json_data.parquet')
+    df = pd.read_parquet('Json_In_Out/Input/json_data.parquet')
     # Write the DataFrame to an Excel file
     df.to_excel('../Output/your_file.xlsx', index=False)
 
@@ -303,7 +303,7 @@ def flatten_top_level_giving_output_directly_example():
     df = pd.DataFrame(final_rows, columns=['key', 'value', 'value data type'])
 
     # Save to Excel
-    excel_filename = '../In_Out/Output/2025-05-31--12-00-00--key_value_type_combined_output.xlsx'
+    excel_filename = 'Json_In_Out/Output/2025-05-31--12-00-00--key_value_type_combined_output.xlsx'
     df.to_excel(excel_filename, index=False)
 
     print(f"Data saved to {excel_filename}")
@@ -511,7 +511,7 @@ def get_json_data_types_store_in_excel_file():
     output_filename = 'json_types_summary.xlsx'
 
     input_path = os.path.join(input_folder, input_filename)
-    output_path = os.path.join("../In_Out/Output", output_filename)
+    output_path = os.path.join("Json_In_Out/Output", output_filename)
 
     # Read the Excel file
     df = pd.read_excel(input_path)
@@ -808,7 +808,7 @@ def process_folder_input(folder_path):
 
 def process_folder_input_examples():
     # Example usage:
-    folder_path = "../In_Out/Input"  # Update this with the actual folder path
+    folder_path = "Json_In_Out/Input"  # Update this with the actual folder path
     process_folder_input(folder_path)
 
 
@@ -937,7 +937,7 @@ def process_folders(folder_path):
 
 def process_folders_example():
     # Example usage:
-    folder_path = "../In_Out/Input"  # Update this with the actual folder path
+    folder_path = "Json_In_Out/Input"  # Update this with the actual folder path
     process_folders(folder_path)
 
 

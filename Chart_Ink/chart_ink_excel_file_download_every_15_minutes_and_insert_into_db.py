@@ -5,7 +5,21 @@ from _Shared.base_functions import *
 
 
 def chat_ink_xls2db():
-    start_date, start_time, status = print_start_timestamp()
+    """
+    Download Chart Ink Excel file and insert into database every 15 minutes.
+    This script is designed to run every 15 minutes, downloading the latest Chart Ink Excel file,
+    processing it, and inserting the data into the database.
+    It includes various stock scanning conditions based on technical indicators like MACD, Stochastic, EMA, RSI, Bollinger Bands, and ADX.
+    The script also handles the start and end timestamps for logging purposes.
+    It uses a predefined list of data conditions to filter stocks based on technical analysis.
+    The data_list contains various scanning conditions for different timeframes (daily, 4-hourly, 1-hourly, and 15-minutes).
+    The script will exit if the start timestamp indicates an exit status.
+    It prints the start timestamp and handles any exit conditions.
+    It also prints the end timestamp after processing the data.
+    The script is intended to be run as a standalone program.
+    It uses the `chart_ink_excel_file_download_and_insert_into_db` function to handle the downloading and inserting of data into the database.
+    """
+    status, start_date, start_time = print_start_timestamp()
     sys.exit() if status == "exit" else None
 
     data_list = [

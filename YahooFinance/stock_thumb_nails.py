@@ -1,10 +1,8 @@
 import matplotlib
-from yfinance.utils import auto_adjust
-
+# Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 matplotlib.use('Agg')  # Use a non-GUI backend
 import matplotlib.pyplot as plt
 import yfinance as yf
-from datetime import datetime
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
@@ -30,37 +28,23 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     # Plot closing price
     plt.figure(figsize=(2, 1.5))  # Small thumbnail size
     plt.plot(data['Close'], linewidth=1)
-    plt.title(f"{symbol_name.replace(".NS", "")}-{interval_value}-{period_value} prd", fontsize=8)
+    plt.title(f"{symbol_name.replace(".NS", "")}-{interval_value}-{period_value}", fontsize=8)
     plt.xticks([], [])
     plt.yticks([], [])
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
     plt.close()
-    print(f"{i} out of {total_len} Thumbnail saved for {symbol_name} with period {period_value} and interval {interval_value}.")
+    print(f"{i} saved out of {total_len} Thumbnails, current symbol is {symbol_name} with period {period_value} and interval {interval_value}")
 
 
-def stock_thumb_nails():
+def valid_intervals_periods():
     """
-    Create stock thumbnails for all stocks names from the database into a folder.
-    This function retrieves stock symbols from the database, downloads their historical data,
-    and creates thumbnails for each stock symbol with various intervals and periods.
-    It saves the thumbnails in a specified directory.
-    The function also handles different intervals and periods based on the current date,
-    ensuring that the thumbnails are relevant to the current trading conditions.
+    Returns a list of dictionaries with valid intervals and periods for stock data.
+    The intervals and periods are chosen based on the current date to ensure relevance.
+    Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 4h, 1d, 5d, 1wk, 1mo, 3mo]
+    Valid period: 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max, etc.,
+    :return: List of dictionaries with interval and period pairs.
     """
-    conn = get_database_connection()
-    cursor = conn.cursor()
-    cursor.execute("select Symbol,Stock_Name from _sis.Master_Stocks_In_Segments")
-    records = cursor.fetchall()  # Fetch all results into a variable
-    first_elements = [str(item[0]) + ".NS" for item in records]  # Extract the first element from each tuple
-    conn.close()
-    symbols = first_elements  # ['HAL.NS',]
-    len_symbols = len(symbols)
-    print(f"count of symbols: {len_symbols}")
-    thumb_dir = 'thumbnails'  # Folder to save thumbnails
-    os.makedirs(thumb_dir, exist_ok=True)  # Create thumbnails directory if it doesn't exist
-    # Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 4h, 1d, 5d, 1wk, 1mo, 3mo]
-    # Valid period: 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max, etc.,
     # Add short intervals for daily runs, and longer intervals for weekly, monthly, etc.
     # Always add daily intervals
     today = datetime.today()
@@ -77,10 +61,59 @@ def stock_thumb_nails():
     # Add yearly intervals at the start of the year
     valid_interval_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else []
     # valid_intervals_periods = [ {'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '3mo'},{'1wk': '6mo'}, {'1wk': '1y'},{'1mo':'5y'}, ]  # Valid periods and intervals
+
+    return valid_interval_period  # Return the list of valid intervals and periods
+    # today = datetime.now()
+    # if today.month == 1 and today.day == 1:
+    #     return [{'1d': '30d'}, {'5d': '90d'}, {'1wk': '1y'}, {'1mo': '5y'}, {'3mo': 'max'}]
+    # else:
+    #     return [{'1d': '30d'}, {'5d': '90d'}, {'1wk': '6mo'}, {'1mo': '2y'}, {'3mo': 'max'}]
+
+
+def connect_to_db():
+    """
+    Connect to the database and retrieve stock symbols.
+    This function connects to the database, retrieves stock symbols,
+    and returns a list of symbols and their count.
+    """
+    conn = get_database_connection()
+    cursor = conn.cursor()
+    # cursor.execute("select Symbol,Stock_Name from _sis.Master_Stocks_In_Segments")
+    cursor.execute("select distinct Symbol from _sis.Analyse_Stocks_v")
+    records = cursor.fetchall()  # Fetch all results into a variable
+    first_elements = [str(item[0]) + ".NS" for item in records]  # Extract the first element from each tuple
+    conn.close()
+    symbols = first_elements  # ['HAL.NS',]
+    len_symbols = len(symbols)
+    print(f"count of symbols: {len_symbols}")
+    return len_symbols, symbols  # Return the list of symbols and their count
+
+
+def stock_thumb_nails(timeframe=""):
+    """
+    Create stock thumbnails for all stocks names from the database into a folder.
+    This function retrieves stock symbols from the database, downloads their historical data,
+    and creates thumbnails for each stock symbol with various intervals and periods.
+    It saves the thumbnails in a specified directory.
+    The function also handles different intervals and periods based on the current date,
+    ensuring that the thumbnails are relevant to the current trading conditions.
+    """
+
+    len_symbols, symbols = connect_to_db() # Connect to the database and get stock symbols
+    if timeframe == "":
+        valid_interval_period = valid_intervals_periods()  # Get valid intervals and periods
+    else:
+        valid_interval_period = [{'15m': '5d'}]  # specific timeframe for every 15 minutes screening
+
+    # Count the number of valid intervals and periods
     len_valid_intervals_periods = len(valid_interval_period)
     print(f"count of valid intervals and periods: {len_valid_intervals_periods}")
     total_len = len_symbols * len_valid_intervals_periods
     print(f"Total thumbnails to be created: {total_len}")
+    # Folder to save thumbnails
+    thumb_dir = 'thumbnails'
+    # Create thumbnails directory if it doesn't exist
+    os.makedirs(thumb_dir, exist_ok=True)
     # Download historical data and create thumbnails
     i=1
     for symbol in symbols:
@@ -93,8 +126,8 @@ def stock_thumb_nails():
 
 
 if __name__ == "__main__":
-    start_date, start_time, status = print_start_timestamp()  # Print start timestamp and check trading hours
+    _, start_date, start_time = print_start_timestamp()  # Print start timestamp and check trading hours
     stock_thumb_nails()  # Call the function to create stock thumbnails
-    print(f"Script completed successfully.")
     print_end_timestamp(start_date, start_time)  # Print end timestamp
+
 

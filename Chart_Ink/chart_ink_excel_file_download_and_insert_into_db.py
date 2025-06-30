@@ -5,7 +5,15 @@ from _Shared.base_functions import *
 
 
 def chat_ink_xls2db():
-    start_date, start_time, status = print_start_timestamp()
+    """
+    Download Chart Ink Excel file and insert into database.
+    This function downloads the Chart Ink Excel file, processes it, and inserts the data into the database.
+    It also prints the start timestamp and handles any exit conditions.
+    Returns: None
+    Raises: SystemExit: If the status is "exit", the program will terminate.
+    Usage: chat_ink_xls2db()
+    """
+    status, start_date, start_time = print_start_timestamp()
     sys.exit() if status == "exit" else None
 
     data_list = [

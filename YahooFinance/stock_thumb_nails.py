@@ -99,7 +99,14 @@ def stock_thumb_nails(timeframe=""):
     ensuring that the thumbnails are relevant to the current trading conditions.
     """
 
-    len_symbols, symbols = connect_to_db() # Connect to the database and get stock symbols
+    # Folder to save thumbnails
+    thumb_dir = os.path.dirname(__file__) + '\\Thumbnails'
+    # Create thumbnails directory if it doesn't exist
+    os.makedirs(thumb_dir, exist_ok=True)
+    print(f"Thumbnails will be saved in: {thumb_dir}")
+
+    # Connect to the database and get stock symbols
+    len_symbols, symbols = connect_to_db()
     if timeframe == "":
         valid_interval_period = valid_intervals_periods()  # Get valid intervals and periods
     else:
@@ -110,10 +117,7 @@ def stock_thumb_nails(timeframe=""):
     print(f"count of valid intervals and periods: {len_valid_intervals_periods}")
     total_len = len_symbols * len_valid_intervals_periods
     print(f"Total thumbnails to be created: {total_len}")
-    # Folder to save thumbnails
-    thumb_dir = 'thumbnails'
-    # Create thumbnails directory if it doesn't exist
-    os.makedirs(thumb_dir, exist_ok=True)
+
     # Download historical data and create thumbnails
     i=1
     for symbol in symbols:
@@ -126,8 +130,11 @@ def stock_thumb_nails(timeframe=""):
 
 
 if __name__ == "__main__":
-    _, start_date, start_time = print_start_timestamp()  # Print start timestamp and check trading hours
+    print_start_timestamp()
+    sys.exit() if trading_hours_check() == "exit" else None
+
     stock_thumb_nails()  # Call the function to create stock thumbnails
-    print_end_timestamp(start_date, start_time)  # Print end timestamp
+
+    print_end_timestamp()
 
 

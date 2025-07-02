@@ -19,8 +19,6 @@ def chat_ink_xls2db():
     The script is intended to be run as a standalone program.
     It uses the `chart_ink_excel_file_download_and_insert_into_db` function to handle the downloading and inserting of data into the database.
     """
-    status, start_date, start_time = print_start_timestamp()
-    sys.exit() if status == "exit" else None
 
     data_list = [
         # {'all_stocks' : {'scan_clause': '( {segments_filter} ( latest close >= 0 ) )'}},
@@ -151,10 +149,13 @@ def chat_ink_xls2db():
         {'adx_down_tick__15_minutes__less_than_equal_to' : {'scan_clause': '( {segments_filter} ( [0] 15 minute adx( 14 ) <= [ -1 ] 15 minute adx( 14 ) ) )'}},
     ]
     table_names = ["Cash_15minutes_Stocks","InsertScript_15minutes","update_Report_15minutes_Queries"]
-    chart_ink_excel_file_download_and_insert_into_db(data_list, table_names, start_date)
-
-    print_end_timestamp(start_date, start_time)
+    chart_ink_excel_file_download_and_insert_into_db(data_list, table_names)
 
 
 if __name__ == "__main__":
+    print_start_timestamp()
+    sys.exit() if trading_hours_check() == "exit" else None
+
     chat_ink_xls2db()
+
+    print_end_timestamp()

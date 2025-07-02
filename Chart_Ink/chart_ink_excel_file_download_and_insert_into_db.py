@@ -1,3 +1,4 @@
+import datetime
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
@@ -13,9 +14,6 @@ def chat_ink_xls2db():
     Raises: SystemExit: If the status is "exit", the program will terminate.
     Usage: chat_ink_xls2db()
     """
-    status, start_date, start_time = print_start_timestamp()
-    sys.exit() if status == "exit" else None
-
     data_list = [
         # {'all_stocks' : {'scan_clause': '( {segments_filter} ( latest close >= 0 ) )'}},
         {'macd__yearly__crosses_above' : {'scan_clause': '( {segments_filter} ( yearly macd line( 26 , 12 , 9 ) >= yearly macd signal( 26 , 12 , 9 ) ) )'}},
@@ -257,10 +255,13 @@ def chat_ink_xls2db():
         {'adx_down_tick__15_minutes__less_than_equal_to' : {'scan_clause': '( {segments_filter} ( [0] 15 minute adx( 14 ) <= [ -1 ] 15 minute adx( 14 ) ) )'}},
     ]
     table_names = ["Cash_Stocks","InsertScript","update_Report_Queries"]
-    chart_ink_excel_file_download_and_insert_into_db(data_list, table_names, start_date)
-
-    print_end_timestamp(start_date, start_time)
+    chart_ink_excel_file_download_and_insert_into_db(data_list, table_names)
 
 
 if __name__ == "__main__":
+    print_start_timestamp()
+    sys.exit() if trading_hours_check() == "exit" else None
+
     chat_ink_xls2db()
+
+    print_end_timestamp()

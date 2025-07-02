@@ -1,63 +1,62 @@
-import os
-import sys
-import time
+import os, sys, time, psutil, pyodbc, requests, pandas as pd
 from datetime import datetime
 from pathlib import Path
-
-import pandas as pd  # pip install --upgrade pandas --target="C:\Program Files\Python312\Lib\site-packages"
-import pyodbc
-import requests
 from bs4 import BeautifulSoup as Bs
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file and add to sys.path
 
 
-def print_start_timestamp():
+def trading_hours_check():
     """
-        Prints the start date and time of the script execution.
-        Checks if the current time is within trading hours (07:30 to 15:30).
-        Returns:
-            - "continue" if within trading hours, along with start date and time.
-            - "exit" if outside trading hours, along with None for date and time.
+    Checks if the current time is within trading hours (07:30 to 15:30).
+    Returns:
+        - "continue" if within trading hours.
+        - "exit" if outside trading hours.
     """
-    start_date = datetime.now()
-    start_time = time.time()
-    date_str = start_date.strftime('%Y-%m-%d')
-    time_str = start_date.strftime('%H:%M:%S')
-    print(f"Start date of script: {date_str} and time: {time_str}")
-    # Define trading hours
-    trading_start = datetime.strptime(f"{date_str} 07:30:00", "%Y-%m-%d %H:%M:%S")
-    trading_end = datetime.strptime(f"{date_str} 15:30:00", "%Y-%m-%d %H:%M:%S")
+    current_time = datetime.now().time()
+    start_time = datetime.strptime("07:00", "%H:%M").time()
+    end_time = datetime.strptime("15:30", "%H:%M").time()
 
-    if trading_start <= start_date <= trading_end:
-        print(f"Current Time: {time_str} is within trading hours (07:30 to 15:30). Continuing the program.")
-        return "continue", start_date, start_time
+    if start_time <= current_time <= end_time:
+        print(f"Current Time: {current_time} is within trading hours (07:00 to 15:30). Continuing the program.")
+        return "continue"
     else:
-        print(f"Current Time: {time_str} is outside trading hours (07:30 to 15:30). Exiting the program.")
-        time.sleep(15)
-        return "exit", None, None
+        print(f"Current Time: {current_time} is outside trading hours (07:00 to 15:30). Exiting the program.")
+        return "exit"
 
 
-def print_end_timestamp(start_date, start_time):
+def print_start_timestamp():
+    """ Prints the start date and time of the script execution."""
+    start_date = datetime.now()
+    print(f"Script start timestamp: {start_date}")
+
+
+def print_end_timestamp():
     """
     Prints the end date and time of the script execution.
-    Args:
-        start_date (datetime): The start date of the script.
-        start_time (float): The start time in seconds since epoch.
-    Returns:
-        None
+    Calculates the total time taken for the script to complete.
+    This function also pauses for 15 seconds before exiting.
+    It uses the psutil library to get the process creation time and calculates the elapsed time.
+    It is useful for logging the execution time of the script.
+    It does not take any arguments and does not return any value.
+    Prints:
+        - Start and end datetime of the script execution.
+        - Total time taken in seconds.
+        - Converted elapsed time in datetime format.
+    Args: None
+    Returns: None
     """
-    end_time = time.time()
+    p = psutil.Process(os.getpid())
+    start_datetime = datetime.fromtimestamp(p.create_time())
+    start_time = start_datetime.timestamp()  # Use timestamp for consistency
+
     end_date = datetime.now()
-    # start_time = start_date.timestamp()  # Use timestamp for consistency
-    end_date_formated = end_date.strftime('%Y-%m-%d')
-    end_time_formatted = end_date.strftime('%H:%M:%S')
+    print(f"Script end timestamp  : {end_date}")
+    end_time = time.time()
     elapsed_seconds = end_time - start_time
-    print(f"End date of script: {end_date_formated} and time: {end_time_formatted}")
-    elapsed_duration = end_date - start_date
-    print(f"total time to complete in seconds: {elapsed_seconds:.2f}\n"
-          f"converted to datetime format: {elapsed_duration}\n")
-    time.sleep(15)
+    elapsed_duration = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
+    print(f"Total time in seconds : {elapsed_seconds}\nand formatted time is : {elapsed_duration}\n")
+    # time.sleep(15)
 
 
 def get_database_connection():
@@ -71,7 +70,7 @@ def get_database_connection():
     try:
         conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
         with pyodbc.connect(conn_str) as conn:
-            print("Database connection successful.")
+            # print("Database connection successful.")
             return conn
     except pyodbc.Error as e:
         print(f"Database connection failed: {e}")
@@ -102,7 +101,6 @@ def insert_into_database_tables(df_all, table_names):
     # Establish connection to SQL Server
     with pyodbc.connect(conn_str) as conn:
         cursor = conn.cursor()
-        print(f'connection is established')
         records = df_all[[
             'sr#', 'stock name', 'symbol', 'Links', '% Chg',
             'price', 'volume', 'Indicator', 'TimeLine',
@@ -113,12 +111,12 @@ def insert_into_database_tables(df_all, table_names):
         print(f"{len(records)} records inserted in {table_names[0]} table using batch insert!")
         # Execute both SQL Script files
         for label, path in file_paths.items():
-            print(f"Executing {label} SQL script")
+            print(f"Executing {label.replace('_', ' ').capitalize()} SQL script")
             with open(path, 'r', encoding='utf-8') as file_path:
                 cursor.execute(file_path.read())
             conn.commit()
-            print(f"{label.replace('_', ' ').capitalize()} committed")
-    print("All operations completed")
+            print(f"Committed {label.replace('_', ' ').capitalize()} SQL script")
+    print("Completed all files execution and database insertions.\n")
 
 
 def download_chart_ink_technical_analysis_scanner(data_each_list):
@@ -150,7 +148,7 @@ def download_chart_ink_technical_analysis_scanner(data_each_list):
         return pd.DataFrame(result.get('data', []))
 
 
-def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, start_date):
+def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
     """
     Reorders, renames, and appends additional metadata columns to the stock DataFrame.
     Args:
@@ -171,14 +169,14 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, start_date):
                        'close': 'price'}, inplace=True)
     # Extract and clean metadata  # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
-    batch_no = start_date.strftime('%Y%m%d')
+    batch_no = datetime.now().strftime('%Y%m%d')
     # Insert new metadata columns
     df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction,
                                                                                 each_segment_list, batch_no]
     return df
 
 
-def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names, start_date):
+def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
     """
     Downloads technical analysis data from Chart ink for multiple segments and inserts it into a database.
     :param data_list: it contains the scan parameters for Chart ink.
@@ -206,7 +204,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names, sta
             key = next(iter(data_each_list))  # Gets the first key
             # end - iterate through the segments for one single url
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
-            df = insert_new_columns_in_data_frame(df, key, each_segment_list, start_date)
+            df = insert_new_columns_in_data_frame(df, key, each_segment_list)
             df_all = pd.concat([df_all, df], ignore_index=True)
             print(
                 f"complete '{key.replace("__", ";").replace("_", " ")}' for {each_segment_list} segment as of {datetime.now()}")

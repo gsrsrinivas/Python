@@ -11,14 +11,14 @@ from _Shared.base_functions import *
 
 def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', period_value='30d'):
     """
-    Download stock data and plot it.
+    download stock data and plot it.
     :param i: the index of the current stock being processed.
     :param total_len: total number of stocks to be processed.
     :param thumb_dir: folder to save thumbnails.
-    :param symbol_name: Stock symbol to download data for.
-    :param period_value: Period for which to download data.
-    :param interval_value: Interval of the data.
-    :return: None
+    :param symbol_name: stock symbol to download data for.
+    :param period_value: period for which to download data.
+    :param interval_value: interval of the data.
+    :return: none
     """
     # Download historical data
     data = yf.download(symbol_name, period=period_value, interval=interval_value, auto_adjust=True, progress=False)
@@ -49,14 +49,14 @@ def valid_intervals_periods():
     # Always add daily intervals
     today = datetime.today()
     weekday = today.weekday()  # Monday is 0, Sunday is 6
-    valid_interval_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '6mo'},]
+    valid_interval_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'},]
     # Add weekly intervals at the start of the week (Monday)
-    valid_interval_period += [{'1wk': '3mo' }, {'1wk': '6mo'}, {'1wk': '1y'},] if weekday == 0 else []
+    valid_interval_period += [{'1wk': '2y'},] if weekday == 0 else []
     # Add monthly intervals at the start of the month
-    valid_interval_period += [{'1mo': '5y'}, {'1mo': '10y'}] if today.day == 1 else []
+    valid_interval_period += [{'1mo': '10y'}] if today.day == 1 else []
     # Add quarterly intervals at the start of a quarter
     valid_interval_period += [{'3mo': '5y'},{'3mo': '10y'},] if today.month in [1, 4, 7, 10] and today.day == 1 else []
-    # Add half-yearly intervals at the start of a half year
+    # Add half-yearly intervals at the start of a half-year
     valid_interval_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else []
     # Add yearly intervals at the start of the year
     valid_interval_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else []
@@ -78,8 +78,8 @@ def connect_to_db():
     """
     conn = get_database_connection()
     cursor = conn.cursor()
-    # cursor.execute("select Symbol,Stock_Name from _sis.Master_Stocks_In_Segments")
-    cursor.execute("select distinct Symbol from _sis.Analyse_Stocks_v")
+    # cursor.execute("select Symbol from _sis.Master_Stocks_In_Segments")
+    cursor.execute("select distinct Symbol from _sis.Analyse_Stocks_v with (nolock)")
     records = cursor.fetchall()  # Fetch all results into a variable
     first_elements = [str(item[0]) + ".NS" for item in records]  # Extract the first element from each tuple
     conn.close()
@@ -89,7 +89,7 @@ def connect_to_db():
     return len_symbols, symbols  # Return the list of symbols and their count
 
 
-def stock_thumb_nails(timeframe=""):
+def stock_thumb_nails(timeframe=None):
     """
     Create stock thumbnails for all stocks names from the database into a folder.
     This function retrieves stock symbols from the database, downloads their historical data,
@@ -107,10 +107,10 @@ def stock_thumb_nails(timeframe=""):
 
     # Connect to the database and get stock symbols
     len_symbols, symbols = connect_to_db()
-    if timeframe == "":
+    if timeframe is None:
         valid_interval_period = valid_intervals_periods()  # Get valid intervals and periods
     else:
-        valid_interval_period = [{'15m': '5d'}]  # specific timeframe for every 15 minutes screening
+        valid_interval_period = timeframe  # specific timeframe for every 15-minute screening
 
     # Count the number of valid intervals and periods
     len_valid_intervals_periods = len(valid_interval_period)
@@ -129,12 +129,24 @@ def stock_thumb_nails(timeframe=""):
     print(f'Total {total_len} Thumbnails processed and saved in "{thumb_dir}" directory.')
 
 
+def stock_thumb_nails_all_times():
+    printlog = setup_logger(__file__, __file__.replace('.py', '.log'))
+    try:
+        prevent_sleep()
+        print("System will stay awake. Running your task...")
+        print_start_timestamp()
+        # sys.exit() if trading_hours_check() == "exit" else None
+        stock_thumb_nails()  # Call the function to create stock thumbnails
+        print_end_timestamp()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
+    finally:
+        allow_sleep()
+        print("System can now sleep normally.")
+
+
 if __name__ == "__main__":
-    print_start_timestamp()
-    sys.exit() if trading_hours_check() == "exit" else None
-
-    stock_thumb_nails()  # Call the function to create stock thumbnails
-
-    print_end_timestamp()
+    stock_thumb_nails_all_times()
 
 

@@ -1,9 +1,90 @@
-import os, sys, time, psutil, pyodbc, requests, pandas as pd
+import os, sys, time, psutil, pyodbc, requests, pandas as pd, ctypes, logging
+from logging.handlers import RotatingFileHandler
+from bs4 import BeautifulSoup as Bs
 from datetime import datetime
 from pathlib import Path
-from bs4 import BeautifulSoup as Bs
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file and add to sys.path
+# Constants from Windows API
+ES_CONTINUOUS = 0x80000000
+ES_SYSTEM_REQUIRED = 0x00000001
+ES_AWAY_MODE_REQUIRED = 0x00000040  # Optional for media apps
+window_flags = 0x80000000 | 0x00000001 | 0x00000040 # ES_Continuous, ES_System_Required, ES_Away_Mode_Required
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get the parent directory of the current file and add to sys.path
+
+
+def prevent_sleep():
+    # This tells Windows: “Stay awake while this process is running”
+    ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAY_MODE_REQUIRED)
+
+
+def allow_sleep():
+    # Restore the system’s sleep settings
+    ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)
+
+
+
+# 🌈 Custom formatter for color-coded console output
+class CustomFormatter(logging.Formatter):
+    grey = "\x1b[38;21m"
+    yellow = "\x1b[33;21m"
+    red = "\x1b[31;21m"
+    bold_red = "\x1b[31;1m"
+    reset = "\x1b[0m"
+    format_str = "%(asctime)s - %(levelname)s - %(message)s"
+
+    FORMATS = {
+        logging.DEBUG: grey + format_str + reset,
+        logging.INFO: grey + format_str + reset,
+        logging.WARNING: yellow + format_str + reset,
+        logging.ERROR: red + format_str + reset,
+        logging.CRITICAL: bold_red + format_str + reset
+    }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
+
+
+# 🔄 Redirect print and stderr to logger
+class StreamToLogger:
+    def __init__(self, logger, log_level=logging.INFO):
+        self.logger = logger
+        self.log_level = log_level
+
+    def write(self, message):
+        message = message.strip()
+        if message:
+            self.logger.log(self.log_level, message)
+
+    def flush(self):
+        pass
+
+
+# 🔁 Setup logger with rotating file + color console + print/sys.stderr redirection
+def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024, backup_count=5):
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+    file_name = os.path.basename(log_file)
+    log_file_path = os.path.dirname(os.path.dirname(log_file)) + '\\_Shared\\Logs\\' + file_name
+    if not logger.handlers:
+        # Rotating file handler
+        file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+        logger.addHandler(file_handler)
+
+        # Console handler with color
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setLevel(logging.DEBUG)
+        console_handler.setFormatter(CustomFormatter())
+        logger.addHandler(console_handler)
+
+        # Redirect print() and sys.stderr to logger
+        sys.stdout = StreamToLogger(logger, logging.INFO)
+        sys.stderr = StreamToLogger(logger, logging.ERROR)
+
+    return logger
 
 
 def trading_hours_check():
@@ -55,8 +136,9 @@ def print_end_timestamp():
     end_time = time.time()
     elapsed_seconds = end_time - start_time
     elapsed_duration = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
-    print(f"Total time in seconds : {elapsed_seconds}\nand formatted time is : {elapsed_duration}\n")
-    # time.sleep(15)
+    print(f"Total time in seconds : {elapsed_seconds}")
+    print(f"and formatted time is : {elapsed_duration}\n")
+    time.sleep(15)
 
 
 def get_database_connection():
@@ -155,7 +237,6 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
         df (pd.DataFrame): The DataFrame containing stock data.
         tf_l_i (str): A string containing indicator, timeline, and direction information.
         each_segment_list (str): The segment of the stock market (e.g., 'Cash').
-        start_date (datetime): The date when the data was fetched.
     Returns:
         pd.DataFrame: The modified DataFrame with new columns and reordered data.
     """
@@ -210,3 +291,5 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
                 f"complete '{key.replace("__", ";").replace("_", " ")}' for {each_segment_list} segment as of {datetime.now()}")
     print(f"\ndownloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
+
+

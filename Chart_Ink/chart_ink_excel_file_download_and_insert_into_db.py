@@ -1,4 +1,3 @@
-import datetime
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
@@ -7,7 +6,7 @@ from _Shared.base_functions import *
 
 def chat_ink_xls2db():
     """
-    Download Chart Ink Excel file and insert into database.
+    Download Chart-ink Excel file and insert into a database.
     This function downloads the Chart Ink Excel file, processes it, and inserts the data into the database.
     It also prints the start timestamp and handles any exit conditions.
     Returns: None
@@ -258,10 +257,22 @@ def chat_ink_xls2db():
     chart_ink_excel_file_download_and_insert_into_db(data_list, table_names)
 
 
+def chart_ink_download():
+    printlog = setup_logger(__file__, __file__.replace('.py', '.log'))
+    try:
+        print_start_timestamp()
+        prevent_sleep()
+        print("System will stay awake. Running your task...")
+        # sys.exit() if trading_hours_check() == "exit" else None
+        chat_ink_xls2db()
+    except Exception as e:
+        print(f"An error occurred: {e} \nPlease check the logs for more details.")
+        sys.exit(1)
+    finally:
+        allow_sleep()
+        print("System can now sleep normally.")
+        print_end_timestamp()
+
+
 if __name__ == "__main__":
-    print_start_timestamp()
-    sys.exit() if trading_hours_check() == "exit" else None
-
-    chat_ink_xls2db()
-
-    print_end_timestamp()
+    chart_ink_download()

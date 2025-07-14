@@ -873,7 +873,7 @@ def chart_ink_excel_file_download_and_insert_into_db():
             df_all = pd.concat([df_all, df], ignore_index=True)
             # print(f"complete '{key.replace("__",";").replace("_"," ")}' for {each_segment_list} segment as of {datetime.now()}")
     print(f"\ndownloading data from the website is complete.")
-    # folder_path = "../Json_In_Out/Output"
+    # folder_path = "../In_Out/Output"
     # print("write to Excel file")
     # df_all.to_excel(f'{folder_path}/ChartInk-Stocks.xlsx', index=False)
     # print("download to excel file complete")

@@ -98,7 +98,6 @@ def stock_thumb_nails(timeframe=None):
     The function also handles different intervals and periods based on the current date,
     ensuring that the thumbnails are relevant to the current trading conditions.
     """
-
     # Folder to save thumbnails
     thumb_dir = os.path.dirname(__file__) + '\\Thumbnails'
     # Create thumbnails directory if it doesn't exist
@@ -132,21 +131,23 @@ def stock_thumb_nails(timeframe=None):
 def stock_thumb_nails_all_times():
     printlog = setup_logger(__file__, __file__.replace('.py', '.log'))
     try:
-        prevent_sleep()
-        print("System will stay awake. Running your task...")
         print_start_timestamp()
         # sys.exit() if trading_hours_check() == "exit" else None
-        stock_thumb_nails()  # Call the function to create stock thumbnails
-        print_end_timestamp()
+        # prevent_sleep()
+        stock_thumb_nails()
     except Exception as e:
         print(f"An error occurred: {e}")
         sys.exit(1)
     finally:
-        allow_sleep()
-        print("System can now sleep normally.")
+        # allow_sleep()
+        print_end_timestamp()
 
 
 if __name__ == "__main__":
-    stock_thumb_nails_all_times()
+    try:
+        prevent_sleep()
+        stock_thumb_nails_all_times()
+    finally:
+        allow_sleep()
 
 

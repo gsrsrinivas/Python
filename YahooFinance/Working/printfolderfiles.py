@@ -16,7 +16,7 @@ def list_directory_contents(path='.'):
 
 # Example usage:
 # List contents of the current directory
-list_directory_contents(r"C:\Users\gsrsr\Documents\PythonProject\YahooFinance\thumbnails")
+list_directory_contents(r"/YahooFinance/thumbnails")
 
 # List contents of a specific directory (replace 'your_directory_path' with the actual path)
 # list_directory_contents('/path/to/your/directory')

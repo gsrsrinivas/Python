@@ -9,41 +9,41 @@ ES_CONTINUOUS = 0x80000000
 ES_SYSTEM_REQUIRED = 0x00000001
 ES_AWAY_MODE_REQUIRED = 0x00000040  # Optional for media apps
 window_flags = 0x80000000 | 0x00000001 | 0x00000040 # ES_Continuous, ES_System_Required, ES_Away_Mode_Required
+
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get the parent directory of the current file and add to sys.path
+
+
+def project_directory_path():
+    """
+    Returns the parent directory path of the current file.
+    This is useful for constructing paths relative to the script's location.
+    """
+    # Get the path of the current script
+    current_file = Path(__file__).resolve()
+    # Traverse upward to find the project root
+    # You can define your root marker (like a folder name or a file)
+    def find_project_root(start_path, marker=".git"):
+        for path in start_path.parents:
+            if (path / marker).exists():
+                return path
+        return start_path.parent  # fallback to one level up if marker not found
+
+    project_root = find_project_root(current_file)
+    # print("Project root:", project_root)
+    return str(project_root)
 
 
 def prevent_sleep():
     # This tells Windows: “Stay awake while this process is running”
     ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAY_MODE_REQUIRED)
+    print("System will stay awake while task is running...")
 
 
 def allow_sleep():
     # Restore the system’s sleep settings
     ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)
-
-
-
-# 🌈 Custom formatter for color-coded console output
-class CustomFormatter(logging.Formatter):
-    grey = "\x1b[38;21m"
-    yellow = "\x1b[33;21m"
-    red = "\x1b[31;21m"
-    bold_red = "\x1b[31;1m"
-    reset = "\x1b[0m"
-    format_str = "%(asctime)s - %(levelname)s - %(message)s"
-
-    FORMATS = {
-        logging.DEBUG: grey + format_str + reset,
-        logging.INFO: grey + format_str + reset,
-        logging.WARNING: yellow + format_str + reset,
-        logging.ERROR: red + format_str + reset,
-        logging.CRITICAL: bold_red + format_str + reset
-    }
-
-    def format(self, record):
-        log_fmt = self.FORMATS.get(record.levelno)
-        formatter = logging.Formatter(log_fmt)
-        return formatter.format(record)
+    print("System can now sleep normally.")
 
 
 # 🔄 Redirect print and stderr to logger
@@ -61,25 +61,22 @@ class StreamToLogger:
         pass
 
 
-# 🔁 Setup logger with rotating file + color console + print/sys.stderr redirection
+# 🔁 Setup logger with rotating file +color console + print/sys.stderr redirection
 def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024, backup_count=5):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
     file_name = os.path.basename(log_file)
-    log_file_path = os.path.dirname(os.path.dirname(log_file)) + '\\_Shared\\Logs\\' + file_name
+    log_file_path = project_directory_path() + '\\_Logs\\' + file_name
     if not logger.handlers:
         # Rotating file handler
         file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count)
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
         logger.addHandler(file_handler)
-
         # Console handler with color
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(logging.DEBUG)
-        console_handler.setFormatter(CustomFormatter())
         logger.addHandler(console_handler)
-
         # Redirect print() and sys.stderr to logger
         sys.stdout = StreamToLogger(logger, logging.INFO)
         sys.stderr = StreamToLogger(logger, logging.ERROR)
@@ -138,6 +135,7 @@ def print_end_timestamp():
     elapsed_duration = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
     print(f"Total time in seconds : {elapsed_seconds}")
     print(f"and formatted time is : {elapsed_duration}\n")
+    print(f"=======================================================================================\n")
     time.sleep(15)
 
 
@@ -160,10 +158,9 @@ def get_database_connection():
 
 
 def insert_into_database_tables(df_all, table_names):
-    """
-    Inserts data from a DataFrame into a SQL Server database table and executes SQL scripts.
+    """ Inserts data from a DataFrame into an SQL Server database table and executes SQL scripts.
     Args:
-        df_all (pd.DataFrame): DataFrame containing the data to be inserted.
+        df_all (pd.DataFrame): DataFrame containing the data to be inserted
         table_names (list): List containing the names of the database tables.
     Returns:
         None
@@ -231,12 +228,11 @@ def download_chart_ink_technical_analysis_scanner(data_each_list):
 
 
 def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
-    """
-    Reorders, renames, and appends additional metadata columns to the stock DataFrame.
+    """ reorders, renames, and appends additional metadata columns to the stock DataFrame.
     Args:
-        df (pd.DataFrame): The DataFrame containing stock data.
-        tf_l_i (str): A string containing indicator, timeline, and direction information.
-        each_segment_list (str): The segment of the stock market (e.g., 'Cash').
+        df (pd.DataFrame): The DataFrame containing stock data
+        tf_l_i (str): A string containing indicator, timeline, and direction information
+        each_segment_list (str): The segment of the stock market (e.g., 'Cash')
     Returns:
         pd.DataFrame: The modified DataFrame with new columns and reordered data.
     """
@@ -248,7 +244,7 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
     # Rename columns
     df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
                        'close': 'price'}, inplace=True)
-    # Extract and clean metadata  # insert new columns
+    # Extract and clean metadata # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
     batch_no = datetime.now().strftime('%Y%m%d')
     # Insert new metadata columns
@@ -260,12 +256,11 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
 def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
     """
     Downloads technical analysis data from Chart ink for multiple segments and inserts it into a database.
-    :param data_list: it contains the scan parameters for Chart ink.
-    :param table_names: it contains the names of the database tables.
-    :param start_date: the date when the data was fetched, used for batch number and metadata.
+    :param data_list: It contains the scan parameters for Chart ink.
+    :param table_names: It contains the names of the database tables.
     :return:
-    1. Downloads technical analysis data from Chart ink for multiple segments.
-    2. Inserts the downloaded data into a database table.
+    1. Download technical analysis data from Chart ink for multiple segments.
+    2. Insert the downloaded data into a database table.
     3. Prints progress messages to the console.
     :raises KeyError: If the expected keys are not found in the response.
     :raises requests.RequestException: If there is an issue with the HTTP request.

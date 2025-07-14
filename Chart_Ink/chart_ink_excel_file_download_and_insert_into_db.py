@@ -261,18 +261,21 @@ def chart_ink_download():
     printlog = setup_logger(__file__, __file__.replace('.py', '.log'))
     try:
         print_start_timestamp()
-        prevent_sleep()
-        print("System will stay awake. Running your task...")
+        # prevent_sleep()
         # sys.exit() if trading_hours_check() == "exit" else None
         chat_ink_xls2db()
     except Exception as e:
-        print(f"An error occurred: {e} \nPlease check the logs for more details.")
+        print(f"An error occurred: {e}")
         sys.exit(1)
     finally:
-        allow_sleep()
-        print("System can now sleep normally.")
+        # allow_sleep()
         print_end_timestamp()
 
 
 if __name__ == "__main__":
-    chart_ink_download()
+    try:
+        prevent_sleep()
+        chart_ink_download()
+    finally:
+        allow_sleep()
+

@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
 from stock_thumb_nails import *
 
-def stock_thumb_nails_15minutes():
+def stock_thumb_nails_15min():
     """
     Create stock thumbnails for all stocks names from the database into a folder.
     This function retrieves stock symbols from the database, downloads their historical data,
@@ -24,4 +24,4 @@ def stock_thumb_nails_15minutes():
 
 
 if __name__ == "__main__":
-    stock_thumb_nails_15minutes()
+    stock_thumb_nails_15min()

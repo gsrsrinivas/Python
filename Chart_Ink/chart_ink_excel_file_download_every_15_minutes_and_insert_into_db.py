@@ -146,13 +146,19 @@ def chat_ink_xls2db():
         {'adx_down_tick__1_hourly__less_than_equal_to' : {'scan_clause': '( {segments_filter} ( [0] 1 hour adx( 14 ) <= [ -1 ] 1 hour adx( 14 ) ) )'}},
         {'adx_up_tick__15_minutes__greater_than_equal_to' : {'scan_clause': '( {segments_filter} ( [0] 15 minute adx( 14 ) >= [ -1 ] 15 minute adx( 14 ) ) )'}},
         {'adx_down_tick__15_minutes__less_than_equal_to' : {'scan_clause': '( {segments_filter} ( [0] 15 minute adx( 14 ) <= [ -1 ] 15 minute adx( 14 ) ) )'}},
+
+        {'volume__daily__shockers': {'scan_clause': '( {segments_filter} ( latest volume > latest sma( volume,20 ) * 5 ) )'}},
+        {'volume__4_hourly__shockers': {'scan_clause': '( {segments_filter} ( [0] 4 hour volume > [ 0 ] 4 hour sma( volume,20 ) * 5 ) )'}},
+        {'volume__1_hourly__shockers': {'scan_clause': '( {segments_filter} ( [0] 1 hour volume > [ 0 ] 1 hour sma( volume,20 ) * 5 ) )'}},
+        {'volume__15_minutes__shockers': {'scan_clause': '( {segments_filter} ( [0] 15 minute volume > [ 0 ] 15 minute sma( volume,20 ) * 5 ) )'}},
+
     ]
-    table_names = ["Cash_15minutes_Stocks","InsertScript_15minutes","update_Report_15minutes_Queries"]
+    table_names = ["Cash_15minutes_Stocks","Insert-Script--15minutes","Update-Report--15Minutes-Queries"]
     chart_ink_excel_file_download_and_insert_into_db(data_list, table_names)
 
 
 def chart_ink_download_15minutes():
-    printlog = setup_logger(__file__, __file__.replace('.py', '.log'))
+    printlog = setup_logger(__file__,'15_minutes_chart_ink_download_and_insert.log')
     try:
         print_start_timestamp()
         sys.exit() if trading_hours_check() == "exit" else None

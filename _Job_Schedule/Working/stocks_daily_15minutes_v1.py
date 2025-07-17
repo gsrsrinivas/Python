@@ -1,8 +1,15 @@
-import sys, subprocess
+import sys, concurrent.futures, subprocess
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from _Shared.base_functions import *
 
+
+def run_script(script):
+    try:
+        return subprocess.run(['python', script], capture_output=True, text=True)
+    except Exception as e:
+        print(f"Execution failed for {script}: {e}")
+        return None
 
 def stocks_daily_15min():
     """
@@ -19,24 +26,22 @@ def stocks_daily_15min():
         project_folder_path = str(project_directory_path())
         scripts = [project_folder_path + f'\\Chart_Ink\\chart_ink_excel_file_download_every_15_minutes_and_insert_into_db.py',
                    project_folder_path + f'\\YahooFinance\\stock_thumb_nails_15minutes.py']
+        print(f"Running scripts: {scripts}")
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            futures = [executor.submit(run_script, script) for script in scripts]
 
-        processes = []
-        for script in scripts:
-            title = f'"Running {os.path.basename(script)}"'  # Title for the window
-            # Each process opens in a new window and waits until it finishes
-            cmd = f'start /wait {title} cmd /c "python {script}"'
-            proc = subprocess.Popen(cmd, shell=True)
-            processes.append(proc)
-
-        # Wait for all to complete
-        for proc in processes:
-            if proc.poll() is None:  # The Process is still running
-                proc.wait()
+        # Wait for all futures to complete and print their results
+        for future in concurrent.futures.as_completed(futures):
+            result = future.result()
+            if result:
+                print(f"{result.args[-1]} completed with return code {result.returncode}")
+                if result.stdout:
+                    print("Output:", result.stdout)
+                if result.stderr:
+                    print("Errors:", result.stderr)
             else:
-                print(f"Process {proc.pid} already completed or crashed. Check logs for details.")
+                print("A script failed or returned no result.")
 
-
-        print("✅ All scripts completed. Closing launcher.")
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:

@@ -1,25 +1,50 @@
-import sys, concurrent.futures
+import sys, subprocess
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from Chart_Ink.chart_ink_excel_file_download_and_insert_into_db import chart_ink_download
-from YahooFinance.stock_thumb_nails import stock_thumb_nails_all_times
 from _Shared.base_functions import *
 
 
-if __name__ == "__main__":
-    printlog = setup_logger(__file__, __file__.replace('.py', '.log'))
+def stocks_daily():
+    """
+    This function is designed to run daily stock-related tasks.
+    It includes downloading chart ink data and creating stock thumbnails.
+    The tasks are executed in parallel using a process pool executor.
+    """
+    printlog = setup_logger(__file__, "daily_stocks.log")
     try:
         print_start_timestamp()
         prevent_sleep()
         # sys.exit() if trading_hours_check() == "exit" else None
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            chart_ink = executor.submit(chart_ink_download)
-            thumb_nails = executor.submit(stock_thumb_nails_all_times)
-            concurrent.futures.wait([chart_ink, thumb_nails])
+
+        project_folder_path = str(project_directory_path())
+        scripts = [project_folder_path + f'\\Chart_Ink\\chart_ink_excel_file_download_and_insert_into_db.py',
+                   project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py']
+
+        processes = []
+        for script in scripts:
+            title = f'"Running {os.path.basename(script)}"'  # Title for the window
+            # Each process opens in a new window and waits until it finishes
+            cmd = f'start /wait {title} cmd /c "python {script}"'
+            proc = subprocess.Popen(cmd, shell=True)
+            processes.append(proc)
+
+        # Wait for all to complete
+        for proc in processes:
+            if proc.poll() is None:  # The Process is still running
+                proc.wait()
+            else:
+                print(f"Process {proc.pid} already completed or crashed. Check logs for details.")
+
+        print("✅ All scripts completed. Closing launcher.")
+
     except Exception as e:
-        print(f"An error occurred: {e} \nPlease check the logs for more details.")
-        sys.exit(1)
+        print(f"An error occurred: {e}")
     finally:
         allow_sleep()
         print_end_timestamp()
+
+
+if __name__ == "__main__":
+    stocks_daily()
+
 

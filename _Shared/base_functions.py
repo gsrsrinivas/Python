@@ -1,4 +1,4 @@
-import os, sys, time, psutil, pyodbc, requests, pandas as pd, ctypes, logging
+import os, sys, time, psutil, pyodbc, sqlite3, requests, pandas as pd, ctypes, logging
 from logging.handlers import RotatingFileHandler
 from bs4 import BeautifulSoup as Bs
 from datetime import datetime
@@ -62,24 +62,45 @@ class StreamToLogger:
 
 
 # 🔁 Setup logger with rotating file +color console + print/sys.stderr redirection
-def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024, backup_count=5):
+def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024*1024, backup_count=5):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
+    # 🔄 Remove existing handlers to prevent duplicates
+    if logger.hasHandlers():
+        logger.handlers.clear()
     file_name = os.path.basename(log_file)
-    log_file_path = project_directory_path() + '\\_Logs\\' + file_name
-    if not logger.handlers:
-        # Rotating file handler
-        file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count)
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-        logger.addHandler(file_handler)
-        # Console handler with color
-        console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setLevel(logging.DEBUG)
-        logger.addHandler(console_handler)
-        # Redirect print() and sys.stderr to logger
-        sys.stdout = StreamToLogger(logger, logging.INFO)
-        sys.stderr = StreamToLogger(logger, logging.ERROR)
+    log_file_path = os.path.join(project_directory_path(), '_Logs', file_name) # project_directory_path() + '\\_Logs\\' + file_name
+
+    # 📝 Rotating file handler (UTF-8 compatible)
+    file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count, encoding='utf-8')
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(file_handler)
+
+    # 📺 Console handler (UTF-8 compatible)
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.DEBUG)
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(console_handler)
+
+    # 🔁 Redirect print() and sys.stderr to logger
+    sys.stdout = StreamToLogger(logger, logging.INFO)
+    sys.stderr = StreamToLogger(logger, logging.ERROR)
+
+    # if not logger.handlers:
+    #     # Rotating file handler
+    #     file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count)
+    #     file_handler.setLevel(logging.DEBUG)
+    #     file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    #     logger.addHandler(file_handler)
+    #     # Console handler with color
+    #     console_handler = logging.StreamHandler(sys.stdout)
+    #     console_handler.setLevel(logging.DEBUG)
+    #     console_handler.stream = open(sys.stdout.fileno(), mode='w', encoding='utf-8', buffering=1) # Ensure console output is UTF-8 encoded
+    #     logger.addHandler(console_handler)
+    #     # Redirect print() and sys.stderr to logger
+    #     sys.stdout = StreamToLogger(logger, logging.INFO)
+    #     sys.stderr = StreamToLogger(logger, logging.ERROR)
 
     return logger
 
@@ -106,7 +127,8 @@ def trading_hours_check():
 def print_start_timestamp():
     """ Prints the start date and time of the script execution."""
     start_date = datetime.now()
-    print(f"Script start timestamp: {start_date}")
+    print(f"=======================================================================================\n")
+    print(f"Script  start timestamp : {start_date}")
 
 
 def print_end_timestamp():
@@ -129,12 +151,12 @@ def print_end_timestamp():
     start_time = start_datetime.timestamp()  # Use timestamp for consistency
 
     end_date = datetime.now()
-    print(f"Script end timestamp  : {end_date}")
+    print(f"Script finish timestamp : {end_date}")
     end_time = time.time()
     elapsed_seconds = end_time - start_time
     elapsed_duration = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
-    print(f"Total time in seconds : {elapsed_seconds}")
-    print(f"and formatted time is : {elapsed_duration}\n")
+    print(f"Total time in seconds   : {elapsed_seconds}")
+    print(f"and formatted time is   : {elapsed_duration}\n")
     print(f"=======================================================================================\n")
     time.sleep(15)
 
@@ -193,6 +215,10 @@ def insert_into_database_tables(df_all, table_names):
             print(f"Executing {label.replace('_', ' ').capitalize()} SQL script")
             with open(path, 'r', encoding='utf-8') as file_path:
                 cursor.execute(file_path.read())
+                # Execute the SQL script from the file ----------------------------------
+                row = cursor.fetchall() # Fetch all rows after executing the script
+                print(row) # Print the fetched rows
+                # Commit the changes to the database ------------------------------------
             conn.commit()
             print(f"Committed {label.replace('_', ' ').capitalize()} SQL script")
     print("Completed all files execution and database insertions.\n")

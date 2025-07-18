@@ -98,8 +98,11 @@ def stock_thumb_nails(timeframe=None):
     The function also handles different intervals and periods based on the current date,
     ensuring that the thumbnails are relevant to the current trading conditions.
     """
+    # Get the path to the Pictures folder
+    # pictures_path = os.path.join(os.environ["USERPROFILE"], "Pictures").replace("gsrsr", r"gsrsr\OneDrive")
+    pictures_path = os.path.dirname(os.path.dirname(project_directory_path()))
     # Folder to save thumbnails
-    thumb_dir = os.path.dirname(__file__) + '\\Thumbnails'
+    thumb_dir = pictures_path + r'\Pictures\Thumbnails'
     # Create thumbnails directory if it doesn't exist
     os.makedirs(thumb_dir, exist_ok=True)
     print(f"Thumbnails will be saved in: {thumb_dir}")

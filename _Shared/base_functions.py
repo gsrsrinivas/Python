@@ -176,7 +176,9 @@ def insert_into_database_tables(df_all, table_names):
     # Define the insert statement
     insert_query = f'''INSERT INTO _sis.{table_names[0]}(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
-    input_folder_path = f"C:/Users/gsrsr/Documents/SQL Server Management Studio/Analysis of Stocks/Analysis of Stocks"
+    # pictures_path = os.path.join(os.environ["USERPROFILE"], "Documents").replace("gsrsr", r"gsrsr\OneDrive")
+    pictures_path = os.path.dirname(project_directory_path())
+    input_folder_path = pictures_path + r"\SQL Server Management Studio\Analysis of Stocks\Analysis of Stocks"
     file_paths = {
         "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql"),
         "update_report_sql_file": Path(f"{input_folder_path}/{table_names[2]}.sql")

@@ -1,7 +1,7 @@
-import os, sys, time, psutil, pyodbc, sqlite3, requests, pandas as pd, ctypes, logging
+import os, sys, time, psutil, pyodbc, requests, pandas as pd, ctypes, logging
 from logging.handlers import RotatingFileHandler
 from bs4 import BeautifulSoup as Bs
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 # Constants from Windows API
@@ -9,7 +9,6 @@ ES_CONTINUOUS = 0x80000000
 ES_SYSTEM_REQUIRED = 0x00000001
 ES_AWAY_MODE_REQUIRED = 0x00000040  # Optional for media apps
 window_flags = 0x80000000 | 0x00000001 | 0x00000040 # ES_Continuous, ES_System_Required, ES_Away_Mode_Required
-
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get the parent directory of the current file and add to sys.path
 
@@ -70,38 +69,19 @@ def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024
         logger.handlers.clear()
     file_name = os.path.basename(log_file)
     log_file_path = os.path.join(project_directory_path(), '_Logs', file_name) # project_directory_path() + '\\_Logs\\' + file_name
-
     # 📝 Rotating file handler (UTF-8 compatible)
     file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count, encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
     logger.addHandler(file_handler)
-
     # 📺 Console handler (UTF-8 compatible)
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.DEBUG)
     console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
     logger.addHandler(console_handler)
-
     # 🔁 Redirect print() and sys.stderr to logger
     sys.stdout = StreamToLogger(logger, logging.INFO)
     sys.stderr = StreamToLogger(logger, logging.ERROR)
-
-    # if not logger.handlers:
-    #     # Rotating file handler
-    #     file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count)
-    #     file_handler.setLevel(logging.DEBUG)
-    #     file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-    #     logger.addHandler(file_handler)
-    #     # Console handler with color
-    #     console_handler = logging.StreamHandler(sys.stdout)
-    #     console_handler.setLevel(logging.DEBUG)
-    #     console_handler.stream = open(sys.stdout.fileno(), mode='w', encoding='utf-8', buffering=1) # Ensure console output is UTF-8 encoded
-    #     logger.addHandler(console_handler)
-    #     # Redirect print() and sys.stderr to logger
-    #     sys.stdout = StreamToLogger(logger, logging.INFO)
-    #     sys.stderr = StreamToLogger(logger, logging.ERROR)
-
     return logger
 
 
@@ -127,7 +107,7 @@ def trading_hours_check():
 def print_start_timestamp():
     """ Prints the start date and time of the script execution."""
     start_date = datetime.now()
-    print(f"=======================================================================================\n")
+    print(f"\n=======================================================================================")
     print(f"Script  start timestamp : {start_date}")
 
 
@@ -155,9 +135,11 @@ def print_end_timestamp():
     end_time = time.time()
     elapsed_seconds = end_time - start_time
     elapsed_duration = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
+
     print(f"Total time in seconds   : {elapsed_seconds}")
     print(f"and formatted time is   : {elapsed_duration}\n")
-    print(f"=======================================================================================\n")
+    print(f"=======================================================================================\n\t\t\t\t\t\t\t\n")
+
     time.sleep(15)
 
 
@@ -196,8 +178,8 @@ def insert_into_database_tables(df_all, table_names):
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     input_folder_path = f"C:/Users/gsrsr/Documents/SQL Server Management Studio/Analysis of Stocks/Analysis of Stocks"
     file_paths = {
-        "analysis_insert": Path(f"{input_folder_path}/{table_names[1]}.sql"),
-        "report_update": Path(f"{input_folder_path}/{table_names[2]}.sql")
+        "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql"),
+        "update_report_sql_file": Path(f"{input_folder_path}/{table_names[2]}.sql")
     }
     # Establish connection to SQL Server
     with pyodbc.connect(conn_str) as conn:
@@ -212,15 +194,11 @@ def insert_into_database_tables(df_all, table_names):
         print(f"{len(records)} records inserted in {table_names[0]} table using batch insert!")
         # Execute both SQL Script files
         for label, path in file_paths.items():
-            print(f"Executing {label.replace('_', ' ').capitalize()} SQL script")
+            print(f"Executing {label.replace('_', ' ').capitalize()}")
             with open(path, 'r', encoding='utf-8') as file_path:
                 cursor.execute(file_path.read())
-                # Execute the SQL script from the file ----------------------------------
-                row = cursor.fetchall() # Fetch all rows after executing the script
-                print(row) # Print the fetched rows
-                # Commit the changes to the database ------------------------------------
             conn.commit()
-            print(f"Committed {label.replace('_', ' ').capitalize()} SQL script")
+            print(f"Committed {label.replace('_', ' ').capitalize()}")
     print("Completed all files execution and database insertions.\n")
 
 
@@ -313,4 +291,34 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
     print(f"\ndownloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
 
+
+def purge_log_files():
+    """
+    Purges log files older than 7 days from the _Logs directory.
+    This function is useful for maintaining clean log entries and preventing excessive disk usage.
+    """
+    log_dir = Path(project_directory_path()) / '_Logs'
+    if not log_dir.exists():
+        print(f"Log directory {log_dir} does not exist. No logs to purge.")
+        return
+
+    for file_name in log_dir.glob('*.log'):
+        log_file_path = file_name.resolve()  # Get the absolute path of the log file
+        days_to_keep = 7
+        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
+        new_logs = []
+        with open(log_file_path, 'r') as file:
+            for line in file:
+                try:
+                    # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
+                    timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
+                    log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
+                    if log_date >= cutoff_date:
+                        new_logs.append(line)
+                except Exception as e:
+                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
+                    # Optionally log or skip malformed lines
+                    pass
+        with open(log_file_path, 'w') as file:
+            file.writelines(new_logs)
 

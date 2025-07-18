@@ -7,10 +7,10 @@ from _Shared.base_functions import *
 def stocks_daily_15min():
     """
     This function runs two scripts concurrently:
-    1. Downloads chart ink data every 15 minutes and inserts it into the database.
-    2. Creates stock thumbnails for all stocks names from the database into a folder.
+    1. Downloads chart ink data every 15 minutes and insert it into the database.
+    2. Create stock thumbnails for all stock names from the database into a folder.
     """
-    printlog = setup_logger(__file__, "15_minutes_stocks_daily.log")
+    setup_logger(__file__, "15_minutes_stocks_daily.log")
     try:
         print_start_timestamp()
         prevent_sleep()
@@ -34,7 +34,6 @@ def stocks_daily_15min():
                 proc.wait()
             else:
                 print(f"Process {proc.pid} already completed or crashed. Check logs for details.")
-
 
         print("✅ All scripts completed. Closing launcher.")
     except Exception as e:

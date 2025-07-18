@@ -129,25 +129,21 @@ def stock_thumb_nails(timeframe=None):
 
 
 def stock_thumb_nails_all_times():
-    printlog = setup_logger(__file__, "daily_stock_thumb_nails.log")
+    setup_logger(__file__, "daily_stock_thumb_nails.log")
     try:
         print_start_timestamp()
         # sys.exit() if trading_hours_check() == "exit" else None
-        # prevent_sleep()
+        prevent_sleep()
         stock_thumb_nails()
     except Exception as e:
         print(f"An error occurred: {e}")
         sys.exit(1)
     finally:
-        # allow_sleep()
+        allow_sleep()
         print_end_timestamp()
 
 
 if __name__ == "__main__":
-    try:
-        prevent_sleep()
-        stock_thumb_nails_all_times()
-    finally:
-        allow_sleep()
+    stock_thumb_nails_all_times()
 
 

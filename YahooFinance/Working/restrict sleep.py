@@ -3,7 +3,7 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent dir of this file and add to sys.path
-from _Shared.base_functions import *
+from _Common_Functions.base_functions import *
 
 # import ctypes
 # import time

@@ -1,7 +1,7 @@
 import sys, concurrent.futures, subprocess
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from _Shared.base_functions import *
+from _Common_Functions.base_functions import *
 
 
 def run_script(script):

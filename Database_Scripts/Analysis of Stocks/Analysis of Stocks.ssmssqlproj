@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Analysis of Stocks">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="DESKTOP-EP99LTB:DESKTOP-EP99LTB\Cnu">
+          <Created>2025-02-10T06:56:25.0987891+05:30</Created>
+          <Type>SQL</Type>
+          <Server>DESKTOP-EP99LTB</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>Stocks_Analysis</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="_Reset-Script.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>_Reset-Script.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Insert-Script.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Insert-Script.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Insert-Script--15Minutes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Insert-Script--15Minutes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--15Minutes-Queries.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--15Minutes-Queries.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--Queries.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--Queries.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Z--Queries_ALL.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Z--Queries_ALL.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Z--Temporary.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Z--Temporary.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items>
+        <FileNode Name="_Reset-Script-v1.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>_Reset-Script-v1.txt</FullPath>
+        </FileNode>
+        <FileNode Name="_ScreensExplained.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>_ScreensExplained.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Backup.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Backup.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Calculation of Fields.xlsx">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Calculation of Fields.xlsx</FullPath>
+        </FileNode>
+        <FileNode Name="Insert-Script.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Insert-Script.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Insert-Script--15Minutes.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Insert-Script--15Minutes.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Insert-Script--15Minutes-v1.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Insert-Script--15Minutes-v1.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Insert-Script-v1.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Insert-Script-v1.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Reset-Script-v0.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Reset-Script-v0.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Screen-Values.xlsx">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Screen-Values.xlsx</FullPath>
+        </FileNode>
+        <FileNode Name="stocks-price-action.csv">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>stocks-price-action.csv</FullPath>
+        </FileNode>
+        <FileNode Name="text-file.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>text-file.txt</FullPath>
+        </FileNode>
+        <FileNode Name="trending sorting.xls">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>trending sorting.xls</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--15Minutes-Queries-v0.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--15Minutes-Queries-v0.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--15Minutes-Queries-v1.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--15Minutes-Queries-v1.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--Queries-v0.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--Queries-v0.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--Queries-v1.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--Queries-v1.txt</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

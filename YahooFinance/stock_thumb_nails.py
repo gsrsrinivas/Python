@@ -6,7 +6,7 @@ import yfinance as yf
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
-from _Shared.base_functions import *
+from _Common_Functions.base_functions import *
 
 
 def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', period_value='30d'):

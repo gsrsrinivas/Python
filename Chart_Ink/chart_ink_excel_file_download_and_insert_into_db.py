@@ -274,6 +274,9 @@ def chart_ink_download():
         # prevent_sleep()
         # sys.exit() if trading_hours_check() == "exit" else None
         chat_ink_xls2db()
+        purge_daily_tables()
+        purge_daily_chart_ink_log_files()
+        shrink_databases()
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:

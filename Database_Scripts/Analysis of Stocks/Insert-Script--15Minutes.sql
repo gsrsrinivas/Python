@@ -1,14 +1,15 @@
 begin -- insert script 15 minutes 
-DECLARE @StartTime DATETIME;
+DECLARE @StartTime DATETIME,@printstarttime varchar;
 SET @StartTime = GETDATE();
-PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+SET @printstarttime = 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121)
+RAISERROR(@printstarttime, 0, 1) WITH NOWAIT;
 ---------
 -- run this script after the data is imported into database table.
 -- update the batch number for the new records
-begin -- update batch no 
-update _sis.Cash_15Minutes_Stocks Set Batch_No =(select isnull(MAX(Batch_No)+1,1) from _sis.Cash_15Minutes_Stocks where batch_No <>CONVERT(int, FORMAT(GETDATE(), 'yyyyMMdd')))
-where Batch_No = CONVERT(int, FORMAT(GETDATE(), 'yyyyMMdd'));
-end
+--begin -- update batch no 
+--update _sis.Cash_15Minutes_Stocks Set Batch_No =(select isnull(MAX(Batch_No)+1,1) from _sis.Cash_15Minutes_Stocks where batch_No <>CONVERT(int, FORMAT(GETDATE(), 'yyyyMMdd')))
+--where Batch_No = CONVERT(int, FORMAT(GETDATE(), 'yyyyMMdd'));
+--end
 begin -- add new stocks in master table 
 insert into _sis.Master_Stocks_In_Segments (Symbol,Segments,Stock_Name)
 select distinct cs.symbol,cs.Segment,cs.[stock name]

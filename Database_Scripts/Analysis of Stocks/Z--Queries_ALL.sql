@@ -1,5 +1,6 @@
-------------------------------------------------------------------------------------------------------------------------
 DECLARE @Batch_no INT
+------------------------------------------------------------------------------------------------------------------------
+
 SELECT @Batch_no = MAX(batch_no) FROM _sis.Analyse_Stocks;
 
 -- Step 1: Create a temp table to hold all MACD crosses
@@ -1673,7 +1674,6 @@ where Batch_No = @Batch_No
 --------------------------------------------------------------------------------------------------------------------------------
 begin
 select top 10000 [Symbol] from [_sis].[Analyse_Stocks_v] order by Batch_No desc;
-GO
 create view [_sis].[Analyse_15Minutes_Stocks_v_aklfdjak] as 
 select [Batch_No], [Trading View],[Trade-Type-Details],[segment]/*,[Trade Type Details],[Segments]*/, [Symbol], [% Chg], [Price], [Volume]
 ,rn,[Stock_Name], [Trade Type Details - Sum], [Trade Type - Bullish Sum], [Trade Type - Bearish Sum], [Trade Type], [Trade Type - Length], [Segments - Length], [Trade Type Details - Length], [Created_Date]
@@ -1688,7 +1688,6 @@ from (
 	--and Symbol in ('BSE','ARE&M','AXISBANK','COALINDIA','HAL','IREDA','OLAELEC','RELIANCE','SHREEGANES-X','SWSOLAR','TVSSCS','VBL','NIFTY50-INDEX','DEEPAKNTR','DLF','MUKTAARTS','WEBELSOLAR','COLPAL','REDINGTON','BHARATFORG','MUTHOOTFIN')
 ) a where rn = 1
 -- order by [Trading View] desc,[Trade Type Details - Sum] desc, [Trade Type Details - Length] desc,[Segments - Length] desc,[Trade Type - Length] desc
-GO;
 create view [_sis].[Analyse_Stocks_v] as 
 select [Batch_No], [Trading View],[Trade-Type-Details],[segment]/*,[Trade Type Details],[Segments]*/, [Symbol], [% Chg], [Price], [Volume]
 ,rn,[Stock_Name], [Trade Type Details - Sum], [Trade Type - Bullish Sum], [Trade Type - Bearish Sum], [Trade Type], [Trade Type - Length]
@@ -1708,7 +1707,6 @@ from (
 	--and Symbol in ('BSE','ARE&M','AXISBANK','COALINDIA','HAL','IREDA','OLAELEC','RELIANCE','SHREEGANES-X','SWSOLAR','TVSSCS','VBL','NIFTY50-INDEX','DEEPAKNTR','DLF','MUKTAARTS','WEBELSOLAR','COLPAL','REDINGTON','BHARATFORG','MUTHOOTFIN')
 ) a where rn = 1
 -- order by [Trading View] desc,[Trade Type Details - Sum] desc, [Trade Type Details - Length] desc,[Segments - Length] desc,[Trade Type - Length] desc
-GO ;
 end
 --------------------------------------------------------------------------------------------------------------------------------
 begin -- updating the report sort order column
@@ -1734,3 +1732,87 @@ select top 1000 [Report Sort Order] as rso,* from _sis.Analyse_Stocks
 where Volume_Shockers is not null
 order by Batch_No desc, [Report Sort Order] asc
 ---------------------------------------------------------------------------------------------
+select top 1000 * from [_sis].[Analyse_15Minutes_Stocks_View]
+where Volume_Shockers is not null
+order by batch_no desc, [Report Sort Order]
+;
+select * from _sis.Analyse_15Minutes_Stocks_v
+;
+select distinct batch_no,Symbol from _sis.Analyse_Stocks_View with (nolock) where Batch_No = 63
+;
+select * from _sis.Analyse_15Minutes_Stocks order by Batch_No desc
+;
+select distinct Symbol from [_sis].[Analyse_Stocks_v]
+;
+select distinct batch_no from _sis.Cash_Stocks 
+order by 1
+;
+
+begin -- purge the records from cash stocks tables 
+select distinct batch_no from _sis.Cash_15Minutes_Stocks
+order by 1
+;
+-- delete from _sis.Cash_15Minutes_Stocks where Batch_No < 38
+;
+select count(1) from _sis.Cash_15Minutes_Stocks
+;
+
+select distinct batch_no from _sis.Cash_Stocks
+order by 1
+;
+-- delete from _sis.Cash_Stocks where Batch_No < 43
+;
+select count(1) from _sis.Cash_Stocks
+;
+end
+
+begin -- purge the records from analyse stocks tables
+select distinct batch_no from [_sis].[Analyse_Stocks] order by 1
+;
+delete from [_sis].[Analyse_Stocks] where Batch_No <=(select 70-15)
+;
+select count(1) from [_sis].[Analyse_Stocks]
+;
+
+select distinct batch_no from [_sis].[Analyse_15Minutes_Stocks] order by 1
+;
+delete from [_sis].[Analyse_15Minutes_Stocks] where Batch_No <=(select 54-15)
+;
+select count(1) from [_sis].[Analyse_15Minutes_Stocks]
+;
+end
+
+begin
+select *
+--DELETE 
+FROM _sis.Analyse_Stocks             where Batch_No <= (select count(distinct Batch_No) from _sis.Analyse_Stocks) - 15;
+select *
+--DELETE 
+FROM _sis.Analyse_15Minutes_Stocks   where Batch_No <= (select count(distinct Batch_No) from _sis.Analyse_15Minutes_Stocks) - 15;
+select *
+--DELETE 
+FROM _sis.Cash_Stocks                where Batch_No <= (select count(distinct Batch_No) from _sis.Cash_Stocks) - 15;
+select *
+--DELETE 
+FROM _sis.Cash_15Minutes_Stocks      where Batch_No <= (select count(distinct Batch_No) from _sis.Cash_15Minutes_Stocks) - 15;
+end
+
+begin -- shrink the log file of the database
+USE Stocks_Analysis;
+
+ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
+DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
+-- ALTER DATABASE Stocks_Analysis SET RECOVERY FULL
+;
+SELECT name, recovery_model_desc FROM sys.databases --WHERE name = 'Stocks_Analysis';
+end
+
+begin -- shrink the log file of the Trade Log database
+USE [Trade Log];
+
+ALTER DATABASE [Trade Log] SET RECOVERY SIMPLE;
+DBCC SHRINKFILE (Stocks_db_log, 1); -- Shrinks to 1MB
+-- ALTER DATABASE [Trade Log] SET RECOVERY FULL
+;
+SELECT name, recovery_model_desc FROM sys.databases --WHERE name = '[Trade Log]';
+end

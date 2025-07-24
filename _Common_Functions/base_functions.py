@@ -269,7 +269,7 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
                        'close': 'price'}, inplace=True)
     # Extract and clean metadata # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
-    batch_no = datetime.now().strftime('%Y%m%d')
+    batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
     # Insert new metadata columns
     df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction,
                                                                                 each_segment_list, batch_no]
@@ -309,17 +309,18 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
     insert_into_database_tables(df_all, table_names)
 
 
-def purge_log_files():
+def purge_daily_chart_ink_log_files():
     """
     Purges log files older than 7 days from the _Logs directory.
     This function is useful for maintaining clean log entries and preventing excessive disk usage.
     """
+    print("start - Purging daily chart ink log files older than 5 days...")
     log_dir = Path(project_directory_path()) / '_Logs'
     if not log_dir.exists():
         print(f"Log directory {log_dir} does not exist. No logs to purge.")
         return
 
-    for file_name in log_dir.glob('*.log'):
+    for file_name in log_dir.glob('daily_chart_ink_*.log'):
         log_file_path = file_name.resolve()  # Get the absolute path of the log file
         days_to_keep = 5
         cutoff_date = datetime.now() - timedelta(days=days_to_keep)
@@ -338,4 +339,197 @@ def purge_log_files():
                     pass
         with open(log_file_path, 'w') as file:
             file.writelines(new_logs)
+    print("completed - Purging daily chart ink log files older than 5 days...")
+
+
+def purge_daily_stocks_log_files():
+    """
+    Purges log files older than 7 days from the _Logs directory.
+    This function is useful for maintaining clean log entries and preventing excessive disk usage.
+    """
+    print("start - Purging daily stocks log files...")
+    log_dir = Path(project_directory_path()) / '_Logs'
+    if not log_dir.exists():
+        print(f"Log directory {log_dir} does not exist. No logs to purge.")
+        return
+
+    for file_name in log_dir.glob('daily_stock*.log'):
+        log_file_path = file_name.resolve()  # Get the absolute path of the log file
+        days_to_keep = 5
+        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
+        new_logs = []
+        with open(log_file_path, 'r') as file:
+            for line in file:
+                try:
+                    # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
+                    timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
+                    log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
+                    if log_date >= cutoff_date:
+                        new_logs.append(line)
+                except Exception as e:
+                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
+                    # Optionally log or skip malformed lines
+                    pass
+        with open(log_file_path, 'w') as file:
+            file.writelines(new_logs)
+    print("completed - Purging daily stocks log files...")
+
+
+def purge_15_minutes_chart_ink_log_files():
+    """
+    Purges log files older than 7 days from the _Logs directory.
+    This function is useful for maintaining clean log entries and preventing excessive disk usage.
+    """
+    print("start - Purging 15 minutes chart ink log files older than 5 days...")
+    log_dir = Path(project_directory_path()) / '_Logs'
+    if not log_dir.exists():
+        print(f"Log directory {log_dir} does not exist. No logs to purge.")
+        return
+
+    for file_name in log_dir.glob('15_minutes_chart_ink_*.log'):
+        log_file_path = file_name.resolve()  # Get the absolute path of the log file
+        days_to_keep = 5
+        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
+        new_logs = []
+        with open(log_file_path, 'r') as file:
+            for line in file:
+                try:
+                    # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
+                    timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
+                    log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
+                    if log_date >= cutoff_date:
+                        new_logs.append(line)
+                except Exception as e:
+                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
+                    # Optionally log or skip malformed lines
+                    pass
+        with open(log_file_path, 'w') as file:
+            file.writelines(new_logs)
+    print("completed - Purging 15 minutes chart ink log files older than 5 days...")
+
+
+def purge_15_minutes_stocks_log_files():
+    """
+    Purges log files older than 7 days from the _Logs directory.
+    This function is useful for maintaining clean log entries and preventing excessive disk usage.
+    """
+    print("start - Purging 15 minutes stocks log files older than 5 days...")
+    log_dir = Path(project_directory_path()) / '_Logs'
+    if not log_dir.exists():
+        print(f"Log directory {log_dir} does not exist. No logs to purge.")
+        return
+
+    for file_name in log_dir.glob('15_minutes_stock*.log'):
+        log_file_path = file_name.resolve()  # Get the absolute path of the log file
+        days_to_keep = 5
+        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
+        new_logs = []
+        with open(log_file_path, 'r') as file:
+            for line in file:
+                try:
+                    # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
+                    timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
+                    log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
+                    if log_date >= cutoff_date:
+                        new_logs.append(line)
+                except Exception as e:
+                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
+                    # Optionally log or skip malformed lines
+                    pass
+        with open(log_file_path, 'w') as file:
+            file.writelines(new_logs)
+    print("completed - Purging 15 minutes stocks log files older than 5 days...")
+
+
+def purge_daily_tables():
+    """
+    Purges the _sis.stocks_daily table in the Stocks_Analysis database.
+    This function is useful for clearing old data before inserting new data.
+    """
+    print("start - Purging daily tables...")
+    conn = get_database_connection()
+    if conn is None:
+        print("Failed to connect to the database. Cannot purge tables.")
+        return
+    sql_query = f"""
+    DELETE FROM _sis.Cash_Stocks 
+    where Batch_No <= (select count(distinct Batch_No) from _sis.Cash_Stocks) - 15;
+    DELETE FROM _sis.Analyse_Stocks 
+    where Batch_No <= (select count(distinct Batch_No) from _sis.Analyse_Stocks) - 15;
+    """
+    cursor = conn.cursor()
+    try:
+        cursor.execute(sql_query)
+        conn.commit()
+        print("✅ Successfully purged all tables.")
+    except pyodbc.Error as e:
+        print(f"Error purging the tables: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+        print("completed - Purging daily tables...")
+
+
+def purge_15minutes_tables():
+    """
+    Purges the _sis.stocks_daily table in the Stocks_Analysis database.
+    This function is useful for clearing old data before inserting new data.
+    """
+    print("start - Purging 15 minutes tables...")
+    conn = get_database_connection()
+    if conn is None:
+        print("Failed to connect to the database. Cannot purge tables.")
+        return
+    sql_query = f"""
+    DELETE FROM _sis.Cash_15Minutes_Stocks 
+    where Batch_No <= (select count(distinct Batch_No) from _sis.Cash_15Minutes_Stocks) - 30;
+    DELETE FROM _sis.Analyse_15Minutes_Stocks 
+    where Batch_No <= (select count(distinct Batch_No) from _sis.Analyse_15Minutes_Stocks) - 30;
+    """
+    cursor = conn.cursor()
+    try:
+        cursor.execute(sql_query)
+        conn.commit()
+        print("✅ Successfully purged all tables.")
+    except pyodbc.Error as e:
+        print(f"Error purging the tables: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+        print("completed - Purging 15 minutes tables...")
+
+
+def shrink_databases():
+    """
+    Shrinks the Stocks_Analysis database to reclaim unused space.
+    This function is useful for optimizing database storage.
+    """
+    today = datetime.today()
+    if today.day == 1:
+        print(f"Today is the 1st of the Month so Shrinking the database log files.")
+        print("start - Shrinking the Stocks_Analysis database log files...")
+    else:
+        sys.exit()
+
+    conn = get_database_connection()
+    if conn is None:
+        print("Failed to connect to the database. Cannot shrink databases.")
+        return
+    sql_query = f""" -- shrink database log file
+    USE Stocks_Analysis;
+    GO;
+    ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
+    DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB    
+    """
+    cursor = conn.cursor()
+    try:
+        cursor.execute(sql_query)
+        conn.commit()
+        print("✅ Successfully shrunk the Stocks_Analysis database.")
+    except pyodbc.Error as e:
+        print(f"Error shrinking the database: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+        print("completed - Shrinking the Stocks_Analysis database log files...")
 

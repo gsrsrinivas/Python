@@ -1,7 +1,9 @@
 begin -- update report queries 
-DECLARE @StartTime DATETIME;
+DECLARE @StartTime DATETIME,@printstarttime varchar;
 SET @StartTime = GETDATE();
-PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+SET @printstarttime = 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121)
+RAISERROR(@printstarttime, 0, 1) WITH NOWAIT;
+
 -- update the report Queries output in table
 -- _sis.Analyse_Stocks,
 ---------------------------------------------------------------------------------------------------------------

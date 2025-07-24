@@ -127,6 +127,7 @@ def stock_thumb_nails_all_times():
         # sys.exit() if trading_hours_check() == "exit" else None
         # prevent_sleep()
         stock_thumb_nails()
+        purge_daily_stocks_log_files()
     except Exception as e:
         print(f"An error occurred: {e}")
         sys.exit(1)

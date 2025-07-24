@@ -1,3 +1,7 @@
+begin -- reset script
+DECLARE @StartTime DATETIME;
+SET @StartTime = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 -- update all indicators to null values and calculate the reporting fields once again 
 -- _sis.Cash_Stocks, _sis.Analyse_Stocks, _sis.Screen_Name_Values
 ---------------------------------------------------------------------------------------------------------------------------
@@ -3378,3 +3382,21 @@ ON a.Batch_No = b.Batch_No and a.sno = b.sno
 ;
 end 
 ---------------------------------------------------------------------------------------------------------------------------
+DECLARE @DurationMs int,@EndTime DATETIME;
+SET @EndTime = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+PRINT 'Script ended at: ' + CONVERT(VARCHAR, @EndTime, 121);
+set @DurationMs = DATEDIFF(MILLISECOND, @StartTime, @EndTime)
+PRINT 'Duration (ms): ' + CAST(@DurationMs AS VARCHAR);
+-- Break down into components
+DECLARE @Hours INT = @DurationMs / 3600000;
+DECLARE @Minutes INT = (@DurationMs % 3600000) / 60000;
+DECLARE @Seconds INT = (@DurationMs % 60000) / 1000;
+DECLARE @Milliseconds INT = @DurationMs % 1000;
+-- Format as hh:mm:ss.mmm
+PRINT 'Duration: ' + 
+    RIGHT('00' + CAST(@Hours AS VARCHAR), 2) + ':' +
+    RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
+    RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
+    RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
+end

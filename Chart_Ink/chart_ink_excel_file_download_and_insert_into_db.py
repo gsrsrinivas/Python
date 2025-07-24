@@ -271,13 +271,13 @@ def chart_ink_download():
     setup_logger(__file__, 'daily_chart_ink_download_and_insert.log' )
     try:
         print_start_timestamp()
-        prevent_sleep()
+        # prevent_sleep()
         # sys.exit() if trading_hours_check() == "exit" else None
         chat_ink_xls2db()
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
-        allow_sleep()
+        # allow_sleep()
         print_end_timestamp()
 
 

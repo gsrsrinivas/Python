@@ -1,3 +1,8 @@
+begin -- update report script 15 minutes 
+DECLARE @StartTime DATETIME;
+SET @StartTime = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+
 -- update the report Queries output in table
 -- _sis.Analyse_15Minutes_Stocks
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -1903,3 +1908,21 @@ where a.Batch_No = @Batch_No
 ;
 end 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+DECLARE @DurationMs int, @EndTime DATETIME;
+SET @EndTime = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+PRINT 'Script ended at: ' + CONVERT(VARCHAR, @EndTime, 121);
+set @DurationMs = DATEDIFF(MILLISECOND, @StartTime, @EndTime)
+PRINT 'Duration (ms): ' + CAST(@DurationMs AS VARCHAR);
+-- Break down into components
+DECLARE @Hours INT = @DurationMs / 3600000;
+DECLARE @Minutes INT = (@DurationMs % 3600000) / 60000;
+DECLARE @Seconds INT = (@DurationMs % 60000) / 1000;
+DECLARE @Milliseconds INT = @DurationMs % 1000;
+-- Format as hh:mm:ss.mmm
+PRINT 'Duration: ' + 
+    RIGHT('00' + CAST(@Hours AS VARCHAR), 2) + ':' +
+    RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
+    RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
+    RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
+end

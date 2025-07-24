@@ -1,10 +1,14 @@
+begin -- update report queries 
+DECLARE @StartTime DATETIME;
+SET @StartTime = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 -- update the report Queries output in table
 -- _sis.Analyse_Stocks,
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+---------------------------------------------------------------------------------------------------------------
 declare @Batch_no int, @batch_num int
 set @Batch_Num = 1
 select @Batch_no = max(batch_no) from _sis.Analyse_Stocks;
-
+---------------------------------------------------------------------------------------------------------------
 begin -- bullish screen 
 -- bullish single screen - child is up tick - timeframe is Yearly
 update a set a.Bullish_Single_Screen_Yearly = 1
@@ -596,10 +600,9 @@ and Ema_100_200_15_Minutes_Crosses_Above = 1
 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
 ;
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--------------------------------------------------------------------------------------------------------------- 
 end 
-
-begin -- bearish screen
+begin -- bearish screen 
 -- Bearish single screen - child is down tick - timeframe is Yearly
 update a set a.Bearish_Single_Screen_Yearly = 1
 from _sis.Analyse_Stocks a
@@ -1194,10 +1197,10 @@ and Ema_100_200_15_Minutes_Crosses_Below = 1
 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
 ;
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--------------------------------------------------------------------------------------------------------------- 
 end 
+begin -- bullish -- trade type and details 
 
-begin -- bullish -- trade type and details
 update a set 
  [Trade Type] = isnull([Trade Type],'')+'Bullish;'
 ,[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';'
@@ -1504,9 +1507,8 @@ from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @B
           AND v.[Screen Names] = 'Bullish_Single_Screen_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_15_Minutes > 0
 ; 
-------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 end
-
 begin -- bearish -- trade type and details 
 update a set 
 [Trade Type] = isnull([Trade Type],'')+'Bearish;',
@@ -1816,7 +1818,6 @@ where a.Batch_No = @Batch_no and Bearish_Single_Screen_15_Minutes > 0
 ;
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 end 
-
 begin -- volume shockers 
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'yearly;'
@@ -1859,23 +1860,18 @@ from _sis.Analyse_Stocks a
 where a.Batch_No = @Batch_no and volume__15_minutes__shockers = 1
 ;
 end
-
-begin -- length of columns
+begin -- length of columns 
 update a set a.[Trade Type - Length] = len([Trade Type])
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set a.[Trade Type Details - Length] = len([Trade Type Details])
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Trading View] = case 
 when isnull([Trade Type - Bullish Sum],0) - isnull([Trade Type - Bearish Sum],0) > 0 then 'Bullish' 
 when isnull([Trade Type - Bullish Sum],0) - isnull([Trade Type - Bearish Sum],0) < 0 then 'Bearish' 
 else NULL end
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Trading View - Order] = (case when a.[Trading View] = 'Bearish' then 1 else 0 end)
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Volume_Shockers - Sum] = isnull([Volume_Shockers - Sum],0) + 
 (case when volume__yearly__shockers = 1 then 525600 else 0 end) +
 (case when volume__quarterly__shockers = 1 then 131400 else 0 end)+
@@ -1885,8 +1881,7 @@ update a set [Volume_Shockers - Sum] = isnull([Volume_Shockers - Sum],0) +
 (case when volume__4_hourly__shockers = 1 then 240 else 0 end)+
 (case when volume__1_hourly__shockers = 1 then 60 else 0 end)+
 (case when volume__15_minutes__shockers = 1 then 15 else 0 end)
-from [_sis].[Analyse_Stocks] a where Batch_No = @Batch_No
-;
+from [_sis].[Analyse_Stocks] a where Batch_No = @Batch_No;
 ;WITH RankedRows AS (
     select batch_no,sno,
 	row_number() over (partition by Batch_No order by Batch_No desc, [Trading View - Order] asc, [Segments - Order] desc, [Volume_Shockers] desc, [Trade Type Details - Sum] desc ) as report_sort_order
@@ -1895,7 +1890,25 @@ from [_sis].[Analyse_Stocks] a where Batch_No = @Batch_No
 UPDATE a SET [Report Sort Order] = b.report_sort_order
 FROM [_sis].[Analyse_Stocks] a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
-where a.Batch_No = @Batch_No
-;
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+where a.Batch_No = @Batch_No;
+---------------------------------------------------------------------------------------------------------------
 end 
+-- select * from _sis.Analyse_Stocks
+DECLARE @DurationMs int, @EndTime DATETIME;
+SET @EndTime = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+PRINT 'Script ended at: ' + CONVERT(VARCHAR, @EndTime, 121);
+set @DurationMs = DATEDIFF(MILLISECOND, @StartTime, @EndTime)
+PRINT 'Duration (ms): ' + CAST(@DurationMs AS VARCHAR);
+-- Break down into components
+DECLARE @Hours INT = @DurationMs / 3600000;
+DECLARE @Minutes INT = (@DurationMs % 3600000) / 60000;
+DECLARE @Seconds INT = (@DurationMs % 60000) / 1000;
+DECLARE @Milliseconds INT = @DurationMs % 1000;
+-- Format as hh:mm:ss.mmm
+PRINT 'Duration: ' + 
+    RIGHT('00' + CAST(@Hours AS VARCHAR), 2) + ':' +
+    RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
+    RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
+    RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
+end

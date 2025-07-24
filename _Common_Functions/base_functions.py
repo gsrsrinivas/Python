@@ -177,8 +177,9 @@ def insert_into_database_tables(df_all, table_names):
     insert_query = f'''INSERT INTO _sis.{table_names[0]}(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     # pictures_path = os.path.join(os.environ["USERPROFILE"], "Documents").replace("gsrsr", r"gsrsr\OneDrive")
-    pictures_path = os.path.dirname(project_directory_path())
-    input_folder_path = pictures_path + r"\SQL Server Management Studio\Analysis of Stocks\Analysis of Stocks"
+    # pictures_path = os.path.dirname(project_directory_path())
+    pictures_path = project_directory_path()
+    input_folder_path = pictures_path + r"\Database_Scripts\Analysis of Stocks"
     file_paths = {
         "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql"),
         "update_report_sql_file": Path(f"{input_folder_path}/{table_names[2]}.sql")
@@ -199,12 +200,16 @@ def insert_into_database_tables(df_all, table_names):
             print(f"Executing {label.replace('_', ' ').capitalize()}")
             with open(path, 'r', encoding='utf-8') as file_path:
                 cursor.execute(file_path.read())
+                # -------------------------------
+                # rows = cursor.fetchall()
+                # print(*rows, sep='\n')
+                # -------------------------------
             conn.commit()
             print(f"Committed {label.replace('_', ' ').capitalize()}")
     print("Completed all files execution and database insertions.\n")
 
 
-def download_chart_ink_technical_analysis_scanner(data_each_list):
+def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 5):
     """
     Fetches technical analysis data from Chart ink based on provided scan parameters.
     Args:
@@ -215,22 +220,34 @@ def download_chart_ink_technical_analysis_scanner(data_each_list):
         KeyError: If the expected keys are not found in the response.
     Raises:
         requests.RequestException: If there is an issue with the HTTP request.
+        :param data_each_list:
+        :param max_retries:
     """
     key, data = next(iter(data_each_list.items()))
     with requests.Session() as session:
-        # Step 1: Fetch CSRF token
-        response = session.get('https://chartink.com/screener/watch-list-stocks-5')
+        response = session.get('https://chartink.com/screener/watch-list-stocks-5') # Step 1: Fetch CSRF token
         soup = Bs(response.content, 'lxml')
         csrf_token = soup.select_one('[name=csrf-token]')['content']
         session.headers['X-CSRF-TOKEN'] = csrf_token
-        # Step 2: Submit scan data
-        response = session.post('https://chartink.com/screener/process', data=data)
-        result = response.json()
-        # Step 3: Check for errors
-        print(
-            f"Scan error:{result["scan_error"]} for rule: {key} with data: {data}") if "scan_error" in result else None
-        # Step 4: Convert to DataFrame
-        return pd.DataFrame(result.get('data', []))
+        # session.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+        for attempt in range(max_retries): # Retry logic loop
+            try: # Step 2: Submit scan data
+                response = session.post('https://chartink.com/screener/process', data=data)
+                if response.status_code == 429:
+                    retry_after = int(response.headers.get("Retry-After", 2 ** attempt))
+                    print(f"Rate limited on attempt {attempt + 1}. Retrying after {retry_after} seconds...")
+                    time.sleep(retry_after)
+                    continue
+                response.raise_for_status()
+                result = response.json()
+                if "scan_error" in result: # Step 3: Check for errors
+                    print(f"Scan error:{result["scan_error"]} for rule: {key} with data: {data}")
+                return pd.DataFrame(result.get('data', [])) # Step 4: Convert to DataFrame
+            except requests.RequestException as e:
+                print(f"{data_each_list} Request failed on attempt {attempt + 1}: {e}")
+                time.sleep(2 ** attempt)  # Exponential backoff
+                return "Maximum retry limit reached. Request failed."
+        return None
 
 
 def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
@@ -280,16 +297,14 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
         old_str = 'segments_filter'
         for each_segment_list in segments:
             new_str = segments[each_segment_list]
-            data_each_list = {key: {k: val.replace(old_str, new_str)} for key, value in data_each_list.items() for
-                              k, val in value.items()}
+            data_each_list = {key: {k: val.replace(old_str, new_str)} for key, value in data_each_list.items() for k, val in value.items()}
             old_str = new_str
             key = next(iter(data_each_list))  # Gets the first key
             # end - iterate through the segments for one single url
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
             df = insert_new_columns_in_data_frame(df, key, each_segment_list)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            print(
-                f"complete '{key.replace("__", ";").replace("_", " ")}' for {each_segment_list} segment as of {datetime.now()}")
+            print(f"complete '{key.replace("__", ";").replace("_", " ")}' for {each_segment_list} segment as of {datetime.now()}")
     print(f"\ndownloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
 

@@ -34,7 +34,7 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
     plt.close()
-    print(f"{i} saved out of {total_len} Thumbnails, current symbol is {symbol_name} with period {period_value} and interval {interval_value}")
+    print(f"Thumbnail Saved:{i}/{total_len}\t-{symbol_name}\t\t\t-{period_value}-{interval_value}")
 
 
 def valid_intervals_periods():
@@ -49,25 +49,14 @@ def valid_intervals_periods():
     # Always add daily intervals
     today = datetime.today()
     weekday = today.weekday()  # Monday is 0, Sunday is 6
-    valid_interval_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'},]
-    # Add weekly intervals at the start of the week (Monday)
-    valid_interval_period += [{'1wk': '2y'},] if weekday == 0 else []
-    # Add monthly intervals at the start of the month
-    valid_interval_period += [{'1mo': '10y'}] if today.day == 1 else []
-    # Add quarterly intervals at the start of a quarter
-    valid_interval_period += [{'3mo': '5y'},{'3mo': '10y'},] if today.month in [1, 4, 7, 10] and today.day == 1 else []
-    # Add half-yearly intervals at the start of a half-year
-    valid_interval_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else []
-    # Add yearly intervals at the start of the year
-    valid_interval_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else []
+    valid_interval_period  = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'},]
+    valid_interval_period += [{'1wk': '2y'},] if weekday == 0 else [] # Add weekly intervals at the start of the week (Monday)
+    valid_interval_period += [{'1mo': '10y'}] if today.day == 1 else [] # Add monthly intervals at the start of the month
+    valid_interval_period += [{'3mo': '5y'},{'3mo': '10y'},] if today.month in [1, 4, 7, 10] and today.day == 1 else [] # Add quarterly intervals at the start of a quarter
+    valid_interval_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else [] # Add half-yearly intervals at the start of a half-year
+    valid_interval_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else []     # Add yearly intervals at the start of the year
     # valid_intervals_periods = [ {'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '3mo'},{'1wk': '6mo'}, {'1wk': '1y'},{'1mo':'5y'}, ]  # Valid periods and intervals
-
     return valid_interval_period  # Return the list of valid intervals and periods
-    # today = datetime.now()
-    # if today.month == 1 and today.day == 1:
-    #     return [{'1d': '30d'}, {'5d': '90d'}, {'1wk': '1y'}, {'1mo': '5y'}, {'3mo': 'max'}]
-    # else:
-    #     return [{'1d': '30d'}, {'5d': '90d'}, {'1wk': '6mo'}, {'1mo': '2y'}, {'3mo': 'max'}]
 
 
 def connect_to_db():
@@ -105,7 +94,7 @@ def stock_thumb_nails(timeframe=None):
     thumb_dir = pictures_path + r'\Pictures\Thumbnails'
     # Create thumbnails directory if it doesn't exist
     os.makedirs(thumb_dir, exist_ok=True)
-    print(f"Thumbnails will be saved in: {thumb_dir}")
+    print(f'Thumbnails will be saved in: "{thumb_dir}"')
 
     # Connect to the database and get stock symbols
     len_symbols, symbols = connect_to_db()
@@ -136,17 +125,15 @@ def stock_thumb_nails_all_times():
     try:
         print_start_timestamp()
         # sys.exit() if trading_hours_check() == "exit" else None
-        prevent_sleep()
+        # prevent_sleep()
         stock_thumb_nails()
     except Exception as e:
         print(f"An error occurred: {e}")
         sys.exit(1)
     finally:
-        allow_sleep()
+        # allow_sleep()
         print_end_timestamp()
 
 
 if __name__ == "__main__":
     stock_thumb_nails_all_times()
-
-

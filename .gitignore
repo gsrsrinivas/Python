@@ -1,0 +1,60 @@
+*.jpg
+*.jpeg
+*.jpe
+*.jif
+*.jfif
+*.jfi
+*.jp2
+*.j2k
+*.jpf
+*.jpx
+*.jpm
+*.mj2
+*.jxr
+*.hdp
+*.wdp
+*.gif
+*.raw
+*.webp
+*.png
+*.apng
+*.mng
+*.tiff
+*.tif
+*.svg
+*.svgz
+*.pdf
+*.xbm
+*.bmp
+*.dib
+*.ico
+*.3dm
+*.max
+/CVS/*
+**/CVS/*
+*.csv
+.cvsignore
+*/.cvsignore
+.idea
+*.iml
+out
+gen
+
+# Ignore log files
+*.log
+
+# Bytecode cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
+*.egg-info/
+
+# PyCharm IDE config
+.idea/
+
+# System-specific files
+.DS_Store
+Thumbs.db

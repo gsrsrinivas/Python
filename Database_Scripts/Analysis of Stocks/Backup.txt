@@ -14,9 +14,9 @@ begin -- price action
             ELSE NULL
         END AS adjusted_value
     FROM 
-        _sis.Cash_Stocks
+        dbo.Cash_Stocks
     WHERE 1=1 
-        -- and batch_no = (SELECT MAX(batch_no) FROM _sis.Cash_Stocks)
+        -- and batch_no = (SELECT MAX(batch_no) FROM dbo.Cash_Stocks)
         AND indicator LIKE '%price action%'
         AND (direction LIKE 'greater than equal to%' OR direction LIKE 'less than equal to%')
 ),
@@ -63,19 +63,19 @@ Price_Action_Final as (
 	GROUP BY symbol, batch_no
 )
 Update a set a.[price_action] = price_action_aggregate
-from [_sis].[Analyse_Stocks] a join Price_Action_Final b 
+from dbo.[Analyse_Stocks] a join Price_Action_Final b
 on a.Symbol = b.symbol and a.Batch_No = b.batch_no
 ;
 
-INSERT INTO _sis.Analyse_Stocks__Price_Action_table (Row_id,Batch_no,symbol,Timeframe,Value)
+INSERT INTO dbo.Analyse_Stocks__Price_Action_table (Row_id,Batch_no,symbol,Timeframe,Value)
 SELECT ROW_NUMBER() OVER (PARTITION BY s.batch_no,s.symbol ORDER BY outerJson.[key],abs(innerJson.[value])) AS Row_Id,
 	s.Batch_no,s.symbol,
     outerJson.[key] AS Timeframe,
     innerJson.[value] AS Value
-FROM _sis.Analyse_Stocks s
+FROM dbo.Analyse_Stocks s
 CROSS APPLY OPENJSON(s.price_action) AS outerJson
 CROSS APPLY OPENJSON(outerJson.[value]) AS innerJson
--- where s.Batch_No = (select MAX(Batch_No) from _sis.Analyse_Stocks)
+-- where s.Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 order by 3,4,5,abs(innerJson.[value])
 ;
 end
@@ -95,9 +95,9 @@ begin -- price action
             ELSE NULL
         END AS adjusted_value
     FROM 
-        _sis.Cash_Stocks
+        dbo.Cash_Stocks
     WHERE 
-        batch_no = (SELECT MAX(batch_no) FROM _sis.Cash_Stocks)
+        batch_no = (SELECT MAX(batch_no) FROM dbo.Cash_Stocks)
         AND indicator LIKE '%price action%'
         AND (direction LIKE 'greater than equal to%' OR direction LIKE 'less than equal to%')
 ),
@@ -144,18 +144,18 @@ Price_Action_Final as (
 	GROUP BY symbol, batch_no
 )
 Update a set a.[price_action] = price_action_aggregate
-from [_sis].[Analyse_Stocks] a join Price_Action_Final b 
+from dbo.[Analyse_Stocks] a join Price_Action_Final b
 on a.Symbol = b.symbol and a.Batch_No = b.batch_no
 ;
-INSERT INTO _sis.Analyse_Stocks__Price_Action_table (Row_id,Batch_no,symbol, Timeframe, Value)
+INSERT INTO dbo.Analyse_Stocks__Price_Action_table (Row_id,Batch_no,symbol, Timeframe, Value)
 SELECT ROW_NUMBER() OVER (PARTITION BY s.batch_no,s.symbol ORDER BY outerJson.[key],abs(innerJson.[value])) AS Row_Id,
 	s.Batch_no,s.symbol,
     outerJson.[key] AS Timeframe,
     innerJson.[value] AS Value
-FROM _sis.Analyse_Stocks s
+FROM dbo.Analyse_Stocks s
 CROSS APPLY OPENJSON(s.price_action) AS outerJson
 CROSS APPLY OPENJSON(outerJson.[value]) AS innerJson
-where s.Batch_No = (select MAX(Batch_No) from _sis.Analyse_Stocks)
+where s.Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 order by 3,4,5,abs(innerJson.[value])
 ;
 end
@@ -166,9 +166,9 @@ begin -- sorted trade type details
     SELECT distinct
         batch_no,sno,[trade type details],
         TRIM(value) AS Signal
-    FROM _sis.Analyse_Stocks
+    FROM dbo.Analyse_Stocks
     CROSS APPLY STRING_SPLIT(replace(replace(replace([trade type details],'; ',';'),'(',''),')',''), ';')
-    WHERE value <> '' -- and Batch_No = (select MAX(Batch_No) from _sis.Analyse_Stocks)
+    WHERE value <> '' -- and Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 	-- order by Batch_No,Sno
 )
 ,OrderedSignals AS (
@@ -176,7 +176,7 @@ begin -- sorted trade type details
         batch_no,sno,ss.[order],[trade type details],
         Signal
     FROM SplitSignals Ps
-    LEFT JOIN _sis.ScreenSort ss 
+    LEFT JOIN dbo.ScreenSort ss
 	ON ps.Signal = replace(ss.Name,'_',' ')
 	order by batch_no,sno,ss.[order]
 ) -- select * from OrderedSignals
@@ -189,7 +189,7 @@ GROUP BY Batch_No,Sno,[trade type details]
 )
 update a
 set [trade type details] = SortedSignalString
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 ;
 end
@@ -201,16 +201,16 @@ begin -- sorted trade type details
     SELECT distinct
         batch_no,sno,[trade type details],
         TRIM(value) AS Signal
-    FROM _sis.Analyse_Stocks
+    FROM dbo.Analyse_Stocks
     CROSS APPLY STRING_SPLIT(replace(replace(replace([trade type details],'; ',';'),'(',''),')',''), ';')
-    WHERE value <> '' and Batch_No = (select MAX(Batch_No) from _sis.Analyse_Stocks)
+    WHERE value <> '' and Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 ) 
 ,OrderedSignals AS (
     SELECT TOP 100 PERCENT
         batch_no,sno,ss.[order],[trade type details],
         Signal
     FROM SplitSignals Ps
-    LEFT JOIN _sis.ScreenSort ss 
+    LEFT JOIN dbo.ScreenSort ss
 	ON ps.Signal = replace(ss.Name,'_',' ')
 	order by batch_no,sno,ss.[order]
 )
@@ -223,7 +223,7 @@ GROUP BY Batch_No,Sno,[trade type details]
 )
 update a
 set [trade type details] = SortedSignalString
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 ;
 end

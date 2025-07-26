@@ -163,8 +163,8 @@ def chart_ink_download_15minutes():
         print_start_timestamp()
         sys.exit() if trading_hours_check() == "exit" else None
         chat_ink_xls2db()
-        purge_15minutes_tables()
-        purge_15_minutes_chart_ink_log_files()
+        purge_tables('15Minutes_')
+        purge_log_files('15_minutes_chart_ink')
     except Exception as e:
         print(f"An error occurred: {e}")
         sys.exit(1)

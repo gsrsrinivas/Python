@@ -6,7 +6,9 @@ from _Common_Functions.base_functions import *
 
 if __name__ == "__main__":
     # Call the function to purge log files
-    print("Purging log files...")
-    purge_log_files()
+    print("Purging started...")
+    # purge_log_files()
+    purge_tables()
+    print("Purging completed.")
 
 

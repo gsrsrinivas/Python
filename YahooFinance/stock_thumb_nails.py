@@ -34,7 +34,7 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
     plt.close()
-    print(f"Thumbnail Saved:{i}/{total_len}\t-{symbol_name}\t\t\t-{period_value}-{interval_value}")
+    print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')}-{str(symbol_name).ljust(20,' ')}-{period_value.ljust(2,' ')}-{interval_value.ljust(2,' ')}")
 
 
 def valid_intervals_periods():
@@ -67,8 +67,8 @@ def connect_to_db():
     """
     conn = get_database_connection()
     cursor = conn.cursor()
-    # cursor.execute("select Symbol from _sis.Master_Stocks_In_Segments")
-    cursor.execute("select distinct Symbol from _sis.Analyse_Stocks_v with (nolock)")
+    # cursor.execute("select distinct Symbol from dbo.Master_Stocks_In_Segments")
+    cursor.execute("select distinct Symbol from dbo.Analyse_Stocks_v with (nolock)")
     records = cursor.fetchall()  # Fetch all results into a variable
     first_elements = [str(item[0]) + ".NS" for item in records]  # Extract the first element from each tuple
     conn.close()
@@ -127,7 +127,7 @@ def stock_thumb_nails_all_times():
         # sys.exit() if trading_hours_check() == "exit" else None
         # prevent_sleep()
         stock_thumb_nails()
-        purge_daily_stocks_log_files()
+        purge_log_files('daily_stock')
     except Exception as e:
         print(f"An error occurred: {e}")
         sys.exit(1)

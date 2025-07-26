@@ -5,16 +5,17 @@ SET @printstarttime = 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121)
 RAISERROR(@printstarttime, 0, 1) WITH NOWAIT;
 
 -- update the report Queries output in table
--- _sis.Analyse_Stocks,
+-- dbo.Analyse_Stocks,
 ---------------------------------------------------------------------------------------------------------------
-declare @Batch_no int, @batch_num int
+declare @Batch_no bigint, @batch_num bigint
 set @Batch_Num = 1
-select @Batch_no = max(batch_no) from _sis.Analyse_Stocks;
+select @Batch_no = max(batch_no) from dbo.Analyse_Stocks;
 ---------------------------------------------------------------------------------------------------------------
 begin -- bullish screen 
 -- bullish single screen - child is up tick - timeframe is Yearly
 update a set a.Bullish_Single_Screen_Yearly = 1
-from _sis.Analyse_Stocks a
+-- select *
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Above = 1
 and Rsi_Yearly_Crosses_Above = 1
@@ -29,7 +30,7 @@ and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- bullish double screen - parent is up tick and child is up tick - timeframe is Quarterly
 update a set a.Bullish_Double_Screen_Strong_Quarterly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1
 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1
@@ -46,7 +47,7 @@ and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinge
 ;
 -- bullish double screen - parent is up tick and child is down tick - timeframe is Quarterly
 update a set a.Bullish_Double_Screen_Strong_Correction_Quarterly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Below = 1
 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Below = 1
@@ -63,7 +64,7 @@ and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- bullish Single screen - parent MACD is up tick and child all indicators is up tick - timeframe is Quarterly
 update a set a.Bullish_Single_Screen_Quarterly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1
 and Rsi_Quarterly_Crosses_Above = 1
@@ -78,7 +79,7 @@ and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinge
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is Monthly
 update a set a.Bullish_Triple_Screen_Strong_Monthly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1
 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1
@@ -97,7 +98,7 @@ and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is Monthly
 update a set a.Bullish_Triple_Screen_Strong_Correction_Monthly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Below = 1
 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1
@@ -116,7 +117,7 @@ and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ban
 ;
 -- bullish double screen - parent is up tick and child is up tick - timeframe is Monthly
 update a set a.Bullish_Double_Screen_Strong_Monthly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1
 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1
@@ -133,7 +134,7 @@ and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_
 ;
 -- bullish double screen - parent is up tick and child is down tick - timeframe is Monthly
 update a set a.Bullish_Double_Screen_Strong_Correction_Monthly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Below = 1
 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1
@@ -150,7 +151,7 @@ and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ban
 ;
 -- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is Monthly
 update a set a.Bullish_Single_Screen_Monthly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1
 and Rsi_Monthly_Crosses_Above = 1
@@ -165,7 +166,7 @@ and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is weekly
 update a set a.Bullish_Triple_Screen_Strong_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1
 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1
@@ -184,7 +185,7 @@ and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is Weekly
 update a set a.Bullish_Triple_Screen_Strong_Correction_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1
 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1
@@ -203,7 +204,7 @@ and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band
 ;
 -- bullish double screen - parent is up tick and child is up tick - timeframe is weekly
 update a set a.Bullish_Double_Screen_Strong_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1
 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1
@@ -220,7 +221,7 @@ and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- bullish double screen - parent is up tick and child is down tick - timeframe is Weekly
 update a set a.Bullish_Double_Screen_Strong_Correction_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1
 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1
@@ -237,7 +238,7 @@ and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band
 ;
 -- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is weekly
 update a set a.Bullish_Single_Screen_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1
 and Rsi_Weekly_Crosses_Above = 1
@@ -252,7 +253,7 @@ and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is daily
 update a set a.Bullish_Triple_Screen_Strong_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
@@ -272,7 +273,7 @@ and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is daily
 update a set a.Bullish_Triple_Screen_Strong_Correction_Daily = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
@@ -292,7 +293,7 @@ and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2
 ;
 -- bullish double screen - parent is up tick and child is up tick - timeframe is daily
 update a set a.Bullish_Double_Screen_Strong_Daily = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
@@ -310,7 +311,7 @@ and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish double screen - parent is up tick and child is down tick - timeframe is daily
 update a set a.Bullish_Double_Screen_Strong_Correction_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
@@ -328,7 +329,7 @@ and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2
 ;
 -- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is daily
 update a set a.Bullish_Single_Screen_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
 and Rsi_Daily_Crosses_Above = 1
@@ -343,7 +344,7 @@ and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is 4 hourly
 update a set a.Bullish_Triple_Screen_Strong_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1
 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1
@@ -362,7 +363,7 @@ and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is 4 hourly
 update a set a.Bullish_Triple_Screen_Strong_Correction_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Below = 1
 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1
@@ -381,7 +382,7 @@ and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish double screen - parent is up tick and child is up tick - timeframe is 4 hourly
 update a set a.Bullish_Double_Screen_Strong_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1
 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1
@@ -398,7 +399,7 @@ and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish double screen - parent is up tick and child is down tick - timeframe is 4 hourly
 update a set a.Bullish_Double_Screen_Strong_Correction_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Below = 1
 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1
@@ -415,7 +416,7 @@ and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is 4 hourly
 update a set a.Bullish_Single_Screen_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Above = 1
 and Rsi_4_Hourly_Crosses_Above = 1
@@ -430,7 +431,7 @@ and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is 1 hourly
 update a set a.Bullish_Triple_Screen_Strong_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1
 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1
@@ -449,7 +450,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is 1 hourly
 update a set a.Bullish_Triple_Screen_Strong_Correction_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Below = 1
 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Below = 1
@@ -468,7 +469,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish double screen - and parent is up tick and child is up tick - timeframe is 1 hourly
 update a set a.Bullish_Double_Screen_Strong_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1
 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1
@@ -485,7 +486,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish double screen - and parent is up tick and child is down tick - timeframe is 1 hourly
 update a set a.Bullish_Double_Screen_Strong_Correction_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Below = 1
 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Below = 1
@@ -502,7 +503,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is 1 hourly
 update a set a.Bullish_Single_Screen_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1
 and Rsi_1_Hourly_Crosses_Above = 1
@@ -517,7 +518,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is 15 Minutes
 update a set a.Bullish_Triple_Screen_Strong_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1
 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Above = 1
@@ -536,7 +537,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is 15 Minutes
 update a set a.Bullish_Triple_Screen_Strong_Correction_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Below = 1
 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Below = 1
@@ -555,7 +556,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish double screen - parent is up tick and child is up tick - timeframe is 15 Minutes
 update a set a.Bullish_Double_Screen_Strong_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1
 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Above = 1
@@ -572,7 +573,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- bullish double screen - parent is up tick and child is down tick - timeframe is 15 Minutes
 update a set a.Bullish_Double_Screen_Strong_Correction_15_Minutes = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Below = 1
 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Below = 1
@@ -589,7 +590,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is 15 Minutes
 update a set a.Bullish_Single_Screen_15_Minutes = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1
 and Rsi_15_Minutes_Crosses_Above = 1
@@ -607,7 +608,7 @@ end
 begin -- bearish screen 
 -- Bearish single screen - child is down tick - timeframe is Yearly
 update a set a.Bearish_Single_Screen_Yearly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Below = 1
 and Rsi_Yearly_Crosses_Below = 1
@@ -622,7 +623,7 @@ and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- Bearish double screen - parent is down tick and child is down tick - timeframe is Quarterly
 update a set a.Bearish_Double_Screen_Strong_Quarterly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1
 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1
@@ -639,7 +640,7 @@ and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinge
 ;
 -- Bearish double screen - parent is down tick and child is up tick - timeframe is Quarterly
 update a set a.Bearish_Double_Screen_Strong_Correction_Quarterly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Above = 1
 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Above = 1
@@ -656,7 +657,7 @@ and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- Bearish Single screen - parent MACD is down tick and child all indicator are down tick - timeframe is quarterly
 update a set a.Bearish_Single_Screen_Quarterly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1
 and Rsi_Quarterly_Crosses_Below = 1
@@ -671,7 +672,7 @@ and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinge
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is Monthly
 update a set a.Bearish_Triple_Screen_Strong_Monthly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1
 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1
@@ -690,7 +691,7 @@ and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is Monthly
 update a set a.Bearish_Triple_Screen_Strong_Correction_Monthly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Above = 1
 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1
@@ -709,7 +710,7 @@ and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ban
 ;
 -- Bearish double screen - parent is down tick and child is down tick - timeframe is Monthly
 update a set a.Bearish_Double_Screen_Strong_Monthly = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1
 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1
@@ -726,7 +727,7 @@ and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_
 ;
 -- Bearish double screen - parent is down tick and child is up tick - timeframe is Monthly
 update a set a.Bearish_Double_Screen_Strong_Correction_Monthly = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Above = 1
 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1
@@ -743,7 +744,7 @@ and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ban
 ;
 -- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is monthly
 update a set a.Bearish_Single_Screen_Monthly = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1
 and Rsi_Monthly_Crosses_Below = 1
@@ -758,7 +759,7 @@ and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is Weekly
 update a set a.Bearish_Triple_Screen_Strong_Weekly = 1 
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1
 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1
@@ -777,7 +778,7 @@ and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is Weekly
 update a set a.Bearish_Triple_Screen_Strong_Correction_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Above = 1
 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1
@@ -796,7 +797,7 @@ and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band
 ;
 -- Bearish double screen - parent is down tick and child is down tick - timeframe is Weekly
 update a set a.Bearish_Double_Screen_Strong_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1
 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1
@@ -813,7 +814,7 @@ and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- Bearish double screen - parent is down tick and child is up tick - timeframe is Weekly
 update a set a.Bearish_Double_Screen_Strong_Correction_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Above = 1
 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1
@@ -830,7 +831,7 @@ and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band
 ;
 -- Bearish single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is weekly
 update a set a.Bearish_Single_Screen_Weekly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1
 and Rsi_Weekly_Crosses_Below = 1
@@ -845,7 +846,7 @@ and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_B
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is daily
 update a set a.Bearish_Triple_Screen_Strong_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
@@ -865,7 +866,7 @@ and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is daily
 update a set a.Bearish_Triple_Screen_Strong_Correction_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
@@ -885,7 +886,7 @@ and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2
 ;
 -- Bearish double screen - parent is down tick and child is down tick - timeframe is daily
 update a set a.Bearish_Double_Screen_Strong_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
@@ -903,7 +904,7 @@ and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish double screen - parent is down tick and child is up tick - timeframe is daily
 update a set a.Bearish_Double_Screen_Strong_Correction_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
@@ -921,7 +922,7 @@ and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2
 ;
 -- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is daily
 update a set a.Bearish_Single_Screen_Daily = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
 and Rsi_Daily_Crosses_Below = 1
@@ -936,7 +937,7 @@ and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is 4 hourly
 update a set a.Bearish_Triple_Screen_Strong_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
@@ -956,7 +957,7 @@ and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is 4 hourly
 update a set a.Bearish_Triple_Screen_Strong_Correction_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
@@ -976,7 +977,7 @@ and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish double screen - parent is down tick and child is down tick - timeframe is 4 hourly
 update a set a.Bearish_Double_Screen_Strong_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
@@ -994,7 +995,7 @@ and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish double screen - parent is down tick and child is up tick - timeframe is 4 hourly
 update a set a.Bearish_Double_Screen_Strong_Correction_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
@@ -1012,7 +1013,7 @@ and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is 4 hourly
 update a set a.Bearish_Single_Screen_4_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
 and Rsi_4_Hourly_Crosses_Below = 1
@@ -1027,7 +1028,7 @@ and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is 1 hourly
 update a set a.Bearish_Triple_Screen_Strong_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1
@@ -1046,7 +1047,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is 1 hourly
 update a set a.Bearish_Triple_Screen_Strong_Correction_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Above = 1
 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Above = 1
@@ -1065,7 +1066,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish double screen - parent is down tick and child is down tick - timeframe is 1 hourly
 update a set a.Bearish_Double_Screen_Strong_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1
@@ -1082,7 +1083,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish double screen - parent is down tick and child is up tick - timeframe is 1 hourly
 update a set a.Bearish_Double_Screen_Strong_Correction_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Above = 1
 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Above = 1
@@ -1099,7 +1100,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is 1 hourly
 update a set a.Bearish_Single_Screen_1_Hourly = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
 and Rsi_1_Hourly_Crosses_Below = 1
@@ -1114,7 +1115,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is 15 minutes
 update a set a.Bearish_Triple_Screen_Strong_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Below = 1
 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1
@@ -1133,7 +1134,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is 15 minutes
 update a set a.Bearish_Triple_Screen_Strong_Correction_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Above = 1
 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Above = 1
@@ -1152,7 +1153,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish double screen - parent is down tick and child is down tick - timeframe is 15 minutes
 update a set a.Bearish_Double_Screen_Strong_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Below = 1
 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1
@@ -1169,7 +1170,7 @@ and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger
 ;
 -- Bearish double screen - parent is down tick and child is up tick - timeframe is 15 minutes
 update a set a.Bearish_Double_Screen_Strong_Correction_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Above = 1
 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Above = 1
@@ -1186,7 +1187,7 @@ and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Ba
 ;
 -- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is 15 minutes
 update a set a.Bearish_Single_Screen_15_Minutes = 1
-from _sis.Analyse_Stocks a
+from dbo.Analyse_Stocks a
 where 1=1 and Batch_No = @Batch_no
 and Macd_15_Minutes_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
 and Rsi_15_Minutes_Crosses_Below = 1
@@ -1208,7 +1209,7 @@ update a set
 ,[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';'
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num 
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num 
          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Monthly' 
 where a.Batch_No = @Batch_no and Bullish_Triple_Screen_Strong_Monthly > 0
 ;
@@ -1217,7 +1218,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Weekly > 0
 ; 
@@ -1226,7 +1227,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Daily > 0
 ; 
@@ -1235,7 +1236,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_4_Hourly > 0
 ; 
@@ -1244,7 +1245,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_1_Hourly > 0
 ; 
@@ -1253,7 +1254,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_15_Minutes > 0
 ; 
@@ -1262,7 +1263,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Monthly > 0
 ; 
@@ -1271,7 +1272,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Weekly > 0
 ; 
@@ -1280,7 +1281,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Daily > 0
 ; 
@@ -1289,7 +1290,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_4_Hourly > 0
 ; 
@@ -1298,7 +1299,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_1_Hourly > 0
 ; 
@@ -1307,7 +1308,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_15_Minutes > 0
 ; 
@@ -1316,7 +1317,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Quarterly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Quarterly > 0
 ; 
@@ -1325,7 +1326,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Monthly > 0
 ; 
@@ -1334,7 +1335,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Weekly > 0
 ; 
@@ -1343,7 +1344,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Daily > 0
 ; 
@@ -1352,7 +1353,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_4_Hourly > 0
 ; 
@@ -1361,7 +1362,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_1_Hourly > 0
 ; 
@@ -1370,7 +1371,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_15_Minutes > 0
 ; 
@@ -1379,7 +1380,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Quarterly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Quarterly > 0
 ; 
@@ -1388,7 +1389,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Monthly > 0
 ; 
@@ -1397,7 +1398,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Weekly > 0
 ; 
@@ -1406,7 +1407,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Daily > 0
 ; 
@@ -1415,7 +1416,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_4_Hourly > 0
 ; 
@@ -1424,7 +1425,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_1_Hourly > 0
 ; 
@@ -1433,7 +1434,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_15_Minutes > 0
 ; 
@@ -1442,7 +1443,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_Yearly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Yearly > 0
 ; 
@@ -1451,7 +1452,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_Quarterly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Quarterly > 0
 ; 
@@ -1460,7 +1461,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Monthly > 0
 ; 
@@ -1469,7 +1470,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Weekly > 0
 ; 
@@ -1478,7 +1479,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Daily > 0
 ; 
@@ -1487,7 +1488,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_4_Hourly > 0
 ; 
@@ -1496,7 +1497,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_1_Hourly > 0
 ; 
@@ -1505,7 +1506,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bullish_Single_Screen_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_15_Minutes > 0
 ; 
@@ -1517,7 +1518,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Monthly > 0
 ; 
@@ -1526,7 +1527,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Weekly > 0
 ; 
@@ -1535,7 +1536,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Daily > 0
 ; 
@@ -1544,7 +1545,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_4_Hourly > 0
 ; 
@@ -1553,7 +1554,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_1_Hourly > 0
 ; 
@@ -1562,7 +1563,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_15_Minutes > 0
 ; 
@@ -1571,7 +1572,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Monthly > 0
 ; 
@@ -1580,7 +1581,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Weekly > 0
 ; 
@@ -1589,7 +1590,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Daily > 0
 ; 
@@ -1598,7 +1599,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_4_Hourly > 0
 ; 
@@ -1607,7 +1608,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_1_Hourly > 0
 ; 
@@ -1616,7 +1617,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_15_Minutes > 0
 ; 
@@ -1625,7 +1626,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Quarterly > 0
 ; 
@@ -1634,7 +1635,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Monthly > 0
 ; 
@@ -1643,7 +1644,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Weekly > 0
 ; 
@@ -1652,7 +1653,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Daily > 0
 ; 
@@ -1661,7 +1662,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_4_Hourly > 0
 ; 
@@ -1670,7 +1671,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_1_Hourly > 0
 ; 
@@ -1679,7 +1680,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_15_Minutes > 0
 ; 
@@ -1688,7 +1689,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Quarterly > 0
 ; 
@@ -1697,7 +1698,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Monthly > 0
 ; 
@@ -1706,7 +1707,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Weekly > 0
 ; 
@@ -1715,7 +1716,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Daily > 0
 ; 
@@ -1724,7 +1725,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_4_Hourly > 0
 ; 
@@ -1733,7 +1734,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_1_Hourly > 0
 ; 
@@ -1742,7 +1743,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_15_Minutes > 0
 ; 
@@ -1751,7 +1752,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Single_Screen_Yearly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Yearly > 0
 ; 
@@ -1760,7 +1761,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Single_Screen_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Quarterly > 0
 ; 
@@ -1769,7 +1770,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Single_Screen_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Monthly > 0
 ; 
@@ -1778,7 +1779,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Single_Screen_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Weekly > 0
 ; 
@@ -1787,7 +1788,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Single_Screen_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Daily > 0
 ; 
@@ -1796,7 +1797,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Single_Screen_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_4_Hourly > 0
 ; 
@@ -1805,7 +1806,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.[Screen Names] = 'Bearish_Single_Screen_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_1_Hourly > 0
 ; 
@@ -1814,7 +1815,7 @@ update a set
 [Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
 ,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
 ,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from _sis.Analyse_Stocks a JOIN [_sis].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num 
+from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num 
          AND v.[Screen Names] = 'Bearish_Single_Screen_15_Minutes'
 where a.Batch_No = @Batch_no and Bearish_Single_Screen_15_Minutes > 0
 ;
@@ -1823,57 +1824,57 @@ end
 begin -- volume shockers 
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'yearly;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__yearly__shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'quarterly;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__quarterly__shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'monthly;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__monthly__shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'weekly;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__weekly__shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'daily;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__daily__shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'4_hourly;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__4_hourly__shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'1_hourly;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__1_hourly__shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'15_minutes;'
-from _sis.Analyse_Stocks a 
+from dbo.Analyse_Stocks a 
 where a.Batch_No = @Batch_no and volume__15_minutes__shockers = 1
 ;
 end
 begin -- length of columns 
 update a set a.[Trade Type - Length] = len([Trade Type])
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set a.[Trade Type Details - Length] = len([Trade Type Details])
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Trading View] = case 
 when isnull([Trade Type - Bullish Sum],0) - isnull([Trade Type - Bearish Sum],0) > 0 then 'Bullish' 
 when isnull([Trade Type - Bullish Sum],0) - isnull([Trade Type - Bearish Sum],0) < 0 then 'Bearish' 
 else NULL end
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Trading View - Order] = (case when a.[Trading View] = 'Bearish' then 1 else 0 end)
-from _sis.Analyse_Stocks a where Batch_No = @Batch_no;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Volume_Shockers - Sum] = isnull([Volume_Shockers - Sum],0) + 
 (case when volume__yearly__shockers = 1 then 525600 else 0 end) +
 (case when volume__quarterly__shockers = 1 then 131400 else 0 end)+
@@ -1883,19 +1884,21 @@ update a set [Volume_Shockers - Sum] = isnull([Volume_Shockers - Sum],0) +
 (case when volume__4_hourly__shockers = 1 then 240 else 0 end)+
 (case when volume__1_hourly__shockers = 1 then 60 else 0 end)+
 (case when volume__15_minutes__shockers = 1 then 15 else 0 end)
-from [_sis].[Analyse_Stocks] a where Batch_No = @Batch_No;
+from dbo.[Analyse_Stocks] a where Batch_No = @Batch_No;
 ;WITH RankedRows AS (
     select batch_no,sno,
 	row_number() over (partition by Batch_No order by Batch_No desc, [Trading View - Order] asc, [Segments - Order] desc, [Volume_Shockers] desc, [Trade Type Details - Sum] desc ) as report_sort_order
-	from [_sis].[Analyse_Stocks]
+	from dbo.[Analyse_Stocks]
 )
 UPDATE a SET [Report Sort Order] = b.report_sort_order
-FROM [_sis].[Analyse_Stocks] a JOIN RankedRows b
+FROM dbo.[Analyse_Stocks] a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
 where a.Batch_No = @Batch_No;
 ---------------------------------------------------------------------------------------------------------------
 end 
--- select * from _sis.Analyse_Stocks
+
+begin -- script execution time calculation 
+-- select * from dbo.Analyse_Stocks
 DECLARE @DurationMs int, @EndTime DATETIME;
 SET @EndTime = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
@@ -1913,4 +1916,6 @@ PRINT 'Duration: ' +
     RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
     RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
     RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
+end
+
 end

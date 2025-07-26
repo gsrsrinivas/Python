@@ -628,7 +628,7 @@ def chat_ink_excel_file_download_every_15_minutes_and_insert_into_db():
     cursor = conn.cursor()
     print(f'connection is established')
     # Define the insert statement
-    insert_query = '''INSERT INTO _sis.Cash_15minutes_Stocks(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
+    insert_query = '''INSERT INTO dbo.Cash_15minutes_Stocks(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     # Iterate over the DataFrame and insert data into the SQL Server table
     for index, row in df_all.iterrows():

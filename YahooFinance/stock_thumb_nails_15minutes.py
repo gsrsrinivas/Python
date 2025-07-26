@@ -16,7 +16,7 @@ def stock_thumb_nails_15min():
         print_start_timestamp()
         sys.exit() if trading_hours_check() == "exit" else None
         stock_thumb_nails([{'15m': '5d'},])  #Call the function to create stock thumbnails
-        purge_15_minutes_stocks_log_files()
+        purge_log_files('15_minutes_stock')
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:

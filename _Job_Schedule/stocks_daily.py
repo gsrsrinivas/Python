@@ -40,7 +40,6 @@ def stocks_daily():
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
-        purge_log_files()
         allow_sleep()
         print_end_timestamp()
 

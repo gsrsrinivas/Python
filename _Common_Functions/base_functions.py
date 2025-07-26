@@ -36,13 +36,13 @@ def project_directory_path():
 def prevent_sleep():
     # This tells Windows: “Stay awake while this process is running”
     ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAY_MODE_REQUIRED)
-    print("System will stay awake while task is running...")
+    print("☀️ System will stay awake while task is running...")
 
 
 def allow_sleep():
     # Restore the system’s sleep settings
     ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)
-    print("System can now sleep normally.")
+    print("🌙 System can now sleep normally.")
 
 
 # 🔄 Redirect print and stderr to logger
@@ -97,18 +97,18 @@ def trading_hours_check():
     end_time = datetime.strptime("15:30", "%H:%M").time()
 
     if start_time <= current_time <= end_time:
-        print(f"Current Time: {current_time} is within trading hours (07:00 to 15:30). Continuing the program.")
+        print(f"⏱️ Current Time: {current_time} is within trading hours (07:00 to 15:30). Continuing the program.")
         return "continue"
     else:
-        print(f"Current Time: {current_time} is outside trading hours (07:00 to 15:30). Exiting the program.")
+        print(f"⏱️ Current Time: {current_time} is outside trading hours (07:00 to 15:30). Exiting the program.")
         return "exit"
 
 
 def print_start_timestamp():
     """ Prints the start date and time of the script execution."""
     start_date = datetime.now()
-    print(f"\n=======================================================================================")
-    print(f"Script  start timestamp : {start_date}")
+    print(f"Start of script".center(100, '='))
+    print(f"🚀 Script start timestamp".ljust(30,' ') + ":" + f"{start_date}")
 
 
 def print_end_timestamp():
@@ -131,14 +131,14 @@ def print_end_timestamp():
     start_time = start_datetime.timestamp()  # Use timestamp for consistency
 
     end_date = datetime.now()
-    print(f"Script finish timestamp : {end_date}")
+    print(f"🏁 Script finish timestamp".ljust(30,' ') + ":" + f"{end_date}")
     end_time = time.time()
     elapsed_seconds = end_time - start_time
     elapsed_duration = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
 
-    print(f"Total time in seconds   : {elapsed_seconds}")
-    print(f"and formatted time is   : {elapsed_duration}\n")
-    print(f"***************************************************************************************\n\t\t\t\t\t\t\t\n")
+    print(f"⏰ Total time in seconds".ljust(30,' ') + ":" + f"{elapsed_seconds}")
+    print(f"and formatted time is ".ljust(30,' ') + ":" + f"{elapsed_duration}\n")
+    print(f"🏁 end of script".center(100, '*'))
 
     time.sleep(15)
 
@@ -157,7 +157,7 @@ def get_database_connection():
             # print("Database connection successful.")
             return conn
     except pyodbc.Error as e:
-        print(f"Database connection failed: {e}")
+        print(f"❌ Database connection failed: {e}")
         return None
 
 
@@ -169,15 +169,13 @@ def insert_into_database_tables(df_all, table_names):
     Returns:
         None
     """
-    print(f'started inserting into the database table')
+    print(f'📥 started inserting into the database table')
     df_all = df_all.fillna(0)
     # Define connection string to SQL Server with Windows Authentication
     conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
     # Define the insert statement
-    insert_query = f'''INSERT INTO _sis.{table_names[0]}(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
+    insert_query = f'''INSERT INTO dbo.{table_names[0]}(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
-    # pictures_path = os.path.join(os.environ["USERPROFILE"], "Documents").replace("gsrsr", r"gsrsr\OneDrive")
-    # pictures_path = os.path.dirname(project_directory_path())
     pictures_path = project_directory_path()
     input_folder_path = pictures_path + r"\Database_Scripts\Analysis of Stocks"
     file_paths = {
@@ -197,7 +195,7 @@ def insert_into_database_tables(df_all, table_names):
         print(f"{len(records)} records inserted in {table_names[0]} table using batch insert!")
         # Execute both SQL Script files
         for label, path in file_paths.items():
-            print(f"Executing {label.replace('_', ' ').capitalize()}")
+            print(f"⏳ Executing {label.replace('_', ' ').capitalize()}")
             with open(path, 'r', encoding='utf-8') as file_path:
                 cursor.execute(file_path.read())
                 # -------------------------------
@@ -205,8 +203,8 @@ def insert_into_database_tables(df_all, table_names):
                 # print(*rows, sep='\n')
                 # -------------------------------
             conn.commit()
-            print(f"Committed {label.replace('_', ' ').capitalize()}")
-    print("Completed all files execution and database insertions.\n")
+            print(f"✅ Committed {label.replace('_', ' ').capitalize()}")
+    print("✅ Completed all files execution and database insertions.\n")
 
 
 def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 5):
@@ -241,7 +239,7 @@ def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 
                 response.raise_for_status()
                 result = response.json()
                 if "scan_error" in result: # Step 3: Check for errors
-                    print(f"Scan error:{result["scan_error"]} for rule: {key} with data: {data}")
+                    print(f"❌ Scan error:{result["scan_error"]} for rule: {key} with data: {data}")
                 return pd.DataFrame(result.get('data', [])) # Step 4: Convert to DataFrame
             except requests.RequestException as e:
                 print(f"{data_each_list} Request failed on attempt {attempt + 1}: {e}")
@@ -250,7 +248,7 @@ def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 
         return None
 
 
-def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
+def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
     """ reorders, renames, and appends additional metadata columns to the stock DataFrame.
     Args:
         df (pd.DataFrame): The DataFrame containing stock data
@@ -258,6 +256,10 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
         each_segment_list (str): The segment of the stock market (e.g., 'Cash')
     Returns:
         pd.DataFrame: The modified DataFrame with new columns and reordered data.
+        :param df:
+        :param tf_l_i:
+        :param each_segment_list:
+        :param batch_no:
     """
     if df.empty:
         return df
@@ -269,7 +271,7 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
                        'close': 'price'}, inplace=True)
     # Extract and clean metadata # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
-    batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
+    # batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
     # Insert new metadata columns
     df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction,
                                                                                 each_segment_list, batch_no]
@@ -292,6 +294,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
                 # 'Nifty 500':'57960','BankNifty':'136699','ETFs':'166311','Futures':'33489','Gold ETFs':'167068','Indices':'45603','Mid-Cap 50':'136492','Nifty 100':'33619','Nifty 200':'46553','Nifty 50':'33492','Nifty 500 Multi Cap 50:25:25':'1090574','Nifty and BankNifty':'109630','Nifty Large Mid-Cap 250':'1090573','Nifty Micro Cap 250':'1090582','Nifty Mid-Cap 100':'1090585','Nifty Mid-Cap 150':'1090588','Nifty Mid-Cap 50':'1090591','Nifty Mid-Cap Select':'1090579','Nifty Mid-Small Cap 400':'1090575','Nifty Next 50':'1116352','Nifty Small Cap 100':'1090587','Nifty Small Cap 250':'1090572','Nifty Small Cap 50':'1090568','Silver ETFs':'1195362',
                 }
     df_all = pd.DataFrame()
+    batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
     for data_each_list in data_list:
         # start - iterate through the segments for one single url
         old_str = 'segments_filter'
@@ -302,25 +305,25 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
             key = next(iter(data_each_list))  # Gets the first key
             # end - iterate through the segments for one single url
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
-            df = insert_new_columns_in_data_frame(df, key, each_segment_list)
+            df = insert_new_columns_in_data_frame(df, key, each_segment_list,batch_no)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            print(f"complete '{key.replace("__", ";").replace("_", " ")}' for {each_segment_list} segment as of {datetime.now()}")
-    print(f"\ndownloading data from the website is complete.")
+            print(f"complete \t'{str(key.replace("__", ";").replace("_", " ")).ljust(60,' ')}' for {each_segment_list} segment as of {datetime.now()}")
+    print(f"\n🔄 downloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
 
 
-def purge_daily_chart_ink_log_files():
+def purge_log_files(filetype='daily_chart_ink'):
     """
     Purges log files older than 7 days from the _Logs directory.
     This function is useful for maintaining clean log entries and preventing excessive disk usage.
     """
-    print("start - Purging daily chart ink log files older than 5 days...")
+    print("🚀 start - Purging log files older than 5 days...")
     log_dir = Path(project_directory_path()) / '_Logs'
     if not log_dir.exists():
-        print(f"Log directory {log_dir} does not exist. No logs to purge.")
+        print(f"❌ Log directory {log_dir} does not exist. No logs to purge.")
         return
-
-    for file_name in log_dir.glob('daily_chart_ink_*.log'):
+    file_type = f"{filetype}*.log"
+    for file_name in log_dir.glob(file_type):
         log_file_path = file_name.resolve()  # Get the absolute path of the log file
         days_to_keep = 5
         cutoff_date = datetime.now() - timedelta(days=days_to_keep)
@@ -334,128 +337,32 @@ def purge_daily_chart_ink_log_files():
                     if log_date >= cutoff_date:
                         new_logs.append(line)
                 except Exception as e:
-                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
+                    print(f"❌ Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
                     # Optionally log or skip malformed lines
                     pass
         with open(log_file_path, 'w') as file:
             file.writelines(new_logs)
-    print("completed - Purging daily chart ink log files older than 5 days...")
+    print("✅ completed - Purging log files older than 5 days...")
 
 
-def purge_daily_stocks_log_files():
+def purge_tables(table_part_name = ''):
     """
-    Purges log files older than 7 days from the _Logs directory.
-    This function is useful for maintaining clean log entries and preventing excessive disk usage.
-    """
-    print("start - Purging daily stocks log files...")
-    log_dir = Path(project_directory_path()) / '_Logs'
-    if not log_dir.exists():
-        print(f"Log directory {log_dir} does not exist. No logs to purge.")
-        return
-
-    for file_name in log_dir.glob('daily_stock*.log'):
-        log_file_path = file_name.resolve()  # Get the absolute path of the log file
-        days_to_keep = 5
-        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
-        new_logs = []
-        with open(log_file_path, 'r') as file:
-            for line in file:
-                try:
-                    # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
-                    timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
-                    log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
-                    if log_date >= cutoff_date:
-                        new_logs.append(line)
-                except Exception as e:
-                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
-                    # Optionally log or skip malformed lines
-                    pass
-        with open(log_file_path, 'w') as file:
-            file.writelines(new_logs)
-    print("completed - Purging daily stocks log files...")
-
-
-def purge_15_minutes_chart_ink_log_files():
-    """
-    Purges log files older than 7 days from the _Logs directory.
-    This function is useful for maintaining clean log entries and preventing excessive disk usage.
-    """
-    print("start - Purging 15 minutes chart ink log files older than 5 days...")
-    log_dir = Path(project_directory_path()) / '_Logs'
-    if not log_dir.exists():
-        print(f"Log directory {log_dir} does not exist. No logs to purge.")
-        return
-
-    for file_name in log_dir.glob('15_minutes_chart_ink_*.log'):
-        log_file_path = file_name.resolve()  # Get the absolute path of the log file
-        days_to_keep = 5
-        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
-        new_logs = []
-        with open(log_file_path, 'r') as file:
-            for line in file:
-                try:
-                    # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
-                    timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
-                    log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
-                    if log_date >= cutoff_date:
-                        new_logs.append(line)
-                except Exception as e:
-                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
-                    # Optionally log or skip malformed lines
-                    pass
-        with open(log_file_path, 'w') as file:
-            file.writelines(new_logs)
-    print("completed - Purging 15 minutes chart ink log files older than 5 days...")
-
-
-def purge_15_minutes_stocks_log_files():
-    """
-    Purges log files older than 7 days from the _Logs directory.
-    This function is useful for maintaining clean log entries and preventing excessive disk usage.
-    """
-    print("start - Purging 15 minutes stocks log files older than 5 days...")
-    log_dir = Path(project_directory_path()) / '_Logs'
-    if not log_dir.exists():
-        print(f"Log directory {log_dir} does not exist. No logs to purge.")
-        return
-
-    for file_name in log_dir.glob('15_minutes_stock*.log'):
-        log_file_path = file_name.resolve()  # Get the absolute path of the log file
-        days_to_keep = 5
-        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
-        new_logs = []
-        with open(log_file_path, 'r') as file:
-            for line in file:
-                try:
-                    # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
-                    timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
-                    log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
-                    if log_date >= cutoff_date:
-                        new_logs.append(line)
-                except Exception as e:
-                    print(f"Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
-                    # Optionally log or skip malformed lines
-                    pass
-        with open(log_file_path, 'w') as file:
-            file.writelines(new_logs)
-    print("completed - Purging 15 minutes stocks log files older than 5 days...")
-
-
-def purge_daily_tables():
-    """
-    Purges the _sis.stocks_daily table in the Stocks_Analysis database.
+    Purges the dbo.stocks_daily table in the Stocks_Analysis database.
     This function is useful for clearing old data before inserting new data.
     """
-    print("start - Purging daily tables...")
+    print("🚀 start - removing old records from tables...")
     conn = get_database_connection()
     if conn is None:
-        print("Failed to connect to the database. Cannot purge tables.")
+        print("❌ Failed to connect to the database. Cannot purge tables.")
         return
+
     sql_query = f"""
-    DELETE FROM _sis.Cash_Stocks 
-    where Batch_No <= (select count(distinct Batch_No) from _sis.Cash_Stocks) - 15;
-    DELETE FROM _sis.Analyse_Stocks 
-    where Batch_No <= (select count(distinct Batch_No) from _sis.Analyse_Stocks) - 15;
+    DELETE FROM dbo.Cash_{table_part_name}Stocks 
+    WHERE batch_no NOT IN (SELECT distinct TOP 15 batch_no FROM dbo.Cash_{table_part_name}Stocks ORDER BY batch_no DESC)
+    ;
+    DELETE FROM dbo.Analyse_{table_part_name}Stocks 
+    WHERE batch_no NOT IN (SELECT distinct TOP 15 batch_no FROM dbo.Analyse_{table_part_name}Stocks ORDER BY batch_no DESC)
+    ;
     """
     cursor = conn.cursor()
     try:
@@ -463,40 +370,11 @@ def purge_daily_tables():
         conn.commit()
         print("✅ Successfully purged all tables.")
     except pyodbc.Error as e:
-        print(f"Error purging the tables: {e}")
+        print(f"❌ Error purging the tables: {e}")
     finally:
         cursor.close()
         conn.close()
-        print("completed - Purging daily tables...")
-
-
-def purge_15minutes_tables():
-    """
-    Purges the _sis.stocks_daily table in the Stocks_Analysis database.
-    This function is useful for clearing old data before inserting new data.
-    """
-    print("start - Purging 15 minutes tables...")
-    conn = get_database_connection()
-    if conn is None:
-        print("Failed to connect to the database. Cannot purge tables.")
-        return
-    sql_query = f"""
-    DELETE FROM _sis.Cash_15Minutes_Stocks 
-    where Batch_No <= (select count(distinct Batch_No) from _sis.Cash_15Minutes_Stocks) - 30;
-    DELETE FROM _sis.Analyse_15Minutes_Stocks 
-    where Batch_No <= (select count(distinct Batch_No) from _sis.Analyse_15Minutes_Stocks) - 30;
-    """
-    cursor = conn.cursor()
-    try:
-        cursor.execute(sql_query)
-        conn.commit()
-        print("✅ Successfully purged all tables.")
-    except pyodbc.Error as e:
-        print(f"Error purging the tables: {e}")
-    finally:
-        cursor.close()
-        conn.close()
-        print("completed - Purging 15 minutes tables...")
+        print("✅ completed - removing old records from tables...")
 
 
 def shrink_databases():
@@ -506,14 +384,14 @@ def shrink_databases():
     """
     today = datetime.today()
     if today.day == 1:
-        print(f"Today is the 1st of the Month so Shrinking the database log files.")
-        print("start - Shrinking the Stocks_Analysis database log files...")
+        print(f"🗓️ Today is the 1st of the Month so Shrinking the database log files.")
+        print("🚀 start - Shrinking the Stocks_Analysis database log files...")
     else:
         sys.exit()
 
     conn = get_database_connection()
     if conn is None:
-        print("Failed to connect to the database. Cannot shrink databases.")
+        print("❌ Failed to connect to the database. Cannot shrink databases.")
         return
     sql_query = f""" -- shrink database log file
     USE Stocks_Analysis;
@@ -527,9 +405,9 @@ def shrink_databases():
         conn.commit()
         print("✅ Successfully shrunk the Stocks_Analysis database.")
     except pyodbc.Error as e:
-        print(f"Error shrinking the database: {e}")
+        print(f"❌ Error shrinking the database: {e}")
     finally:
         cursor.close()
         conn.close()
-        print("completed - Shrinking the Stocks_Analysis database log files...")
+        print("✅ completed - Shrinking the Stocks_Analysis database log files...")
 

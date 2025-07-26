@@ -121,7 +121,7 @@ def stock_thumb_nails(timeframe=None):
 
 
 def stock_thumb_nails_all_times():
-    setup_logger(__file__, "daily_stock_thumb_nails.log")
+    setup_logger(__file__, f"{Path(__file__).stem}.log") # "daily_stock_thumb_nails.log")
     try:
         print_start_timestamp()
         # sys.exit() if trading_hours_check() == "exit" else None

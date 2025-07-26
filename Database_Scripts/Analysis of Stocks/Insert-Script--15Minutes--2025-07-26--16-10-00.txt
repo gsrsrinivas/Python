@@ -1,91 +1,30 @@
 begin -- insert script 15 minutes 
-begin -- print the start time
-DECLARE @StartTime DATETIME = GETDATE();
+DECLARE @StartTime DATETIME= GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
-end
-
-begin -- add and update new stocks in master table 
+---------
+begin -- add new stocks in master table 
 insert into dbo.Master_Stocks_In_Segments (Symbol,Segments,Stock_Name)
 select distinct cs.symbol,cs.Segment,cs.[stock name]
 from dbo.Cash_15Minutes_Stocks cs 
 WHERE NOT EXISTS (SELECT 1 FROM dbo.Master_Stocks_In_Segments ms WHERE ms.Symbol = cs.Symbol)
 ;
--- update the sno in master table 
+end
+begin -- update the sno in master table 
 update sis set Sno = rn 
 from dbo.Master_Stocks_In_Segments sis inner join (
 	select Symbol,row_number() over(order by len(segments) desc) as rn -- ,len(segments) as maxsegments,* 
 	from dbo.Master_Stocks_In_Segments
-) b on sis.Symbol = b.Symbol
-;
+) b on sis.Symbol = b.Symbol;
 end
-
-begin -- insert into analyse stocks
-declare @Batch_No bigint;
-DECLARE @cols NVARCHAR(MAX), @query NVARCHAR(MAX);
-
-select @Batch_No = MAX(Batch_No) from dbo.Cash_15Minutes_Stocks;
-delete from dbo.Analyse_15Minutes_Stocks where Batch_No = @Batch_no;
-
--- Explicit LOB type enforcement inside STRING_AGG
-SELECT @cols = STRING_AGG(CAST(QUOTENAME(REPLACE(indicator, ' ', '_') + '_' + REPLACE(timeline, ' ', '_') + '_' + REPLACE(direction, ' ', '_')) AS NVARCHAR(MAX)), ',')
-              WITHIN GROUP (ORDER BY indicator)
-FROM (
-    SELECT DISTINCT indicator, timeline, direction
-    FROM dbo.Cash_15Minutes_Stocks
-    WHERE Batch_No = @Batch_No -- (SELECT MAX(Batch_No) FROM Cash_15Minutes_Stocks)
-) AS temp;
-
-drop table if exists dbo.Cash_15Minutes_Stocks_extended;
--- Build final query
-SET @query = '
-WITH cte AS (
-    SELECT *, REPLACE(indicator, '' '', ''_'') + ''_'' + REPLACE(timeline, '' '', ''_'') + ''_'' + REPLACE(direction, '' '', ''_'') AS ind_direction
-    FROM dbo.Cash_15Minutes_Stocks
-    WHERE Batch_No = ' + @Batch_No + ' -- (SELECT MAX(Batch_No) FROM Cash_15Minutes_Stocks)
-),
-source as (
-	select symbol, ind_direction
-	, 1 as [sr#]
-	, MAX([stock name]) as [stock name]
-	, MAX([% Chg]) as [% Chg]
-	, MAX(price) as price
-	, MAX(volume) as volume
-	, MAX(Segment) as segments
-	, MAX(Batch_No) as batch_no
-	, SYSDATETIME() as created_date
-	from cte
-	group by symbol, ind_direction
-)
-SELECT * 
-into dbo.Cash_15Minutes_Stocks_extended
-FROM source
-PIVOT (
-    MAX([sr#])
-    FOR ind_direction IN (' + @cols + ')
-) AS pivoted
-order by symbol;';
-EXEC sp_executesql @query;
-
-SET @query = 'insert into dbo.Analyse_15Minutes_Stocks (Symbol,Stock_Name,[% Chg],Price,Volume,Segments,Batch_No,Created_Date, 
-' +@cols + ') select * from dbo.Cash_15Minutes_Stocks_extended;'
-EXEC sp_executesql @query;
-
-update a set Industry = b.Industry, ISIN_Code = b.[ISIN Code], a.Series = b.Series
-,a.[Segments - Order] = b.sector_order,a.[Segments - Sum] = b.sector_sum
-,a.[Segments - Length] = len(b.Segments)
-from dbo.Analyse_15Minutes_Stocks a inner join dbo.Master_Stocks_In_Segments b on a.Symbol = b.Symbol 
-and a.Batch_No = @Batch_No
-
-end
-
-/*
-------------------------
 begin -- add stocks from master table 
+declare @batch_num bigint
+select @batch_num = MAX(Batch_No) from dbo.Cash_15Minutes_Stocks;
+delete from dbo.Analyse_15Minutes_Stocks where Batch_No = @batch_num;
 insert into dbo.[Analyse_15Minutes_Stocks] (Batch_No,created_date,Stock_Name
 	,[% Chg],price,volume,[Segments - Length]
 	,Segments,Symbol,Industry,ISIN_Code,Series
 	,[Segments - Order],[Segments - Sum])
-select @Batch_no,SYSDATETIME(),a.[stock name]
+select @batch_num,SYSDATETIME(),a.[stock name]
 	,a.[% Chg],a.price,a.volume,len(ss.Segments) as [Segments - Length]
 	,ss.Segments,a.symbol,ss.Industry,ss.[ISIN Code],ss.Series
 	,ss.sector_order,ss.sector_sum
@@ -95,9 +34,14 @@ from (
 	where batch_no = (select MAX(Batch_No) from dbo.Cash_15Minutes_Stocks)
 	group by a.[stock name],a.Segment,a.Symbol
 ) a
-left join dbo.Master_Stocks_In_Segments ss on ss.Symbol = a.symbol
+left join dbo.[Master_Stocks_In_Segments] ss on ss.Symbol = a.symbol
 Order by ss.Sno;
 end
+
+declare @Batch_no bigint
+select @batch_no = max(batch_no) from dbo.Cash_15Minutes_Stocks;
+-- select @batch_no
+
 -- update indicators
 begin -- macd 
 update a set Macd_Yearly_Crosses_Above = 1
@@ -1536,9 +1480,8 @@ where a.Batch_No = @Batch_No
 ;
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 end
--- */
 
-begin -- print end time and duration 
+begin -- script execution time calculation 
 DECLARE	 @EndTime DATETIME = GETDATE();
 DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
 -- Break down into components
@@ -1558,5 +1501,5 @@ PRINT 'Duration: ' +
   RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
 end
 
--- select top 2530 * from dbo.Analyse_15Minutes_Stocks order by Sno desc;
+-- select top 2500 * from dbo.Analyse_15Minutes_Stocks order by Sno desc;
 end

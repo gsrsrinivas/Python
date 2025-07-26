@@ -5,7 +5,8 @@
 from _Common_Functions.base_functions import *
 
 if __name__ == "__main__":
-    setup_logger(__file__, 'purge-log-files.log' )
+    print(f"__file__:{Path(__file__).stem}.log")
+    setup_logger(__file__, f"{Path(__file__).stem}.log" )
     # Call the function to purge log files
     print("Purging started...")
     # purge_log_files()

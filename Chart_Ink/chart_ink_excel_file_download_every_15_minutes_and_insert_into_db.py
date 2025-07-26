@@ -158,7 +158,7 @@ def chat_ink_xls2db():
 
 
 def chart_ink_download_15minutes():
-    setup_logger(__file__,'15_minutes_chart_ink_download_and_insert.log')
+    setup_logger(__file__,f"{Path(__file__).stem}.log") # '15_minutes_chart_ink_download_and_insert.log')
     try:
         print_start_timestamp()
         sys.exit() if trading_hours_check() == "exit" else None

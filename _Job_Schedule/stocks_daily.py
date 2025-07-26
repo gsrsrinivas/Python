@@ -10,7 +10,7 @@ def stocks_daily():
     It includes downloading chart ink data and creating stock thumbnails.
     The tasks are executed in parallel using a process pool executor.
     """
-    setup_logger(__file__, "daily_stocks.log")
+    setup_logger(__file__, f"{Path(__file__).stem}.log") # "daily_stocks.log")
     try:
         print_start_timestamp()
         prevent_sleep()

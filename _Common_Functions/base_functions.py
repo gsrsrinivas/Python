@@ -29,7 +29,7 @@ def project_directory_path():
         return start_path.parent  # fallback to one level up if marker not found
 
     project_root = find_project_root(current_file)
-    # print("Project root:", project_root)
+    # print("📁 \U0001F4C1 Project root:", project_root)
     return str(project_root)
 
 
@@ -107,7 +107,7 @@ def trading_hours_check():
 def print_start_timestamp():
     """ Prints the start date and time of the script execution."""
     start_date = datetime.now()
-    print(f"Start of script".center(100, '='))
+    print(f" 🚀 Start of script ".center(100, '='))
     print(f"🚀 Script start timestamp".ljust(30,' ') + ":" + f"{start_date}")
 
 
@@ -137,9 +137,8 @@ def print_end_timestamp():
     elapsed_duration = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
 
     print(f"⏰ Total time in seconds".ljust(30,' ') + ":" + f"{elapsed_seconds}")
-    print(f"and formatted time is ".ljust(30,' ') + ":" + f"{elapsed_duration}\n")
-    print(f"🏁 end of script".center(100, '*'))
-
+    print(f"⏰ and formatted time is ".ljust(30,' ') + ":" + f"{elapsed_duration}\n")
+    print(f" 🏁 end of script ".center(100, '*'))
     time.sleep(15)
 
 
@@ -154,7 +153,7 @@ def get_database_connection():
     try:
         conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
         with pyodbc.connect(conn_str) as conn:
-            # print("Database connection successful.")
+            # print("🗄️Database connection successful.")
             return conn
     except pyodbc.Error as e:
         print(f"❌ Database connection failed: {e}")
@@ -192,7 +191,7 @@ def insert_into_database_tables(df_all, table_names):
         ]].values.tolist()
         cursor.executemany(insert_query, records)
         conn.commit()
-        print(f"{len(records)} records inserted in {table_names[0]} table using batch insert!")
+        print(f"✅ {len(records)} records inserted in {table_names[0]} table using batch insert!")
         # Execute both SQL Script files
         for label, path in file_paths.items():
             print(f"⏳ Executing {label.replace('_', ' ').capitalize()}")
@@ -233,7 +232,7 @@ def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 
                 response = session.post('https://chartink.com/screener/process', data=data)
                 if response.status_code == 429:
                     retry_after = int(response.headers.get("Retry-After", 2 ** attempt))
-                    print(f"Rate limited on attempt {attempt + 1}. Retrying after {retry_after} seconds...")
+                    print(f"❌ Rate limited on attempt {attempt + 1}. Retrying after {retry_after} seconds...")
                     time.sleep(retry_after)
                     continue
                 response.raise_for_status()
@@ -242,9 +241,9 @@ def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 
                     print(f"❌ Scan error:{result["scan_error"]} for rule: {key} with data: {data}")
                 return pd.DataFrame(result.get('data', [])) # Step 4: Convert to DataFrame
             except requests.RequestException as e:
-                print(f"{data_each_list} Request failed on attempt {attempt + 1}: {e}")
+                print(f"❌ {data_each_list} Request failed on attempt {attempt + 1}: {e}")
                 time.sleep(2 ** attempt)  # Exponential backoff
-                return "Maximum retry limit reached. Request failed."
+                return "❌ Maximum retry limit reached. Request failed."
         return None
 
 
@@ -307,7 +306,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
             df = insert_new_columns_in_data_frame(df, key, each_segment_list,batch_no)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            print(f"complete \t'{str(key.replace("__", ";").replace("_", " ")).ljust(60,' ')}' for {each_segment_list} segment as of {datetime.now()}")
+            print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(60,' ')}' - {each_segment_list} segment ")
     print(f"\n🔄 downloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
 
@@ -328,7 +327,8 @@ def purge_log_files(filetype='daily_chart_ink'):
         days_to_keep = 5
         cutoff_date = datetime.now() - timedelta(days=days_to_keep)
         new_logs = []
-        with open(log_file_path, 'r') as file:
+        print(f"🔍 Processing log file: {log_file_path}")
+        with open(log_file_path, 'r', encoding='utf-8') as file:
             for line in file:
                 try:
                     # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
@@ -340,7 +340,7 @@ def purge_log_files(filetype='daily_chart_ink'):
                     print(f"❌ Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
                     # Optionally log or skip malformed lines
                     pass
-        with open(log_file_path, 'w') as file:
+        with open(log_file_path, 'w', encoding='utf-8') as file:
             file.writelines(new_logs)
     print("✅ completed - Purging log files older than 5 days...")
 
@@ -397,7 +397,7 @@ def shrink_databases():
     USE Stocks_Analysis;
     GO;
     ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
-    DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB    
+    DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
     """
     cursor = conn.cursor()
     try:

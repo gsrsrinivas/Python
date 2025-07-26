@@ -32,8 +32,8 @@ def stocks_daily():
         for proc in processes:
             if proc.poll() is None:  # The Process is still running
                 proc.wait()
-            else:
-                print(f"Process {proc.pid} already completed or crashed. Check logs for details.")
+            # else:
+            #     print(f"Process {proc.pid} already completed. Check logs for details")
 
         print("✅ All scripts completed. Closing launcher.")
 

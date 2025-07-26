@@ -1,4 +1,6 @@
+begin -- all the running queries are stored  
 DECLARE @Batch_no INT
+end
 ------------------------------------------------------------------------------------------------------------------------
 
 SELECT @Batch_no = MAX(batch_no) FROM dbo.Analyse_Stocks;
@@ -1867,4 +1869,140 @@ WHERE type = 'U' AND SCHEMA_NAME(schema_id) = 'dbo';
 end
 begin 
 DELETE FROM dbo.Cash_Stocks WHERE batch_no NOT IN (SELECT distinct TOP 15 batch_no FROM dbo.Cash_Stocks ORDER BY batch_no DESC);
+end
+
+select * from dbo.Analyse_Stocks 
+where batch_no =  20250725085552 -- 20250725102550 
+and [Trading View] is not null
+order by Batch_No desc;
+
+-- delete from dbo.Analyse_Stocks where Batch_No in (20250725103420,20250725110948)
+-- select distinct batch_no from dbo.Analyse_Stocks order by 1 desc;
+
+select * from dbo.Analyse_15Minutes_Stocks -- where [Trading View] is not null
+order by Batch_No desc
+;
+
+select * from (select distinct top 3 batch_no,'Cash_Stocks' as tblname from Cash_Stocks order by 1 desc) a
+union all
+select * from (select distinct top 3 batch_no,'Analyse_Stocks' as tblname from Analyse_Stocks order by 1 desc) b
+;
+begin
+with cse as (
+select *, indicator + '_' + timeline + '_' + replace(direction,' ','_') as ind_direction
+from Cash_Stocks 
+where Batch_No = (select max(batch_no) from Cash_Stocks)
+)
+select distinct ind_direction from cse
+
+select * from (
+select batch_no, symbol,ind_direction,sr#
+from cse) as source
+pivot( max([sr#]) for ind_direction in ()) as pivoted
+end
+
+begin
+WITH cse AS (
+    SELECT *,
+           indicator + '_' + timeline + '_' + REPLACE(direction, ' ', '_') AS ind_direction
+    FROM Cash_Stocks
+    WHERE Batch_No = (SELECT MAX(Batch_No) FROM Cash_Stocks)
+),
+source AS (
+    SELECT symbol, ind_direction, MAX([sr#]) AS sr_value
+    FROM cse
+    GROUP BY symbol, ind_direction
+)
+SELECT *
+FROM source
+PIVOT (
+    MAX(sr_value)
+    FOR ind_direction IN ([adx_daily_crosses_above], [adx_quarterly_crosses_above])  -- Add more as needed
+) AS pivoted;
+end
+
+begin
+DECLARE @cols NVARCHAR(MAX), @query NVARCHAR(MAX);
+
+-- Explicit LOB type enforcement inside STRING_AGG
+SELECT @cols = STRING_AGG(CAST(QUOTENAME(REPLACE(indicator, ' ', '_') + '_' + REPLACE(timeline, ' ', '_') + '_' + REPLACE(direction, ' ', '_')) AS NVARCHAR(MAX)), ',')
+              WITHIN GROUP (ORDER BY indicator)
+FROM (
+    SELECT DISTINCT indicator, timeline, direction
+    FROM Cash_Stocks
+    WHERE Batch_No = (SELECT MAX(Batch_No) FROM Cash_Stocks)
+) AS temp;
+
+-- Build final query
+SET @query = '
+WITH cse AS (
+    SELECT *,
+           REPLACE(indicator, '' '', ''_'') + ''_'' + REPLACE(timeline, '' '', ''_'') + ''_'' + REPLACE(direction, '' '', ''_'') AS ind_direction
+    FROM Cash_Stocks
+    WHERE Batch_No = (SELECT MAX(Batch_No) FROM Cash_Stocks)
+),
+source as (
+	select symbol, ind_direction
+	, 1 as [sr#]
+	, MAX([stock name]) as stock_name	
+	, MAX(Links) as links
+	, MAX([% Chg]) as percent_change
+	, MAX(price) as price
+	, MAX(volume) as volume
+	, MAX(Segment) as segment
+	, MAX(Batch_No) as batch_no
+	from cse
+	group by symbol, ind_direction
+)
+SELECT * 
+FROM source
+PIVOT (
+    MAX([sr#])
+    FOR ind_direction IN (' + @cols + ')
+) AS pivoted
+order by symbol';
+
+EXEC sp_executesql @query;
+end
+begin
+USE tempdb;
+
+EXEC sp_helpfile;
+DBCC SHRINKFILE (temp9, EMPTYFILE);
+ALTER DATABASE tempdb REMOVE FILE temp9;
+
+use Stocks_Analysis;
+
+EXEC sp_helpfile;
+DBCC SHRINKFILE (Stocks_Analysis_log, EMPTYFILE);
+end
+begin
+
+select count(1),batch_no from Analyse_Stocks -- where [Trade Type Details - Sum] is not null
+group by Batch_No
+;
+end
+begin
+
+select * from (select distinct top 30 batch_no,'Cash_Stocks' as tblname from Cash_Stocks order by 1 desc) a
+union all
+select * from (select distinct top 30 batch_no,'Analyse_Stocks' as tblname from Analyse_Stocks order by 1 desc) b
+;
+
+select * from Analyse_Stocks where Batch_No = 20250726145435
+order by Batch_No desc;
+select * from [dbo].[Analyse_Stocks_v];
+end
+begin
+EXEC sp_rename 'table_name.old_column_name', 'new_column_name', 'COLUMN';
+
+
+exec sp_rename 'analyse_15minutes_stocks.volume__yearly__shockers','volume_yearly_shockers', 'COLUMN';
+exec sp_rename 'analyse_15minutes_stocks.volume__quarterly__shockers','volume_quarterly_shockers', 'COLUMN';
+exec sp_rename 'analyse_15minutes_stocks.volume__monthly__shockers','volume_monthly_shockers', 'COLUMN';
+exec sp_rename 'analyse_15minutes_stocks.volume__weekly__shockers','volume_weekly_shockers', 'COLUMN';
+exec sp_rename 'analyse_15minutes_stocks.volume__daily__shockers','volume_daily_shockers', 'COLUMN';
+exec sp_rename 'analyse_15minutes_stocks.volume__4_hourly__shockers','volume_4_hourly_shockers', 'COLUMN';
+exec sp_rename 'analyse_15minutes_stocks.volume__1_hourly__shockers','volume_1_hourly_shockers', 'COLUMN';
+exec sp_rename 'analyse_15minutes_stocks.volume__15_minutes__shockers','volume_15_minutes_shockers', 'COLUMN';
 end

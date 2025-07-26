@@ -1,8 +1,6 @@
 begin -- update report queries 
-DECLARE @StartTime DATETIME,@printstarttime varchar;
-SET @StartTime = GETDATE();
-SET @printstarttime = 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121)
-RAISERROR(@printstarttime, 0, 1) WITH NOWAIT;
+DECLARE @StartTime DATETIME = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 
 -- update the report Queries output in table
 -- dbo.Analyse_Stocks,
@@ -16,7 +14,7 @@ begin -- bullish screen
 update a set a.Bullish_Single_Screen_Yearly = 1
 -- select *
 from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
+where 1=1 and Batch_No = @Batch_no -- (select max(batch_no) from dbo.Analyse_Stocks)
 and Macd_Yearly_Crosses_Above = 1
 and Rsi_Yearly_Crosses_Above = 1
 -- and Adx_Yearly_Crosses_Above = 1
@@ -1825,42 +1823,42 @@ begin -- volume shockers
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'yearly;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__yearly__shockers = 1
+where a.Batch_No = @Batch_no and volume_yearly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'quarterly;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__quarterly__shockers = 1
+where a.Batch_No = @Batch_no and volume_quarterly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'monthly;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__monthly__shockers = 1
+where a.Batch_No = @Batch_no and volume_monthly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'weekly;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__weekly__shockers = 1
+where a.Batch_No = @Batch_no and volume_weekly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'daily;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__daily__shockers = 1
+where a.Batch_No = @Batch_no and volume_daily_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'4_hourly;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__4_hourly__shockers = 1
+where a.Batch_No = @Batch_no and volume_4_hourly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'1_hourly;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__1_hourly__shockers = 1
+where a.Batch_No = @Batch_no and volume_1_hourly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'15_minutes;'
 from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume__15_minutes__shockers = 1
+where a.Batch_No = @Batch_no and volume_15_minutes_shockers = 1
 ;
 end
 begin -- length of columns 
@@ -1876,14 +1874,14 @@ from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Trading View - Order] = (case when a.[Trading View] = 'Bearish' then 1 else 0 end)
 from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set [Volume_Shockers - Sum] = isnull([Volume_Shockers - Sum],0) + 
-(case when volume__yearly__shockers = 1 then 525600 else 0 end) +
-(case when volume__quarterly__shockers = 1 then 131400 else 0 end)+
-(case when volume__monthly__shockers = 1 then 43800 else 0 end)+
-(case when volume__weekly__shockers = 1 then 10080 else 0 end)+
-(case when volume__daily__shockers = 1 then 1440 else 0 end)+
-(case when volume__4_hourly__shockers = 1 then 240 else 0 end)+
-(case when volume__1_hourly__shockers = 1 then 60 else 0 end)+
-(case when volume__15_minutes__shockers = 1 then 15 else 0 end)
+(case when volume_yearly_shockers = 1 then 525600 else 0 end) +
+(case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
+(case when volume_monthly_shockers = 1 then 43800 else 0 end)+
+(case when volume_weekly_shockers = 1 then 10080 else 0 end)+
+(case when volume_daily_shockers = 1 then 1440 else 0 end)+
+(case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
+(case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
+(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
 from dbo.[Analyse_Stocks] a where Batch_No = @Batch_No;
 ;WITH RankedRows AS (
     select batch_no,sno,
@@ -1898,24 +1896,23 @@ where a.Batch_No = @Batch_No;
 end 
 
 begin -- script execution time calculation 
--- select * from dbo.Analyse_Stocks
-DECLARE @DurationMs int, @EndTime DATETIME;
-SET @EndTime = GETDATE();
+DECLARE	 @EndTime DATETIME = GETDATE();
+DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
+-- Break down into components
+DECLARE	 @Hours INT = @DurationMs / 3600000
+		,@Minutes INT = (@DurationMs % 3600000) / 60000
+		,@Seconds INT = (@DurationMs % 60000) / 1000
+		,@Milliseconds INT = @DurationMs % 1000;
+-- Format as hh:mm:ss.mmm
+
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 PRINT 'Script ended at: ' + CONVERT(VARCHAR, @EndTime, 121);
-set @DurationMs = DATEDIFF(MILLISECOND, @StartTime, @EndTime)
 PRINT 'Duration (ms): ' + CAST(@DurationMs AS VARCHAR);
--- Break down into components
-DECLARE @Hours INT = @DurationMs / 3600000;
-DECLARE @Minutes INT = (@DurationMs % 3600000) / 60000;
-DECLARE @Seconds INT = (@DurationMs % 60000) / 1000;
-DECLARE @Milliseconds INT = @DurationMs % 1000;
--- Format as hh:mm:ss.mmm
 PRINT 'Duration: ' + 
-    RIGHT('00' + CAST(@Hours AS VARCHAR), 2) + ':' +
-    RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
-    RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
-    RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
+  RIGHT('00' + CAST(@Hours AS VARCHAR), 2) + ':' +
+  RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
+  RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
+  RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
 end
 
 end

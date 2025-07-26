@@ -34,7 +34,7 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
     plt.close()
-    print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')}-{str(symbol_name).ljust(20,' ')}-{period_value.ljust(2,' ')}-{interval_value.ljust(2,' ')}")
+    print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')} - {str(symbol_name).ljust(20,' ')} - {period_value.ljust(3,' ')} - {interval_value.ljust(3,' ')}")
 
 
 def valid_intervals_periods():

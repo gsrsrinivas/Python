@@ -80,6 +80,7 @@ on a.Symbol = b.Symbol and a.Batch_No = @Batch_No
 end
 
 begin -- script execution time calculation 
+--DECLARE @StartTime DATETIME = GETDATE();
 DECLARE	 @EndTime DATETIME = GETDATE();
 DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
 -- Break down into components
@@ -92,7 +93,7 @@ DECLARE	 @Hours INT = @DurationMs / 3600000
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 PRINT 'Script ended at  : ' + CONVERT(VARCHAR, @EndTime, 121);
 PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR);
-PRINT 'Duration         : ' + CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) 
+PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) as VARCHAR)
 
 end
 /*

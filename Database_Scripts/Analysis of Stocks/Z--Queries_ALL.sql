@@ -752,7 +752,7 @@ FROM dbo.Master_Stocks_In_Segments
 CROSS APPLY STRING_SPLIT(segments, ';')
 order by 1;
 --------------------------------------------------------------------------------------------------------------------------------
-select a.Sno,a.Sector,a.Sector Value
+select a.Sno,a.Sector,a.Sector_Value
 from dbo.Sector_Table a
 inner join (
 	SELECT distinct trim(value) AS sector
@@ -773,7 +773,7 @@ on a.Symbol = b.Symbol;
 --------------------------------------------------------------------------------------------------------------------------------
 --select * from dbo.Master_Stocks_In_Segments
 ;with cte as 
-(	select b.Symbol,a.Sno,a.Sector,a.Sector Value as sector_value
+(	select b.Symbol,a.Sno,a.Sector,a.Sector_Value as sector_value
 	from dbo.Sector_Table a
 	inner join 
 	(	SELECT distinct trim(value) AS sector,Symbol
@@ -1369,8 +1369,8 @@ on a.Symbol = b.symbol and a.Batch_No = b.batch_no
 -- select batch_no, symbol, created_date, price_action from dbo.Analyse_Stocks
 DECLARE @json NVARCHAR(MAX) = '{"yearly" : 0, -1, 2, -3, 4, 5, -6, -7, 8, 9, -10, 11, -12, -13, -14, -15, 16, -17, 18, -19, "quarterly" : 0, -1, -2, -3, -4, -5, 6, 7, 8, -9, -10, 11, -12, -13, 14, -15, 16, 17, 18, 19, 20, -21, -22, -23, -24, 25, 26, -27, -28, -29, 30, "monthly" : 0, 1, 2, -3, -4, 5, -6, 7, -8, -9, -10, 11, 12, -13, -14, -15, -16, 17, 18, 19, -20, 21, -22, 23, 24, -25, 26, -27, -28, -29, -30, "weekly" : 0, 1, -2, -3, -4, 5, -6, -7, 8, 9, -10, 11, -12, 13, -14, 15, -16, -17, -18, 19, 20, -21, 22, -23, 24, -25, -26, 27, 28, 29, -30, "daily" : 0, -1, -2, -3, 4, -5, -6, 7, 8, 9, 10, -11, -12, -13, 14, -15, -16, 17, -18, 19, 20, -21, -22, -23, -24, -25, 26, 27, 28, 29, 30, "4 hourly" : 0, 1, -2, -3, -4, -5, 6, 7, 8, -9, 10, -11, -12, -13, -14, 15, -16, 17, -18, 19, 20, -21, -22, 23, 24, -25, -26, -27, -28, 29, 30, "1 hourly" : 0, 1, 2, -3, 4, 5, 6, -7, 8, 9, -10, -11, -12, -13, -14, 15, -16, -17, 18, -19, -20, 21, -22, -23, -24, -25, 26, 27, -28, 29, 30, "15 minute" : 0, 1, 2, -3, 4, 5, -6, 7, 8, -9, -10, -11, -12, -13, 14, 15, -16, 17, -18, -19, 20, 21, 22, -23, 24, -25, -26, 27, -28, 29, 30}';
 SELECT 
-    outerJson.key AS Timeframe,
-    innerJson.value AS Value
+    [outer_Json.key] AS Timeframe,
+    [inner_Json.value] AS Value
 FROM OPENJSON(@json) AS outerJson
 CROSS APPLY OPENJSON(outerJson.value) AS innerJson;
 ;
@@ -1445,9 +1445,9 @@ on a.Symbol = b.symbol and a.Batch_No = b.batch_no
 ;
 --------------------------------------------------------------------------------------------------------------------------------
 INSERT INTO dbo.Analyse_15Minutes_Stocks__Price_Action_table (Row_id,Batch_no,symbol, Timeframe, Value)
-SELECT ROW_NUMBER() OVER (PARTITION BY s.batch_no,s.symbol ORDER BY outerJson.key,abs(innerJson.value)) AS Row_Id,
+SELECT ROW_NUMBER() OVER (PARTITION BY s.batch_no,s.symbol ORDER BY [outer_Json.key],abs(innerJson.value)) AS Row_Id,
 	s.Batch_no,s.symbol,
-    outerJson.key AS Timeframe,
+    [outer_Json.key] AS Timeframe,
     innerJson.value AS Value
 FROM dbo.Analyse_15Minutes_Stocks s
 CROSS APPLY OPENJSON(s.price_action) AS outerJson
@@ -1484,7 +1484,7 @@ select Symbol,Stock_Name,* from dbo.Master_Stocks_In_Segments
 select * from cte a left join dbo.ScreenSort b
 on a.value = replace(b.name,'_',' ')
 where trim(a.value) <> ''
-order by a.ttd,b.order
+order by a.ttd,b.[order]
 ;
 --------------------------------------------------------------------------------------------------------------------------------
 -- this is working as expected
@@ -1498,17 +1498,17 @@ order by a.ttd,b.order
 ) 
 ,OrderedSignals AS (
     SELECT TOP 100 PERCENT
-        batch_no,sno,ss.order,Trade_Type_Details,
+        batch_no,sno,ss.[order],Trade_Type_Details,
         Signal
     FROM SplitSignals Ps -- ParsedSignals ps
     LEFT JOIN dbo.ScreenSort ss 
 	ON ps.Signal = replace(ss.Name,'_',' ')
-	order by batch_no,sno,ss.order
+	order by batch_no,sno,ss.[order]
 )
 ,final as (
 SELECT 
     Batch_No,Sno,Trade_Type_Details,
-    STRING_AGG(Signal, '; ') WITHIN GROUP (ORDER BY Batch_No,Sno,order ASC)  AS SortedSignalString
+    STRING_AGG(Signal, '; ') WITHIN GROUP (ORDER BY Batch_No,Sno,[order] ASC)  AS SortedSignalString
 FROM OrderedSignals
 GROUP BY Batch_No,Sno,Trade_Type_Details
 ) 
@@ -1526,17 +1526,17 @@ select * from final
 ) 
 ,OrderedSignals AS (
     SELECT TOP 100 PERCENT
-        batch_no,sno,ss.order,Trade_Type_Details,
+        batch_no,sno,ss.[order],Trade_Type_Details,
         Signal
     FROM SplitSignals Ps -- ParsedSignals ps
     LEFT JOIN dbo.ScreenSort ss 
 	ON ps.Signal = replace(ss.Name,'_',' ')
-	order by batch_no,sno,ss.order
+	order by batch_no,sno,ss.[order]
 )
 ,final as (
 SELECT 
     Batch_No,Sno,Trade_Type_Details,
-    STRING_AGG(Signal, '; ') WITHIN GROUP (ORDER BY Batch_No,Sno,order ASC)  AS SortedSignalString
+    STRING_AGG(Signal, '; ') WITHIN GROUP (ORDER BY Batch_No,Sno,[order] ASC)  AS SortedSignalString
 FROM OrderedSignals
 GROUP BY Batch_No,Sno,Trade_Type_Details
 )
@@ -1565,8 +1565,7 @@ select distinct Trade_Type_Details from dbo.Analyse_Stocks;
 select  * from dbo.ScreenSort;
 --------------------------------------------------------------------------------------------------------------------------------
 
-select top 1000 * from dbo.Analyse_Stocks where Batch_No = 22;
-
+select top 1000 * from dbo.Analyse_Stocks where Batch_No = 22
 order by Trade_Type_Details_Length desc;
 
 --------------------------------------------------------------------------------------------------------------------------------
@@ -1660,24 +1659,24 @@ from dbo.Analyse_Stocks where Batch_No = 52 and volume_shockers is not null
 order by batch_no desc
 ;
 --------------------------------------------------------------------------------------------------------------------------------
-select * 
+select *, 
 -- update a set Volume_Shockers_Sum =
 isnull(Volume_Shockers_Sum,0) +
-(case when volume__yearly__shockers = 1 then 525600 else 0 end) +
-(case when volume__quarterly__shockers = 1 then 131400 else 0 end)+
-(case when volume__monthly__shockers = 1 then 43800 else 0 end)+
-(case when volume__weekly__shockers = 1 then 10080 else 0 end)+
-(case when volume__daily__shockers = 1 then 1440 else 0 end)+
-(case when volume__4_hourly__shockers = 1 then 240 else 0 end)+
-(case when volume__1_hourly__shockers = 1 then 60 else 0 end)+
-(case when volume__15_minutes__shockers = 1 then 15 else 0 end)
+(case when volume_yearly_shockers = 1 then 525600 else 0 end) +
+(case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
+(case when volume_monthly_shockers = 1 then 43800 else 0 end)+
+(case when volume_weekly_shockers = 1 then 10080 else 0 end)+
+(case when volume_daily_shockers = 1 then 1440 else 0 end)+
+(case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
+(case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
+(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
 from dbo.Analyse_15Minutes_Stocks a
 where Batch_No = @Batch_No
 ;
 --------------------------------------------------------------------------------------------------------------------------------
 begin
 select top 10000 Symbol from dbo.Analyse_Stocks_v order by Batch_No desc;
-create view dbo.Analyse_15Minutes_Stocks_v_aklfdjak as 
+-- create or alter view dbo.Analyse_15Minutes_Stocks_v as 
 select Batch_No, Trading_View,Trade-Type-Details,segment/*,Trade_Type_Details,Segments*/, Symbol, Percent_Change, Price, Volume
 ,rn,Stock_Name, Trade_Type_Details_Sum, Trade_Type_Bullish_Sum, Trade_Type_Bearish_Sum, Trade_Type, Trade_Type_Length, Segments_Length, Trade_Type_Details_Length, Created_Date
 ,Segments_Order,Segments_Sum,price_action
@@ -1691,7 +1690,7 @@ from (
 	--and Symbol in ('BSE','ARE&M','AXISBANK','COALINDIA','HAL','IREDA','OLAELEC','RELIANCE','SHREEGANES-X','SWSOLAR','TVSSCS','VBL','NIFTY50-INDEX','DEEPAKNTR','DLF','MUKTAARTS','WEBELSOLAR','COLPAL','REDINGTON','BHARATFORG','MUTHOOTFIN')
 ) a where rn = 1
 -- order by Trading_View desc,Trade_Type_Details_Sum desc, Trade_Type_Details_Length desc,Segments_Length desc,Trade_Type_Length desc
-create view dbo.Analyse_Stocks_v as 
+-- create view dbo.Analyse_Stocks_v as 
 select Batch_No, Trading_View,Trade-Type-Details,segment/*,Trade_Type_Details,Segments*/, Symbol, Percent_Change, Price, Volume
 ,rn,Stock_Name, Trade_Type_Details_Sum, Trade_Type_Bullish_Sum, Trade_Type_Bearish_Sum, Trade_Type, Trade_Type_Length
 ,Segments_Length, Trade_Type_Details_Length, Created_Date
@@ -1811,9 +1810,9 @@ SELECT name, recovery_model_desc FROM sys.databases --WHERE name = 'Stocks_Analy
 end
 
 begin -- shrink the log file of the Trade Log database
-USE Trade Log;
+USE [Trade Log];
 
-ALTER DATABASE Trade Log SET RECOVERY SIMPLE;
+ALTER DATABASE [Trade Log] SET RECOVERY SIMPLE;
 DBCC SHRINKFILE (Stocks_db_log, 1); -- Shrinks to 1MB
 -- ALTER DATABASE Trade Log SET RECOVERY FULL
 ;
@@ -1899,7 +1898,7 @@ select distinct ind_direction from cse
 select * from (
 select batch_no, symbol,ind_direction,sno
 from cse) as source
-pivot( max(sno) for ind_direction in ()) as pivoted
+pivot( max(sno) for ind_direction in ([01])) as pivoted
 end
 
 begin
@@ -2055,8 +2054,7 @@ PIVOT (
 ) AS pivoted
 order by symbol;
 end
-rollback transaction
-end
+
 begin
 select * from dbo.ScreenSort
 select * from dbo.Sector_Table
@@ -2102,8 +2100,10 @@ exec sp_rename 'Analyse_15Minutes_Stocks.[Trade Type Details - Length]',Trade_Ty
 exec sp_rename 'Analyse_15Minutes_Stocks.[Segments - Length]'          ,Segments_Length          ,'column';
 exec sp_rename 'Analyse_15Minutes_Stocks.Segments_Sum'				   ,Segments_Sum             ,'column';
 
+--sno -- Sno
+--% Cng - Percent_change
+--segments - segments
+--end
 
-sno -- Sno
-% Cng - Percent_change
-segments - segments
+rollback transaction
 end

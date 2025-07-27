@@ -4,7 +4,7 @@ update dbo.Cash_15Minutes_Stocks Set Batch_No =(select isnull(MAX(Batch_No)+1,1)
 where Batch_No = CONVERT(int, FORMAT(GETDATE(), 'yyyyMMdd'));
 -- add new stocks in master table
 insert into dbo.Master_Stocks_In_Segments (Symbol,Segments,Stock_Name)
-select distinct cs.symbol,cs.Segment,cs.[stock name]
+select distinct cs.symbol,cs.segments,cs.[stock_name]
 from dbo.Cash_15Minutes_Stocks cs
 where symbol in (
 	select symbol from dbo.Cash_15Minutes_Stocks
@@ -20,18 +20,18 @@ from dbo.Master_Stocks_In_Segments sis inner join (
 ) b on sis.Symbol = b.Symbol;
 -- add stocks from master table
 insert into dbo.[Analyse_15Minutes_Stocks] (Batch_No,created_date,Stock_Name
-	,[% Chg],price,volume,[Segments - Length]
+	,Percent_Change,price,volume,Segments_Length
 	,Segments,Symbol,Industry,ISIN_Code,Series
-	,[Segments - Order],[Segments - Sum])
-select (select isnull(max(batch_no)+1,1) from dbo.Analyse_15Minutes_Stocks),SYSDATETIME(),a.[stock name]
-	,a.[% Chg],a.price,a.volume,len(ss.Segments) as [Segments - Length]
+	,Segments_Order,[Segments - Sum])
+select (select isnull(max(batch_no)+1,1) from dbo.Analyse_15Minutes_Stocks),SYSDATETIME(),a.[stock_name]
+	,a.Percent_Change,a.price,a.volume,len(ss.Segments) as Segments_Length
 	,ss.Segments,a.symbol,ss.Industry,ss.[ISIN Code],ss.Series
 	,ss.sector_order,ss.sector_sum
 from (
-	select a.[stock name],a.Segment,a.Symbol,max(a.[% Chg]) as [% Chg],max(a.price) as price,max(a.volume) as volume
+	select a.[stock_name],a.segments,a.Symbol,max(a.Percent_Change) as Percent_Change,max(a.price) as price,max(a.volume) as volume
 	from dbo.Cash_15Minutes_Stocks a
 	where batch_no = (select MAX(Batch_No) from dbo.Cash_15Minutes_Stocks)
-	group by a.[stock name],a.Segment,a.Symbol
+	group by a.[stock_name],a.segments,a.Symbol
 ) a
 left join dbo.[Master_Stocks_In_Segments] ss on ss.Symbol = a.symbol
 Order by ss.Sno;

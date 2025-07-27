@@ -268,7 +268,7 @@ def chat_ink_xls2db():
 
 
 def chart_ink_download():
-    setup_logger(__file__, f"{Path(__file__).stem}.log") # 'daily_chart_ink_download_and_insert.log' )
+    setup_logger(__file__, f"daily_{Path(__file__).stem}.log") # 'daily_chart_ink_download_and_insert.log' )
     try:
         print_start_timestamp()
         # prevent_sleep()

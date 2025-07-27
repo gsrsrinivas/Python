@@ -19,7 +19,7 @@ def chat_ink_excel_file_download():
         # print(f"{df}")
         # Rename columns
         df.rename(
-            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+            columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
                      'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish 15 Minutes of Triple Screen, Technical Analysis Scanner',
@@ -46,7 +46,7 @@ def chat_ink_excel_file_download():
         # print(f"{df}")
         # Rename columns
         df.rename(
-            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+            columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
                      'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish Hourly of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)
@@ -74,7 +74,7 @@ def chat_ink_excel_file_download():
         # print(f"{df}")
         # Rename columns
         df.rename(
-            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+            columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
                      'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish 4 Hourly of Triple Screen, Technical Analysis Scanner',
@@ -103,7 +103,7 @@ def chat_ink_excel_file_download():
         # print(f"{df}")
         # Rename columns
         df.rename(
-            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+            columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
                      'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish Daily of Triple Screen System, Technical Analysis Scanner',
@@ -132,7 +132,7 @@ def chat_ink_excel_file_download():
         # print(f"{df}")
         # Rename columns
         df.rename(
-            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+            columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
                      'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish Weekly of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)
@@ -160,7 +160,7 @@ def chat_ink_excel_file_download():
         # print(f"{df}")
         # Rename columns
         df.rename(
-            columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+            columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
                      'close': 'price'}, inplace=True)
         # insert new column timeframe
         df.insert(7, 'TimeFrame', 'Bullish Monthly of Triple Screen, Technical Analysis Scanner', allow_duplicates=True)

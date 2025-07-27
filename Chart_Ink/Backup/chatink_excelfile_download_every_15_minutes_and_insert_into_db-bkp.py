@@ -593,14 +593,14 @@ def chat_ink_excel_file_download_every_15_minutes_and_insert_into_db():
                     df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
                     # print(f"{df}")
                     # Rename columns
-                    df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links',
-                                       'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+                    df.rename(columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol',
+                                       'per_chg': 'percent_change', 'close': 'price'}, inplace=True)
                     # insert new column timeframe
                     part1, part2, part3 = tf_l[i].split(';')
                     df.insert(7, 'Indicator', part1, allow_duplicates=True)
                     df.insert(8, 'TimeLine', part2, allow_duplicates=True)
                     df.insert(9, 'Direction', part3, allow_duplicates=True)
-                    df.insert(10, 'Segment', each_segment_list, allow_duplicates=True)
+                    df.insert(10, 'segments', each_segment_list, allow_duplicates=True)
                     df.insert(11, 'Batch_No', start_date.strftime('%Y%m%d'), allow_duplicates=True)
                     # print(df)
                 if i == 0 and j == 0:
@@ -628,12 +628,12 @@ def chat_ink_excel_file_download_every_15_minutes_and_insert_into_db():
     cursor = conn.cursor()
     print(f'connection is established')
     # Define the insert statement
-    insert_query = '''INSERT INTO dbo.Cash_15minutes_Stocks(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
+    insert_query = '''INSERT INTO dbo.Cash_15minutes_Stocks(sno,[stock_name],symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,segments,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     # Iterate over the DataFrame and insert data into the SQL Server table
     for index, row in df_all.iterrows():
-        cursor.execute(insert_query, row['sr#'], row['stock name'], row['symbol'], row['Links'], row['% Chg'],
-                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['Segment'],
+        cursor.execute(insert_query, row['sno'], row['stock_name'], row['symbol'], row['bsecode'], row['percent_change'],
+                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['segments'],
                        row['Batch_No'])
         sys.stdout.write(f"\r{index} records inserted out of {df_all.shape[0] - 1}")
         sys.stdout.flush()

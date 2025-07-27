@@ -161,19 +161,19 @@ order by 3,4,5,abs(innerJson.[value])
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 -- from rest script.sql
-begin -- sorted trade type details
+begin -- sorted Trade_Type details
 ;WITH SplitSignals AS (
     SELECT distinct
-        batch_no,sno,[trade type details],
+        batch_no,sno,Trade_Type_Details,
         TRIM(value) AS Signal
     FROM dbo.Analyse_Stocks
-    CROSS APPLY STRING_SPLIT(replace(replace(replace([trade type details],'; ',';'),'(',''),')',''), ';')
+    CROSS APPLY STRING_SPLIT(replace(replace(replace(Trade_Type_Details,'; ',';'),'(',''),')',''), ';')
     WHERE value <> '' -- and Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 	-- order by Batch_No,Sno
 )
 ,OrderedSignals AS (
     SELECT TOP 100 PERCENT
-        batch_no,sno,ss.[order],[trade type details],
+        batch_no,sno,ss.[order],Trade_Type_Details,
         Signal
     FROM SplitSignals Ps
     LEFT JOIN dbo.ScreenSort ss
@@ -182,13 +182,13 @@ begin -- sorted trade type details
 ) -- select * from OrderedSignals
 ,final as (
 SELECT 
-    Batch_No,Sno,[trade type details],
+    Batch_No,Sno,Trade_Type_Details,
     STRING_AGG(Signal, '; ') WITHIN GROUP (ORDER BY Batch_No,Sno,[order] ASC)  AS SortedSignalString
 FROM OrderedSignals
-GROUP BY Batch_No,Sno,[trade type details]
+GROUP BY Batch_No,Sno,Trade_Type_Details
 )
 update a
-set [trade type details] = SortedSignalString
+set Trade_Type_Details = SortedSignalString
 from dbo.Analyse_Stocks a
 inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 ;
@@ -196,18 +196,18 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 
 -- from update_report_query
-begin -- sorted trade type details
+begin -- sorted Trade_Type details
 ;WITH SplitSignals AS (
     SELECT distinct
-        batch_no,sno,[trade type details],
+        batch_no,sno,Trade_Type_Details,
         TRIM(value) AS Signal
     FROM dbo.Analyse_Stocks
-    CROSS APPLY STRING_SPLIT(replace(replace(replace([trade type details],'; ',';'),'(',''),')',''), ';')
+    CROSS APPLY STRING_SPLIT(replace(replace(replace(Trade_Type_Details,'; ',';'),'(',''),')',''), ';')
     WHERE value <> '' and Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 ) 
 ,OrderedSignals AS (
     SELECT TOP 100 PERCENT
-        batch_no,sno,ss.[order],[trade type details],
+        batch_no,sno,ss.[order],Trade_Type_Details,
         Signal
     FROM SplitSignals Ps
     LEFT JOIN dbo.ScreenSort ss
@@ -216,13 +216,13 @@ begin -- sorted trade type details
 )
 ,final as (
 SELECT 
-    Batch_No,Sno,[trade type details],
+    Batch_No,Sno,Trade_Type_Details,
     STRING_AGG(Signal, '; ') WITHIN GROUP (ORDER BY Batch_No,Sno,[order] ASC)  AS SortedSignalString
 FROM OrderedSignals
-GROUP BY Batch_No,Sno,[trade type details]
+GROUP BY Batch_No,Sno,Trade_Type_Details
 )
 update a
-set [trade type details] = SortedSignalString
+set Trade_Type_Details = SortedSignalString
 from dbo.Analyse_Stocks a
 inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 ;

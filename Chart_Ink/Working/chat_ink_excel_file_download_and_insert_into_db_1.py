@@ -47,7 +47,7 @@ def insert_into_database_tables(df_all):
     # Define connection string to SQL Server with Windows Authentication
     conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
     # Define the insert statement
-    insert_query = '''INSERT INTO dbo.Cash_Stocks(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
+    insert_query = '''INSERT INTO dbo.Cash_Stocks(sno,[stock_name],symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,segments,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     input_folder_path = f"C:/Users/gsrsr/Documents/SQL Server Management Studio/Analysis of Stocks/Analysis of Stocks"
     file_paths = {
@@ -59,9 +59,9 @@ def insert_into_database_tables(df_all):
         cursor = conn.cursor()
         print(f'connection is established')
         records = df_all[[
-            'sr#', 'stock name', 'symbol', 'Links', '% Chg',
+            'sno', 'stock_name', 'symbol', 'bsecode', 'percent_change',
             'price', 'volume', 'Indicator', 'TimeLine',
-            'Direction', 'Segment', 'Batch_No'
+            'Direction', 'segments', 'Batch_No'
         ]].values.tolist()
         cursor.executemany(insert_query, records)
         conn.commit()
@@ -104,12 +104,13 @@ def insert_new_columns_in_data_frame(df,tf_l_i,each_segment_list,start_date):
     expected_order = ['sr', 'nsecode', 'name', 'bsecode', 'per_chg', 'close', 'volume']
     df = df[expected_order]
     # Rename columns
-    df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+    df.rename(columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
+                       'close': 'price'}, inplace=True)
     # Extract and clean metadata  # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
     batch_no = start_date.strftime('%Y%m%d')
     # Insert new metadata columns
-    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction, each_segment_list, batch_no]
+    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']] = [indicator, timeline, direction, each_segment_list, batch_no]
     return df
 
 
@@ -871,7 +872,7 @@ def chart_ink_excel_file_download_and_insert_into_db():
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
             df = insert_new_columns_in_data_frame(df,key,each_segment_list,start_date)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            # print(f"complete '{key.replace("__",";").replace("_"," ")}' for {each_segment_list} segment as of {datetime.now()}")
+            # print(f"complete '{key.replace("__",";").replace("_"," ")}' for {each_segment_list} segments as of {datetime.now()}")
     print(f"\ndownloading data from the website is complete.")
     # folder_path = "../In_Out/Output"
     # print("write to Excel file")

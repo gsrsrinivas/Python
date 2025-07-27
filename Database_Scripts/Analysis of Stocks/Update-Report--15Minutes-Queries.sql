@@ -3,7 +3,7 @@ DECLARE @StartTime DATETIME = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 
 -- update the report Queries output in table
--- dbo.Analyse_15Minutes_Stocks
+-- dbo.Analyse_15Minutes_Stocks, dbo.Master_Screen_Name_Values
 ----------------------------------------------------------------------------------------------------------------------------------------
 declare @Batch_no bigint, @batch_num bigint
 set @Batch_Num = 1
@@ -1205,621 +1205,621 @@ and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bolling
 end 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 
-begin -- bullish -- trade type and details
+begin -- bullish -- Trade_Type and details
 update a set 
- [Trade Type] = isnull([Trade Type],'')+'Bullish;'
-,[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';'
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num 
-         AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Monthly' 
+ Trade_Type = isnull(Trade_Type,'')+'Bullish;'
+,Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+         AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no and Bullish_Triple_Screen_Strong_Monthly > 0
 ;
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Triple_Screen_Strong_Correction_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Quarterly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Quarterly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Quarterly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Quarterly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Quarterly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Quarterly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Double_Screen_Strong_Correction_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_Yearly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_Yearly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Yearly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_Quarterly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_Quarterly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Quarterly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_Monthly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_Weekly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_Daily'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_4_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_1_Hourly'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bullish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bullish Sum] = isnull([Trade Type - Bullish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bullish_Single_Screen_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bullish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bullish_Single_Screen_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_15_Minutes > 0
 ; 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 end
 
-begin -- bearish -- trade type and details 
+begin -- bearish -- Trade_Type and details
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Triple_Screen_Strong_Correction_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Quarterly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Quarterly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Quarterly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Quarterly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Double_Screen_Strong_Correction_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_15_Minutes > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Single_Screen_Yearly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Single_Screen_Yearly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Yearly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Single_Screen_Quarterly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Single_Screen_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Quarterly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Single_Screen_Monthly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Single_Screen_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Monthly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Single_Screen_Weekly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Single_Screen_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Weekly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Single_Screen_Daily'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Single_Screen_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Daily > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Single_Screen_4_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Single_Screen_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_4_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num
-          AND v.[Screen Names] = 'Bearish_Single_Screen_1_Hourly'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+          AND v.Screen_Names = 'Bearish_Single_Screen_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_1_Hourly > 0
 ; 
 update a set 
-[Trade Type] = isnull([Trade Type],'')+'Bearish;',
-[Trade Type Details] = isnull([Trade Type Details],'') + v.Description + ';' 
-,[Trade Type Details - Sum] = isnull([Trade Type Details - Sum],0) + v.value
-,[Trade Type - Bearish Sum] = isnull([Trade Type - Bearish Sum],0) + v.value
-from dbo.Analyse_15Minutes_Stocks a JOIN [dbo].[Screen_Name_Values] v ON v.Batch_No = @Batch_Num 
-         AND v.[Screen Names] = 'Bearish_Single_Screen_15_Minutes'
+Trade_Type = isnull(Trade_Type,'')+'Bearish;',
+Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
+,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
+,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
+from dbo.Analyse_15Minutes_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
+         AND v.Screen_Names = 'Bearish_Single_Screen_15_Minutes'
 where a.Batch_No = @Batch_no and Bearish_Single_Screen_15_Minutes > 0
 ;
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
@@ -1869,22 +1869,22 @@ where a.Batch_No = @Batch_no and volume_15_minutes_shockers = 1
 end
 
 begin -- length of columns
-update a set a.[Trade Type - Length] = len([Trade Type])
+update a set a.Trade_Type_Length = len(Trade_Type)
 from dbo.Analyse_15Minutes_Stocks a where Batch_No = @Batch_no
 ;
-update a set a.[Trade Type Details - Length] = len([Trade Type Details])
+update a set a.Trade_Type_Details_Length = len(Trade_Type_Details)
 from dbo.Analyse_15Minutes_Stocks a where Batch_No = @Batch_no
 ;
-update a set [Trading View] = case 
-when isnull([Trade Type - Bullish Sum],0) - isnull([Trade Type - Bearish Sum],0) > 0 then 'Bullish' 
-when isnull([Trade Type - Bullish Sum],0) - isnull([Trade Type - Bearish Sum],0) < 0 then 'Bearish' 
+update a set Trading_View = case
+when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
+when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
 else NULL end
 from dbo.Analyse_15Minutes_Stocks a where Batch_No = @Batch_no
 ;
-update a set [Trading View - Order] = (case when a.[Trading View] = 'Bearish' then 1 else 0 end)
+update a set Trading_View_Order = (case when a.Trading_View = 'Bearish' then 1 else 0 end)
 from dbo.Analyse_15Minutes_Stocks a where Batch_No = @Batch_no
 ;
-update a set [Volume_Shockers - Sum] = isnull([Volume_Shockers - Sum],0) + 
+update a set Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
 (case when volume_yearly_shockers = 1 then 525600 else 0 end) +
 (case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
 (case when volume_monthly_shockers = 1 then 43800 else 0 end)+
@@ -1893,15 +1893,15 @@ update a set [Volume_Shockers - Sum] = isnull([Volume_Shockers - Sum],0) +
 (case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
 (case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
 (case when volume_15_minutes_shockers = 1 then 15 else 0 end)
-from [dbo].[Analyse_15Minutes_Stocks] a where Batch_No = @Batch_No
+from dbo.[Analyse_15Minutes_Stocks] a where Batch_No = @Batch_No
 ;
 ;WITH RankedRows AS (
     select batch_no,sno,
-	row_number() over (partition by Batch_No order by Batch_No desc, [Trading View - Order] asc, [Segments - Order] desc, [Volume_Shockers] desc, [Trade Type Details - Sum] desc ) as report_sort_order
-	from [dbo].[Analyse_15Minutes_Stocks]
+	row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
+	from dbo.[Analyse_15Minutes_Stocks]
 )
 UPDATE a SET [Report Sort Order] = b.report_sort_order
-FROM [dbo].[Analyse_15Minutes_Stocks] a JOIN RankedRows b
+FROM dbo.[Analyse_15Minutes_Stocks] a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
 where a.Batch_No = @Batch_No
 ;
@@ -1918,13 +1918,10 @@ DECLARE	 @Hours INT = @DurationMs / 3600000
 -- Format as hh:mm:ss.mmm
 
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
-PRINT 'Script ended at: ' + CONVERT(VARCHAR, @EndTime, 121);
-PRINT 'Duration (ms): ' + CAST(@DurationMs AS VARCHAR);
-PRINT 'Duration: ' + 
-  RIGHT('00' + CAST(@Hours AS VARCHAR), 2) + ':' +
-  RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
-  RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
-  RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
+PRINT 'Script ended at  : ' + CONVERT(VARCHAR, @EndTime, 121);
+PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR);
+PRINT 'Duration         : ' + CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) 
+
 end
 
 end

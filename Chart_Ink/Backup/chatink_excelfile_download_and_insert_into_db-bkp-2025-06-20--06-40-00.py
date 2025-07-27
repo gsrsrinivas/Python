@@ -80,12 +80,12 @@ def insert_into_database_tables(df_all):
     cursor = conn.cursor()
     print(f'connection is established')
     # Define the insert statement
-    insert_query = '''INSERT INTO dbo.Cash_Stocks(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
+    insert_query = '''INSERT INTO dbo.Cash_Stocks(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     # Iterate over the DataFrame and insert data into the SQL Server table
     for index, row in df_all.iterrows():
-        cursor.execute(insert_query, row['sr#'], row['stock name'], row['symbol'], row['Links'], row['% Chg'],
-                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['Segment'],
+        cursor.execute(insert_query, row['sno'], row['stock_name'], row['symbol'], row['bsecode'], row['percent_change'],
+                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['segments'],
                        row['Batch_No'])
         sys.stdout.write(f"\r{index} records inserted out of {df_all.shape[0] - 1}")
         sys.stdout.flush()
@@ -146,14 +146,14 @@ def insert_new_columns_in_data_frame(df,tf_l_i,each_segment_list,start_date):
     if len(df) > 0:
         df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
         # Rename columns
-        df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links',
-                           'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+        df.rename(columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
+                           'close': 'price'}, inplace=True)
         # insert new columns
         part1, part2, part3 = tf_l_i.split('__')
         df.insert(7, 'Indicator', part1.replace("_"," "), allow_duplicates=True)
         df.insert(8, 'TimeLine', part2.replace("_"," "), allow_duplicates=True)
         df.insert(9, 'Direction', part3.replace("_"," "), allow_duplicates=True)
-        df.insert(10, 'Segment', each_segment_list, allow_duplicates=True)
+        df.insert(10, 'segments', each_segment_list, allow_duplicates=True)
         df.insert(11, 'Batch_No', start_date.strftime('%Y%m%d'), allow_duplicates=True)
     return df
 

@@ -173,7 +173,7 @@ def insert_into_database_tables(df_all, table_names):
     # Define connection string to SQL Server with Windows Authentication
     conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
     # Define the insert statement
-    insert_query = f'''INSERT INTO dbo.{table_names[0]}(sr#,[stock name],symbol,Links,[% Chg],price,volume,Indicator,TimeLine,Direction,Segment,Batch_No)
+    insert_query = f'''INSERT INTO dbo.{table_names[0]}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     pictures_path = project_directory_path()
     input_folder_path = pictures_path + r"\Database_Scripts\Analysis of Stocks"
@@ -185,9 +185,9 @@ def insert_into_database_tables(df_all, table_names):
     with pyodbc.connect(conn_str) as conn:
         cursor = conn.cursor()
         records = df_all[[
-            'sr#', 'stock name', 'symbol', 'Links', '% Chg',
+            'sno', 'stock_name', 'symbol', 'bsecode', 'percent_change',
             'price', 'volume', 'Indicator', 'TimeLine',
-            'Direction', 'Segment', 'Batch_No'
+            'Direction', 'segments', 'Batch_No'
         ]].values.tolist()
         cursor.executemany(insert_query, records)
         conn.commit()
@@ -252,7 +252,7 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
     Args:
         df (pd.DataFrame): The DataFrame containing stock data
         tf_l_i (str): A string containing indicator, timeline, and direction information
-        each_segment_list (str): The segment of the stock market (e.g., 'Cash')
+        each_segment_list (str): The segments of the stock market (e.g., 'Cash')
     Returns:
         pd.DataFrame: The modified DataFrame with new columns and reordered data.
         :param df:
@@ -266,13 +266,13 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
     expected_order = ['sr', 'nsecode', 'name', 'bsecode', 'per_chg', 'close', 'volume']
     df = df[expected_order]
     # Rename columns
-    df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links', 'per_chg': '% Chg',
+    df.rename(columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
                        'close': 'price'}, inplace=True)
     # Extract and clean metadata # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
     # batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
     # Insert new metadata columns
-    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'Segment', 'Batch_No']] = [indicator, timeline, direction,
+    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']] = [indicator, timeline, direction,
                                                                                 each_segment_list, batch_no]
     return df
 
@@ -306,7 +306,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
             df = insert_new_columns_in_data_frame(df, key, each_segment_list,batch_no)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(60,' ')}' - {each_segment_list} segment ")
+            print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(60,' ')}' - {each_segment_list} segments ")
     print(f"\n🔄 downloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
 
@@ -327,7 +327,6 @@ def purge_log_files(filetype='daily_chart_ink'):
         days_to_keep = 5
         cutoff_date = datetime.now() - timedelta(days=days_to_keep)
         new_logs = []
-        print(f"🔍 Processing log file: {log_file_path}")
         with open(log_file_path, 'r', encoding='utf-8') as file:
             for line in file:
                 try:

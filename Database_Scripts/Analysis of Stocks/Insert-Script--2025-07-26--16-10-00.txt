@@ -9,7 +9,8 @@ PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 
 begin -- add new stocks in master table 
 insert into dbo.Master_Stocks_In_Segments (Symbol,Segments,Stock_Name)
-select distinct cs.symbol,cs.Segment,cs.[stock name] from dbo.Cash_Stocks cs where NOT EXISTS (SELECT 1
+select distinct cs.symbol,cs.segments,cs.[stock_name] from dbo.Cash_Stocks cs
+where NOT EXISTS (SELECT 1
 from dbo.Master_Stocks_In_Segments ms WHERE ms.Symbol = cs.Symbol);
 end
 begin -- update the sno in master table 
@@ -25,18 +26,18 @@ declare @Batch_Num bigint;
 select @Batch_Num = MAX(Batch_No) from dbo.Cash_Stocks
 delete from dbo.Analyse_Stocks where Batch_No = @batch_num;
 insert into dbo.Analyse_Stocks (Batch_No,created_date,Stock_Name
-		,[% Chg],price,volume,[Segments - Length]
+		,Percent_Change,price,volume,Segments_Length
 		,Segments,Symbol,Industry,ISIN_Code,Series
-		,[Segments - Order],[Segments - Sum])
-select @Batch_Num,SYSDATETIME(),a.[stock name]
-		,a.[% Chg],a.price,a.volume,len(ss.Segments) as [Segments - Length]
+		,Segments_Order,[Segments - Sum])
+select @Batch_Num,SYSDATETIME(),a.[stock_name]
+		,a.Percent_Change,a.price,a.volume,len(ss.Segments) as Segments_Length
 		,ss.Segments,a.symbol,ss.Industry,ss.[ISIN Code],ss.Series
 		,ss.[sector_order],ss.[sector_sum] from (
-	select a.[stock name],a.Segment,a.Symbol
-		 ,max(a.[% Chg]) as [% Chg],max(a.price) as price,max(a.volume) as volume
+	select a.[stock_name],a.segments,a.Symbol
+		 ,max(a.Percent_Change) as Percent_Change,max(a.price) as price,max(a.volume) as volume
 	from dbo.Cash_Stocks a 
 	where batch_no = (select MAX(Batch_No) from dbo.Cash_Stocks)
-	group by a.[stock name],a.Segment,a.Symbol
+	group by a.[stock_name],a.segments,a.Symbol
 ) a
 left join dbo.Master_Stocks_In_Segments ss on ss.Symbol = a.symbol
 Order by ss.Sno;

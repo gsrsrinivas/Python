@@ -475,8 +475,8 @@ def chatink_excelfile_download():
                 df = df.iloc[:, [0, 2, 1, 3, 4, 5, 6]]
                 # print(f"{df}")
                 # Rename columns
-                df.rename(columns={'sr': 'sr#', 'name': 'stock name', 'nsecode': 'symbol', 'bsecode': 'Links',
-                                   'per_chg': '% Chg', 'close': 'price'}, inplace=True)
+                df.rename(columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol',
+                                   'per_chg': 'percent_change', 'close': 'price'}, inplace=True)
                 # insert new column timeframe
                 df.insert(7, 'TimeFrame', tf_l[i], allow_duplicates=True)
                 # print(df)

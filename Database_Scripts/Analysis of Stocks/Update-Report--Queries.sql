@@ -1534,7 +1534,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Daily > 0
 ; 
@@ -1543,7 +1543,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_4_Hourly > 0
 ; 
@@ -1552,7 +1552,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_1_Hourly > 0
 ; 
@@ -1561,7 +1561,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_15_Minutes > 0
 ; 
@@ -1570,7 +1570,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Monthly > 0
 ; 
@@ -1579,7 +1579,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Weekly > 0
 ; 
@@ -1588,7 +1588,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Daily > 0
 ; 
@@ -1597,7 +1597,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_4_Hourly > 0
 ; 
@@ -1606,7 +1606,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_1_Hourly > 0
 ; 
@@ -1615,7 +1615,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_15_Minutes > 0
 ; 
@@ -1624,7 +1624,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Quarterly > 0
 ; 
@@ -1633,7 +1633,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Monthly > 0
 ; 
@@ -1642,7 +1642,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Weekly > 0
 ; 
@@ -1651,7 +1651,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Daily > 0
 ; 
@@ -1660,7 +1660,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_4_Hourly > 0
 ; 
@@ -1669,7 +1669,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_1_Hourly > 0
 ; 
@@ -1678,7 +1678,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_15_Minutes > 0
 ; 
@@ -1687,7 +1687,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Quarterly > 0
 ; 
@@ -1696,7 +1696,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Monthly > 0
 ; 
@@ -1705,7 +1705,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Weekly > 0
 ; 
@@ -1714,7 +1714,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Daily > 0
 ; 
@@ -1723,7 +1723,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_4_Hourly > 0
 ; 
@@ -1732,7 +1732,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_1_Hourly > 0
 ; 
@@ -1741,7 +1741,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_15_Minutes'
 where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_15_Minutes > 0
 ; 
@@ -1750,7 +1750,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Single_Screen_Yearly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Yearly > 0
 ; 
@@ -1759,7 +1759,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Single_Screen_Quarterly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Quarterly > 0
 ; 
@@ -1768,7 +1768,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Single_Screen_Monthly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Monthly > 0
 ; 
@@ -1777,7 +1777,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Single_Screen_Weekly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Weekly > 0
 ; 
@@ -1786,7 +1786,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Single_Screen_Daily'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Daily > 0
 ; 
@@ -1795,7 +1795,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Single_Screen_4_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_4_Hourly > 0
 ; 
@@ -1804,7 +1804,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
           AND v.Screen_Names = 'Bearish_Single_Screen_1_Hourly'
 where a.Batch_No = @Batch_no  and Bearish_Single_Screen_1_Hourly > 0
 ; 
@@ -1813,7 +1813,7 @@ Trade_Type = isnull(Trade_Type,'')+'Bearish;',
 Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
 ,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
 ,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Screen_Name_Values v ON v.Batch_No = @Batch_Num 
+from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
          AND v.Screen_Names = 'Bearish_Single_Screen_15_Minutes'
 where a.Batch_No = @Batch_no and Bearish_Single_Screen_15_Minutes > 0
 ;
@@ -1888,7 +1888,7 @@ from dbo.Analyse_Stocks a where Batch_No = @Batch_No;
 	row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
 	from dbo.Analyse_Stocks
 )
-UPDATE a SET [Report Sort Order] = b.report_sort_order
+UPDATE a SET Report_Sort_Order = b.report_sort_order
 FROM dbo.Analyse_Stocks a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
 where a.Batch_No = @Batch_No;

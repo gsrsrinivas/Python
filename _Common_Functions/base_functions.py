@@ -270,7 +270,6 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
                        'close': 'price'}, inplace=True)
     # Extract and clean metadata # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
-    # batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
     # Insert new metadata columns
     df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']] = [indicator, timeline, direction,
                                                                                 each_segment_list, batch_no]

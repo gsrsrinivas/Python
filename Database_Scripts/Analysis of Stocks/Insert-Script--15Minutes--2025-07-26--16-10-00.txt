@@ -23,10 +23,10 @@ delete from dbo.Analyse_15Minutes_Stocks where Batch_No = @batch_num;
 insert into dbo.[Analyse_15Minutes_Stocks] (Batch_No,created_date,Stock_Name
 	,Percent_Change,price,volume,Segments_Length
 	,Segments,Symbol,Industry,ISIN_Code,Series
-	,Segments_Order,[Segments - Sum])
+	,Segments_Order,Segments_Sum)
 select @batch_num,SYSDATETIME(),a.[stock_name]
 	,a.Percent_Change,a.price,a.volume,len(ss.Segments) as Segments_Length
-	,ss.Segments,a.symbol,ss.Industry,ss.[ISIN Code],ss.Series
+	,ss.Segments,a.symbol,ss.Industry,ss.ISIN_Code,ss.Series
 	,ss.sector_order,ss.sector_sum
 from (
 	select a.[stock_name],a.segments,a.Symbol,max(a.Percent_Change) as Percent_Change,max(a.price) as price,max(a.volume) as volume

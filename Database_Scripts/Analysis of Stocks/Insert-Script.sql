@@ -11,7 +11,7 @@ end
 begin -- add and update new stocks in master table 
 print 'add and update new stocks in master table'
 insert into dbo.Master_Stocks_In_Segments (Symbol,Segments,Stock_Name)
-select distinct cs.symbol,cs.segments,cs.[stock_name] from dbo.Cash_Stocks cs
+select distinct cs.symbol,cs.segments,cs.stock_name from dbo.Cash_Stocks cs
 where NOT EXISTS (SELECT 1
 from dbo.Master_Stocks_In_Segments ms WHERE ms.Symbol = cs.Symbol)
 ;
@@ -49,8 +49,8 @@ WITH cte AS (
 ),
 source as (
 	select symbol, ind_direction
-	, 1 as [sno]
-	, MAX([stock_name]) as [stock_name]
+	, 1 as sno
+	, MAX(stock_name) as stock_name
 	, MAX(Percent_Change) as Percent_Change
 	, MAX(price) as price
 	, MAX(volume) as volume
@@ -63,7 +63,7 @@ insert into dbo.Analyse_Stocks (Symbol,Stock_Name,Percent_Change,Price,Volume,Ba
 SELECT * 
 FROM source
 PIVOT (
-    MAX([sno])
+    MAX(sno)
     FOR ind_direction IN (' + @cols + ')
 ) AS pivoted
 order by symbol;';
@@ -71,8 +71,8 @@ print 'inserting the records into the analyse stocks table'
 EXEC sp_executesql @query;
 
 print 'update the few columns in analyse stocks table'
-update a set Industry = b.Industry, ISIN_Code = b.[ISIN Code], a.Series = b.Series
-,a.Segments = b.Segments,a.Segments_Order = b.sector_order,a.[Segments - Sum] = b.sector_sum
+update a set Industry = b.Industry, ISIN_Code = b.ISIN_Code, a.Series = b.Series
+,a.Segments = b.Segments,a.Segments_Order = b.sector_order,a.Segments_Sum = b.sector_sum
 ,a.Segments_Length = len(b.Segments)
 from dbo.Analyse_Stocks a inner join dbo.Master_Stocks_In_Segments b 
 on a.Symbol = b.Symbol and a.Batch_No = @Batch_No

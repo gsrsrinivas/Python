@@ -9,8 +9,9 @@ def stock_thumb_nails_15min():
     This function retrieves stock symbols from the database, downloads their historical data,
     and creates thumbnails for each stock symbol with a 15-minute interval and various periods.
     It saves the thumbnails in a specified directory.
-    {'1d': '1y'}, {'1wk': '2y'}, {'1mo': '10y'}
     """
+    # {'1d': '1y'}, {'1wk': '2y'}, {'1mo': '10y'} # noqa
+
     setup_logger(__file__, f"15minutes_{Path(__file__).stem}.log") # "15_minutes_stock_thumb_nails.log")
     try:
         print_start_timestamp()

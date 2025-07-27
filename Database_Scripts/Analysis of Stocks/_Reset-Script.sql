@@ -3376,7 +3376,7 @@ from dbo.Analyse_Stocks a
 	row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
 	from dbo.Analyse_Stocks
 )
-UPDATE a SET [Report Sort Order] = b.report_sort_order
+UPDATE a SET Report_Sort_Order = b.report_sort_order
 FROM dbo.Analyse_Stocks a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
 ;

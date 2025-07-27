@@ -29,7 +29,7 @@ insert into dbo.Analyse_Stocks (Batch_No,created_date,Stock_Name
 		,sector_order,sector_sum)
 select (select isnull(max(batch_no)+1,1) from dbo.Analyse_Stocks),SYSDATETIME(),a.[stock_name]
 		,a.Percent_Change,a.price,a.volume,len(ss.Segments) as Segments_Length
-		,ss.Segments,a.symbol,ss.Industry,ss.[ISIN Code],ss.Series
+		,ss.Segments,a.symbol,ss.Industry,ss.ISIN_Code,ss.Series
 		,ss.sector_order,ss.sector_sum
 from (
 	select a.[stock_name],a.segments,a.Symbol,max(a.Percent_Change) as Percent_Change,max(a.price) as price,max(a.volume) as volume

@@ -25,11 +25,23 @@
           <AssociatedConnUserName />
           <FullPath>_Reset-Script.sql</FullPath>
         </FileNode>
+        <FileNode Name="Comparision.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Comparision.sql</FullPath>
+        </FileNode>
         <FileNode Name="Insert-Script.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Insert-Script.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Insert-Script_New.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Insert-Script_New.sql</FullPath>
         </FileNode>
         <FileNode Name="Insert-Script--15Minutes.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>

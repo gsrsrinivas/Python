@@ -117,7 +117,7 @@ def stock_thumb_nails(timeframe=None):
             plot_stock(thumb_dir, symbol, i, total_len, interval_value=interval, period_value=period)  # Plot stock data
             i+= 1
 
-    print(f'Total {total_len} Thumbnails processed and saved in "{thumb_dir}" directory.')
+    print(f'Total {total_len} Thumbnails processed & saved: "{thumb_dir}"')
 
 
 def stock_thumb_nails_all_times():

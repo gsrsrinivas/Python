@@ -61,7 +61,7 @@ class StreamToLogger:
 
 
 # 🔁 Setup logger with rotating file +color console + print/sys.stderr redirection
-def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024*1024, backup_count=5):
+def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024*5, backup_count=5):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
     # 🔄 Remove existing handlers to prevent duplicates
@@ -107,7 +107,7 @@ def trading_hours_check():
 def print_start_timestamp():
     """ Prints the start date and time of the script execution."""
     start_date = datetime.now()
-    print(f" 🚀 Start of script ".center(100, '='))
+    print(f" 🚀 Start of script ".center(86, '='))
     print(f"🚀 Script start timestamp".ljust(30,' ') + ":" + f"{start_date}")
 
 
@@ -138,7 +138,7 @@ def print_end_timestamp():
 
     print(f"⏰ Total time in seconds".ljust(30,' ') + ":" + f"{elapsed_seconds}")
     print(f"⏰ and formatted time is ".ljust(30,' ') + ":" + f"{elapsed_duration}\n")
-    print(f" 🏁 end of script ".center(100, '*'))
+    print(f" 🏁 end of script ".center(86, '*'))
     time.sleep(15)
 
 
@@ -305,7 +305,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
             df = download_chart_ink_technical_analysis_scanner(data_each_list)
             df = insert_new_columns_in_data_frame(df, key, each_segment_list,batch_no)
             df_all = pd.concat([df_all, df], ignore_index=True)
-            print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(60,' ')}' - {each_segment_list} segments ")
+            print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(56,' ')}' - {each_segment_list} segments ")
     print(f"\n🔄 downloading data from the website is complete.")
     insert_into_database_tables(df_all, table_names)
 

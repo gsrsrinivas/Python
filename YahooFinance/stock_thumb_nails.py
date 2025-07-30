@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 import matplotlib
 # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 matplotlib.use('Agg')  # Use a non-GUI backend
@@ -87,37 +88,44 @@ def stock_thumb_nails(timeframe=None):
     The function also handles different intervals and periods based on the current date,
     ensuring that the thumbnails are relevant to the current trading conditions.
     """
-    # Get the path to the Pictures folder
-    # pictures_path = os.path.join(os.environ["USERPROFILE"], "Pictures").replace("gsrsr", r"gsrsr\OneDrive")
-    pictures_path = os.path.dirname(os.path.dirname(project_directory_path()))
-    # Folder to save thumbnails
-    thumb_dir = pictures_path + r'\Pictures\Thumbnails'
-    # Create thumbnails directory if it doesn't exist
-    os.makedirs(thumb_dir, exist_ok=True)
+    thumb_dir = os.path.dirname(os.path.dirname(project_directory_path())) + r'\Pictures\Thumbnails' # Get the path to the Pictures folder; Folder to save thumbnails
+    os.makedirs(thumb_dir, exist_ok=True) # Create thumbnails directory if it doesn't exist
     print(f'Thumbnails will be saved in: "{thumb_dir}"')
 
-    # Connect to the database and get stock symbols
-    len_symbols, symbols = connect_to_db()
-    if timeframe is None:
-        valid_interval_period = valid_intervals_periods()  # Get valid intervals and periods
-    else:
-        valid_interval_period = timeframe  # specific timeframe for every 15-minute screening
+    len_symbols, symbols = connect_to_db() # Connect to the database and get stock symbols
+    valid_interval_period = valid_intervals_periods() if timeframe is None else timeframe # Get valid intervals and periods and specific timeframe for every 15-minute screening
 
-    # Count the number of valid intervals and periods
-    len_valid_intervals_periods = len(valid_interval_period)
+    len_valid_intervals_periods = len(valid_interval_period) # Count the number of valid intervals and periods
     print(f"count of valid intervals and periods: {len_valid_intervals_periods}")
     total_len = len_symbols * len_valid_intervals_periods
     print(f"Total thumbnails to be created: {total_len}")
+    # ------------------------------------------------------------------------------------
+    try:
+        requests.Session().get('https://google.com')
+    except Exception as e:
+        print(f"No Internet Connection: {e}")
+        sys.exit(1)
 
-    # Download historical data and create thumbnails
-    i=1
-    for symbol in symbols:
-        for interval_period_dict in valid_interval_period:
-            interval, period = next(iter(interval_period_dict.items()))
-            plot_stock(thumb_dir, symbol, i, total_len, interval_value=interval, period_value=period)  # Plot stock data
-            i+= 1
-
+    # def plot(symbol_nm, increment, total_count, interval_val, period_val):
+    #     plot_stock(thumb_dir, symbol_nm, increment, total_count, interval_value=interval_val, period_value=period_val)
+    # -------------------
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        i = 1
+        for symbol in symbols:
+            for interval_period_dict in valid_interval_period:
+                interval, period = next(iter(interval_period_dict.items()))
+                executor.submit(plot_stock, thumb_dir, symbol, i, total_len, interval, period)
+                i+=1
+    #------------------------------------------------------------------------------------
     print(f'Total {total_len} Thumbnails processed & saved: "{thumb_dir}"')
+    # # Download historical data and create thumbnails
+    # i=1
+    # for symbol in symbols:
+    #     for interval_period_dict in valid_interval_period:
+    #         interval, period = next(iter(interval_period_dict.items()))
+    #         plot_stock(thumb_dir, symbol, i, total_len, interval_value=interval, period_value=period)  # Plot stock data
+    #         i+= 1
+    # print(f'Total {total_len} Thumbnails processed & saved: "{thumb_dir}"')
 
 
 def stock_thumb_nails_all_times():

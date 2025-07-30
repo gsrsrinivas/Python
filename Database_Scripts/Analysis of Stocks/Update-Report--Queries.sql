@@ -5,11 +5,11 @@ DECLARE @StartTime DATETIME = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 -- update the report Queries output in table
 -- dbo.Analyse_Stocks,dbo.Master_Screen_Name_Values
----------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 declare @Batch_no bigint, @batch_num bigint
 set @Batch_Num = 1
 select @Batch_no = max(batch_no) from dbo.Analyse_Stocks;
----------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 end;
 begin -- drop the temp table 
 drop table if exists dbo.Analyse_Stocks_Screening
@@ -232,23 +232,25 @@ inner join dbo.Analyse_Stocks_Screening b
 on a.batch_no = b.batch_no and a.symbol = b.symbol
 end;
 begin -- update screen values 
-with SourceValues as 
-(
-SELECT Batch_No,Metric,[Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly]
-FROM (
-    SELECT Batch_No, Screen_Names, Metric, ColValue 
-    FROM Master_Screen_Name_Values
-    CROSS APPLY (
-        VALUES 
-            ('Value', CAST(Value AS VARCHAR)),
-            ('Description', Description)
-    ) AS Metrics(Metric, ColValue)
-) AS SourceTable
-PIVOT (
-    MAX(ColValue) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])
-) AS PivotTable
-where Batch_No = 1
+WITH ValueSource AS 
+(	SELECT Batch_No, Screen_Names, Value
+    FROM Master_Screen_Name_Values WHERE Batch_No = 1
 )
+,ValuePivot AS 
+(	SELECT * FROM ValueSource
+    PIVOT (SUM(Value) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])) AS vp
+) -- SELECT 'Value' AS DataType, * FROM ValuePivot;
+,DescSource AS 
+(	SELECT Batch_No, Screen_Names, Description 
+	FROM Master_Screen_Name_Values 
+	WHERE Batch_No = 1
+)
+,DescPivot AS 
+(	SELECT * FROM DescSource a 
+	PIVOT (MAX(Description) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])
+		  ) AS dp
+) -- SELECT 'Description' AS DataType, * FROM DescPivot;  
+--select a.Symbol, a.Batch_No, 
 UPDATE a SET 
     Trade_Type = ISNULL(a.Trade_Type, '') + CASE 
 		WHEN	a.Bullish_Single_Screen_Yearly           >0 OR 
@@ -398,9 +400,8 @@ UPDATE a SET
 			when a.Bearish_Triple_Screen_Strong_4_Hourly  >0 then ISNULL(vp.Bearish_Triple_Screen_Strong_4_Hourly , 0)
             ELSE 0 END, 0)
 FROM dbo.Analyse_Stocks a 
-JOIN SourceValues dp on dp.Metric = 'Description'
-JOIN SourceValues vp on vp.Metric = 'Value' AND a.Batch_No = (SELECT MAX(Batch_No) FROM Analyse_Stocks)
-where ISNULL(a.Trade_Type_Details_Sum, 0) > 0
+JOIN DescPivot dp  ON dp.Batch_No = 1 AND a.Batch_No = (select max(batch_no) from Analyse_Stocks)
+JOIN ValuePivot vp ON vp.Batch_No = 1 
 ;
 end
 begin -- update calculated fields 
@@ -462,6 +463,8 @@ PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00
 end
 
 end
+
 /*
+--------------------------------------------------------------------------------------------------------------
 select * from Analyse_Stocks_v where batch_no = (select max(batch_no) from Analyse_Stocks)
-*/
+-------------------------------------------------------------------------------------------------------------- */

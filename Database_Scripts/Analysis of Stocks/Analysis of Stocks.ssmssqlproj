@@ -125,12 +125,6 @@
           <AssociatedConnUserName />
           <FullPath>Screen-Values-v1.xlsx</FullPath>
         </FileNode>
-        <FileNode Name="stocks-price-action-v1.csv">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>stocks-price-action-v1.csv</FullPath>
-        </FileNode>
         <FileNode Name="trending sorting-v1.xls">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />

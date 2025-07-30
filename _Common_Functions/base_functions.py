@@ -1,5 +1,6 @@
 import os, sys, time, psutil, pyodbc, requests, pandas as pd, ctypes, logging
 from logging.handlers import RotatingFileHandler
+from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup as Bs
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -97,10 +98,12 @@ def trading_hours_check():
     end_time = datetime.strptime("15:30", "%H:%M").time()
 
     if start_time <= current_time <= end_time:
-        print(f"⏱️ Current Time: {current_time} is within trading hours (07:00 to 15:30). Continuing the program.")
+        print(f"⏱️ Trading hours are (07:00 to 15:30) and current time is {current_time} ")
+        print(f"Which is within trading hours. So continuing...")
         return "continue"
     else:
-        print(f"⏱️ Current Time: {current_time} is outside trading hours (07:00 to 15:30). Exiting the program.")
+        print(f"⏱️ Trading hours are (07:00 to 15:30) and current time is {current_time} ")
+        print(f"Which is outside trading hours. So exiting...")
         return "exit"
 
 
@@ -206,7 +209,35 @@ def insert_into_database_tables(df_all, table_names):
     print("✅ Completed all files execution and database insertions.\n")
 
 
-def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 5):
+def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
+    """ reorders, renames, and appends additional metadata columns to the stock DataFrame.
+    Args:
+        df (pd.DataFrame): The DataFrame containing stock data
+        tf_l_i (str): A string containing indicator, timeline, and direction information
+        each_segment_list (str): The segments of the stock market (e.g., 'Cash')
+    Returns:
+        pd.DataFrame: The modified DataFrame with new columns and reordered data.
+        :param df:
+        :param tf_l_i:
+        :param each_segment_list:
+        :param batch_no:
+    """
+    if df.empty:
+        return df
+    # Reorder columns by name to avoid hardcoded indexes
+    expected_order = ['sr', 'nsecode', 'name', 'bsecode', 'per_chg', 'close', 'volume']
+    df = df[expected_order]
+    # Rename columns
+    df.rename(columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change', 'close': 'price'}, inplace=True)
+    # Extract and clean metadata # insert new columns
+    indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
+    # Insert new metadata columns
+    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']] = [indicator, timeline, direction,
+                                                                                 each_segment_list, batch_no]
+    return df
+
+
+def download_chart_ink_technical_analysis_scanner_bkp(data_each_list, each_segment_list, batch_no, max_retries = 5):
     """
     Fetches technical analysis data from Chart ink based on provided scan parameters.
     Args:
@@ -238,45 +269,108 @@ def download_chart_ink_technical_analysis_scanner(data_each_list, max_retries = 
                 response.raise_for_status()
                 result = response.json()
                 if "scan_error" in result: # Step 3: Check for errors
-                    print(f"❌ Scan error:{result["scan_error"]} for rule: {key} with data: {data}")
-                return pd.DataFrame(result.get('data', [])) # Step 4: Convert to DataFrame
+                    print(f"❌ Scan error:{result['scan_error']} for rule: {key} with data: {data}")
+                df = pd.DataFrame(result.get('data', [])) # Step 4: Convert to DataFrame
+                df = insert_new_columns_in_data_frame(df, key, each_segment_list, batch_no)
+                return df
             except requests.RequestException as e:
                 print(f"❌ {data_each_list} Request failed on attempt {attempt + 1}: {e}")
                 time.sleep(2 ** attempt)  # Exponential backoff
-                return "❌ Maximum retry limit reached. Request failed."
         return None
 
 
-def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
-    """ reorders, renames, and appends additional metadata columns to the stock DataFrame.
-    Args:
-        df (pd.DataFrame): The DataFrame containing stock data
-        tf_l_i (str): A string containing indicator, timeline, and direction information
-        each_segment_list (str): The segments of the stock market (e.g., 'Cash')
-    Returns:
-        pd.DataFrame: The modified DataFrame with new columns and reordered data.
-        :param df:
-        :param tf_l_i:
-        :param each_segment_list:
-        :param batch_no:
+def download_chart_ink_technical_analysis_scanner(key, data, segment_val, batch_no, max_retries = 5):
     """
-    if df.empty:
-        return df
-    # Reorder columns by name to avoid hardcoded indexes
-    expected_order = ['sr', 'nsecode', 'name', 'bsecode', 'per_chg', 'close', 'volume']
-    df = df[expected_order]
-    # Rename columns
-    df.rename(columns={'sr': 'sno', 'name': 'stock_name', 'nsecode': 'symbol', 'per_chg': 'percent_change',
-                       'close': 'price'}, inplace=True)
-    # Extract and clean metadata # insert new columns
-    indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
-    # Insert new metadata columns
-    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']] = [indicator, timeline, direction,
-                                                                                each_segment_list, batch_no]
-    return df
+    Fetches technical analysis data from Chart ink based on provided scan parameters.
+    Args:
+        data_each_list (dict): A dictionary containing scan parameters for Chart ink.
+    Returns:
+        pd.DataFrame: A DataFrame containing the scan results.
+    Raises:
+        KeyError: If the expected keys are not found in the response.
+    Raises:
+        requests.RequestException: If there is an issue with the HTTP request.
+        :param key:
+        :param data:
+        :param segment_val:
+        :param batch_no:
+        :param data_each_list:
+        :param max_retries:
+    """
+    # key, data = next(iter(data_each_list.items()))
+    with requests.Session() as session:
+        response = session.get('https://chartink.com/screener/watch-list-stocks-5') # Step 1: Fetch CSRF token
+        soup = Bs(response.content, 'lxml')
+        csrf_token = soup.select_one('[name=csrf-token]')['content']
+        session.headers['X-CSRF-TOKEN'] = csrf_token
+        # session.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+        for attempt in range(max_retries): # Retry logic loop
+            try: # Step 2: Submit scan data
+                response = session.post('https://chartink.com/screener/process', data=data)
+                if response.status_code == 429:
+                    retry_after = int(response.headers.get("Retry-After", 2 ** attempt))
+                    print(f"❌ Rate limited on attempt {attempt + 1}. Retrying after {retry_after} seconds...")
+                    time.sleep(retry_after)
+                    continue
+                response.raise_for_status()
+                result = response.json()
+                if "scan_error" in result: # Step 3: Check for errors
+                    print(f"❌ Scan error:{result['scan_error']} for rule: {key} with data: {data}")
+                df = pd.DataFrame(result.get('data', [])) # Step 4: Convert to DataFrame
+                df = insert_new_columns_in_data_frame(df, key, segment_val, batch_no)
+                print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(56,' ')}' - {segment_val} segments ")
+                return df
+            except requests.RequestException as e:
+                print(f"❌ {key}-{data} Request failed on attempt {attempt + 1}: {e}")
+                time.sleep(2 ** attempt)  # Exponential backoff
+        return None
 
 
 def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
+    """
+    Downloads technical analysis data from Chart ink for multiple segments and inserts it into a database.
+    :param data_list: It contains the scan parameters for Chart ink.
+    :param table_names: It contains the names of the database tables.
+    :return:
+    1. Download technical analysis data from Chart ink for multiple segments.
+    2. Insert the downloaded data into a database table.
+    3. Prints progress messages to the console.
+    :raises KeyError: If the expected keys are not found in the response.
+    :raises requests.RequestException: If there is an issue with the HTTP request.
+    """
+    segments = {'Cash': 'cash',
+                # 'Nifty 500':'57960','BankNifty':'136699','ETFs':'166311','Futures':'33489','Gold ETFs':'167068','Indices':'45603','Mid-Cap 50':'136492','Nifty 100':'33619','Nifty 200':'46553','Nifty 50':'33492','Nifty 500 Multi Cap 50:25:25':'1090574','Nifty and BankNifty':'109630','Nifty Large Mid-Cap 250':'1090573','Nifty Micro Cap 250':'1090582','Nifty Mid-Cap 100':'1090585','Nifty Mid-Cap 150':'1090588','Nifty Mid-Cap 50':'1090591','Nifty Mid-Cap Select':'1090579','Nifty Mid-Small Cap 400':'1090575','Nifty Next 50':'1116352','Nifty Small Cap 100':'1090587','Nifty Small Cap 250':'1090572','Nifty Small Cap 50':'1090568','Silver ETFs':'1195362',
+                }
+    df_all = pd.DataFrame()
+    batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        futures = []
+        for data_each_list in data_list:
+    # ------start - iterate through the segments for one single url--------------------
+            old_str = 'segments_filter'
+            for each_segment_list in segments:
+                new_str = segments[each_segment_list]
+                data_each_list = {key: {k: val.replace(old_str, new_str)} for key, value in data_each_list.items() for k, val in value.items()}
+                old_str = new_str
+                key, data = next(iter(data_each_list.items())) # Gets the first key and iterate through the segments for one single url
+    # ------ended - iterate through the segments for one single url----------------------
+                # Submit the download task to the executor
+                futures.append(executor.submit(download_chart_ink_technical_analysis_scanner,key, data, each_segment_list, batch_no))
+                # print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(56,' ')}' - {each_segment_list} segments - out the function")
+        print(f"🔄 started downloading data from the website for {len(futures)} segments.")
+        # Collect results as they complete
+        for future in futures:
+            df = future.result()
+            # key = next(iter(future.args[0])) if hasattr(future, 'args') else ''
+            # each_segment_list = each_segment_list
+            # batch_no = batch_no if 'batch_no' in locals() else ''
+            # df = insert_new_columns_in_data_frame(df, key, each_segment_list, batch_no)
+            df_all = pd.concat([df_all, df], ignore_index=True)
+    print(f"\n🔄 downloading data from the website is complete.")
+    insert_into_database_tables(df_all, table_names)
+
+
+def chart_ink_excel_file_download_and_insert_into_db_bkp(data_list, table_names):
     """
     Downloads technical analysis data from Chart ink for multiple segments and inserts it into a database.
     :param data_list: It contains the scan parameters for Chart ink.
@@ -329,14 +423,17 @@ def purge_log_files(filetype='daily_chart_ink'):
         with open(log_file_path, 'r', encoding='utf-8') as file:
             for line in file:
                 try:
+                    if line.startswith("❌ Malformed line in log file"):
+                        continue  # Skip lines that are error messages
                     # Extract timestamp from the beginning of the line: '2025-07-17 16:48:59,056'
                     timestamp_str = line.split(" - ")[0]  # This grabs just the timestamp portion
                     log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
                     if log_date >= cutoff_date:
                         new_logs.append(line)
                 except Exception as e:
-                    print(f"❌ Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
                     # Optionally log or skip malformed lines
+                    # print(f"❌ Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
+                    # Only log the first occurrence, or skip logging error lines entirely
                     pass
         with open(log_file_path, 'w', encoding='utf-8') as file:
             file.writelines(new_logs)
@@ -356,11 +453,9 @@ def purge_tables(table_part_name = ''):
 
     sql_query = f"""
     DELETE FROM dbo.Cash_{table_part_name}Stocks 
-    WHERE batch_no NOT IN (SELECT distinct TOP 15 batch_no FROM dbo.Cash_{table_part_name}Stocks ORDER BY batch_no DESC)
-    ;
+    WHERE batch_no NOT IN (SELECT distinct TOP 5 batch_no FROM dbo.Cash_{table_part_name}Stocks ORDER BY batch_no DESC);
     DELETE FROM dbo.Analyse_{table_part_name}Stocks 
-    WHERE batch_no NOT IN (SELECT distinct TOP 15 batch_no FROM dbo.Analyse_{table_part_name}Stocks ORDER BY batch_no DESC)
-    ;
+    WHERE batch_no NOT IN (SELECT distinct TOP 25 batch_no FROM dbo.Analyse_{table_part_name}Stocks ORDER BY batch_no DESC);
     """
     cursor = conn.cursor()
     try:

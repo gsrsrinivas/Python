@@ -10,7 +10,7 @@ def stocks_daily_15min():
     1. Downloads chart ink data every 15 minutes and insert it into the database.
     2. Create stock thumbnails for all stock names from the database into a folder.
     """
-    setup_logger(__file__, f"{Path(__file__).stem}.log") # "15_minutes_stocks_daily.log")
+    setup_logger(__file__, f"15Minutes_{Path(__file__).stem}.log") # "15_minutes_stocks_daily.log")
     try:
         print_start_timestamp()
         prevent_sleep()

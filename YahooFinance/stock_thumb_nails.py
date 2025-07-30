@@ -109,7 +109,7 @@ def stock_thumb_nails(timeframe=None):
     # def plot(symbol_nm, increment, total_count, interval_val, period_val):
     #     plot_stock(thumb_dir, symbol_nm, increment, total_count, interval_value=interval_val, period_value=period_val)
     # -------------------
-    with ThreadPoolExecutor(max_workers=50) as executor:
+    with ThreadPoolExecutor(max_workers=12) as executor:
         i = 1
         for symbol in symbols:
             for interval_period_dict in valid_interval_period:

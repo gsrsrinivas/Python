@@ -233,172 +233,168 @@ on a.batch_no = b.batch_no and a.symbol = b.symbol
 end;
 begin -- update screen values 
 WITH ValueSource AS 
-(	SELECT Batch_No, Screen_Names, Value
+(    SELECT Batch_No, Screen_Names, Value
     FROM Master_Screen_Name_Values WHERE Batch_No = 1
 )
 ,ValuePivot AS 
-(	SELECT * FROM ValueSource
+(    SELECT * FROM ValueSource
     PIVOT (SUM(Value) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])) AS vp
 ) -- SELECT 'Value' AS DataType, * FROM ValuePivot;
 ,DescSource AS 
-(	SELECT Batch_No, Screen_Names, Description 
-	FROM Master_Screen_Name_Values 
-	WHERE Batch_No = 1
+(    SELECT Batch_No, Screen_Names, Description 
+    FROM Master_Screen_Name_Values 
+    WHERE Batch_No = 1
 )
 ,DescPivot AS 
-(	SELECT * FROM DescSource a 
-	PIVOT (MAX(Description) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])
-		  ) AS dp
+(    SELECT * FROM DescSource a 
+    PIVOT (MAX(Description) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])
+          ) AS dp
 ) -- SELECT 'Description' AS DataType, * FROM DescPivot;  
 --select a.Symbol, a.Batch_No, 
 UPDATE a SET 
-    Trade_Type = ISNULL(a.Trade_Type, '') + CASE 
-		WHEN	a.Bullish_Single_Screen_Yearly           >0 OR 
-				a.Bullish_Single_Screen_Quarterly        >0 OR 
-				a.Bullish_Single_Screen_Monthly          >0 OR 
-				a.Bullish_Single_Screen_Weekly           >0 OR 
-				a.Bullish_Single_Screen_Daily            >0 OR 
-				a.Bullish_Single_Screen_4_Hourly         >0 OR 
-				a.Bullish_Single_Screen_1_Hourly         >0 OR 
-				a.Bullish_Single_Screen_15_Minutes       >0 OR 
-				a.Bullish_Double_Screen_Strong_Quarterly >0 OR 
-				a.Bullish_Double_Screen_Strong_Monthly   >0 OR 
-				a.Bullish_Double_Screen_Strong_Weekly    >0 OR 
-				a.Bullish_Double_Screen_Strong_Daily     >0 OR 
-				a.Bullish_Double_Screen_Strong_4_Hourly  >0 OR 
-				a.Bullish_Double_Screen_Strong_1_Hourly  >0 OR 
-				a.Bullish_Triple_Screen_Strong_Weekly    >0 OR 
-				a.Bullish_Triple_Screen_Strong_Daily     >0 OR 
-				a.Bullish_Triple_Screen_Strong_4_Hourly  >0 then 'Bullish;' 
-		WHEN	a.Bearish_Single_Screen_Yearly           >0 OR 
-				a.Bearish_Single_Screen_Quarterly        >0 OR 
-				a.Bearish_Single_Screen_Monthly          >0 OR 
-				a.Bearish_Single_Screen_Weekly           >0 OR 
-				a.Bearish_Single_Screen_Daily            >0 OR 
-				a.Bearish_Single_Screen_4_Hourly         >0 OR 
-				a.Bearish_Single_Screen_1_Hourly         >0 OR 
-				a.Bearish_Single_Screen_15_Minutes       >0 OR 
-				a.Bearish_Double_Screen_Strong_Quarterly >0 OR 
-				a.Bearish_Double_Screen_Strong_Monthly   >0 OR 
-				a.Bearish_Double_Screen_Strong_Weekly    >0 OR 
-				a.Bearish_Double_Screen_Strong_Daily     >0 OR 
-				a.Bearish_Double_Screen_Strong_4_Hourly  >0 OR 
-				a.Bearish_Double_Screen_Strong_1_Hourly  >0 OR 
-				a.Bearish_Triple_Screen_Strong_Weekly    >0 OR 
-				a.Bearish_Triple_Screen_Strong_Daily     >0 OR 
-				a.Bearish_Triple_Screen_Strong_4_Hourly  >0 then 'Bullish;'
-        ELSE ''
-	END,
-    Trade_Type_Details = ISNULL(a.Trade_Type_Details, '') + COALESCE(CASE
-		when a.Bullish_Single_Screen_Yearly           >0 then dp.Bullish_Single_Screen_Yearly
-		when a.Bullish_Single_Screen_Quarterly        >0 then dp.Bullish_Single_Screen_Quarterly
-		when a.Bullish_Single_Screen_Monthly          >0 then dp.Bullish_Single_Screen_Monthly
-		when a.Bullish_Single_Screen_Weekly           >0 then dp.Bullish_Single_Screen_Weekly
-		when a.Bullish_Single_Screen_Daily            >0 then dp.Bullish_Single_Screen_Daily
-		when a.Bullish_Single_Screen_4_Hourly         >0 then dp.Bullish_Single_Screen_4_Hourly
-		when a.Bullish_Single_Screen_1_Hourly         >0 then dp.Bullish_Single_Screen_1_Hourly
-		when a.Bullish_Single_Screen_15_Minutes       >0 then dp.Bullish_Single_Screen_15_Minutes
-		when a.Bullish_Double_Screen_Strong_Quarterly >0 then dp.Bullish_Double_Screen_Strong_Quarterly
-		when a.Bullish_Double_Screen_Strong_Monthly   >0 then dp.Bullish_Double_Screen_Strong_Monthly
-		when a.Bullish_Double_Screen_Strong_Weekly    >0 then dp.Bullish_Double_Screen_Strong_Weekly
-		when a.Bullish_Double_Screen_Strong_Daily     >0 then dp.Bullish_Double_Screen_Strong_Daily
-		when a.Bullish_Double_Screen_Strong_4_Hourly  >0 then dp.Bullish_Double_Screen_Strong_4_Hourly
-		when a.Bullish_Double_Screen_Strong_1_Hourly  >0 then dp.Bullish_Double_Screen_Strong_1_Hourly
-		when a.Bullish_Triple_Screen_Strong_Weekly    >0 then dp.Bullish_Triple_Screen_Strong_Weekly
-		when a.Bullish_Triple_Screen_Strong_Daily     >0 then dp.Bullish_Triple_Screen_Strong_Daily
-		when a.Bullish_Triple_Screen_Strong_4_Hourly  >0 then dp.Bullish_Triple_Screen_Strong_4_Hourly
-		when a.Bearish_Single_Screen_Yearly           >0 then dp.Bearish_Single_Screen_Yearly
-		when a.Bearish_Single_Screen_Quarterly        >0 then dp.Bearish_Single_Screen_Quarterly
-		when a.Bearish_Single_Screen_Monthly          >0 then dp.Bearish_Single_Screen_Monthly
-		when a.Bearish_Single_Screen_Weekly           >0 then dp.Bearish_Single_Screen_Weekly
-		when a.Bearish_Single_Screen_Daily            >0 then dp.Bearish_Single_Screen_Daily
-		when a.Bearish_Single_Screen_4_Hourly         >0 then dp.Bearish_Single_Screen_4_Hourly
-		when a.Bearish_Single_Screen_1_Hourly         >0 then dp.Bearish_Single_Screen_1_Hourly
-		when a.Bearish_Single_Screen_15_Minutes       >0 then dp.Bearish_Single_Screen_15_Minutes
-		when a.Bearish_Double_Screen_Strong_Quarterly >0 then dp.Bearish_Double_Screen_Strong_Quarterly
-		when a.Bearish_Double_Screen_Strong_Monthly   >0 then dp.Bearish_Double_Screen_Strong_Monthly
-		when a.Bearish_Double_Screen_Strong_Weekly    >0 then dp.Bearish_Double_Screen_Strong_Weekly
-		when a.Bearish_Double_Screen_Strong_Daily     >0 then dp.Bearish_Double_Screen_Strong_Daily
-		when a.Bearish_Double_Screen_Strong_4_Hourly  >0 then dp.Bearish_Double_Screen_Strong_4_Hourly
-		when a.Bearish_Double_Screen_Strong_1_Hourly  >0 then dp.Bearish_Double_Screen_Strong_1_Hourly
-		when a.Bearish_Triple_Screen_Strong_Weekly    >0 then dp.Bearish_Triple_Screen_Strong_Weekly
-		when a.Bearish_Triple_Screen_Strong_Daily     >0 then dp.Bearish_Triple_Screen_Strong_Daily
-		when a.Bearish_Triple_Screen_Strong_4_Hourly  >0 then dp.Bearish_Triple_Screen_Strong_4_Hourly
-        ELSE '' END, ''),
-    Trade_Type_Details_Sum = ISNULL(a.Trade_Type_Details_Sum, 0) + COALESCE(CASE
-			when a.Bullish_Single_Screen_Yearly           >0 then vp.Bullish_Single_Screen_Yearly
-			when a.Bullish_Single_Screen_Quarterly        >0 then vp.Bullish_Single_Screen_Quarterly
-			when a.Bullish_Single_Screen_Monthly          >0 then vp.Bullish_Single_Screen_Monthly
-			when a.Bullish_Single_Screen_Weekly           >0 then vp.Bullish_Single_Screen_Weekly
-			when a.Bullish_Single_Screen_Daily            >0 then vp.Bullish_Single_Screen_Daily
-			when a.Bullish_Single_Screen_4_Hourly         >0 then vp.Bullish_Single_Screen_4_Hourly
-			when a.Bullish_Single_Screen_1_Hourly         >0 then vp.Bullish_Single_Screen_1_Hourly
-			when a.Bullish_Single_Screen_15_Minutes       >0 then vp.Bullish_Single_Screen_15_Minutes
-			when a.Bullish_Double_Screen_Strong_Quarterly >0 then vp.Bullish_Double_Screen_Strong_Quarterly
-			when a.Bullish_Double_Screen_Strong_Monthly   >0 then vp.Bullish_Double_Screen_Strong_Monthly
-			when a.Bullish_Double_Screen_Strong_Weekly    >0 then vp.Bullish_Double_Screen_Strong_Weekly
-			when a.Bullish_Double_Screen_Strong_Daily     >0 then vp.Bullish_Double_Screen_Strong_Daily
-			when a.Bullish_Double_Screen_Strong_4_Hourly  >0 then vp.Bullish_Double_Screen_Strong_4_Hourly
-			when a.Bullish_Double_Screen_Strong_1_Hourly  >0 then vp.Bullish_Double_Screen_Strong_1_Hourly
-			when a.Bullish_Triple_Screen_Strong_Weekly    >0 then vp.Bullish_Triple_Screen_Strong_Weekly
-			when a.Bullish_Triple_Screen_Strong_Daily     >0 then vp.Bullish_Triple_Screen_Strong_Daily
-			when a.Bullish_Triple_Screen_Strong_4_Hourly  >0 then vp.Bullish_Triple_Screen_Strong_4_Hourly
-			when a.Bearish_Single_Screen_Yearly           >0 then vp.Bearish_Single_Screen_Yearly
-			when a.Bearish_Single_Screen_Quarterly        >0 then vp.Bearish_Single_Screen_Quarterly
-			when a.Bearish_Single_Screen_Monthly          >0 then vp.Bearish_Single_Screen_Monthly
-			when a.Bearish_Single_Screen_Weekly           >0 then vp.Bearish_Single_Screen_Weekly
-			when a.Bearish_Single_Screen_Daily            >0 then vp.Bearish_Single_Screen_Daily
-			when a.Bearish_Single_Screen_4_Hourly         >0 then vp.Bearish_Single_Screen_4_Hourly
-			when a.Bearish_Single_Screen_1_Hourly         >0 then vp.Bearish_Single_Screen_1_Hourly
-			when a.Bearish_Single_Screen_15_Minutes       >0 then vp.Bearish_Single_Screen_15_Minutes
-			when a.Bearish_Double_Screen_Strong_Quarterly >0 then vp.Bearish_Double_Screen_Strong_Quarterly
-			when a.Bearish_Double_Screen_Strong_Monthly   >0 then vp.Bearish_Double_Screen_Strong_Monthly
-			when a.Bearish_Double_Screen_Strong_Weekly    >0 then vp.Bearish_Double_Screen_Strong_Weekly
-			when a.Bearish_Double_Screen_Strong_Daily     >0 then vp.Bearish_Double_Screen_Strong_Daily
-			when a.Bearish_Double_Screen_Strong_4_Hourly  >0 then vp.Bearish_Double_Screen_Strong_4_Hourly
-			when a.Bearish_Double_Screen_Strong_1_Hourly  >0 then vp.Bearish_Double_Screen_Strong_1_Hourly
-			when a.Bearish_Triple_Screen_Strong_Weekly    >0 then vp.Bearish_Triple_Screen_Strong_Weekly
-			when a.Bearish_Triple_Screen_Strong_Daily     >0 then vp.Bearish_Triple_Screen_Strong_Daily
-			when a.Bearish_Triple_Screen_Strong_4_Hourly  >0 then vp.Bearish_Triple_Screen_Strong_4_Hourly
-            ELSE 0 END, 0),
-    Trade_Type_Bullish_Sum = ISNULL(a.Trade_Type_Bullish_Sum, 0) + COALESCE(CASE
-			when a.Bullish_Single_Screen_Yearly           >0 then ISNULL(vp.Bullish_Single_Screen_Yearly		  , 0)
-			when a.Bullish_Single_Screen_Quarterly        >0 then ISNULL(vp.Bullish_Single_Screen_Quarterly		  , 0)
-			when a.Bullish_Single_Screen_Monthly          >0 then ISNULL(vp.Bullish_Single_Screen_Monthly		  , 0)
-			when a.Bullish_Single_Screen_Weekly           >0 then ISNULL(vp.Bullish_Single_Screen_Weekly		  , 0)
-			when a.Bullish_Single_Screen_Daily            >0 then ISNULL(vp.Bullish_Single_Screen_Daily			  , 0)
-			when a.Bullish_Single_Screen_4_Hourly         >0 then ISNULL(vp.Bullish_Single_Screen_4_Hourly		  , 0)
-			when a.Bullish_Single_Screen_1_Hourly         >0 then ISNULL(vp.Bullish_Single_Screen_1_Hourly		  , 0)
-			when a.Bullish_Single_Screen_15_Minutes       >0 then ISNULL(vp.Bullish_Single_Screen_15_Minutes	  , 0)
-			when a.Bullish_Double_Screen_Strong_Quarterly >0 then ISNULL(vp.Bullish_Double_Screen_Strong_Quarterly, 0)
-			when a.Bullish_Double_Screen_Strong_Monthly   >0 then ISNULL(vp.Bullish_Double_Screen_Strong_Monthly  , 0)
-			when a.Bullish_Double_Screen_Strong_Weekly    >0 then ISNULL(vp.Bullish_Double_Screen_Strong_Weekly	  , 0)
-			when a.Bullish_Double_Screen_Strong_Daily     >0 then ISNULL(vp.Bullish_Double_Screen_Strong_Daily	  , 0)
-			when a.Bullish_Double_Screen_Strong_4_Hourly  >0 then ISNULL(vp.Bullish_Double_Screen_Strong_4_Hourly , 0)
-			when a.Bullish_Double_Screen_Strong_1_Hourly  >0 then ISNULL(vp.Bullish_Double_Screen_Strong_1_Hourly , 0)
-			when a.Bullish_Triple_Screen_Strong_Weekly    >0 then ISNULL(vp.Bullish_Triple_Screen_Strong_Weekly	  , 0)
-			when a.Bullish_Triple_Screen_Strong_Daily     >0 then ISNULL(vp.Bullish_Triple_Screen_Strong_Daily	  , 0)
-			when a.Bullish_Triple_Screen_Strong_4_Hourly  >0 then ISNULL(vp.Bullish_Triple_Screen_Strong_4_Hourly , 0)
-            ELSE 0 END, 0),
-    Trade_Type_Bearish_Sum = ISNULL(a.Trade_Type_Bearish_Sum, 0) + COALESCE(CASE
-			when a.Bearish_Single_Screen_Yearly           >0 then ISNULL(vp.Bearish_Single_Screen_Yearly		  , 0)
-			when a.Bearish_Single_Screen_Quarterly        >0 then ISNULL(vp.Bearish_Single_Screen_Quarterly		  , 0)
-			when a.Bearish_Single_Screen_Monthly          >0 then ISNULL(vp.Bearish_Single_Screen_Monthly		  , 0)
-			when a.Bearish_Single_Screen_Weekly           >0 then ISNULL(vp.Bearish_Single_Screen_Weekly		  , 0)
-			when a.Bearish_Single_Screen_Daily            >0 then ISNULL(vp.Bearish_Single_Screen_Daily			  , 0)
-			when a.Bearish_Single_Screen_4_Hourly         >0 then ISNULL(vp.Bearish_Single_Screen_4_Hourly		  , 0)
-			when a.Bearish_Single_Screen_1_Hourly         >0 then ISNULL(vp.Bearish_Single_Screen_1_Hourly		  , 0)
-			when a.Bearish_Single_Screen_15_Minutes       >0 then ISNULL(vp.Bearish_Single_Screen_15_Minutes	  , 0)
-			when a.Bearish_Double_Screen_Strong_Quarterly >0 then ISNULL(vp.Bearish_Double_Screen_Strong_Quarterly, 0)
-			when a.Bearish_Double_Screen_Strong_Monthly   >0 then ISNULL(vp.Bearish_Double_Screen_Strong_Monthly  , 0)
-			when a.Bearish_Double_Screen_Strong_Weekly    >0 then ISNULL(vp.Bearish_Double_Screen_Strong_Weekly	  , 0)
-			when a.Bearish_Double_Screen_Strong_Daily     >0 then ISNULL(vp.Bearish_Double_Screen_Strong_Daily	  , 0)
-			when a.Bearish_Double_Screen_Strong_4_Hourly  >0 then ISNULL(vp.Bearish_Double_Screen_Strong_4_Hourly , 0)
-			when a.Bearish_Double_Screen_Strong_1_Hourly  >0 then ISNULL(vp.Bearish_Double_Screen_Strong_1_Hourly , 0)
-			when a.Bearish_Triple_Screen_Strong_Weekly    >0 then ISNULL(vp.Bearish_Triple_Screen_Strong_Weekly	  , 0)
-			when a.Bearish_Triple_Screen_Strong_Daily     >0 then ISNULL(vp.Bearish_Triple_Screen_Strong_Daily	  , 0)
-			when a.Bearish_Triple_Screen_Strong_4_Hourly  >0 then ISNULL(vp.Bearish_Triple_Screen_Strong_4_Hourly , 0)
-            ELSE 0 END, 0)
+    Trade_Type = ISNULL(a.Trade_Type, '') + 
+            -- Bullish 
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Daily            > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then 'Bullish;' else '' end) +
+            -- Bearish 
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Daily            > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then 'Bearish;' else '' end) , 
+    Trade_Type_Details = ISNULL(a.Trade_Type_Details, '') +  
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then dp.Bullish_Single_Screen_Yearly            + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then dp.Bullish_Single_Screen_Quarterly         + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then dp.Bullish_Single_Screen_Monthly           + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then dp.Bullish_Single_Screen_Weekly            + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Daily            > 0 then dp.Bullish_Single_Screen_Daily             + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then dp.Bullish_Single_Screen_4_Hourly          + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then dp.Bullish_Single_Screen_1_Hourly          + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then dp.Bullish_Single_Screen_15_Minutes        + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then dp.Bullish_Double_Screen_Strong_Quarterly  + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then dp.Bullish_Double_Screen_Strong_Monthly    + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then dp.Bullish_Double_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then dp.Bullish_Double_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then dp.Bullish_Double_Screen_Strong_4_Hourly   + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then dp.Bullish_Double_Screen_Strong_1_Hourly   + ';' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then dp.Bullish_Triple_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then dp.Bullish_Triple_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then dp.Bullish_Triple_Screen_Strong_4_Hourly   + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then dp.Bearish_Single_Screen_Yearly            + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then dp.Bearish_Single_Screen_Quarterly         + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then dp.Bearish_Single_Screen_Monthly           + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then dp.Bearish_Single_Screen_Weekly            + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Daily            > 0 then dp.Bearish_Single_Screen_Daily             + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then dp.Bearish_Single_Screen_4_Hourly          + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then dp.Bearish_Single_Screen_1_Hourly          + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then dp.Bearish_Single_Screen_15_Minutes        + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then dp.Bearish_Double_Screen_Strong_Quarterly  + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then dp.Bearish_Double_Screen_Strong_Monthly    + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then dp.Bearish_Double_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then dp.Bearish_Double_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then dp.Bearish_Double_Screen_Strong_4_Hourly   + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then dp.Bearish_Double_Screen_Strong_1_Hourly   + ';' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then dp.Bearish_Triple_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then dp.Bearish_Triple_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then dp.Bearish_Triple_Screen_Strong_4_Hourly   + ';' else '' end) , 
+    Trade_Type_Details_Sum = ISNULL(a.Trade_Type_Details_Sum, 0) + 
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then vp.Bullish_Single_Screen_Yearly           else 0 end) + 
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then vp.Bullish_Single_Screen_Quarterly        else 0 end) + 
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then vp.Bullish_Single_Screen_Monthly          else 0 end) + 
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then vp.Bullish_Single_Screen_Weekly           else 0 end) + 
+            (case when a.Bullish_Single_Screen_Daily            > 0 then vp.Bullish_Single_Screen_Daily            else 0 end) + 
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then vp.Bullish_Single_Screen_4_Hourly         else 0 end) + 
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then vp.Bullish_Single_Screen_1_Hourly         else 0 end) + 
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then vp.Bullish_Single_Screen_15_Minutes       else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then vp.Bullish_Double_Screen_Strong_Quarterly else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then vp.Bullish_Double_Screen_Strong_Monthly   else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then vp.Bullish_Double_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then vp.Bullish_Double_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_4_Hourly  else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_1_Hourly  else 0 end) + 
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then vp.Bullish_Triple_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then vp.Bullish_Triple_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Triple_Screen_Strong_4_Hourly  else 0 end) + 
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then vp.Bearish_Single_Screen_Yearly           else 0 end) + 
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then vp.Bearish_Single_Screen_Quarterly        else 0 end) + 
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then vp.Bearish_Single_Screen_Monthly          else 0 end) + 
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then vp.Bearish_Single_Screen_Weekly           else 0 end) + 
+            (case when a.Bearish_Single_Screen_Daily            > 0 then vp.Bearish_Single_Screen_Daily            else 0 end) + 
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then vp.Bearish_Single_Screen_4_Hourly         else 0 end) + 
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then vp.Bearish_Single_Screen_1_Hourly         else 0 end) + 
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then vp.Bearish_Single_Screen_15_Minutes       else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then vp.Bearish_Double_Screen_Strong_Quarterly else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then vp.Bearish_Double_Screen_Strong_Monthly   else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then vp.Bearish_Double_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then vp.Bearish_Double_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_4_Hourly  else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_1_Hourly  else 0 end) + 
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then vp.Bearish_Triple_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then vp.Bearish_Triple_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Triple_Screen_Strong_4_Hourly  else 0 end) ,
+    Trade_Type_Bullish_Sum = ISNULL(a.Trade_Type_Bullish_Sum, 0) + 
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then vp.Bullish_Single_Screen_Yearly           else 0 end) +
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then vp.Bullish_Single_Screen_Quarterly        else 0 end) +
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then vp.Bullish_Single_Screen_Monthly          else 0 end) +
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then vp.Bullish_Single_Screen_Weekly           else 0 end) +
+            (case when a.Bullish_Single_Screen_Daily            > 0 then vp.Bullish_Single_Screen_Daily            else 0 end) +
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then vp.Bullish_Single_Screen_4_Hourly         else 0 end) +
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then vp.Bullish_Single_Screen_1_Hourly         else 0 end) +
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then vp.Bullish_Single_Screen_15_Minutes       else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then vp.Bullish_Double_Screen_Strong_Quarterly else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then vp.Bullish_Double_Screen_Strong_Monthly   else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then vp.Bullish_Double_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then vp.Bullish_Double_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_4_Hourly  else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_1_Hourly  else 0 end) +
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then vp.Bullish_Triple_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then vp.Bullish_Triple_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Triple_Screen_Strong_4_Hourly  else 0 end) ,
+    Trade_Type_Bearish_Sum = ISNULL(a.Trade_Type_Bearish_Sum, 0) + 
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then vp.Bearish_Single_Screen_Yearly           else 0 end) +
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then vp.Bearish_Single_Screen_Quarterly        else 0 end) +
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then vp.Bearish_Single_Screen_Monthly          else 0 end) +
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then vp.Bearish_Single_Screen_Weekly           else 0 end) +
+            (case when a.Bearish_Single_Screen_Daily            > 0 then vp.Bearish_Single_Screen_Daily            else 0 end) +
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then vp.Bearish_Single_Screen_4_Hourly         else 0 end) +
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then vp.Bearish_Single_Screen_1_Hourly         else 0 end) +
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then vp.Bearish_Single_Screen_15_Minutes       else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then vp.Bearish_Double_Screen_Strong_Quarterly else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then vp.Bearish_Double_Screen_Strong_Monthly   else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then vp.Bearish_Double_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then vp.Bearish_Double_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_4_Hourly  else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_1_Hourly  else 0 end) +
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then vp.Bearish_Triple_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then vp.Bearish_Triple_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Triple_Screen_Strong_4_Hourly  else 0 end) 
 FROM dbo.Analyse_Stocks a 
 JOIN DescPivot dp  ON dp.Batch_No = 1 AND a.Batch_No = (select max(batch_no) from Analyse_Stocks)
 JOIN ValuePivot vp ON vp.Batch_No = 1 
@@ -406,39 +402,38 @@ JOIN ValuePivot vp ON vp.Batch_No = 1
 end
 begin -- update calculated fields 
 update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+ (case 
-	when 1=1 and volume_yearly_shockers = 1 then 'yearly;' 
-	when 1=1 and volume_quarterly_shockers = 1 then 'quarterly;' 
-	when 1=1 and volume_monthly_shockers = 1 then 'monthly;'
-	when 1=1 and volume_weekly_shockers = 1 then 'weekly;' 
-	when 1=1 and volume_daily_shockers = 1 then 'daily;'
-	when 1=1 and volume_4_hourly_shockers = 1 then '4_hourly;'
-	when 1=1 and volume_1_hourly_shockers = 1 then '1_hourly;'
-	when 1=1 and volume_15_minutes_shockers = 1 then '15_minutes;' 
-	else '' end)
+Volume_Shockers = isnull(Volume_Shockers,'') + 
+    (case when volume_yearly_shockers     = 1 then 'yearly;' 	 else '' end) +
+    (case when volume_quarterly_shockers  = 1 then 'quarterly;'  else '' end) +
+    (case when volume_monthly_shockers    = 1 then 'monthly;'	 else '' end) +
+    (case when volume_weekly_shockers     = 1 then 'weekly;' 	 else '' end) +
+    (case when volume_daily_shockers      = 1 then 'daily;'		 else '' end) +
+    (case when volume_4_hourly_shockers   = 1 then '4_hourly;'	 else '' end) +
+    (case when volume_1_hourly_shockers   = 1 then '1_hourly;'	 else '' end) +
+    (case when volume_15_minutes_shockers = 1 then '15_minutes;' else '' end) 
 ,Trade_Type_Length = len(a.Trade_Type)
 ,Trade_Type_Details_Length = len(Trade_Type_Details)
 ,Trading_View = (case
-	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
-	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
-	else NULL end)
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
+    else NULL end)
 ,Trading_View_Order = (case when a.Trading_View = 'Bearish' then 1 else 0 end)
 ,Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
-	(case when volume_yearly_shockers = 1 then 525600 else 0 end) +
-	(case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
-	(case when volume_monthly_shockers = 1 then 43800 else 0 end)+
-	(case when volume_weekly_shockers = 1 then 10080 else 0 end)+
-	(case when volume_daily_shockers = 1 then 1440 else 0 end)+
-	(case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
-	(case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
-	(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
+    (case when volume_yearly_shockers = 1 then 525600 else 0 end) +
+    (case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
+    (case when volume_monthly_shockers = 1 then 43800 else 0 end)+
+    (case when volume_weekly_shockers = 1 then 10080 else 0 end)+
+    (case when volume_daily_shockers = 1 then 1440 else 0 end)+
+    (case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
+    (case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
+    (case when volume_15_minutes_shockers = 1 then 15 else 0 end)
 from dbo.Analyse_Stocks a where a.Batch_No = @Batch_no
 end;
 begin -- update report_sort_order 
 ;WITH RankedRows AS (
     select batch_no,sno,
-	row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
-	from dbo.Analyse_Stocks
+    row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
+    from dbo.Analyse_Stocks
 )
 UPDATE a SET Report_Sort_Order = b.report_sort_order
 FROM dbo.Analyse_Stocks a JOIN RankedRows b
@@ -447,17 +442,17 @@ where a.Batch_No = @Batch_No
 end;
 begin -- script execution time calculation 
 -- DECLARE @StartTime DATETIME = GETDATE();
-DECLARE	 @EndTime DATETIME = GETDATE();
-DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
+DECLARE     @endTime DATETIME = GETDATE();
+DECLARE     @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @endTime);
 -- Break down into components
-DECLARE	 @Hours INT = @DurationMs / 3600000
-		,@Minutes INT = (@DurationMs % 3600000) / 60000
-		,@Seconds INT = (@DurationMs % 60000) / 1000
-		,@Milliseconds INT = @DurationMs % 1000;
+DECLARE     @Hours INT = @DurationMs / 3600000
+        ,@Minutes INT = (@DurationMs % 3600000) / 60000
+        ,@Seconds INT = (@DurationMs % 60000) / 1000
+        ,@Milliseconds INT = @DurationMs % 1000;
 -- Format as hh:mm:ss.mmm
 
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
-PRINT 'Script end at    : ' + CONVERT(VARCHAR, @EndTime, 121);
+PRINT 'Script end at    : ' + CONVERT(VARCHAR, @endTime, 121);
 PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR);
 PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) AS VARCHAR)
 end

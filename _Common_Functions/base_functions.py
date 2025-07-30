@@ -46,8 +46,8 @@ def allow_sleep():
     print("🌙 System can now sleep normally.")
 
 
-# 🔄 Redirect print and stderr to logger
 class StreamToLogger:
+    # 🔄 Redirect print and stderr to logger
     def __init__(self, logger, log_level=logging.INFO):
         self.logger = logger
         self.log_level = log_level
@@ -61,8 +61,8 @@ class StreamToLogger:
         pass
 
 
-# 🔁 Setup logger with rotating file +color console + print/sys.stderr redirection
 def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024*5, backup_count=5):
+    # 🔁 Setup logger with rotating file +color console + print/sys.stderr redirection
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
     # 🔄 Remove existing handlers to prevent duplicates
@@ -301,7 +301,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
                 }
     df_all = pd.DataFrame()
     batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
-    with ThreadPoolExecutor(max_workers=50) as executor:
+    with ThreadPoolExecutor(max_workers=60) as executor:
         futures = []
         for data_each_list in data_list:
     # ------start - iterate through the segments for one single url--------------------

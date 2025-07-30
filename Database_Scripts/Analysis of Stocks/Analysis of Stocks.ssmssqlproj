@@ -49,11 +49,17 @@
           <AssociatedConnUserName />
           <FullPath>Update-Report--Queries-15Minutes.sql</FullPath>
         </FileNode>
-        <FileNode Name="Working--Queries-Temporary.sql">
+        <FileNode Name="Working--All--Queries--V1.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>Working--Queries-Temporary.sql</FullPath>
+          <FullPath>Working--All--Queries--V1.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Working--Temp--Queries--V1.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Working--Temp--Queries--V1.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

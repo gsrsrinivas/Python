@@ -153,8 +153,9 @@ def chat_ink_xls2db():
         {'volume__15_minutes__shockers': {'scan_clause': '( {segments_filter} ( [0] 15 minute volume > [ 0 ] 15 minute sma( volume,20 ) * 5 ) )'}},
 
     ]
-    table_names = ["Cash_15minutes_Stocks","Insert-Script--15minutes","Update-Report--Queries-15Minutes",]
-    chart_ink_excel_file_download_and_insert_into_db(data_list, table_names)
+    table_script_names = ["Cash_15minutes_Stocks","Insert-Script--15minutes","Update-Report--Queries-15Minutes",]
+    df = chart_ink_excel_file_download_and_insert_into_db(data_list)
+    insert_into_database_tables(table_script_names, data_frame=df)
 
 
 def chart_ink_download_15minutes():

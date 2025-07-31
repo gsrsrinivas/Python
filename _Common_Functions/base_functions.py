@@ -154,6 +154,7 @@ def get_database_connection():
         pyodbc.Connection: A connection object if successful, None otherwise.
     """
     try:
+        # Define connection string to SQL Server with Windows Authentication
         conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
         with pyodbc.connect(conn_str) as conn:
             # print("🗄️Database connection successful.")
@@ -163,53 +164,72 @@ def get_database_connection():
         return None
 
 
-def insert_into_database_tables(df_all, table_names):
+def insert_into_database_tables(table_names, bulk_file_path=None, data_frame=None):
     """ Inserts data from a DataFrame into an SQL Server database table and executes SQL scripts.
     Args:
         df_all (pd.DataFrame): DataFrame containing the data to be inserted
         table_names (list): List containing the names of the database tables.
     Returns:
         None
+        :param table_names:
+        :param data_frame:
+        :param bulk_file_path:
     """
     print(f'📥 started inserting into the database table')
-    df_all = df_all.fillna(0)
-    # Define connection string to SQL Server with Windows Authentication
-    conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-EP99LTB;DATABASE=Stocks_Analysis;Trusted_Connection=yes;'
-    # Define the insert statement
-    insert_query = f'''INSERT INTO dbo.{table_names[0]}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
-    VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
-    pictures_path = project_directory_path()
-    input_folder_path = pictures_path + r"\Database_Scripts\Analysis of Stocks"
-    file_paths = {
-        "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql"),
-        "update_report_sql_file": Path(f"{input_folder_path}/{table_names[2]}.sql")
-    }
     # Establish connection to SQL Server
-    with pyodbc.connect(conn_str) as conn:
+    # with pyodbc.connect(conn_str) as conn:
+    with (get_database_connection() as conn):
         cursor = conn.cursor()
-        records = df_all[[
-            'sno', 'stock_name', 'symbol', 'bsecode', 'percent_change',
-            'price', 'volume', 'Indicator', 'TimeLine',
-            'Direction', 'segments', 'Batch_No'
-        ]].values.tolist()
-        cursor.executemany(insert_query, records)
-        conn.commit()
-        print(f"✅ {len(records)} records inserted in {table_names[0]} table using batch insert!")
-        # Execute both SQL Script files
+        if bulk_file_path is not None:
+            # start - Bulk insert data from CSV file into the database table
+            bulk_insert_query = (
+                f" BULK INSERT dbo.{table_names[0]} FROM '{bulk_file_path}' WITH \n" # noqa
+                + f" (   FIELDTERMINATOR = ',',  -- Column delimiter, e.g., comma for CSV \n" # noqa
+                + f"     ROWTERMINATOR = '\\n',   -- Row delimiter, newline character \n" # noqa
+                + f"     FIRSTROW = 2,           -- Skip header row if present (start at row 2) \n" # noqa
+                + f"     TABLOCK,                -- Optional: improve performance by locking the table \n" # noqa
+                + f"     KEEPIDENTITY            -- keep identity values from file \n" # noqa
+                + f" );")
+            cursor.execute(bulk_insert_query)
+            conn.commit()
+            print(f"✅ Data inserted into {table_names[0]} table using BULK INSERT!")
+            # end - Bulk insert data from CSV file into the database table
+        else:
+            # start - Insert data into the database table using batch insert from DataFrame
+            df_all = data_frame.fillna(0)  # Fill NaN values with 0 for numeric columns
+            records = df_all[[
+                'sno', 'stock_name', 'symbol', 'bsecode', 'percent_change',
+                'price', 'volume', 'Indicator', 'TimeLine',
+                'Direction', 'segments', 'Batch_No'
+            ]].values.tolist()
+            # Define the insert statement
+            insert_query = f'''INSERT INTO dbo.{table_names[0]}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
+            VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
+            cursor.executemany(insert_query, records)
+            conn.commit()
+            print(f"✅ {len(records)} records inserted in {table_names[0]} table using batch insert!")
+            # end - Insert data into the database table using batch insert from DataFrame
+
+        # start - Get the file path of both SQL Script files
+        project_path = project_directory_path()
+        input_folder_path = project_path + r"\Database_Scripts\Analysis of Stocks"
+        file_paths = {
+            "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql"),
+            "update_report_sql_file": Path(f"{input_folder_path}/{table_names[2]}.sql")
+        }
+        # end - Get the file path of both SQL Script files
+        # start - Execute both SQL Script files
         for label, path in file_paths.items():
             print(f"⏳ Executing {label.replace('_', ' ').capitalize()}")
             with open(path, 'r', encoding='utf-8') as file_path:
                 cursor.execute(file_path.read())
-                # -------------------------------
-                # rows = cursor.fetchall()
-                # print(*rows, sep='\n')
-                # -------------------------------
             conn.commit()
             print(f"✅ Committed {label.replace('_', ' ').capitalize()}")
+        # end - Execute both SQL Script files
     print("✅ Completed all files execution and database insertions.\n")
 
 
-def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
+def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
     """ reorders, renames, and appends additional metadata columns to the stock DataFrame.
     Args:
         df (pd.DataFrame): The DataFrame containing stock data
@@ -220,7 +240,6 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
         :param df:
         :param tf_l_i:
         :param each_segment_list:
-        :param batch_no:
     """
     if df.empty:
         return df
@@ -232,12 +251,11 @@ def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list, batch_no):
     # Extract and clean metadata # insert new columns
     indicator, timeline, direction = (part.replace("_", " ") for part in tf_l_i.split("__"))
     # Insert new metadata columns
-    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']] = [indicator, timeline, direction,
-                                                                                 each_segment_list, batch_no]
+    df.loc[:, ['Indicator', 'TimeLine', 'Direction', 'segments']] = [indicator, timeline, direction, each_segment_list]
     return df
 
 
-def download_chart_ink_technical_analysis_scanner(key, data, segment_val, batch_no, max_retries = 5):
+def download_chart_ink_technical_analysis_scanner(key, data, segment_val, max_retries = 5):
     """
     Fetches technical analysis data from Chart ink based on provided scan parameters.
     Args:
@@ -251,8 +269,6 @@ def download_chart_ink_technical_analysis_scanner(key, data, segment_val, batch_
         :param key:
         :param data:
         :param segment_val:
-        :param batch_no:
-        :param data_each_list:
         :param max_retries:
     """
     # key, data = next(iter(data_each_list.items()))
@@ -275,7 +291,7 @@ def download_chart_ink_technical_analysis_scanner(key, data, segment_val, batch_
                 if "scan_error" in result: # Step 3: Check for errors
                     print(f"❌ Scan error:{result['scan_error']} for rule: {key} with data: {data}")
                 df = pd.DataFrame(result.get('data', [])) # Step 4: Convert to DataFrame
-                df = insert_new_columns_in_data_frame(df, key, segment_val, batch_no)
+                df = insert_new_columns_in_data_frame(df, key, segment_val)
                 print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(56,' ')}' - {segment_val} segments ")
                 return df
             except requests.RequestException as e:
@@ -284,11 +300,10 @@ def download_chart_ink_technical_analysis_scanner(key, data, segment_val, batch_
         return None
 
 
-def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
+def chart_ink_excel_file_download_and_insert_into_db(data_list):
     """
     Downloads technical analysis data from Chart ink for multiple segments and inserts it into a database.
     :param data_list: It contains the scan parameters for Chart ink.
-    :param table_names: It contains the names of the database tables.
     :return:
     1. Download technical analysis data from Chart ink for multiple segments.
     2. Insert the downloaded data into a database table.
@@ -300,8 +315,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
                 # 'Nifty 500':'57960','BankNifty':'136699','ETFs':'166311','Futures':'33489','Gold ETFs':'167068','Indices':'45603','Mid-Cap 50':'136492','Nifty 100':'33619','Nifty 200':'46553','Nifty 50':'33492','Nifty 500 Multi Cap 50:25:25':'1090574','Nifty and BankNifty':'109630','Nifty Large Mid-Cap 250':'1090573','Nifty Micro Cap 250':'1090582','Nifty Mid-Cap 100':'1090585','Nifty Mid-Cap 150':'1090588','Nifty Mid-Cap 50':'1090591','Nifty Mid-Cap Select':'1090579','Nifty Mid-Small Cap 400':'1090575','Nifty Next 50':'1116352','Nifty Small Cap 100':'1090587','Nifty Small Cap 250':'1090572','Nifty Small Cap 50':'1090568','Silver ETFs':'1195362',
                 }
     df_all = pd.DataFrame()
-    batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
-    with ThreadPoolExecutor(max_workers=60) as executor:
+    with ThreadPoolExecutor(max_workers=250) as executor:
         futures = []
         for data_each_list in data_list:
     # ------start - iterate through the segments for one single url--------------------
@@ -313,19 +327,30 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list, table_names):
                 key, data = next(iter(data_each_list.items())) # Gets the first key and iterate through the segments for one single url
     # ------ended - iterate through the segments for one single url----------------------
                 # Submit the download task to the executor
-                futures.append(executor.submit(download_chart_ink_technical_analysis_scanner,key, data, each_segment_list, batch_no))
-                # print(f"complete - '{str(key.replace("__", ";").replace("_", " ")).ljust(56,' ')}' - {each_segment_list} segments - out the function")
+                futures.append(executor.submit(download_chart_ink_technical_analysis_scanner,key, data, each_segment_list))
         print(f"🔄 started downloading data from the website for {len(futures)} segments.")
         # Collect results as they complete
         for future in futures:
             df = future.result()
-            # key = next(iter(future.args[0])) if hasattr(future, 'args') else ''
-            # each_segment_list = each_segment_list
-            # batch_no = batch_no if 'batch_no' in locals() else ''
-            # df = insert_new_columns_in_data_frame(df, key, each_segment_list, batch_no)
             df_all = pd.concat([df_all, df], ignore_index=True)
     print(f"\n🔄 downloading data from the website is complete.")
-    insert_into_database_tables(df_all, table_names)
+    batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
+    df_all['Batch_No'] = batch_no  # Add batch number to the DataFrame
+    # insert_into_database_tables(df_all, table_names)
+    return df_all
+
+
+def chart_ink_to_csv(df):
+    print(f"📥 started saving data to CSV file")
+    str_datetime = datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
+    output_file = Path(project_directory_path()) / 'Chart_Ink/Source' / f'chart_ink_daily---{str_datetime}.csv'
+    print(f"📥 Saving data to CSV file: {output_file}")
+    if df.empty:
+        print("❌ No data to save. DataFrame is empty.")
+        return None
+    df.to_csv(output_file, index=False) # Save to CSV
+    print("✅ Data saved to csv file successfully.")
+    return output_file
 
 
 def purge_log_files(filetype='daily_chart_ink'):
@@ -354,7 +379,7 @@ def purge_log_files(filetype='daily_chart_ink'):
                     log_date = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
                     if log_date >= cutoff_date:
                         new_logs.append(line)
-                except Exception as e:
+                except Exception as e: # noqa
                     # Optionally log or skip malformed lines
                     # print(f"❌ Malformed line in log file {log_file_path}: {line.strip()} \nand error message is: {e}")
                     # Only log the first occurrence, or skip logging error lines entirely

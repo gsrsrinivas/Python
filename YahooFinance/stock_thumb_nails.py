@@ -1,13 +1,12 @@
-from concurrent.futures import ThreadPoolExecutor
 import matplotlib
-# Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
-matplotlib.use('Agg')  # Use a non-GUI backend
+matplotlib.rcParams['figure.max_open_warning'] = 1000  # or any number you prefer
+matplotlib.use('Agg')  # Use a non-GUI backend # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 import matplotlib.pyplot as plt
 import yfinance as yf
-import sys
-import os
+import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
 from _Common_Functions.base_functions import *
+from concurrent.futures import ThreadPoolExecutor
 
 
 def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', period_value='30d'):
@@ -27,14 +26,14 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
         print(f"No data found for {symbol_name} with period {period_value} and interval {interval_value}.")
         return
     # Plot closing price
-    plt.figure(figsize=(2, 1.5))  # Small thumbnail size
+    fig = plt.figure(figsize=(2, 1.5))  # Small thumbnail size
     plt.plot(data['Close'], linewidth=1)
     plt.title(f"{symbol_name.replace(".NS", "")}-{interval_value}-{period_value}", fontsize=8)
     plt.xticks([], [])
     plt.yticks([], [])
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
-    plt.close()
+    plt.close(fig)
     print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')} - {str(symbol_name).ljust(20,' ')} - {period_value.ljust(3,' ')} - {interval_value.ljust(3,' ')}")
 
 
@@ -105,11 +104,8 @@ def stock_thumb_nails(timeframe=None):
     except Exception as e:
         print(f"No Internet Connection: {e}")
         sys.exit(1)
-
-    # def plot(symbol_nm, increment, total_count, interval_val, period_val):
-    #     plot_stock(thumb_dir, symbol_nm, increment, total_count, interval_value=interval_val, period_value=period_val)
-    # -------------------
-    with ThreadPoolExecutor(max_workers=12) as executor:
+    # ------------------------------------------------------------------------------------
+    with ThreadPoolExecutor(max_workers=100) as executor:
         i = 1
         for symbol in symbols:
             for interval_period_dict in valid_interval_period:
@@ -118,14 +114,6 @@ def stock_thumb_nails(timeframe=None):
                 i+=1
     #------------------------------------------------------------------------------------
     print(f'Total {total_len} Thumbnails processed & saved: "{thumb_dir}"')
-    # # Download historical data and create thumbnails
-    # i=1
-    # for symbol in symbols:
-    #     for interval_period_dict in valid_interval_period:
-    #         interval, period = next(iter(interval_period_dict.items()))
-    #         plot_stock(thumb_dir, symbol, i, total_len, interval_value=interval, period_value=period)  # Plot stock data
-    #         i+= 1
-    # print(f'Total {total_len} Thumbnails processed & saved: "{thumb_dir}"')
 
 
 def stock_thumb_nails_all_times():

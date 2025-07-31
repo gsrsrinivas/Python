@@ -54,3 +54,30 @@ where a.Industry is null
 
 select * from [dbo].[Symbol-IndustrySegment-Series]
 end
+
+begin
+DECLARE @StartTime DATETIME = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+
+-- delete from dbo.Cash_Stocks where Batch_No = 20250731180015;
+
+BULK INSERT dbo.cash_stocks FROM 'C:\Users\gsrsr\Documents\PythonProject\Chart_Ink\Source\chart_ink_daily1.csv'
+WITH ( 
+	FIELDTERMINATOR = ',',   -- Column delimiter, e.g., comma for CSV
+	ROWTERMINATOR = '\n',       -- Row delimiter, newline character
+	FIRSTROW = 2,   -- Skip header row if present (start at row 2)
+	TABLOCK,        -- Optional: improve performance by locking the table
+	KEEPIDENTITY    -- keep identity values from file
+);
+
+-- select count(1) from dbo.Cash_Stocks where Batch_No = (select max(batch_no) from dbo.Cash_Stocks)
+DECLARE	 @EndTime DATETIME = GETDATE() --,@StartTime DATETIME = GETDATE(); 
+DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime); 
+
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121); 
+PRINT 'Script ended at  : ' + CONVERT(VARCHAR, @EndTime, 121); 
+PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR); 
+PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) as VARCHAR)
+; 
+
+end

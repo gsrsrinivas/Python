@@ -125,6 +125,12 @@
           <AssociatedConnUserName />
           <FullPath>Reset-Script-v2.txt</FullPath>
         </FileNode>
+        <FileNode Name="Reset-Script-v3.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Reset-Script-v3.txt</FullPath>
+        </FileNode>
         <FileNode Name="Screen-Values-v1.xlsx">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />

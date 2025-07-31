@@ -1,17 +1,16 @@
 begin -- update report queries 
 
-begin -- declare variables 
-DECLARE @StartTime DATETIME = GETDATE();
+begin -- declare variables and get batch_no
+declare @StartTime DATETIME = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
--- dbo.Analyse_15Minutes_Stocks, dbo.Master_Screen_Name_Values
+-- dbo.Analyse_15Minutes_Stocks, dbo.Master_Screen_Name_Values, dbo.Temp_Analyse_15Minutes_Stocks
 --------------------------------------------------------------------------------------------------------------
-declare @Batch_no bigint, @batch_num bigint
-set @Batch_Num = 1
-select @Batch_no = max(batch_no) from dbo.Analyse_15Minutes_Stocks;
+declare @batch_no bigint, @batch_num bigint = 1
+select @batch_no = max(batch_no) from dbo.Analyse_15Minutes_Stocks;
 --------------------------------------------------------------------------------------------------------------
 end;
 begin -- drop the temp table 
-drop table if exists dbo.Analyse_15Minutes_Stocks_Screening
+drop table if exists dbo.Temp_Analyse_15Minutes_Stocks
 end;
 begin -- insert screen analysis into temp table 
 select batch_no, symbol
@@ -152,11 +151,11 @@ then 1 else null end as Bearish_Double_Screen_Strong_15_Minutes
 then 1 else null end as Bearish_Double_Screen_Strong_Correction_15_Minutes
 ,case when 1 = 1 and Macd_15_Minutes_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1 and Adx_15_Minutes_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
 then 1 else null end as Bearish_Single_Screen_15_Minutes
-into dbo.Analyse_15Minutes_Stocks_Screening
+into dbo.Temp_Analyse_15Minutes_Stocks
 from dbo.Analyse_15Minutes_Stocks
-where Batch_No = (select max(batch_no) from Analyse_15Minutes_Stocks)
+where Batch_No = @batch_no
 end;
-begin -- udpate screen analysis values into table 
+begin -- udpate screen analysis values into main table 
 update a set 
  Bullish_Single_Screen_Yearly                        = b.Bullish_Single_Screen_Yearly
 ,Bullish_Double_Screen_Strong_Quarterly              = b.Bullish_Double_Screen_Strong_Quarterly
@@ -227,28 +226,47 @@ update a set
 ,Bearish_Double_Screen_Strong_Correction_15_Minutes  = b.Bearish_Double_Screen_Strong_Correction_15_Minutes
 ,Bearish_Single_Screen_15_Minutes                    = b.Bearish_Single_Screen_15_Minutes
 from dbo.Analyse_15Minutes_Stocks a
-inner join dbo.Analyse_15Minutes_Stocks_Screening b 
+inner join dbo.Temp_Analyse_15Minutes_Stocks b 
 on a.batch_no = b.batch_no and a.symbol = b.symbol
 end;
 begin -- update screen values 
-WITH ValueSource AS 
-(	SELECT Batch_No, Screen_Names, Value
-    FROM Master_Screen_Name_Values WHERE Batch_No = 1
+IF exists (select 1 FROM dbo.Analyse_15Minutes_Stocks where Batch_No = @batch_no and Trading_View_Order is not null)
+begin -- update all records to null if trading_view_order is not null
+update dbo.Analyse_15Minutes_Stocks 
+set	 Trade_Type					= NULL
+	,Trade_Type_Details			= NULL
+	,Trade_Type_Details_Sum		= NULL
+	,Trade_Type_Bullish_Sum		= NULL
+	,Trade_Type_Bearish_Sum		= NULL
+	,Volume_Shockers			= NULL
+	,Trade_Type_Length			= NULL
+	,Trade_Type_Details_Length	= NULL
+	,Trading_View				= NULL
+	,Trading_View_Order			= NULL
+	,Volume_Shockers_Sum		= NULL
+	,Report_Sort_Order			= NULL
+where Batch_No = @batch_no;
+
+END
+begin -- update trade_type.... calculated fields 
+with ValueSource AS 
+(	select Batch_No, Screen_Names, Value
+    FROM dbo.Master_Screen_Name_Values where Batch_No = 1
 )
 ,ValuePivot AS 
-(	SELECT * FROM ValueSource
+(	select * FROM ValueSource
     PIVOT (SUM(Value) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])) AS vp
-) -- SELECT 'Value' AS DataType, * FROM ValuePivot;
+) -- select 'Value' AS DataType, * FROM ValuePivot;
 ,DescSource AS 
-(	SELECT Batch_No, Screen_Names, Description 
-	FROM Master_Screen_Name_Values 
-	WHERE Batch_No = 1
+(	select Batch_No, Screen_Names, Description 
+	FROM dbo.Master_Screen_Name_Values 
+	where Batch_No = 1
 )
 ,DescPivot AS 
-(	SELECT * FROM DescSource a 
+(	select * FROM DescSource a 
 	PIVOT (MAX(Description) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])
 		  ) AS dp
-) -- SELECT 'Description' AS DataType, * FROM DescPivot;  
+) -- select 'Description' AS DataType, * FROM DescPivot;  
 --select a.Symbol, a.Batch_No,
 UPDATE a SET 
     Trade_Type = ISNULL(a.Trade_Type, '') + 
@@ -395,10 +413,10 @@ UPDATE a SET
             (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then vp.Bearish_Triple_Screen_Strong_Daily     else 0 end) +
             (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Triple_Screen_Strong_4_Hourly  else 0 end) 
 FROM dbo.Analyse_15Minutes_Stocks a 
-JOIN DescPivot dp  ON dp.Batch_No = 1 AND a.Batch_No = (select max(batch_no) from Analyse_Stocks)
-JOIN ValuePivot vp ON vp.Batch_No = 1 ;
+JOIN DescPivot dp  ON dp.Batch_No = 1 AND a.Batch_No = @batch_no
+JOIN ValuePivot vp ON vp.Batch_No = 1;
 end
-begin -- update calculated fields 
+begin -- update all other calculated fields for sum and length 
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'') + 
     (case when volume_yearly_shockers     = 1 then 'yearly;' 	 else '' end) +
@@ -415,7 +433,10 @@ Volume_Shockers = isnull(Volume_Shockers,'') +
 	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
 	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
 	else NULL end)
-,Trading_View_Order = (case when a.Trading_View = 'Bearish' then 1 else 0 end)
+,Trading_View_Order = (case
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 0
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 1
+    else NULL end) -- (case when a.Trading_View = 'Bearish' then 1 else 0 end)
 ,Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
 	(case when volume_yearly_shockers = 1 then 525600 else 0 end) +
 	(case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
@@ -425,7 +446,7 @@ Volume_Shockers = isnull(Volume_Shockers,'') +
 	(case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
 	(case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
 	(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
-from dbo.Analyse_15Minutes_Stocks a where a.Batch_No = @Batch_no
+from dbo.Analyse_15Minutes_Stocks a where a.Batch_No = @batch_no
 end;
 begin -- update report_sort_order 
 ;WITH RankedRows AS (
@@ -436,14 +457,16 @@ begin -- update report_sort_order
 UPDATE a SET Report_Sort_Order = b.report_sort_order
 FROM dbo.Analyse_15Minutes_Stocks a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
-where a.Batch_No = @Batch_No
+where a.Batch_No = @batch_no
 end;
+
+end
 begin -- script execution time calculation 
--- DECLARE @StartTime DATETIME = GETDATE();
-DECLARE	 @EndTime DATETIME = GETDATE();
-DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
+declare	 @EndTime DATETIME = GETDATE() -- ,@StartTime DATETIME = GETDATE();
+declare	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
+
 -- Break down into components
-DECLARE	 @Hours INT = @DurationMs / 3600000
+declare	 @Hours INT = @DurationMs / 3600000
 		,@Minutes INT = (@DurationMs % 3600000) / 60000
 		,@Seconds INT = (@DurationMs % 60000) / 1000
 		,@Milliseconds INT = @DurationMs % 1000;
@@ -456,7 +479,6 @@ PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00
 end
 
 end
-
 /*
 --------------------------------------------------------------------------------------------------------------
 select * from Analyse_15Minutes_Stocks_v where batch_no = (select max(batch_no) from dbo.Analyse_15Minutes_Stocks)

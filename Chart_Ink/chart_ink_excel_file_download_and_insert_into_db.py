@@ -265,7 +265,7 @@ def chat_ink_xls2db():
     ]
     table_script_names = ["Cash_Stocks","Insert-Script","Update-Report--Queries"]
     df_all = chart_ink_excel_file_download_and_insert_into_db(data_list)
-    file_path = chart_ink_to_csv(df_all)
+    file_path = chart_ink_to_csv(df_all, Path(__file__).stem)
     insert_into_database_tables(table_script_names, bulk_file_path=file_path)
 
 

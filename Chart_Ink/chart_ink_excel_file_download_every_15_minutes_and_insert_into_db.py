@@ -155,7 +155,8 @@ def chat_ink_xls2db():
     ]
     table_script_names = ["Cash_15minutes_Stocks","Insert-Script--15minutes","Update-Report--Queries-15Minutes",]
     df = chart_ink_excel_file_download_and_insert_into_db(data_list)
-    insert_into_database_tables(table_script_names, data_frame=df)
+    file_path_15mins = chart_ink_to_csv(df, Path(__file__).stem)
+    insert_into_database_tables(table_script_names, bulk_file_path=file_path_15mins)
 
 
 def chart_ink_download_15minutes():

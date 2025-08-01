@@ -164,52 +164,57 @@ def get_database_connection():
         return None
 
 
-def insert_into_database_tables(table_names, bulk_file_path=None, data_frame=None):
-    """ Inserts data from a DataFrame into an SQL Server database table and executes SQL scripts.
-    Args:
-        df_all (pd.DataFrame): DataFrame containing the data to be inserted
-        table_names (list): List containing the names of the database tables.
-    Returns:
-        None
-        :param table_names:
-        :param data_frame:
-        :param bulk_file_path:
+def insert_into_db_from_data_frame(data_frame, table_names):
+    """ Inserts data from a DataFrame into an SQL Server database table using batch insert.
+    :param data_frame:
+    :param table_names:
+    :return:
     """
-    print(f'📥 started inserting into the database table')
-    # Establish connection to SQL Server
-    # with pyodbc.connect(conn_str) as conn:
-    with (get_database_connection() as conn):
+    with get_database_connection() as conn:
         cursor = conn.cursor()
-        if bulk_file_path is not None:
-            # start - Bulk insert data from CSV file into the database table
-            bulk_insert_query = (
-                f" BULK INSERT dbo.{table_names[0]} FROM '{bulk_file_path}' WITH \n" # noqa
-                + f" (   FIELDTERMINATOR = ',',  -- Column delimiter, e.g., comma for CSV \n" # noqa
-                + f"     ROWTERMINATOR = '\\n',   -- Row delimiter, newline character \n" # noqa
-                + f"     FIRSTROW = 2,           -- Skip header row if present (start at row 2) \n" # noqa
-                + f"     TABLOCK,                -- Optional: improve performance by locking the table \n" # noqa
-                + f"     KEEPIDENTITY            -- keep identity values from file \n" # noqa
-                + f" );")
-            cursor.execute(bulk_insert_query)
-            conn.commit()
-            print(f"✅ Data inserted into {table_names[0]} table using BULK INSERT!")
-            # end - Bulk insert data from CSV file into the database table
-        else:
-            # start - Insert data into the database table using batch insert from DataFrame
-            df_all = data_frame.fillna(0)  # Fill NaN values with 0 for numeric columns
-            records = df_all[[
-                'sno', 'stock_name', 'symbol', 'bsecode', 'percent_change',
-                'price', 'volume', 'Indicator', 'TimeLine',
-                'Direction', 'segments', 'Batch_No'
-            ]].values.tolist()
-            # Define the insert statement
-            insert_query = f'''INSERT INTO dbo.{table_names[0]}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
-            VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
-            cursor.executemany(insert_query, records)
-            conn.commit()
-            print(f"✅ {len(records)} records inserted in {table_names[0]} table using batch insert!")
-            # end - Insert data into the database table using batch insert from DataFrame
+        # start - Insert data into the database table using batch insert from DataFrame
+        df_all = data_frame.fillna(0)  # Fill NaN values with 0 for numeric columns
+        records = df_all[['sno', 'stock_name', 'symbol', 'bsecode', 'percent_change', 'price', 'volume',
+                          'Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']].values.tolist()
+        # Define the insert statement
+        insert_query = f'''INSERT INTO dbo.{table_names[0]}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
+        VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
+        cursor.executemany(insert_query, records)
+        conn.commit()
+        print(f"✅ {len(records)} records inserted in {table_names[0]} table using batch insert!")
+        # end - Insert data into the database table using batch insert from DataFrame
 
+
+def bulk_insert_from_csv(bulk_file_path, table_name):
+    """ Inserts data from a CSV file into an SQL Server database table using BULK INSERT.
+    :param bulk_file_path: Path to the CSV file to be inserted.
+    :param table_name: Name of the database table where data will be inserted.
+    :return: None
+    """
+    with get_database_connection() as conn:
+        cursor = conn.cursor()
+        # start - Bulk insert data from CSV file into the database table
+        bulk_insert_query = (
+                f" BULK INSERT dbo.{table_name} FROM '{bulk_file_path}' WITH \n"  # noqa
+                + f" (   FIELDTERMINATOR = ',',  -- Column delimiter, e.g., comma for CSV \n"  # noqa
+                + f"     ROWTERMINATOR = '\\n',   -- Row delimiter, newline character \n"  # noqa
+                + f"     FIRSTROW = 2,           -- Skip header row if present (start at row 2) \n"  # noqa
+                + f"     TABLOCK,                -- Optional: improve performance by locking the table \n"  # noqa
+                + f"     KEEPIDENTITY            -- keep identity values from file \n"  # noqa
+                + f" );")
+        cursor.execute(bulk_insert_query)
+        conn.commit()
+        print(f"✅ Data inserted into {table_name} table using BULK INSERT!")
+        # end - Bulk insert data from CSV file into the database table
+
+
+def execute_sql_script(table_names):
+    """ Executes an SQL script file against the Stocks_Analysis database.
+    :param table_names: List containing the names of the database tables.
+    :return: None
+    """
+    with get_database_connection() as conn:
+        cursor = conn.cursor()
         # start - Get the file path of both SQL Script files
         project_path = project_directory_path()
         input_folder_path = project_path + r"\Database_Scripts\Analysis of Stocks"
@@ -226,7 +231,70 @@ def insert_into_database_tables(table_names, bulk_file_path=None, data_frame=Non
             conn.commit()
             print(f"✅ Committed {label.replace('_', ' ').capitalize()}")
         # end - Execute both SQL Script files
-    print("✅ Completed all files execution and database insertions.\n")
+    print("✅ Completed all script files execution\n")
+
+
+def insert_into_database_tables(table_names, bulk_file_path=None, data_frame=None):
+    """ Inserts data from a DataFrame into an SQL Server database table and executes SQL scripts.
+    Args:
+        df_all (pd.DataFrame): DataFrame containing the data to be inserted
+        table_names (list): List containing the names of the database tables.
+    Returns:
+        None
+        :param table_names:
+        :param data_frame:
+        :param bulk_file_path:
+    """
+    print(f'📥 started inserting into the database table')
+    with (get_database_connection() as conn): # Establish connection to SQL Server
+        cursor = conn.cursor()
+        if bulk_file_path is not None:
+            bulk_insert_from_csv(bulk_file_path, table_names[0])  # Insert data from CSV file into the database table
+            # # start - Bulk insert data from CSV file into the database table
+            # bulk_insert_query = (
+            #     f" BULK INSERT dbo.{table_names[0]} FROM '{bulk_file_path}' WITH \n" # noqa
+            #     + f" (   FIELDTERMINATOR = ',',  -- Column delimiter, e.g., comma for CSV \n" # noqa
+            #     + f"     ROWTERMINATOR = '\\n',   -- Row delimiter, newline character \n" # noqa
+            #     + f"     FIRSTROW = 2,           -- Skip header row if present (start at row 2) \n" # noqa
+            #     + f"     TABLOCK,                -- Optional: improve performance by locking the table \n" # noqa
+            #     + f"     KEEPIDENTITY            -- keep identity values from file \n" # noqa
+            #     + f" );")
+            # cursor.execute(bulk_insert_query)
+            # conn.commit()
+            # print(f"✅ Data inserted into {table_names[0]} table using BULK INSERT!")
+            # # end - Bulk insert data from CSV file into the database table
+        else:
+            insert_into_db_from_data_frame(data_frame, table_names)  # Insert data from DataFrame into the database table
+            # # start - Insert data into the database table using batch insert from DataFrame
+            # df_all = data_frame.fillna(0)  # Fill NaN values with 0 for numeric columns
+            # records = df_all[['sno', 'stock_name', 'symbol', 'bsecode', 'percent_change', 'price', 'volume',
+            #                   'Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']].values.tolist()
+            # # Define the insert statement
+            # insert_query = f'''INSERT INTO dbo.{table_names[0]}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
+            # VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
+            # cursor.executemany(insert_query, records)
+            # conn.commit()
+            # print(f"✅ {len(records)} records inserted in {table_names[0]} table using batch insert!")
+            # # end - Insert data into the database table using batch insert from DataFrame
+
+        execute_sql_script(table_names)
+    #     # start - Get the file path of both SQL Script files
+    #     project_path = project_directory_path()
+    #     input_folder_path = project_path + r"\Database_Scripts\Analysis of Stocks"
+    #     file_paths = {
+    #         "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql"),
+    #         "update_report_sql_file": Path(f"{input_folder_path}/{table_names[2]}.sql")
+    #     }
+    #     # end - Get the file path of both SQL Script files
+    #     # start - Execute both SQL Script files
+    #     for label, path in file_paths.items():
+    #         print(f"⏳ Executing {label.replace('_', ' ').capitalize()}")
+    #         with open(path, 'r', encoding='utf-8') as file_path:
+    #             cursor.execute(file_path.read())
+    #         conn.commit()
+    #         print(f"✅ Committed {label.replace('_', ' ').capitalize()}")
+    #     # end - Execute both SQL Script files
+    # print("✅ Completed all script files execution\n")
 
 
 def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):
@@ -340,10 +408,11 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list):
     return df_all
 
 
-def chart_ink_to_csv(df):
+def chart_ink_to_csv(df, file_name):
     print(f"📥 started saving data to CSV file")
     str_datetime = datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
-    output_file = Path(project_directory_path()) / 'Chart_Ink/Source' / f'chart_ink_daily---{str_datetime}.csv'
+    file_nm = f'{file_name}---{str_datetime}' if '15_min' not in file_name else file_name
+    output_file = Path(project_directory_path()) / 'Chart_Ink/Source' / f'{file_nm}.csv'
     print(f"📥 Saving data to CSV file: {output_file}")
     if df.empty:
         print("❌ No data to save. DataFrame is empty.")
@@ -435,11 +504,15 @@ def shrink_databases():
     if conn is None:
         print("❌ Failed to connect to the database. Cannot shrink databases.")
         return
-    sql_query = f""" -- shrink database log file
-    USE Stocks_Analysis;
-    GO;
-    ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
-    DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
+    sql_query = f""" 
+        -- shrink database log file
+        USE Stocks_Analysis;
+        ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
+        DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
+        
+        USE Stocks_db;
+        ALTER DATABASE Stocks_db SET RECOVERY SIMPLE;
+        DBCC SHRINKFILE (Stocks_db_log, 1); -- Shrinks to 1MB
     """
     cursor = conn.cursor()
     try:

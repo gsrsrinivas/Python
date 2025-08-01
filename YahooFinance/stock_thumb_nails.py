@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.rcParams['figure.max_open_warning'] = 1000  # or any number you prefer
+matplotlib.rcParams['figure.max_open_warning'] = 100  # or any number you prefer
 matplotlib.use('Agg')  # Use a non-GUI backend # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 import matplotlib.pyplot as plt
 import yfinance as yf
@@ -33,7 +33,7 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     plt.yticks([], [])
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
-    plt.close(fig)
+    plt.close(fig) # Close the figure to free memory
     print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')} - {str(symbol_name).ljust(20,' ')} - {period_value.ljust(3,' ')} - {interval_value.ljust(3,' ')}")
 
 
@@ -104,15 +104,23 @@ def stock_thumb_nails(timeframe=None):
     except Exception as e:
         print(f"No Internet Connection: {e}")
         sys.exit(1)
+    # ----- single file processing -------------------------------------------------------
+    i = 1
+    for symbol in symbols:
+        for interval_period_dict in valid_interval_period:
+            interval, period = next(iter(interval_period_dict.items()))
+            plot_stock(thumb_dir, symbol, i, total_len, interval, period)
+            i+=1
+    # ------ single file processing ------------------------------------------------------
     # ------------------------------------------------------------------------------------
-    with ThreadPoolExecutor(max_workers=100) as executor:
-        i = 1
-        for symbol in symbols:
-            for interval_period_dict in valid_interval_period:
-                interval, period = next(iter(interval_period_dict.items()))
-                executor.submit(plot_stock, thumb_dir, symbol, i, total_len, interval, period)
-                i+=1
-    #------------------------------------------------------------------------------------
+    # with ThreadPoolExecutor(max_workers=50) as executor:
+    #     i = 1
+    #     for symbol in symbols:
+    #         for interval_period_dict in valid_interval_period:
+    #             interval, period = next(iter(interval_period_dict.items()))
+    #             executor.submit(plot_stock, thumb_dir, symbol, i, total_len, interval, period)
+    #             i+=1
+    # ------------------------------------------------------------------------------------
     print(f'Total {total_len} Thumbnails processed & saved: "{thumb_dir}"')
 
 

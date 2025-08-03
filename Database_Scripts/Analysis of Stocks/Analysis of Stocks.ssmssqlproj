@@ -161,6 +161,12 @@
           <AssociatedConnUserName />
           <FullPath>Update-Report--15Minutes-Queries-v3.txt</FullPath>
         </FileNode>
+        <FileNode Name="Update-Report--Queries-15Minutes-v4.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--Queries-15Minutes-v4.txt</FullPath>
+        </FileNode>
         <FileNode Name="Update-Report--Queries-v1.txt">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
@@ -178,6 +184,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>Update-Report--Queries-v3.txt</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--Queries-v4.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--Queries-v4.txt</FullPath>
         </FileNode>
         <FileNode Name="Working--Queries-ALL-v1.txt">
           <AssociatedConnectionMoniker />

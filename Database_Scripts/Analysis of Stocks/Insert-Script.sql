@@ -11,12 +11,11 @@ begin -- add and update new stocks in master table
 print 'add and update new stocks in master table'
 insert into dbo.Master_Stocks_In_Segments (Symbol,Segments,Stock_Name) 
 select distinct cs.symbol,cs.segments,cs.stock_name from dbo.Cash_Stocks cs
-where NOT EXISTS (SELECT 1
-from dbo.Master_Stocks_In_Segments ms WHERE ms.Symbol = cs.Symbol) 
+where NOT EXISTS (SELECT 1 from dbo.Master_Stocks_In_Segments ms WHERE ms.Symbol = cs.Symbol) 
 ;
 print 'update the sno in master table'
 update sis set Sno = rn from dbo.Master_Stocks_In_Segments sis inner join 
-(	select Symbol,row_number() over(order by len(segments) desc) as rn
+(	select Symbol,row_number() over(order by len(segments) desc) as rn 
 	from dbo.Master_Stocks_In_Segments 
 ) b on sis.Symbol = b.Symbol 
 ;
@@ -30,7 +29,7 @@ SELECT @cols = STRING_AGG(CAST(QUOTENAME(REPLACE(indicator, ' ', '_') + '_' + RE
               WITHIN GROUP (ORDER BY indicator)
 FROM (
     SELECT DISTINCT indicator, timeline, direction
-    FROM Cash_Stocks
+    FROM dbo.Cash_Stocks
     WHERE Batch_No = @Batch_No 
 ) AS temp;
 

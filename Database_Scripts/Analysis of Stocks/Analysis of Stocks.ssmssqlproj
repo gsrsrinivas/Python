@@ -37,17 +37,17 @@
           <AssociatedConnUserName />
           <FullPath>Reset-Script.sql</FullPath>
         </FileNode>
-        <FileNode Name="Update-Report--15Minutes-Queries.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>Update-Report--15Minutes-Queries.sql</FullPath>
-        </FileNode>
         <FileNode Name="Update-Report--Queries.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Update-Report--Queries.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Update-Report--Queries-15Minutes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Update-Report--Queries-15Minutes.sql</FullPath>
         </FileNode>
         <FileNode Name="Working--All--Queries--V1.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>

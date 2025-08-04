@@ -186,3 +186,4 @@ def chart_ink_download_15minutes():
 if __name__ == "__main__":
     chart_ink_download_15minutes()
 
+

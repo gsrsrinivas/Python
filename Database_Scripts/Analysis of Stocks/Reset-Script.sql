@@ -1,3 +1,7 @@
+begin -- reset script
+DECLARE @StartTime DATETIME = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+
 -- update all indicators to null values and calculate the reporting fields once again 
 -- dbo.Cash_Stocks, dbo.Analyse_Stocks, dbo.Master_Screen_Name_Values
 ---------------------------------------------------------------------------------------------------------------------------
@@ -318,1124 +322,1124 @@ update a set a.Bearish_Single_Screen_15_Minutes = null from dbo.Analyse_Stocks a
 begin -- update all the indicators 
 update a set Macd_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Macd_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Macd_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Macd_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Macd' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Stochastic_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Stochastic_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Stochastic_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Stochastic' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_5_13_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_5_13_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_5_13_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 5 13' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_13_26_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_13_26_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_13_26_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 13 26' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_50_100_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_50_100_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_50_100_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 50 100' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Ema_100_200_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Ema_100_200_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Ema_100_200_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'Ema 100 200' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set ADX_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as ADX_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as ADX_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'ADX' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Yearly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Yearly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Yearly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Yearly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Yearly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Yearly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Quarterly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Quarterly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Quarterly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Quarterly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Quarterly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Quarterly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Monthly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Monthly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Monthly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Monthly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Monthly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Monthly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Weekly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Weekly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Weekly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Weekly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Weekly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Weekly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Daily_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Daily' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Daily_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Daily' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_Daily_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Daily' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_Daily_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = 'Daily' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_4_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_4_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '4 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_4_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_4_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '4 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_1_Hourly_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_1_Hourly_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '1 Hourly' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_1_Hourly_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_1_Hourly_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '1 Hourly' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_15_Minutes_Crosses_Above = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_15_Minutes_Crosses_Above from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '15 Minutes' and Direction = 'Crosses Above'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set RSI_15_Minutes_Crosses_Below = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as RSI_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as RSI_15_Minutes_Crosses_Below from dbo.Cash_Stocks where Indicator = 'RSI' and TimeLine = '15 Minutes' and Direction = 'Crosses Below'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band3_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band3_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band3' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 ;
 update a set Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Upper_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Upper_Bollinger_Band2_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Upper_Bollinger_Band2_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Upper Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Lower Bollinger Band2' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Yearly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Yearly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Quarterly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Quarterly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Monthly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Monthly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Weekly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Weekly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Daily_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_Daily_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_4_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_4_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_1_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_1_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_15_Minutes_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Volume_15_Minutes_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Volume_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Volume_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Volume' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_Yearly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Yearly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Yearly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_Yearly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Yearly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Yearly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_Quarterly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Quarterly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Quarterly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_Quarterly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Quarterly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Quarterly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_Monthly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Monthly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Monthly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_Monthly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Monthly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Monthly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_Weekly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Weekly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Weekly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_Weekly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Weekly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Weekly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_Daily_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Daily_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = 'Daily' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_Daily_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_Daily_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = 'Daily' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_4_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_4_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = '4 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_4_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_4_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = '4 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_1_Hourly_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_1_Hourly_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = '1 Hourly' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_1_Hourly_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_1_Hourly_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = '1 Hourly' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Up_Tick_15_Minutes_Greater_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_15_Minutes_Greater_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Up Tick' and TimeLine = '15 Minutes' and Direction = 'Greater Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 update a set Adx_Down_Tick_15_Minutes_Less_Than_Equal_To = 1
 from dbo.Analyse_Stocks a inner join (
-select symbol, 1 as Adx_Up_Tick_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
-) b on b.symbol = a.Symbol
+select batch_no, symbol, 1 as Adx_Up_Tick_15_Minutes_Less_Than_Equal_To from dbo.Cash_Stocks where Indicator = 'Adx Down Tick' and TimeLine = '15 Minutes' and Direction = 'Less Than Equal To'
+group by batch_no, symbol ) b on b.symbol = a.Symbol and b.batch_no = a.batch_no 
 ;
 end 
 ---------------------------------------------------------------------------------------------------------------------------
@@ -3340,7 +3344,7 @@ where 1=1       and Bearish_Single_Screen_15_Minutes > 0
 end 
 ---------------------------------------------------------------------------------------------------------------------------
 
-begin -- length of Trade_Type and details
+begin -- lenth of Trade_Type and details
 update a set Trade_Type_Length = len(Trade_Type) from dbo.Analyse_Stocks a
 ;
 update a set Trade_Type_Details_Length = len(Trade_Type_Details) from dbo.Analyse_Stocks a
@@ -3357,14 +3361,14 @@ update a set Trading_View_Order = (case when a.Trading_View = 'Bearish' then 1 e
 from dbo.Analyse_Stocks a
 ;
 update a set Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
-(case when volume__yearly__shockers = 1 then 525600 else 0 end) +
-(case when volume__quarterly__shockers = 1 then 131400 else 0 end)+
-(case when volume__monthly__shockers = 1 then 43800 else 0 end)+
-(case when volume__weekly__shockers = 1 then 10080 else 0 end)+
-(case when volume__daily__shockers = 1 then 1440 else 0 end)+
-(case when volume__4_hourly__shockers = 1 then 240 else 0 end)+
-(case when volume__1_hourly__shockers = 1 then 60 else 0 end)+
-(case when volume__15_minutes__shockers = 1 then 15 else 0 end)
+(case when volume_yearly_shockers = 1 then 525600 else 0 end) +
+(case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
+(case when volume_monthly_shockers = 1 then 43800 else 0 end)+
+(case when volume_weekly_shockers = 1 then 10080 else 0 end)+
+(case when volume_daily_shockers = 1 then 1440 else 0 end)+
+(case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
+(case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
+(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
 from dbo.Analyse_Stocks a
 ;
 ;WITH RankedRows AS (
@@ -3378,4 +3382,24 @@ ON a.Batch_No = b.Batch_No and a.sno = b.sno
 ;
 end 
 ---------------------------------------------------------------------------------------------------------------------------
- 
+begin -- script execution time calculation 
+DECLARE	 @EndTime DATETIME = GETDATE();
+DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
+-- Break down into components
+DECLARE	 @Hours INT = @DurationMs / 3600000
+		,@Minutes INT = (@DurationMs % 3600000) / 60000
+		,@Seconds INT = (@DurationMs % 60000) / 1000
+		,@Milliseconds INT = @DurationMs % 1000;
+-- Format as hh:mm:ss.mmm
+
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+PRINT 'Script ended at  : ' + CONVERT(VARCHAR, @EndTime, 121);
+PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR);
+PRINT 'Duration         : ' + 
+  RIGHT('00' + CAST(@Hours AS VARCHAR), 2) + ':' +
+  RIGHT('00' + CAST(@Minutes AS VARCHAR), 2) + ':' +
+  RIGHT('00' + CAST(@Seconds AS VARCHAR), 2) + '.' +
+  RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
+end
+
+end 

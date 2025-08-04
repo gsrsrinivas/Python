@@ -1,15 +1,20 @@
+begin -- update report queries 
+DECLARE @StartTime DATETIME = GETDATE();
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+
 -- update the report Queries output in table
--- dbo.Analyse_Stocks,
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-declare @Batch_no int, @batch_num int
+-- dbo.Analyse_Stocks,dbo.Master_Screen_Name_Values
+---------------------------------------------------------------------------------------------------------------
+declare @Batch_no bigint, @batch_num bigint
 set @Batch_Num = 1
 select @Batch_no = max(batch_no) from dbo.Analyse_Stocks;
-
+---------------------------------------------------------------------------------------------------------------
 begin -- bullish screen 
 -- bullish single screen - child is up tick - timeframe is Yearly
 update a set a.Bullish_Single_Screen_Yearly = 1
+-- select *
 from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
+where 1=1 and Batch_No = @Batch_no -- (select max(batch_no) from dbo.Analyse_Stocks)
 and Macd_Yearly_Crosses_Above = 1
 and Rsi_Yearly_Crosses_Above = 1
 -- and Adx_Yearly_Crosses_Above = 1
@@ -596,10 +601,9 @@ and Ema_100_200_15_Minutes_Crosses_Above = 1
 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
 ;
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--------------------------------------------------------------------------------------------------------------- 
 end 
-
-begin -- bearish screen
+begin -- bearish screen 
 -- Bearish single screen - child is down tick - timeframe is Yearly
 update a set a.Bearish_Single_Screen_Yearly = 1
 from dbo.Analyse_Stocks a
@@ -1194,10 +1198,10 @@ and Ema_100_200_15_Minutes_Crosses_Below = 1
 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
 ;
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--------------------------------------------------------------------------------------------------------------- 
 end 
-
 begin -- bullish -- Trade_Type and details
+
 update a set 
  Trade_Type = isnull(Trade_Type,'')+'Bullish;'
 ,Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
@@ -1504,9 +1508,8 @@ from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @
           AND v.Screen_Names = 'Bullish_Single_Screen_15_Minutes'
 where a.Batch_No = @Batch_no  and Bullish_Single_Screen_15_Minutes > 0
 ; 
-------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 end
-
 begin -- bearish -- Trade_Type and details
 update a set 
 Trade_Type = isnull(Trade_Type,'')+'Bearish;',
@@ -1816,87 +1819,98 @@ where a.Batch_No = @Batch_no and Bearish_Single_Screen_15_Minutes > 0
 ;
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 end 
-
 begin -- volume shockers 
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'yearly;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__yearly__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_yearly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'quarterly;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__quarterly__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_quarterly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'monthly;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__monthly__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_monthly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'weekly;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__weekly__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_weekly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'daily;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__daily__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_daily_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'4_hourly;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__4_hourly__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_4_hourly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'1_hourly;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__1_hourly__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_1_hourly_shockers = 1
 ;
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'')+'15_minutes;'
-from dbo.Analyse_Stocks a
-where a.Batch_No = @Batch_no and volume__15_minutes__shockers = 1
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @Batch_no and volume_15_minutes_shockers = 1
 ;
 end
-
-begin -- length of columns
+begin -- length of columns 
 update a set a.Trade_Type_Length = len(Trade_Type)
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set a.Trade_Type_Details_Length = len(Trade_Type_Details)
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set Trading_View = case
 when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
 when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
 else NULL end
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set Trading_View_Order = (case when a.Trading_View = 'Bearish' then 1 else 0 end)
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no
-;
+from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
 update a set Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
-(case when volume__yearly__shockers = 1 then 525600 else 0 end) +
-(case when volume__quarterly__shockers = 1 then 131400 else 0 end)+
-(case when volume__monthly__shockers = 1 then 43800 else 0 end)+
-(case when volume__weekly__shockers = 1 then 10080 else 0 end)+
-(case when volume__daily__shockers = 1 then 1440 else 0 end)+
-(case when volume__4_hourly__shockers = 1 then 240 else 0 end)+
-(case when volume__1_hourly__shockers = 1 then 60 else 0 end)+
-(case when volume__15_minutes__shockers = 1 then 15 else 0 end)
-from dbo.[Analyse_Stocks] a where Batch_No = @Batch_No
-;
+(case when volume_yearly_shockers = 1 then 525600 else 0 end) +
+(case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
+(case when volume_monthly_shockers = 1 then 43800 else 0 end)+
+(case when volume_weekly_shockers = 1 then 10080 else 0 end)+
+(case when volume_daily_shockers = 1 then 1440 else 0 end)+
+(case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
+(case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
+(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
+from dbo.Analyse_Stocks a where Batch_No = @Batch_No;
 ;WITH RankedRows AS (
     select batch_no,sno,
 	row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
-	from dbo.[Analyse_Stocks]
+	from dbo.Analyse_Stocks
 )
 UPDATE a SET Report_Sort_Order = b.report_sort_order
-FROM dbo.[Analyse_Stocks] a JOIN RankedRows b
+FROM dbo.Analyse_Stocks a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
-where a.Batch_No = @Batch_No
-;
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+where a.Batch_No = @Batch_No;
+---------------------------------------------------------------------------------------------------------------
 end 
-  
+
+begin -- script execution time calculation 
+-- DECLARE @StartTime DATETIME = GETDATE();
+DECLARE	 @EndTime DATETIME = GETDATE();
+DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
+-- Break down into components
+DECLARE	 @Hours INT = @DurationMs / 3600000
+		,@Minutes INT = (@DurationMs % 3600000) / 60000
+		,@Seconds INT = (@DurationMs % 60000) / 1000
+		,@Milliseconds INT = @DurationMs % 1000;
+-- Format as hh:mm:ss.mmm
+
+PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+PRINT 'Script end at    : ' + CONVERT(VARCHAR, @EndTime, 121);
+PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR);
+PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) AS VARCHAR)
+end
+
+end
+ 

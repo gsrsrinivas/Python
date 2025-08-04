@@ -14,8 +14,8 @@ update dbo.Analyse_Stocks set
 ,Trade_Type_Length			= NULL
 ,Trade_Type_Bullish_Sum		= NULL
 ,Trade_Type_Bearish_Sum		= NULL
-,Trading_View				= NULL
-,Trading_View_Order			= NULL
+,Trade_View				    = NULL
+,Trade_View_Order			= NULL
 ,Trade_Type_Details			= NULL
 ,Trade_Type_Details_Length	= NULL
 ,Trade_Type_Details_Sum		= NULL
@@ -508,14 +508,14 @@ Volume_Shockers = isnull(Volume_Shockers,'') +
     (case when volume_15_minutes_shockers = 1 then '15_minutes;' else '' end) 
 ,Trade_Type_Length = len(Trade_Type)
 ,Trade_Type_Details_Length = len(Trade_Type_Details)
-,Trading_View = (case
+,trade_view = (case
     when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
     when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
     else NULL end)
-,Trading_View_Order = (case
+,Trade_View_Order = (case
     when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 0
     when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 1
-    else NULL end) -- (case when a.Trading_View = 'Bearish' then 1 else 0 end)
+    else NULL end) -- (case when a.trade_view = 'Bearish' then 1 else 0 end)
 ,Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
     (case when volume_yearly_shockers = 1 then 525600 else 0 end) +
     (case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
@@ -535,13 +535,13 @@ update a set
 , Segments_Sum = b.sector_sum 
 , Segments_Length = len(b.Segments)
 from dbo.Analyse_Stocks a 
-join dbo.Master_Stocks_In_Segments b 
+join dbo.Master_Segments b
 on a.Symbol = b.Symbol 
 end
 begin -- update report_sort_order field 
 ;WITH RankedRows AS (
     select batch_no,sno,
-    row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
+    row_number() over (partition by Batch_No order by Batch_No desc, Trade_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
     from dbo.Analyse_Stocks
 )
 UPDATE a SET Report_Sort_Order = b.report_sort_order

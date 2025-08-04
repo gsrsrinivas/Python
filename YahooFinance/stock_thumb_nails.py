@@ -67,7 +67,7 @@ def connect_to_db():
     """
     conn = get_database_connection()
     cursor = conn.cursor()
-    # cursor.execute("select distinct Symbol from dbo.Master_Stocks_In_Segments")
+    # cursor.execute("select distinct Symbol from dbo.Master_Segments")
     cursor.execute("select distinct Symbol from dbo.Analyse_Stocks_v with (nolock)")
     records = cursor.fetchall()  # Fetch all results into a variable
     first_elements = [str(item[0]) + ".NS" for item in records]  # Extract the first element from each tuple

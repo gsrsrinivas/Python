@@ -3,20 +3,20 @@ begin -- print script start time
 DECLARE @StartTime DATETIME = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 /* ------------------------------------------------------------------------
--- dbo.Cash_Stocks, dbo.Master_Stocks_In_Segments, dbo.Analyse_Stocks
+-- dbo.Cash_Stocks, dbo.Master_Segments, dbo.Analyse_Stocks
 ------------------------------------------------------------------------ */ 
 end 
 ----------------------------------------------------------------
 begin -- add and update new stocks in master table  
 print 'add and update new stocks in master table'
-insert into dbo.Master_Stocks_In_Segments (Symbol,Segments,Stock_Name) 
+insert into dbo.Master_Segments (Symbol,Segments,Stock_Name)
 select distinct cs.symbol,cs.segments,cs.stock_name from dbo.Cash_Stocks cs
-where NOT EXISTS (SELECT 1 from dbo.Master_Stocks_In_Segments ms WHERE ms.Symbol = cs.Symbol) 
+where NOT EXISTS (SELECT 1 from dbo.Master_Segments ms WHERE ms.Symbol = cs.Symbol)
 ;
 print 'update the sno in master table'
-update sis set Sno = rn from dbo.Master_Stocks_In_Segments sis inner join 
+update sis set Sno = rn from dbo.Master_Segments sis inner join
 (	select Symbol,row_number() over(order by len(segments) desc) as rn 
-	from dbo.Master_Stocks_In_Segments 
+	from dbo.Master_Segments
 ) b on sis.Symbol = b.Symbol 
 ;
 end 
@@ -75,7 +75,7 @@ update a set
 , Segments_Order = b.sector_order
 , Segments_Sum = b.sector_sum 
 , Segments_Length = len(b.Segments)
-from dbo.Analyse_Stocks a inner join dbo.Master_Stocks_In_Segments b 
+from dbo.Analyse_Stocks a inner join dbo.Master_Segments b
 on a.Symbol = b.Symbol and a.Batch_No = @Batch_No 
 ;
 end 

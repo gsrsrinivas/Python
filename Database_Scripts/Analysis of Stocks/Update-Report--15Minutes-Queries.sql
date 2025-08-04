@@ -189,15 +189,15 @@ on a.batch_no = b.batch_no and a.symbol = b.symbol
 end
 end 
 begin -- update screen & calculated values 
-IF EXISTS (SELECT 1 FROM dbo.Analyse_15Minutes_Stocks WHERE Batch_No = @batch_no and Trading_View_Order is not null)
-begin -- update all records to null if trading_view_order is not null 
+IF EXISTS (SELECT 1 FROM dbo.Analyse_15Minutes_Stocks WHERE Batch_No = @batch_no and Trade_View_Order is not null)
+begin -- update all records to null if Trade_View_Order is not null
 update dbo.Analyse_15Minutes_Stocks 
 set	 Trade_Type					= NULL
 	,Trade_Type_Length			= NULL
 	,Trade_Type_Bullish_Sum		= NULL
 	,Trade_Type_Bearish_Sum		= NULL
-	,Trading_View				= NULL
-	,Trading_View_Order			= NULL
+	,trade_view				= NULL
+	,Trade_View_Order			= NULL
 	,Trade_Type_Details			= NULL
 	,Trade_Type_Details_Sum		= NULL
 	,Trade_Type_Details_Length	= NULL
@@ -407,14 +407,14 @@ Volume_Shockers = isnull(Volume_Shockers,'') +
 	''
 ,Trade_Type_Length = len(a.Trade_Type)
 ,Trade_Type_Details_Length = len(Trade_Type_Details)
-,Trading_View = (case
+,trade_view = (case
 	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
 	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
 	else NULL end)
-,Trading_View_Order = (case
+,Trade_View_Order = (case
 	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 0
 	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 1
-	else NULL end) -- (case when a.Trading_View = 'Bearish' then 1 else 0 end)
+	else NULL end) -- (case when a.trade_view = 'Bearish' then 1 else 0 end)
 ,Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
 	(case when volume_yearly_shockers     = 1 then 525600 else 0 end) +
 	(case when volume_quarterly_shockers  = 1 then 131400 else 0 end) +
@@ -431,7 +431,7 @@ end
 begin -- update report_sort_order 
 ;WITH RankedRows AS (
 	select batch_no,sno,
-	row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
+	row_number() over (partition by Batch_No order by Batch_No desc, Trade_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
 	from dbo.Analyse_15Minutes_Stocks
 )
 UPDATE a SET Report_Sort_Order = b.report_sort_order

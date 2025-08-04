@@ -6,7 +6,6 @@ import yfinance as yf
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
 from _Common_Functions.base_functions import *
-from concurrent.futures import ThreadPoolExecutor
 
 
 def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', period_value='30d'):
@@ -125,7 +124,7 @@ def stock_thumb_nails(timeframe=None):
 
 
 def stock_thumb_nails_all_times():
-    setup_logger(__file__, f"daily_{Path(__file__).stem}.log") # "daily_stock_thumb_nails.log")
+    setup_logger(__file__, f"daily_{Path(__file__).stem}.log")
     try:
         print_start_timestamp()
         # sys.exit() if trading_hours_check() == "exit" else None

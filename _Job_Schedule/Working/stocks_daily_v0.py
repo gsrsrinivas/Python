@@ -2,7 +2,7 @@ import subprocess
 import time
 
 if __name__ == "__main__":
-    run_chart_ink_file = r"/Chart_Ink/chart_ink_excel_file_download_and_insert_into_db.py"
+    run_chart_ink_file = r"/Chart_Ink/chart-ink-files-download.py"
     run_thumb_nails = r"C:\Users\gsrsr\Documents\PythonProject\YahooFinance\stock_thumb_nails.py"
     # Start the process (non-blocking)
     process_1 = subprocess.Popen(["python", run_chart_ink_file])

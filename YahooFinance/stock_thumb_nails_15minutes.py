@@ -12,7 +12,7 @@ def stock_thumb_nails_15min():
     """
     # {'1d': '1y'}, {'1wk': '2y'}, {'1mo': '10y'} # noqa
 
-    setup_logger(__file__, f"15minutes_{Path(__file__).stem}.log") # "15_minutes_stock_thumb_nails.log")
+    setup_logger(__file__, f"15minutes_{Path(__file__).stem}.log")
     try:
         print_start_timestamp()
         sys.exit() if trading_hours_check() == "exit" else None

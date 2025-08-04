@@ -17,7 +17,7 @@ def stocks_daily():
         # sys.exit() if trading_hours_check() == "exit" else None
 
         project_folder_path = str(project_directory_path())
-        scripts = [project_folder_path + f'\\Chart_Ink\\chart_ink_excel_file_download_and_insert_into_db.py',
+        scripts = [project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
                    project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py']
 
         processes = []

@@ -1,1916 +1,492 @@
 begin -- update report queries 
+print 'started update report queries'
+begin -- declare variables and get batch no 
 DECLARE @StartTime DATETIME = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
+------------------------------------------------------------------------------
+-- dbo.Analyse_Stocks, dbo.Master_Screen_Name_Values, dbo.Temp_Analyse_Stocks
+------------------------------------------------------------------------------
+declare @batch_no bigint, @batch_num bigint = 1
+select @batch_no = max(batch_no) from dbo.Analyse_Stocks;
+--------------------------------------------------------------------------------------------------------------
+end;
+begin -- drop indicators temp table 
+drop table if exists dbo.Temp_Analyse_Stocks
+end;
+begin -- insert indicators into temp table 
+select batch_no, symbol
+,case when 1 = 1 and Macd_Yearly_Crosses_Above = 1 and Rsi_Yearly_Crosses_Above = 1 and Adx_Yearly_Crosses_Above = 1 and Stochastic_Yearly_Crosses_Above = 1 and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_200_Yearly_Crosses_Above = 1 and Ema_100_200_Yearly_Crosses_Above = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_Yearly
+,case when 1 = 1 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_200_Yearly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Quarterly
+,case when 1 = 1 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Below = 1 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Below = 1 and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Below = 1 and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_200_Yearly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Correction_Quarterly
+,case when 1 = 1 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_Quarterly
+,case when 1 = 1 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_200_Yearly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Monthly
+,case when 1 = 1 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Below = 1 and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1 and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Below = 1 and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Below = 1 and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_200_Yearly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Correction_Monthly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Monthly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Correction_Monthly
+,case when 1 = 1 and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_Monthly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Weekly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Correction_Weekly
+,case when 1 = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Weekly
+,case when 1 = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Correction_Weekly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_Weekly
+,case when 1 = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Daily
+,case when 1 = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Below = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Correction_Daily
+,case when 1 = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Daily
+,case when 1 = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Below = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Correction_Daily
+,case when 1 = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_Daily
+,case when 1 = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_4_Hourly
+,case when 1 = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Correction_4_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_4_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Below = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Correction_4_Hourly
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_4_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_1_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Below = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Correction_1_Hourly
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_1_Hourly
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Correction_1_Hourly
+,case when 1 = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_1_Hourly
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_50_200_15_Minutes_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_15_Minutes
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_50_200_15_Minutes_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Triple_Screen_Strong_Correction_15_Minutes
+,case when 1 = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_50_200_15_Minutes_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_15_Minutes
+,case when 1 = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_50_200_15_Minutes_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bullish_Double_Screen_Strong_Correction_15_Minutes
+,case when 1 = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1 and Ema_50_200_15_Minutes_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
+then 1 else null end as Bullish_Single_Screen_15_Minutes
+,case when 1 = 1 and Macd_Yearly_Crosses_Below = 1 and Rsi_Yearly_Crosses_Below = 1 and Adx_Yearly_Crosses_Below = 1 and Stochastic_Yearly_Crosses_Below = 1 and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_200_Yearly_Crosses_Below = 1 and Ema_100_200_Yearly_Crosses_Below = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_Yearly
+,case when 1 = 1 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Adx_Yearly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Below = 1 and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_200_Yearly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Quarterly
+,case when 1 = 1 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Above = 1 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Above = 1 and Adx_Yearly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Above = 1 and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_200_Yearly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Correction_Quarterly
+,case when 1 = 1 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_Quarterly
+,case when 1 = 1 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Adx_Yearly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Below = 1 and Adx_Monthly_Crosses_Below = 1 and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_200_Yearly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Monthly
+,case when 1 = 1 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Above = 1 and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1 and Adx_Yearly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Below = 1 and Adx_Monthly_Crosses_Above = 1 and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Above = 1 and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_200_Yearly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Correction_Monthly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Below = 1 and Adx_Monthly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Monthly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Below = 1 and Adx_Monthly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Correction_Monthly
+,case when 1 = 1 and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Adx_Monthly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_Monthly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Adx_Quarterly_Crosses_Below = 1 and Adx_Monthly_Crosses_Below = 1 and Adx_Weekly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Weekly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Below = 1 and Adx_Monthly_Crosses_Below = 1 and Adx_Weekly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_200_Quarterly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Correction_Weekly
+,case when 1 = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Adx_Monthly_Crosses_Below = 1 and Adx_Weekly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Weekly
+,case when 1 = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1 and Adx_Monthly_Crosses_Below = 1 and Adx_Weekly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Correction_Weekly
+,case when 1 = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Adx_Weekly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_Weekly
+,case when 1 = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Adx_Monthly_Crosses_Below = 1 and Adx_Weekly_Crosses_Below = 1 and Adx_Daily_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Daily
+,case when 1 = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Above = 1 and Adx_Monthly_Crosses_Below = 1 and Adx_Weekly_Crosses_Below = 1 and Adx_Daily_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_200_Monthly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Correction_Daily
+,case when 1 = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Adx_Weekly_Crosses_Below = 1 and Adx_Daily_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Daily
+,case when 1 = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Above = 1 and Adx_Weekly_Crosses_Below = 1 and Adx_Daily_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Correction_Daily
+,case when 1 = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Adx_Daily_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_Daily
+,case when 1 = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Adx_Weekly_Crosses_Below = 1 and Adx_Daily_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_4_Hourly
+,case when 1 = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Adx_Weekly_Crosses_Below = 1 and Adx_Daily_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_200_Weekly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Correction_4_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Adx_Daily_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_4_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Adx_Daily_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Correction_4_Hourly
+,case when 1 = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_4_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Adx_Daily_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_1_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Above = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Adx_Daily_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_200_Daily_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Correction_1_Hourly
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_1_Hourly
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Correction_1_Hourly
+,case when 1 = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_1_Hourly
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1 and Adx_4_Hourly_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Below = 1 and Adx_15_Minutes_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_50_200_15_Minutes_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_15_Minutes
+,case when 1 = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Below = 1 and Adx_15_Minutes_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1 and Ema_50_200_4_Hourly_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_50_200_15_Minutes_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Triple_Screen_Strong_Correction_15_Minutes
+,case when 1 = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1 and Adx_1_Hourly_Crosses_Below = 1 and Adx_15_Minutes_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_50_200_15_Minutes_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_15_Minutes
+,case when 1 = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Below = 1 and Adx_15_Minutes_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1 and Ema_50_200_1_Hourly_Crosses_Below = 1 and Ema_50_200_15_Minutes_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1 and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
+then 1 else null end as Bearish_Double_Screen_Strong_Correction_15_Minutes
+,case when 1 = 1 and Macd_15_Minutes_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1 and Adx_15_Minutes_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1 and Ema_50_200_15_Minutes_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
+then 1 else null end as Bearish_Single_Screen_15_Minutes
+into dbo.Temp_Analyse_Stocks
+from dbo.Analyse_Stocks
+where Batch_No = @batch_no 
+end;
+begin -- udpate indicators values into table 
+update a set 
+-- Bullish Screen 
+ Bullish_Single_Screen_Yearly                        = b.Bullish_Single_Screen_Yearly
+,Bullish_Double_Screen_Strong_Quarterly              = b.Bullish_Double_Screen_Strong_Quarterly
+,Bullish_Double_Screen_Strong_Correction_Quarterly   = b.Bullish_Double_Screen_Strong_Correction_Quarterly
+,Bullish_Single_Screen_Quarterly                     = b.Bullish_Single_Screen_Quarterly
+,Bullish_Triple_Screen_Strong_Monthly                = b.Bullish_Triple_Screen_Strong_Monthly
+,Bullish_Triple_Screen_Strong_Correction_Monthly     = b.Bullish_Triple_Screen_Strong_Correction_Monthly
+,Bullish_Double_Screen_Strong_Monthly                = b.Bullish_Double_Screen_Strong_Monthly
+,Bullish_Double_Screen_Strong_Correction_Monthly     = b.Bullish_Double_Screen_Strong_Correction_Monthly
+,Bullish_Single_Screen_Monthly                       = b.Bullish_Single_Screen_Monthly
+,Bullish_Triple_Screen_Strong_Weekly                 = b.Bullish_Triple_Screen_Strong_Weekly
+,Bullish_Triple_Screen_Strong_Correction_Weekly      = b.Bullish_Triple_Screen_Strong_Correction_Weekly
+,Bullish_Double_Screen_Strong_Weekly                 = b.Bullish_Double_Screen_Strong_Weekly
+,Bullish_Double_Screen_Strong_Correction_Weekly      = b.Bullish_Double_Screen_Strong_Correction_Weekly
+,Bullish_Single_Screen_Weekly                        = b.Bullish_Single_Screen_Weekly
+,Bullish_Triple_Screen_Strong_Daily                  = b.Bullish_Triple_Screen_Strong_Daily
+,Bullish_Triple_Screen_Strong_Correction_Daily       = b.Bullish_Triple_Screen_Strong_Correction_Daily
+,Bullish_Double_Screen_Strong_Daily                  = b.Bullish_Double_Screen_Strong_Daily
+,Bullish_Double_Screen_Strong_Correction_Daily       = b.Bullish_Double_Screen_Strong_Correction_Daily
+,Bullish_Single_Screen_Daily                         = b.Bullish_Single_Screen_Daily
+,Bullish_Triple_Screen_Strong_4_Hourly               = b.Bullish_Triple_Screen_Strong_4_Hourly
+,Bullish_Triple_Screen_Strong_Correction_4_Hourly    = b.Bullish_Triple_Screen_Strong_Correction_4_Hourly
+,Bullish_Double_Screen_Strong_4_Hourly               = b.Bullish_Double_Screen_Strong_4_Hourly
+,Bullish_Double_Screen_Strong_Correction_4_Hourly    = b.Bullish_Double_Screen_Strong_Correction_4_Hourly
+,Bullish_Single_Screen_4_Hourly                      = b.Bullish_Single_Screen_4_Hourly
+,Bullish_Triple_Screen_Strong_1_Hourly               = b.Bullish_Triple_Screen_Strong_1_Hourly
+,Bullish_Triple_Screen_Strong_Correction_1_Hourly    = b.Bullish_Triple_Screen_Strong_Correction_1_Hourly
+,Bullish_Double_Screen_Strong_1_Hourly               = b.Bullish_Double_Screen_Strong_1_Hourly
+,Bullish_Double_Screen_Strong_Correction_1_Hourly    = b.Bullish_Double_Screen_Strong_Correction_1_Hourly
+,Bullish_Single_Screen_1_Hourly                      = b.Bullish_Single_Screen_1_Hourly
+,Bullish_Triple_Screen_Strong_15_Minutes             = b.Bullish_Triple_Screen_Strong_15_Minutes
+,Bullish_Triple_Screen_Strong_Correction_15_Minutes  = b.Bullish_Triple_Screen_Strong_Correction_15_Minutes
+,Bullish_Double_Screen_Strong_15_Minutes             = b.Bullish_Double_Screen_Strong_15_Minutes
+,Bullish_Double_Screen_Strong_Correction_15_Minutes  = b.Bullish_Double_Screen_Strong_Correction_15_Minutes
+,Bullish_Single_Screen_15_Minutes                    = b.Bullish_Single_Screen_15_Minutes
+-- Bearish Screen 
+,Bearish_Single_Screen_Yearly                        = b.Bearish_Single_Screen_Yearly
+,Bearish_Double_Screen_Strong_Quarterly              = b.Bearish_Double_Screen_Strong_Quarterly
+,Bearish_Double_Screen_Strong_Correction_Quarterly   = b.Bearish_Double_Screen_Strong_Correction_Quarterly
+,Bearish_Single_Screen_Quarterly                     = b.Bearish_Single_Screen_Quarterly
+,Bearish_Triple_Screen_Strong_Monthly                = b.Bearish_Triple_Screen_Strong_Monthly
+,Bearish_Triple_Screen_Strong_Correction_Monthly     = b.Bearish_Triple_Screen_Strong_Correction_Monthly
+,Bearish_Double_Screen_Strong_Monthly                = b.Bearish_Double_Screen_Strong_Monthly
+,Bearish_Double_Screen_Strong_Correction_Monthly     = b.Bearish_Double_Screen_Strong_Correction_Monthly
+,Bearish_Single_Screen_Monthly                       = b.Bearish_Single_Screen_Monthly
+,Bearish_Triple_Screen_Strong_Weekly                 = b.Bearish_Triple_Screen_Strong_Weekly
+,Bearish_Triple_Screen_Strong_Correction_Weekly      = b.Bearish_Triple_Screen_Strong_Correction_Weekly
+,Bearish_Double_Screen_Strong_Weekly                 = b.Bearish_Double_Screen_Strong_Weekly
+,Bearish_Double_Screen_Strong_Correction_Weekly      = b.Bearish_Double_Screen_Strong_Correction_Weekly
+,Bearish_Single_Screen_Weekly                        = b.Bearish_Single_Screen_Weekly
+,Bearish_Triple_Screen_Strong_Daily                  = b.Bearish_Triple_Screen_Strong_Daily
+,Bearish_Triple_Screen_Strong_Correction_Daily       = b.Bearish_Triple_Screen_Strong_Correction_Daily
+,Bearish_Double_Screen_Strong_Daily                  = b.Bearish_Double_Screen_Strong_Daily
+,Bearish_Double_Screen_Strong_Correction_Daily       = b.Bearish_Double_Screen_Strong_Correction_Daily
+,Bearish_Single_Screen_Daily                         = b.Bearish_Single_Screen_Daily
+,Bearish_Triple_Screen_Strong_4_Hourly               = b.Bearish_Triple_Screen_Strong_4_Hourly
+,Bearish_Triple_Screen_Strong_Correction_4_Hourly    = b.Bearish_Triple_Screen_Strong_Correction_4_Hourly
+,Bearish_Double_Screen_Strong_4_Hourly               = b.Bearish_Double_Screen_Strong_4_Hourly
+,Bearish_Double_Screen_Strong_Correction_4_Hourly    = b.Bearish_Double_Screen_Strong_Correction_4_Hourly
+,Bearish_Single_Screen_4_Hourly                      = b.Bearish_Single_Screen_4_Hourly
+,Bearish_Triple_Screen_Strong_1_Hourly               = b.Bearish_Triple_Screen_Strong_1_Hourly
+,Bearish_Triple_Screen_Strong_Correction_1_Hourly    = b.Bearish_Triple_Screen_Strong_Correction_1_Hourly
+,Bearish_Double_Screen_Strong_1_Hourly               = b.Bearish_Double_Screen_Strong_1_Hourly
+,Bearish_Double_Screen_Strong_Correction_1_Hourly    = b.Bearish_Double_Screen_Strong_Correction_1_Hourly
+,Bearish_Single_Screen_1_Hourly                      = b.Bearish_Single_Screen_1_Hourly
+,Bearish_Triple_Screen_Strong_15_Minutes             = b.Bearish_Triple_Screen_Strong_15_Minutes
+,Bearish_Triple_Screen_Strong_Correction_15_Minutes  = b.Bearish_Triple_Screen_Strong_Correction_15_Minutes
+,Bearish_Double_Screen_Strong_15_Minutes             = b.Bearish_Double_Screen_Strong_15_Minutes
+,Bearish_Double_Screen_Strong_Correction_15_Minutes  = b.Bearish_Double_Screen_Strong_Correction_15_Minutes
+,Bearish_Single_Screen_15_Minutes                    = b.Bearish_Single_Screen_15_Minutes
+from dbo.Analyse_Stocks a
+inner join dbo.Temp_Analyse_Stocks b 
+on a.batch_no = b.batch_no and a.symbol = b.symbol
+end;
+begin -- update screen values and calculated values 
+IF EXISTS (SELECT 1 FROM dbo.Analyse_Stocks WHERE Batch_No = @batch_no and Trading_View_Order is not null)
+begin -- update all records to null if trading_view_order is not null 
+update dbo.Analyse_Stocks 
+set	 Trade_Type					= NULL
+	,Trade_Type_Details			= NULL
+	,Trade_Type_Details_Sum		= NULL
+	,Trade_Type_Bullish_Sum		= NULL
+	,Trade_Type_Bearish_Sum		= NULL
+	,Volume_Shockers			= NULL
+	,Trade_Type_Length			= NULL
+	,Trade_Type_Details_Length	= NULL
+	,Trading_View				= NULL
+	,Trading_View_Order			= NULL
+	,Volume_Shockers_Sum		= NULL
+	,Report_Sort_Order			= NULL
+WHERE Batch_No = @batch_no;
 
--- update the report Queries output in table
--- dbo.Analyse_Stocks,dbo.Master_Screen_Name_Values
----------------------------------------------------------------------------------------------------------------
-declare @Batch_no bigint, @batch_num bigint
-set @Batch_Num = 1
-select @Batch_no = max(batch_no) from dbo.Analyse_Stocks;
----------------------------------------------------------------------------------------------------------------
-begin -- bullish screen 
--- bullish single screen - child is up tick - timeframe is Yearly
-update a set a.Bullish_Single_Screen_Yearly = 1
--- select *
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no -- (select max(batch_no) from dbo.Analyse_Stocks)
-and Macd_Yearly_Crosses_Above = 1
-and Rsi_Yearly_Crosses_Above = 1
--- and Adx_Yearly_Crosses_Above = 1
-and Stochastic_Yearly_Crosses_Above = 1
-and Ema_5_13_Yearly_Crosses_Above = 1
-and Ema_13_26_Yearly_Crosses_Above = 1
-and Ema_50_100_Yearly_Crosses_Above = 1
-and Ema_100_200_Yearly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is up tick - timeframe is Quarterly
-update a set a.Bullish_Double_Screen_Strong_Quarterly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1
-and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1
--- and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1
-and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1
-and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1
-and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1
-and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1
-and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is down tick - timeframe is Quarterly
-update a set a.Bullish_Double_Screen_Strong_Correction_Quarterly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Below = 1
-and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Below = 1
--- and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Below = 1
-and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Below = 1
-and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Below = 1
-and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Below = 1
-and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Below = 1
-and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1
-;
--- bullish Single screen - parent MACD is up tick and child all indicators is up tick - timeframe is Quarterly
-update a set a.Bullish_Single_Screen_Quarterly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1
-and Rsi_Quarterly_Crosses_Above = 1
--- and Adx_Quarterly_Crosses_Above = 1
-and Stochastic_Quarterly_Crosses_Above = 1
-and Ema_5_13_Quarterly_Crosses_Above = 1
-and Ema_13_26_Quarterly_Crosses_Above = 1
-and Ema_50_100_Quarterly_Crosses_Above = 1
-and Ema_100_200_Quarterly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is Monthly
-update a set a.Bullish_Triple_Screen_Strong_Monthly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1
-and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1
--- and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1
-and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1
-and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1
-and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1
-and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1
-and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is Monthly
-update a set a.Bullish_Triple_Screen_Strong_Correction_Monthly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Below = 1
-and Rsi_Yearly_Crosses_Above = 1 and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1
--- and Adx_Yearly_Crosses_Above = 1 and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Below = 1
-and Stochastic_Yearly_Crosses_Above = 1 and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Below = 1
-and Ema_5_13_Yearly_Crosses_Above = 1 and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Below = 1
-and Ema_13_26_Yearly_Crosses_Above = 1 and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Below = 1
-and Ema_50_100_Yearly_Crosses_Above = 1 and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Below = 1
-and Ema_100_200_Yearly_Crosses_Above = 1 and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is up tick - timeframe is Monthly
-update a set a.Bullish_Double_Screen_Strong_Monthly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1
-and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1
--- and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1
-and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1
-and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1
-and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1
-and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1
-and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is down tick - timeframe is Monthly
-update a set a.Bullish_Double_Screen_Strong_Correction_Monthly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Below = 1
-and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Below = 1
--- and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Below = 1
-and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Below = 1
-and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Below = 1
-and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Below = 1
-and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Below = 1
-and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
-;
--- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is Monthly
-update a set a.Bullish_Single_Screen_Monthly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Above = 1 and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1
-and Rsi_Monthly_Crosses_Above = 1
--- and Adx_Monthly_Crosses_Above = 1
-and Stochastic_Monthly_Crosses_Above = 1
-and Ema_5_13_Monthly_Crosses_Above = 1
-and Ema_13_26_Monthly_Crosses_Above = 1
-and Ema_50_100_Monthly_Crosses_Above = 1
-and Ema_100_200_Monthly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is weekly
-update a set a.Bullish_Triple_Screen_Strong_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1
-and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1
--- and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1
-and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1
-and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1
-and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1
-and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1
-and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is Weekly
-update a set a.Bullish_Triple_Screen_Strong_Correction_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1
-and Rsi_Quarterly_Crosses_Above = 1 and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1
--- and Adx_Quarterly_Crosses_Above = 1 and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Below = 1
-and Stochastic_Quarterly_Crosses_Above = 1 and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Below = 1
-and Ema_5_13_Quarterly_Crosses_Above = 1 and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Below = 1
-and Ema_13_26_Quarterly_Crosses_Above = 1 and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Below = 1
-and Ema_50_100_Quarterly_Crosses_Above = 1 and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Below = 1
-and Ema_100_200_Quarterly_Crosses_Above = 1 and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is up tick - timeframe is weekly
-update a set a.Bullish_Double_Screen_Strong_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1
-and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1
--- and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1
-and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1
-and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1
-and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1
-and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1
-and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is down tick - timeframe is Weekly
-update a set a.Bullish_Double_Screen_Strong_Correction_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Below = 1
-and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Below = 1
--- and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Below = 1
-and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Below = 1
-and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Below = 1
-and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Below = 1
-and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Below = 1
-and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
-;
--- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is weekly
-update a set a.Bullish_Single_Screen_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Above = 1 and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1
-and Rsi_Weekly_Crosses_Above = 1
--- and Adx_Weekly_Crosses_Above = 1
-and Stochastic_Weekly_Crosses_Above = 1
-and Ema_5_13_Weekly_Crosses_Above = 1
-and Ema_13_26_Weekly_Crosses_Above = 1
-and Ema_50_100_Weekly_Crosses_Above = 1
-and Ema_100_200_Weekly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is daily
-update a set a.Bullish_Triple_Screen_Strong_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
-and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1
--- and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1
-and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1
-and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1
-and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1
-and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1
-and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is daily
-update a set a.Bullish_Triple_Screen_Strong_Correction_Daily = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
-and Rsi_Monthly_Crosses_Above = 1 and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Below = 1
--- and Adx_Monthly_Crosses_Above = 1 and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Below = 1
-and Stochastic_Monthly_Crosses_Above = 1 and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Below = 1
-and Ema_5_13_Monthly_Crosses_Above = 1 and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Below = 1
-and Ema_13_26_Monthly_Crosses_Above = 1 and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Below = 1
-and Ema_50_100_Monthly_Crosses_Above = 1 and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Below = 1
-and Ema_100_200_Monthly_Crosses_Above = 1 and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Below = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is up tick - timeframe is daily
-update a set a.Bullish_Double_Screen_Strong_Daily = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
-and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
-and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1
--- and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1
-and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1
-and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1
-and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1
-and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1
-and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is down tick - timeframe is daily
-update a set a.Bullish_Double_Screen_Strong_Correction_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
-and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Below = 1
-and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Below = 1
--- and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Below = 1
-and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Below = 1
-and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Below = 1
-and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Below = 1
-and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Below = 1
-and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Below = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
-;
--- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is daily
-update a set a.Bullish_Single_Screen_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1
-and Rsi_Daily_Crosses_Above = 1
--- and Adx_Daily_Crosses_Above = 1
-and Stochastic_Daily_Crosses_Above = 1
-and Ema_5_13_Daily_Crosses_Above = 1
-and Ema_13_26_Daily_Crosses_Above = 1
-and Ema_50_100_Daily_Crosses_Above = 1
-and Ema_100_200_Daily_Crosses_Above = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is 4 hourly
-update a set a.Bullish_Triple_Screen_Strong_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1
-and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1
--- and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1
-and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1
-and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1
-and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1
-and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1
-and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is 4 hourly
-update a set a.Bullish_Triple_Screen_Strong_Correction_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Above = 1 and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Below = 1
-and Rsi_Weekly_Crosses_Above = 1 and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1
--- and Adx_Weekly_Crosses_Above = 1 and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Below = 1
-and Stochastic_Weekly_Crosses_Above = 1 and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Below = 1
-and Ema_5_13_Weekly_Crosses_Above = 1 and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1
-and Ema_13_26_Weekly_Crosses_Above = 1 and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1
-and Ema_50_100_Weekly_Crosses_Above = 1 and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1
-and Ema_100_200_Weekly_Crosses_Above = 1 and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is up tick - timeframe is 4 hourly
-update a set a.Bullish_Double_Screen_Strong_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1
-and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1
--- and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1
-and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1
-and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1
-and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1
-and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1
-and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is down tick - timeframe is 4 hourly
-update a set a.Bullish_Double_Screen_Strong_Correction_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Below = 1
-and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Below = 1
--- and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Below = 1
-and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Below = 1
-and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1
-and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1
-and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1
-and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
-;
--- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is 4 hourly
-update a set a.Bullish_Single_Screen_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Above = 1
-and Rsi_4_Hourly_Crosses_Above = 1
--- and Adx_4_Hourly_Crosses_Above = 1
-and Stochastic_4_Hourly_Crosses_Above = 1
-and Ema_5_13_4_Hourly_Crosses_Above = 1
-and Ema_13_26_4_Hourly_Crosses_Above = 1
-and Ema_50_100_4_Hourly_Crosses_Above = 1
-and Ema_100_200_4_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is 1 hourly
-update a set a.Bullish_Triple_Screen_Strong_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1
-and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1
--- and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1
-and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1
-and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1
-and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1
-and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1
-and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is 1 hourly
-update a set a.Bullish_Triple_Screen_Strong_Correction_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Above = 1 and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Below = 1
-and Rsi_Daily_Crosses_Above = 1 and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Below = 1
--- and Adx_Daily_Crosses_Above = 1 and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Below = 1
-and Stochastic_Daily_Crosses_Above = 1 and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Below = 1
-and Ema_5_13_Daily_Crosses_Above = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1
-and Ema_13_26_Daily_Crosses_Above = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1
-and Ema_50_100_Daily_Crosses_Above = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1
-and Ema_100_200_Daily_Crosses_Above = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- bullish double screen - and parent is up tick and child is up tick - timeframe is 1 hourly
-update a set a.Bullish_Double_Screen_Strong_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1
-and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1
--- and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1
-and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1
-and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1
-and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1
-and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1
-and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- bullish double screen - and parent is up tick and child is down tick - timeframe is 1 hourly
-update a set a.Bullish_Double_Screen_Strong_Correction_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Below = 1
-and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Below = 1
--- and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Below = 1
-and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Below = 1
-and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1
-and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1
-and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1
-and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is 1 hourly
-update a set a.Bullish_Single_Screen_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1
-and Rsi_1_Hourly_Crosses_Above = 1
--- and Adx_1_Hourly_Crosses_Above = 1
-and Stochastic_1_Hourly_Crosses_Above = 1
-and Ema_5_13_1_Hourly_Crosses_Above = 1
-and Ema_13_26_1_Hourly_Crosses_Above = 1
-and Ema_50_100_1_Hourly_Crosses_Above = 1
-and Ema_100_200_1_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is up tick - timeframe is 15 Minutes
-update a set a.Bullish_Triple_Screen_Strong_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1
-and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Above = 1
--- and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Above = 1
-and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Above = 1
-and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1
-and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1
-and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1
-and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1
-and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- bullish triple screen - grandparent is up tick and parent is up tick and child is down tick - timeframe is 15 Minutes
-update a set a.Bullish_Triple_Screen_Strong_Correction_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Above = 1 and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Below = 1
-and Rsi_4_Hourly_Crosses_Above = 1 and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Below = 1
--- and Adx_4_Hourly_Crosses_Above = 1 and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Below = 1
-and Stochastic_4_Hourly_Crosses_Above = 1 and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Below = 1
-and Ema_5_13_4_Hourly_Crosses_Above = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1
-and Ema_13_26_4_Hourly_Crosses_Above = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1
-and Ema_50_100_4_Hourly_Crosses_Above = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1
-and Ema_100_200_4_Hourly_Crosses_Above = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1
-and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is up tick - timeframe is 15 Minutes
-update a set a.Bullish_Double_Screen_Strong_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1
-and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Above = 1
--- and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Above = 1
-and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Above = 1
-and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1
-and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1
-and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1
-and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- bullish double screen - parent is up tick and child is down tick - timeframe is 15 Minutes
-update a set a.Bullish_Double_Screen_Strong_Correction_15_Minutes = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_1_Hourly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Below = 1
-and Rsi_1_Hourly_Crosses_Above = 1 and Rsi_15_Minutes_Crosses_Below = 1
--- and Adx_1_Hourly_Crosses_Above = 1 and Adx_15_Minutes_Crosses_Below = 1
-and Stochastic_1_Hourly_Crosses_Above = 1 and Stochastic_15_Minutes_Crosses_Below = 1
-and Ema_5_13_1_Hourly_Crosses_Above = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1
-and Ema_13_26_1_Hourly_Crosses_Above = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1
-and Ema_50_100_1_Hourly_Crosses_Above = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1
-and Ema_100_200_1_Hourly_Crosses_Above = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- bullish single screen - grandparent MACD is up tick and parent MACD is up tick and child all indicators is up tick - timeframe is 15 Minutes
-update a set a.Bullish_Single_Screen_15_Minutes = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Above = 1 and Macd_Weekly_Crosses_Above = 1 and Macd_15_Minutes_Crosses_Above = 1
-and Rsi_15_Minutes_Crosses_Above = 1
--- and Adx_15_Minutes_Crosses_Above = 1
-and Stochastic_15_Minutes_Crosses_Above = 1
-and Ema_5_13_15_Minutes_Crosses_Above = 1
-and Ema_13_26_15_Minutes_Crosses_Above = 1
-and Ema_50_100_15_Minutes_Crosses_Above = 1
-and Ema_100_200_15_Minutes_Crosses_Above = 1
-and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
-;
---------------------------------------------------------------------------------------------------------------- 
-end 
-begin -- bearish screen 
--- Bearish single screen - child is down tick - timeframe is Yearly
-update a set a.Bearish_Single_Screen_Yearly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Below = 1
-and Rsi_Yearly_Crosses_Below = 1
--- and Adx_Yearly_Crosses_Below = 1
-and Stochastic_Yearly_Crosses_Below = 1
-and Ema_5_13_Yearly_Crosses_Below = 1
-and Ema_13_26_Yearly_Crosses_Below = 1
-and Ema_50_100_Yearly_Crosses_Below = 1
-and Ema_100_200_Yearly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is down tick - timeframe is Quarterly
-update a set a.Bearish_Double_Screen_Strong_Quarterly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1
-and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1
--- and Adx_Yearly_Crosses_Below = 1 -- and Adx_Quarterly_Crosses_Below = 1
-and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1
-and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1
-and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1
-and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1
-and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is up tick - timeframe is Quarterly
-update a set a.Bearish_Double_Screen_Strong_Correction_Quarterly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Above = 1
-and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Above = 1
--- and Adx_Yearly_Crosses_Below = 1 -- and Adx_Quarterly_Crosses_Above = 1
-and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Above = 1
-and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Above = 1
-and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Above = 1
-and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Above = 1
-and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1
-;
--- Bearish Single screen - parent MACD is down tick and child all indicator are down tick - timeframe is quarterly
-update a set a.Bearish_Single_Screen_Quarterly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1
-and Rsi_Quarterly_Crosses_Below = 1
--- and Adx_Quarterly_Crosses_Below = 1
-and Stochastic_Quarterly_Crosses_Below = 1
-and Ema_5_13_Quarterly_Crosses_Below = 1
-and Ema_13_26_Quarterly_Crosses_Below = 1
-and Ema_50_100_Quarterly_Crosses_Below = 1
-and Ema_100_200_Quarterly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is Monthly
-update a set a.Bearish_Triple_Screen_Strong_Monthly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1
-and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1
--- and Adx_Yearly_Crosses_Below = 1 -- and Adx_Quarterly_Crosses_Below = 1 -- and Adx_Monthly_Crosses_Below = 1
-and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1
-and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1
-and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1
-and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1
-and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is Monthly
-update a set a.Bearish_Triple_Screen_Strong_Correction_Monthly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Above = 1
-and Rsi_Yearly_Crosses_Below = 1 and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1
--- and Adx_Yearly_Crosses_Below = 1 -- and Adx_Quarterly_Crosses_Below = 1 -- and Adx_Monthly_Crosses_Above = 1
-and Stochastic_Yearly_Crosses_Below = 1 and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Above = 1
-and Ema_5_13_Yearly_Crosses_Below = 1 and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Above = 1
-and Ema_13_26_Yearly_Crosses_Below = 1 and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Above = 1
-and Ema_50_100_Yearly_Crosses_Below = 1 and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Above = 1
-and Ema_100_200_Yearly_Crosses_Below = 1 and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is down tick - timeframe is Monthly
-update a set a.Bearish_Double_Screen_Strong_Monthly = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1
-and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1
--- and Adx_Quarterly_Crosses_Below = 1 -- and Adx_Monthly_Crosses_Below = 1
-and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1
-and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1
-and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1
-and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1
-and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is up tick - timeframe is Monthly
-update a set a.Bearish_Double_Screen_Strong_Correction_Monthly = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Above = 1
-and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Above = 1
--- and Adx_Quarterly_Crosses_Below = 1 -- and Adx_Monthly_Crosses_Above = 1
-and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Above = 1
-and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Above = 1
-and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Above = 1
-and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Above = 1
-and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1
-;
--- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is monthly
-update a set a.Bearish_Single_Screen_Monthly = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Yearly_Crosses_Below = 1 and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1
-and Rsi_Monthly_Crosses_Below = 1
--- and Adx_Monthly_Crosses_Below = 1
-and Stochastic_Monthly_Crosses_Below = 1
-and Ema_5_13_Monthly_Crosses_Below = 1
-and Ema_13_26_Monthly_Crosses_Below = 1
-and Ema_50_100_Monthly_Crosses_Below = 1
-and Ema_100_200_Monthly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is Weekly
-update a set a.Bearish_Triple_Screen_Strong_Weekly = 1 
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1
-and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1
--- and Adx_Quarterly_Crosses_Below = 1 -- and Adx_Monthly_Crosses_Below = 1 -- and Adx_Weekly_Crosses_Below = 1
-and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1
-and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1
-and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1
-and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1
-and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is Weekly
-update a set a.Bearish_Triple_Screen_Strong_Correction_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Above = 1
-and Rsi_Quarterly_Crosses_Below = 1 and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1
--- and Adx_Quarterly_Crosses_Below = 1 -- and Adx_Monthly_Crosses_Below = 1 -- and Adx_Weekly_Crosses_Above = 1
-and Stochastic_Quarterly_Crosses_Below = 1 and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Above = 1
-and Ema_5_13_Quarterly_Crosses_Below = 1 and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Above = 1
-and Ema_13_26_Quarterly_Crosses_Below = 1 and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Above = 1
-and Ema_50_100_Quarterly_Crosses_Below = 1 and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Above = 1
-and Ema_100_200_Quarterly_Crosses_Below = 1 and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is down tick - timeframe is Weekly
-update a set a.Bearish_Double_Screen_Strong_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1
-and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1
--- and Adx_Monthly_Crosses_Below = 1 -- and Adx_Weekly_Crosses_Below = 1
-and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1
-and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1
-and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1
-and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1
-and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is up tick - timeframe is Weekly
-update a set a.Bearish_Double_Screen_Strong_Correction_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Above = 1
-and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Above = 1
--- and Adx_Monthly_Crosses_Below = 1 -- and Adx_Weekly_Crosses_Above = 1
-and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Above = 1
-and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Above = 1
-and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Above = 1
-and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Above = 1
-and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1
-;
--- Bearish single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is weekly
-update a set a.Bearish_Single_Screen_Weekly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Quarterly_Crosses_Below = 1 and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1
-and Rsi_Weekly_Crosses_Below = 1
--- and Adx_Weekly_Crosses_Below = 1
-and Stochastic_Weekly_Crosses_Below = 1
-and Ema_5_13_Weekly_Crosses_Below = 1
-and Ema_13_26_Weekly_Crosses_Below = 1
-and Ema_50_100_Weekly_Crosses_Below = 1
-and Ema_100_200_Weekly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is daily
-update a set a.Bearish_Triple_Screen_Strong_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
-and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
-and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1
--- and Adx_Monthly_Crosses_Below = 1 -- and Adx_Weekly_Crosses_Below = 1 -- and Adx_Daily_Crosses_Below = 1
-and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1
-and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1
-and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1
-and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1
-and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is daily
-update a set a.Bearish_Triple_Screen_Strong_Correction_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
-and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
-and Rsi_Monthly_Crosses_Below = 1 and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Above = 1
--- and Adx_Monthly_Crosses_Below = 1 -- and Adx_Weekly_Crosses_Below = 1 -- and Adx_Daily_Crosses_Above = 1
-and Stochastic_Monthly_Crosses_Below = 1 and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Above = 1
-and Ema_5_13_Monthly_Crosses_Below = 1 and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Above = 1
-and Ema_13_26_Monthly_Crosses_Below = 1 and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Above = 1
-and Ema_50_100_Monthly_Crosses_Below = 1 and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Above = 1
-and Ema_100_200_Monthly_Crosses_Below = 1 and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Above = 1
-and Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is down tick - timeframe is daily
-update a set a.Bearish_Double_Screen_Strong_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
-and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1
--- and Adx_Weekly_Crosses_Below = 1 -- and Adx_Daily_Crosses_Below = 1
-and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1
-and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1
-and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1
-and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1
-and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is up tick - timeframe is daily
-update a set a.Bearish_Double_Screen_Strong_Correction_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Above = 1
-and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Above = 1
--- and Adx_Weekly_Crosses_Below = 1 -- and Adx_Daily_Crosses_Above = 1
-and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Above = 1
-and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Above = 1
-and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Above = 1
-and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Above = 1
-and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Above = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1
-;
--- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is daily
-update a set a.Bearish_Single_Screen_Daily = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Monthly_Crosses_Below = 1 and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1
-and Rsi_Daily_Crosses_Below = 1
--- and Adx_Daily_Crosses_Below = 1
-and Stochastic_Daily_Crosses_Below = 1
-and Ema_5_13_Daily_Crosses_Below = 1
-and Ema_13_26_Daily_Crosses_Below = 1
-and Ema_50_100_Daily_Crosses_Below = 1
-and Ema_100_200_Daily_Crosses_Below = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is 4 hourly
-update a set a.Bearish_Triple_Screen_Strong_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
-and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1
--- and Adx_Weekly_Crosses_Below = 1 -- and Adx_Daily_Crosses_Below = 1 -- and Adx_4_Hourly_Crosses_Below = 1
-and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1
-and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1
-and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1
-and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1
-and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is 4 hourly
-update a set a.Bearish_Triple_Screen_Strong_Correction_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
-and Rsi_Weekly_Crosses_Below = 1 and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Above = 1
--- and Adx_Weekly_Crosses_Below = 1 -- and Adx_Daily_Crosses_Below = 1 -- and Adx_4_Hourly_Crosses_Above = 1
-and Stochastic_Weekly_Crosses_Below = 1 and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Above = 1
-and Ema_5_13_Weekly_Crosses_Below = 1 and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1
-and Ema_13_26_Weekly_Crosses_Below = 1 and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1
-and Ema_50_100_Weekly_Crosses_Below = 1 and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1
-and Ema_100_200_Weekly_Crosses_Below = 1 and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is down tick - timeframe is 4 hourly
-update a set a.Bearish_Double_Screen_Strong_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
-and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
-and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1
--- and Adx_Daily_Crosses_Below = 1 -- and Adx_4_Hourly_Crosses_Below = 1
-and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1
-and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1
-and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1
-and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1
-and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is up tick - timeframe is 4 hourly
-update a set a.Bearish_Double_Screen_Strong_Correction_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
-and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Above = 1
-and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Above = 1
--- and Adx_Daily_Crosses_Below = 1 -- and Adx_4_Hourly_Crosses_Above = 1
-and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Above = 1
-and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Above = 1
-and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Above = 1
-and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Above = 1
-and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1
-;
--- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is 4 hourly
-update a set a.Bearish_Single_Screen_4_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Weekly_Crosses_Below = 1 and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1
-and Rsi_4_Hourly_Crosses_Below = 1
--- and Adx_4_Hourly_Crosses_Below = 1
-and Stochastic_4_Hourly_Crosses_Below = 1
-and Ema_5_13_4_Hourly_Crosses_Below = 1
-and Ema_13_26_4_Hourly_Crosses_Below = 1
-and Ema_50_100_4_Hourly_Crosses_Below = 1
-and Ema_100_200_4_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is 1 hourly
-update a set a.Bearish_Triple_Screen_Strong_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
-and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1
--- and Adx_Daily_Crosses_Below = 1 -- and Adx_4_Hourly_Crosses_Below = 1 -- and Adx_1_Hourly_Crosses_Below = 1
-and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1
-and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1
-and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1
-and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1
-and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is 1 hourly
-update a set a.Bearish_Triple_Screen_Strong_Correction_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Above = 1
-and Rsi_Daily_Crosses_Below = 1 and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Above = 1
--- and Adx_Daily_Crosses_Below = 1 -- and Adx_4_Hourly_Crosses_Below = 1 -- and Adx_1_Hourly_Crosses_Above = 1
-and Stochastic_Daily_Crosses_Below = 1 and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Above = 1
-and Ema_5_13_Daily_Crosses_Below = 1 and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1
-and Ema_13_26_Daily_Crosses_Below = 1 and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1
-and Ema_50_100_Daily_Crosses_Below = 1 and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1
-and Ema_100_200_Daily_Crosses_Below = 1 and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_Daily_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is down tick - timeframe is 1 hourly
-update a set a.Bearish_Double_Screen_Strong_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
-and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1
--- and Adx_4_Hourly_Crosses_Below = 1 -- and Adx_1_Hourly_Crosses_Below = 1
-and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1
-and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1
-and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1
-and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1
-and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is up tick - timeframe is 1 hourly
-update a set a.Bearish_Double_Screen_Strong_Correction_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Above = 1
-and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Above = 1
--- and Adx_4_Hourly_Crosses_Below = 1 -- and Adx_1_Hourly_Crosses_Above = 1
-and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Above = 1
-and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Above = 1
-and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Above = 1
-and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Above = 1
-and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Above = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is 1 hourly
-update a set a.Bearish_Single_Screen_1_Hourly = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_Daily_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
-and Rsi_1_Hourly_Crosses_Below = 1
--- and Adx_1_Hourly_Crosses_Below = 1
-and Stochastic_1_Hourly_Crosses_Below = 1
-and Ema_5_13_1_Hourly_Crosses_Below = 1
-and Ema_13_26_1_Hourly_Crosses_Below = 1
-and Ema_50_100_1_Hourly_Crosses_Below = 1
-and Ema_100_200_1_Hourly_Crosses_Below = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is down tick - timeframe is 15 minutes
-update a set a.Bearish_Triple_Screen_Strong_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Below = 1
-and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1
--- and Adx_4_Hourly_Crosses_Below = 1 -- and Adx_1_Hourly_Crosses_Below = 1 -- and Adx_15_Minutes_Crosses_Below = 1
-and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Below = 1
-and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1
-and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1
-and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1
-and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1
-and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish triple screen - grandparent is down tick and parent is down tick and child is up tick - timeframe is 15 minutes
-update a set a.Bearish_Triple_Screen_Strong_Correction_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Above = 1
-and Rsi_4_Hourly_Crosses_Below = 1 and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Above = 1
--- and Adx_4_Hourly_Crosses_Below = 1 -- and Adx_1_Hourly_Crosses_Below = 1 -- and Adx_15_Minutes_Crosses_Above = 1
-and Stochastic_4_Hourly_Crosses_Below = 1 and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Above = 1
-and Ema_5_13_4_Hourly_Crosses_Below = 1 and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1
-and Ema_13_26_4_Hourly_Crosses_Below = 1 and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1
-and Ema_50_100_4_Hourly_Crosses_Below = 1 and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1
-and Ema_100_200_4_Hourly_Crosses_Below = 1 and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1
-and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is down tick - timeframe is 15 minutes
-update a set a.Bearish_Double_Screen_Strong_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Below = 1
-and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Below = 1
--- and Adx_1_Hourly_Crosses_Below = 1 -- and Adx_15_Minutes_Crosses_Below = 1
-and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Below = 1
-and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Below = 1
-and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Below = 1
-and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Below = 1
-and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Below = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1
-;
--- Bearish double screen - parent is down tick and child is up tick - timeframe is 15 minutes
-update a set a.Bearish_Double_Screen_Strong_Correction_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_1_Hourly_Crosses_Below = 1 and Macd_15_Minutes_Crosses_Above = 1
-and Rsi_1_Hourly_Crosses_Below = 1 and Rsi_15_Minutes_Crosses_Above = 1
--- and Adx_1_Hourly_Crosses_Below = 1 -- and Adx_15_Minutes_Crosses_Above = 1
-and Stochastic_1_Hourly_Crosses_Below = 1 and Stochastic_15_Minutes_Crosses_Above = 1
-and Ema_5_13_1_Hourly_Crosses_Below = 1 and Ema_5_13_15_Minutes_Crosses_Above = 1
-and Ema_13_26_1_Hourly_Crosses_Below = 1 and Ema_13_26_15_Minutes_Crosses_Above = 1
-and Ema_50_100_1_Hourly_Crosses_Below = 1 and Ema_50_100_15_Minutes_Crosses_Above = 1
-and Ema_100_200_1_Hourly_Crosses_Below = 1 and Ema_100_200_15_Minutes_Crosses_Above = 1
-and Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To = 1
-and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To = 1
-;
--- Bearish Single screen - grandparent MACD is down tick and parent MACD is down tick and child all indicator are down tick - timeframe is 15 minutes
-update a set a.Bearish_Single_Screen_15_Minutes = 1
-from dbo.Analyse_Stocks a
-where 1=1 and Batch_No = @Batch_no
-and Macd_15_Minutes_Crosses_Below = 1 and Macd_4_Hourly_Crosses_Below = 1 and Macd_1_Hourly_Crosses_Below = 1
-and Rsi_15_Minutes_Crosses_Below = 1
--- and Adx_15_Minutes_Crosses_Below = 1
-and Stochastic_15_Minutes_Crosses_Below = 1
-and Ema_5_13_15_Minutes_Crosses_Below = 1
-and Ema_13_26_15_Minutes_Crosses_Below = 1
-and Ema_50_100_15_Minutes_Crosses_Below = 1
-and Ema_100_200_15_Minutes_Crosses_Below = 1
-and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1
-and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1
-;
---------------------------------------------------------------------------------------------------------------- 
-end 
-begin -- bullish -- Trade_Type and details
-
-update a set 
- Trade_Type = isnull(Trade_Type,'')+'Bullish;'
-,Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-         AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Monthly'
-where a.Batch_No = @Batch_no and Bullish_Triple_Screen_Strong_Monthly > 0
-;
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Weekly'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Daily'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_4_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_1_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_15_Minutes'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_Monthly'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_Weekly'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_Daily'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_4_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_1_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Triple_Screen_Strong_Correction_15_Minutes'
-where a.Batch_No = @Batch_no  and Bullish_Triple_Screen_Strong_Correction_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Quarterly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Quarterly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Monthly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Weekly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Daily'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_4_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_1_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_15_Minutes'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Quarterly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Quarterly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Monthly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Weekly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_Daily'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_4_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_1_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Double_Screen_Strong_Correction_15_Minutes'
-where a.Batch_No = @Batch_no  and Bullish_Double_Screen_Strong_Correction_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_Yearly'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Yearly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_Quarterly'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Quarterly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_Monthly'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_Weekly'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_Daily'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_4_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_1_Hourly'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bullish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bullish_Sum = isnull(Trade_Type_Bullish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bullish_Single_Screen_15_Minutes'
-where a.Batch_No = @Batch_no  and Bullish_Single_Screen_15_Minutes > 0
-; 
----------------------------------------------------------------------------------------------------------------
-end
-begin -- bearish -- Trade_Type and details
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Monthly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Weekly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Daily'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_4_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_1_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_15_Minutes'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Monthly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Weekly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_Daily'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_4_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_1_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Triple_Screen_Strong_Correction_15_Minutes'
-where a.Batch_No = @Batch_no  and Bearish_Triple_Screen_Strong_Correction_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Quarterly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Quarterly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Monthly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Weekly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Daily'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_4_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_1_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_15_Minutes'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Quarterly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Quarterly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Monthly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Weekly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_Daily'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_4_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_1_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Double_Screen_Strong_Correction_15_Minutes'
-where a.Batch_No = @Batch_no  and Bearish_Double_Screen_Strong_Correction_15_Minutes > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Single_Screen_Yearly'
-where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Yearly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Single_Screen_Quarterly'
-where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Quarterly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Single_Screen_Monthly'
-where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Monthly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Single_Screen_Weekly'
-where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Weekly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Single_Screen_Daily'
-where a.Batch_No = @Batch_no  and Bearish_Single_Screen_Daily > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Single_Screen_4_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Single_Screen_4_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-          AND v.Screen_Names = 'Bearish_Single_Screen_1_Hourly'
-where a.Batch_No = @Batch_no  and Bearish_Single_Screen_1_Hourly > 0
-; 
-update a set 
-Trade_Type = isnull(Trade_Type,'')+'Bearish;',
-Trade_Type_Details = isnull(Trade_Type_Details,'') + v.Description + ';'
-,Trade_Type_Details_Sum = isnull(Trade_Type_Details_Sum,0) + v.value
-,Trade_Type_Bearish_Sum = isnull(Trade_Type_Bearish_Sum,0) + v.value
-from dbo.Analyse_Stocks a JOIN dbo.Master_Screen_Name_Values v ON v.Batch_No = @Batch_Num
-         AND v.Screen_Names = 'Bearish_Single_Screen_15_Minutes'
-where a.Batch_No = @Batch_no and Bearish_Single_Screen_15_Minutes > 0
-;
------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-end 
-begin -- volume shockers 
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'yearly;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_yearly_shockers = 1
-;
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'quarterly;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_quarterly_shockers = 1
-;
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'monthly;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_monthly_shockers = 1
-;
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'weekly;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_weekly_shockers = 1
-;
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'daily;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_daily_shockers = 1
-;
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'4_hourly;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_4_hourly_shockers = 1
-;
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'1_hourly;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_1_hourly_shockers = 1
-;
-update a set 
-Volume_Shockers = isnull(Volume_Shockers,'')+'15_minutes;'
-from dbo.Analyse_Stocks a 
-where a.Batch_No = @Batch_no and volume_15_minutes_shockers = 1
+END
+begin -- update trade_type.... calculated fields  
+WITH ValueSource AS 
+(    SELECT Batch_No, Screen_Names, Value
+    FROM dbo.Master_Screen_Name_Values WHERE Batch_No = 1
+)
+,ValuePivot AS 
+(    SELECT * FROM ValueSource
+    PIVOT (SUM(Value) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])) AS vp
+) -- SELECT 'Value' AS DataType, * FROM ValuePivot;
+,DescSource AS 
+(    SELECT Batch_No, Screen_Names, Description 
+    FROM dbo.Master_Screen_Name_Values 
+    WHERE Batch_No = 1
+)
+,DescPivot AS 
+(    SELECT * FROM DescSource a 
+    PIVOT (MAX(Description) FOR Screen_Names IN ([Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly])
+          ) AS dp
+) -- SELECT 'Description' AS DataType, * FROM DescPivot;  
+--select a.Symbol, a.Batch_No, 
+UPDATE a SET 
+    Trade_Type = ISNULL(a.Trade_Type, '') + 
+            -- Bullish 
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_Daily            > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then 'Bullish;' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then 'Bullish;' else '' end) +
+            -- Bearish 
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_Daily            > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then 'Bearish;' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then 'Bearish;' else '' end) , 
+    Trade_Type_Details = ISNULL(a.Trade_Type_Details, '') +  
+			--- Bullish Screen 
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then dp.Bullish_Single_Screen_Yearly            + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then dp.Bullish_Single_Screen_Quarterly         + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then dp.Bullish_Single_Screen_Monthly           + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then dp.Bullish_Single_Screen_Weekly            + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_Daily            > 0 then dp.Bullish_Single_Screen_Daily             + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then dp.Bullish_Single_Screen_4_Hourly          + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then dp.Bullish_Single_Screen_1_Hourly          + ';' else '' end) +
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then dp.Bullish_Single_Screen_15_Minutes        + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then dp.Bullish_Double_Screen_Strong_Quarterly  + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then dp.Bullish_Double_Screen_Strong_Monthly    + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then dp.Bullish_Double_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then dp.Bullish_Double_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then dp.Bullish_Double_Screen_Strong_4_Hourly   + ';' else '' end) +
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then dp.Bullish_Double_Screen_Strong_1_Hourly   + ';' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then dp.Bullish_Triple_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then dp.Bullish_Triple_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then dp.Bullish_Triple_Screen_Strong_4_Hourly   + ';' else '' end) +
+			-- Bearish Screen 
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then dp.Bearish_Single_Screen_Yearly            + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then dp.Bearish_Single_Screen_Quarterly         + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then dp.Bearish_Single_Screen_Monthly           + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then dp.Bearish_Single_Screen_Weekly            + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_Daily            > 0 then dp.Bearish_Single_Screen_Daily             + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then dp.Bearish_Single_Screen_4_Hourly          + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then dp.Bearish_Single_Screen_1_Hourly          + ';' else '' end) +
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then dp.Bearish_Single_Screen_15_Minutes        + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then dp.Bearish_Double_Screen_Strong_Quarterly  + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then dp.Bearish_Double_Screen_Strong_Monthly    + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then dp.Bearish_Double_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then dp.Bearish_Double_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then dp.Bearish_Double_Screen_Strong_4_Hourly   + ';' else '' end) +
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then dp.Bearish_Double_Screen_Strong_1_Hourly   + ';' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then dp.Bearish_Triple_Screen_Strong_Weekly     + ';' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then dp.Bearish_Triple_Screen_Strong_Daily      + ';' else '' end) +
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then dp.Bearish_Triple_Screen_Strong_4_Hourly   + ';' else '' end) , 
+    Trade_Type_Details_Sum = ISNULL(a.Trade_Type_Details_Sum, 0) + 
+			-- Bullish Screen 
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then vp.Bullish_Single_Screen_Yearly           else 0 end) + 
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then vp.Bullish_Single_Screen_Quarterly        else 0 end) + 
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then vp.Bullish_Single_Screen_Monthly          else 0 end) + 
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then vp.Bullish_Single_Screen_Weekly           else 0 end) + 
+            (case when a.Bullish_Single_Screen_Daily            > 0 then vp.Bullish_Single_Screen_Daily            else 0 end) + 
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then vp.Bullish_Single_Screen_4_Hourly         else 0 end) + 
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then vp.Bullish_Single_Screen_1_Hourly         else 0 end) + 
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then vp.Bullish_Single_Screen_15_Minutes       else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then vp.Bullish_Double_Screen_Strong_Quarterly else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then vp.Bullish_Double_Screen_Strong_Monthly   else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then vp.Bullish_Double_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then vp.Bullish_Double_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_4_Hourly  else 0 end) + 
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_1_Hourly  else 0 end) + 
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then vp.Bullish_Triple_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then vp.Bullish_Triple_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Triple_Screen_Strong_4_Hourly  else 0 end) + 
+			-- Bearish Screen 
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then vp.Bearish_Single_Screen_Yearly           else 0 end) + 
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then vp.Bearish_Single_Screen_Quarterly        else 0 end) + 
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then vp.Bearish_Single_Screen_Monthly          else 0 end) + 
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then vp.Bearish_Single_Screen_Weekly           else 0 end) + 
+            (case when a.Bearish_Single_Screen_Daily            > 0 then vp.Bearish_Single_Screen_Daily            else 0 end) + 
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then vp.Bearish_Single_Screen_4_Hourly         else 0 end) + 
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then vp.Bearish_Single_Screen_1_Hourly         else 0 end) + 
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then vp.Bearish_Single_Screen_15_Minutes       else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then vp.Bearish_Double_Screen_Strong_Quarterly else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then vp.Bearish_Double_Screen_Strong_Monthly   else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then vp.Bearish_Double_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then vp.Bearish_Double_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_4_Hourly  else 0 end) + 
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_1_Hourly  else 0 end) + 
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then vp.Bearish_Triple_Screen_Strong_Weekly    else 0 end) + 
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then vp.Bearish_Triple_Screen_Strong_Daily     else 0 end) + 
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Triple_Screen_Strong_4_Hourly  else 0 end) ,
+    Trade_Type_Bullish_Sum = ISNULL(a.Trade_Type_Bullish_Sum, 0) + 
+            (case when a.Bullish_Single_Screen_Yearly           > 0 then vp.Bullish_Single_Screen_Yearly           else 0 end) +
+            (case when a.Bullish_Single_Screen_Quarterly        > 0 then vp.Bullish_Single_Screen_Quarterly        else 0 end) +
+            (case when a.Bullish_Single_Screen_Monthly          > 0 then vp.Bullish_Single_Screen_Monthly          else 0 end) +
+            (case when a.Bullish_Single_Screen_Weekly           > 0 then vp.Bullish_Single_Screen_Weekly           else 0 end) +
+            (case when a.Bullish_Single_Screen_Daily            > 0 then vp.Bullish_Single_Screen_Daily            else 0 end) +
+            (case when a.Bullish_Single_Screen_4_Hourly         > 0 then vp.Bullish_Single_Screen_4_Hourly         else 0 end) +
+            (case when a.Bullish_Single_Screen_1_Hourly         > 0 then vp.Bullish_Single_Screen_1_Hourly         else 0 end) +
+            (case when a.Bullish_Single_Screen_15_Minutes       > 0 then vp.Bullish_Single_Screen_15_Minutes       else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then vp.Bullish_Double_Screen_Strong_Quarterly else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then vp.Bullish_Double_Screen_Strong_Monthly   else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then vp.Bullish_Double_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_Daily     > 0 then vp.Bullish_Double_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_4_Hourly  else 0 end) +
+            (case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bullish_Double_Screen_Strong_1_Hourly  else 0 end) +
+            (case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then vp.Bullish_Triple_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then vp.Bullish_Triple_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bullish_Triple_Screen_Strong_4_Hourly  else 0 end) ,
+    Trade_Type_Bearish_Sum = ISNULL(a.Trade_Type_Bearish_Sum, 0) + 
+            (case when a.Bearish_Single_Screen_Yearly           > 0 then vp.Bearish_Single_Screen_Yearly           else 0 end) +
+            (case when a.Bearish_Single_Screen_Quarterly        > 0 then vp.Bearish_Single_Screen_Quarterly        else 0 end) +
+            (case when a.Bearish_Single_Screen_Monthly          > 0 then vp.Bearish_Single_Screen_Monthly          else 0 end) +
+            (case when a.Bearish_Single_Screen_Weekly           > 0 then vp.Bearish_Single_Screen_Weekly           else 0 end) +
+            (case when a.Bearish_Single_Screen_Daily            > 0 then vp.Bearish_Single_Screen_Daily            else 0 end) +
+            (case when a.Bearish_Single_Screen_4_Hourly         > 0 then vp.Bearish_Single_Screen_4_Hourly         else 0 end) +
+            (case when a.Bearish_Single_Screen_1_Hourly         > 0 then vp.Bearish_Single_Screen_1_Hourly         else 0 end) +
+            (case when a.Bearish_Single_Screen_15_Minutes       > 0 then vp.Bearish_Single_Screen_15_Minutes       else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then vp.Bearish_Double_Screen_Strong_Quarterly else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then vp.Bearish_Double_Screen_Strong_Monthly   else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then vp.Bearish_Double_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_Daily     > 0 then vp.Bearish_Double_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_4_Hourly  else 0 end) +
+            (case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then vp.Bearish_Double_Screen_Strong_1_Hourly  else 0 end) +
+            (case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then vp.Bearish_Triple_Screen_Strong_Weekly    else 0 end) +
+            (case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then vp.Bearish_Triple_Screen_Strong_Daily     else 0 end) +
+            (case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then vp.Bearish_Triple_Screen_Strong_4_Hourly  else 0 end) 
+FROM dbo.Analyse_Stocks a 
+JOIN DescPivot dp  ON dp.Batch_No = 1 and a.Batch_No = @batch_no 
+JOIN ValuePivot vp ON vp.Batch_No = 1 
 ;
 end
-begin -- length of columns 
-update a set a.Trade_Type_Length = len(Trade_Type)
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
-update a set a.Trade_Type_Details_Length = len(Trade_Type_Details)
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
-update a set Trading_View = case
-when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
-when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
-else NULL end
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
-update a set Trading_View_Order = (case when a.Trading_View = 'Bearish' then 1 else 0 end)
-from dbo.Analyse_Stocks a where Batch_No = @Batch_no;
-update a set Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
-(case when volume_yearly_shockers = 1 then 525600 else 0 end) +
-(case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
-(case when volume_monthly_shockers = 1 then 43800 else 0 end)+
-(case when volume_weekly_shockers = 1 then 10080 else 0 end)+
-(case when volume_daily_shockers = 1 then 1440 else 0 end)+
-(case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
-(case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
-(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
-from dbo.Analyse_Stocks a where Batch_No = @Batch_No;
+begin -- update all other calculated fields for sum and length 
+update a set 
+Volume_Shockers = isnull(Volume_Shockers,'') + 
+    (case when volume_yearly_shockers     = 1 then 'yearly;' 	 else '' end) +
+    (case when volume_quarterly_shockers  = 1 then 'quarterly;'  else '' end) +
+    (case when volume_monthly_shockers    = 1 then 'monthly;'	 else '' end) +
+    (case when volume_weekly_shockers     = 1 then 'weekly;' 	 else '' end) +
+    (case when volume_daily_shockers      = 1 then 'daily;'		 else '' end) +
+    (case when volume_4_hourly_shockers   = 1 then '4_hourly;'	 else '' end) +
+    (case when volume_1_hourly_shockers   = 1 then '1_hourly;'	 else '' end) +
+    (case when volume_15_minutes_shockers = 1 then '15_minutes;' else '' end) 
+,Trade_Type_Length = len(a.Trade_Type)
+,Trade_Type_Details_Length = len(Trade_Type_Details)
+,Trading_View = (case
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
+    else NULL end)
+,Trading_View_Order = (case
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 0
+    when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 1
+    else NULL end) -- (case when a.Trading_View = 'Bearish' then 1 else 0 end)
+,Volume_Shockers_Sum = isnull(Volume_Shockers_Sum,0) +
+    (case when volume_yearly_shockers = 1 then 525600 else 0 end) +
+    (case when volume_quarterly_shockers = 1 then 131400 else 0 end)+
+    (case when volume_monthly_shockers = 1 then 43800 else 0 end)+
+    (case when volume_weekly_shockers = 1 then 10080 else 0 end)+
+    (case when volume_daily_shockers = 1 then 1440 else 0 end)+
+    (case when volume_4_hourly_shockers = 1 then 240 else 0 end)+
+    (case when volume_1_hourly_shockers = 1 then 60 else 0 end)+
+    (case when volume_15_minutes_shockers = 1 then 15 else 0 end)
+from dbo.Analyse_Stocks a where a.Batch_No = @batch_no
+;
+end
+begin -- update report_sort_order 
 ;WITH RankedRows AS (
     select batch_no,sno,
-	row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
-	from dbo.Analyse_Stocks
+    row_number() over (partition by Batch_No order by Batch_No desc, Trading_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
+    from dbo.Analyse_Stocks
 )
 UPDATE a SET Report_Sort_Order = b.report_sort_order
 FROM dbo.Analyse_Stocks a JOIN RankedRows b
 ON a.Batch_No = b.Batch_No and a.sno = b.sno
-where a.Batch_No = @Batch_No;
----------------------------------------------------------------------------------------------------------------
-end 
+where a.Batch_No = @batch_no
+;
+end
+
+end
 
 begin -- script execution time calculation 
--- DECLARE @StartTime DATETIME = GETDATE();
-DECLARE	 @EndTime DATETIME = GETDATE();
-DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
--- Break down into components
-DECLARE	 @Hours INT = @DurationMs / 3600000
-		,@Minutes INT = (@DurationMs % 3600000) / 60000
-		,@Seconds INT = (@DurationMs % 60000) / 1000
-		,@Milliseconds INT = @DurationMs % 1000;
--- Format as hh:mm:ss.mmm
+DECLARE @endTime DATETIME = GETDATE() -- ,@StartTime DATETIME = GETDATE();
+DECLARE @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @endTime);
 
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
-PRINT 'Script end at    : ' + CONVERT(VARCHAR, @EndTime, 121);
+PRINT 'Script end at    : ' + CONVERT(VARCHAR, @endTime, 121);
 PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR);
 PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) AS VARCHAR)
+;
 end
 
 end
+
+/*
+--------------------------------------------------------------------------------------------------------------
+select * from Analyse_Stocks_v where batch_no = (select max(batch_no) from Analyse_Stocks)
+-------------------------------------------------------------------------------------------------------------- 
+*/
  

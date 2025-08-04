@@ -77,29 +77,11 @@
           <AssociatedConnUserName />
           <FullPath>Calculation of Fields-v1.xlsx</FullPath>
         </FileNode>
-        <FileNode Name="Insert-Script--15Minutes-v3.txt">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Insert-Script--15Minutes-v3.txt</FullPath>
-        </FileNode>
         <FileNode Name="Insert-Script--15Minutes-v4.txt">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>Insert-Script--15Minutes-v4.txt</FullPath>
-        </FileNode>
-        <FileNode Name="Insert-Script-v3.txt">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Insert-Script-v3.txt</FullPath>
-        </FileNode>
-        <FileNode Name="Reset-Script-v3.txt">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Reset-Script-v3.txt</FullPath>
         </FileNode>
         <FileNode Name="Screen-Values-v1.xlsx">
           <AssociatedConnectionMoniker />
@@ -113,12 +95,6 @@
           <AssociatedConnUserName />
           <FullPath>trending sorting-v1.xls</FullPath>
         </FileNode>
-        <FileNode Name="Update-Report--15Minutes-Queries-v3.txt">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Update-Report--15Minutes-Queries-v3.txt</FullPath>
-        </FileNode>
         <FileNode Name="Update-Report--Queries-15Minutes-v4.txt">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
@@ -130,12 +106,6 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>Update-Report--Queries-15Minutes-v5.txt</FullPath>
-        </FileNode>
-        <FileNode Name="Update-Report--Queries-v3.txt">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Update-Report--Queries-v3.txt</FullPath>
         </FileNode>
         <FileNode Name="Update-Report--Queries-v4.txt">
           <AssociatedConnectionMoniker />

@@ -1502,4 +1502,4 @@ PRINT 'Duration: ' +
 end
 
 -- select top 2500 * from dbo.Analyse_15Minutes_Stocks order by Sno desc;
-end
+end 

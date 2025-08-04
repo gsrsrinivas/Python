@@ -1478,3 +1478,4 @@ where a.Batch_No = @Batch_No
 end
 
 -- select * from dbo.Analyse_15Minutes_Stocks where Batch_No = @Batch_No order by Sno;
+ 

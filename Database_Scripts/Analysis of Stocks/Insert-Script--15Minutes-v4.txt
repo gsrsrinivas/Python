@@ -97,3 +97,4 @@ select top 2500 * from dbo.Analyse_15Minutes_Stocks
 order by 1 desc;
 */
 end 
+ 

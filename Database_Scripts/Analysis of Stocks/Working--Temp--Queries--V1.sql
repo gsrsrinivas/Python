@@ -8,7 +8,7 @@ Segments_Order desc,
 Trade_Type_Details_Sum desc,
 Volume_Shockers_Sum desc,
 Trading_View desc
-
+ 
 
 /*
 */

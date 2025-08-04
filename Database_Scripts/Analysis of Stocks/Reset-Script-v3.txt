@@ -3402,4 +3402,4 @@ PRINT 'Duration         : ' +
   RIGHT('000' + CAST(@Milliseconds AS VARCHAR), 3);
 end
 
-end
+end 

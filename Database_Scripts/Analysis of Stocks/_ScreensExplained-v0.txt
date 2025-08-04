@@ -81,3 +81,4 @@ begin -- bearish screen
 -- Bearish_Triple_Screen_Strong_Correction_15_Minutes ; grandparent,parent down tick, child up tick - period 15 minutes
 end 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
+ 

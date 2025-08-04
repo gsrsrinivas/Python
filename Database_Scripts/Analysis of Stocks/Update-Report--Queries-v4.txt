@@ -489,3 +489,4 @@ end
 select * from Analyse_Stocks_v where batch_no = (select max(batch_no) from Analyse_Stocks)
 -------------------------------------------------------------------------------------------------------------- 
 */
+ 

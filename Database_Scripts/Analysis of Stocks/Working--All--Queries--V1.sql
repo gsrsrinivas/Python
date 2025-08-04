@@ -1434,3 +1434,4 @@ group by Batch_No, Sno
 )
 select * from Final
 end
+ 

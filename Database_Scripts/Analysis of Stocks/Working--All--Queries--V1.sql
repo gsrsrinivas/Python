@@ -1,3 +1,20 @@
+begin -- shrink databases
+	-- shrink database log file
+	USE Stocks_Analysis;
+	ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
+	DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
+        
+	USE Stocks_db;
+	ALTER DATABASE Stocks_db SET RECOVERY SIMPLE;
+	DBCC SHRINKFILE (Stocks_db_log, 1); -- Shrinks to 1MB
+end
+begin
+select top 2500 * from dbo.Analyse_Stocks
+where Trading_View is not null
+order by Batch_No desc,Report_Sort_Order asc
+;
+select * from Master_Screen_Name_Values where batch_no = 1 order by sno
+end
 begin
 select * from Analyse_Stocks where Batch_No = (select max(batch_no) from Analyse_Stocks)
 and Trade_Type_Details != ''
@@ -146,4 +163,1274 @@ from dbo.Analyse_15Minutes_Stocks
 order by Batch_No desc,Report_Sort_Order asc
 ;
 select * from dbo.Analyse_15Minutes_Stocks
+end
+begin
+
+update Master_Screen_Name_Values
+set Description = REPLACE(Description,'-Ts-','-T-')
+where Batch_No = 1 -- and Screen_Names like '%Strong_Daily%'
+;
+select * from dbo.Master_Screen_Name_Values where Batch_No = 1
+order by sno,[Value] desc;
+
+WITH Split AS (
+    SELECT value = TRIM(value)
+    FROM STRING_SPLIT('orange,apple,banana', ',')
+)
+SELECT STUFF((
+    SELECT ',' + value
+    FROM Split
+    ORDER BY value
+    FOR XML PATH(''), TYPE
+).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS SortedString;
+
+end
+begin
+select count(sno),batch_no,description 
+from Master_Screen_Name_Values 
+where batch_no = 1 
+group by batch_no,description
+having count(1)>1
+select * from Master_Screen_Name_Values where Description = 'Bu-T-Stg-Corr-M'
+update Master_Screen_Name_Values set Description = 'Bu-T-Stg-Corr-D'
+where sno = 9 and Batch_No = 1
+end
+begin
+
+DECLARE @raw_string NVARCHAR(MAX) = 
+  'Bu-T-Stg-W;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Sgl-Y;Bu-Sgl-Q;Bu-Sgl-M;Bu-Sgl-W';
+
+WITH SplitValues AS (
+    SELECT 
+        value AS full_string,
+        PARSENAME(REPLACE(value, '-', '.'), 4) AS part1,  -- Bu
+        PARSENAME(REPLACE(value, '-', '.'), 3) AS part2,  -- T / Dbl / Sgl
+        PARSENAME(REPLACE(value, '-', '.'), 2) AS part3,  -- Optional: Stg or Suffix
+        PARSENAME(REPLACE(value, '-', '.'), 1) AS suffix  -- Optional: suffix
+    FROM STRING_SPLIT(@raw_string, ';')
+),
+Normalized AS (
+    SELECT 
+        CASE 
+            WHEN part2 = 'Sgl' THEN CONCAT(part1, '-', part2)             -- Bu-Sgl
+            ELSE CONCAT(part1, '-', part2, '-', part3)                    -- Bu-T-Stg / Bu-Dbl-Stg
+        END AS group_key,
+        CASE 
+            WHEN part2 = 'Sgl' THEN part3                                 -- Suffix for Bu-Sgl
+            ELSE suffix                                                  -- Suffix for Bu-T/Dbl
+        END AS suffix_value
+    FROM SplitValues
+),
+GroupAgg AS (
+    SELECT 
+        group_key,
+        STRING_AGG(suffix_value, ',') WITHIN GROUP (ORDER BY suffix_value) AS suffixes
+    FROM Normalized
+    GROUP BY group_key
+)
+SELECT STRING_AGG(group_key + '-' + suffixes, ';') AS final_output
+FROM GroupAgg;
+
+DECLARE @raw_string NVARCHAR(MAX) = 'Bu-T-Stg-W;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Sgl-Y;Bu-Sgl-Q;Bu-Sgl-M;Bu-Sgl-W';
+
+;WITH SplitValues AS (
+    SELECT 
+        value,
+        PARSENAME(REPLACE(value, '-', '.'), 4) AS prefix,  -- Bu
+        PARSENAME(REPLACE(value, '-', '.'), 3) AS category, -- T / Dbl / Sgl
+        PARSENAME(REPLACE(value, '-', '.'), 2) AS mid,      -- Stg or suffix
+        PARSENAME(REPLACE(value, '-', '.'), 1) AS suffix    -- suffix
+    FROM STRING_SPLIT(@raw_string, ';')
+),
+Normalized AS (
+    SELECT 
+        category,
+        CASE WHEN category = 'Sgl' THEN mid ELSE suffix END AS suffix_value,
+        CASE WHEN category = 'Sgl' THEN NULL ELSE mid END AS mid_value
+    FROM SplitValues
+),
+GroupAgg AS (
+    SELECT 
+        category,
+        ISNULL(mid_value, '') AS mid_text,
+        STRING_AGG(suffix_value, ',') WITHIN GROUP (ORDER BY suffix_value) AS suffixes
+    FROM Normalized
+    GROUP BY category, mid_value
+),
+Formatted AS (
+    SELECT 
+        CASE 
+            WHEN category = 'T' THEN 'T-Stg-' + suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-Stg-' + suffixes
+            ELSE 'Sgl-' + suffixes
+        END AS segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_order
+    FROM GroupAgg
+)
+SELECT 'Bu-' + STRING_AGG(segment, ';') WITHIN GROUP (ORDER BY sort_order) AS final_output;
+end
+
+'Bu-T-Stg-W;
+
+Bu-Dbl-Stg-Q;
+Bu-Dbl-Stg-M;
+Bu-Dbl-Stg-W;
+
+Bu-Sgl-Y;
+Bu-Sgl-Q;
+Bu-Sgl-M;
+Bu-Sgl-W';
+
+Bu-T-Stg-W;Dbl-Stg-Q,M,W;Sgl-Y,Q,M,W;
+
+begin
+
+WITH split_items AS (
+    SELECT 
+		i.Batch_No,
+        i.Report_Sort_Order,
+        LTRIM(RTRIM(value)) AS item
+    FROM Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')	
+	where LTRIM(RTRIM(value)) !=''	
+)
+,joined_items AS (
+    SELECT top 100 percent 
+		s.Batch_No,
+        s.Report_Sort_Order,
+        s.item,
+		cast(o.sno as int) as sno
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o ON s.item = o.Description and o.Batch_No = 1
+	where s.item !=''
+)
+SELECT 
+    Batch_No,Report_Sort_Order,
+    STRING_AGG(item, ';') WITHIN GROUP (ORDER BY batch_no,report_sort_order,sno) AS sorted_Trade_Type_Details
+FROM joined_items
+GROUP BY batch_no,report_sort_order
+order by batch_no,report_sort_order
+end
+begin
+
+WITH split_items AS (
+    SELECT 
+        i.Batch_No,
+        i.Report_Sort_Order,
+        LTRIM(RTRIM(value)) AS item
+    FROM Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')
+    WHERE LTRIM(RTRIM(value)) != ''
+),
+joined_items AS (
+    SELECT 
+        s.Batch_No,
+        s.Report_Sort_Order,
+        s.item,
+        CAST(o.sno AS INT) AS sno
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o 
+        ON s.item = o.Description 
+       AND o.Batch_No = 1
+    WHERE s.item != ''
+),
+item_parts AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        item,
+        PARSENAME(REPLACE(item, '-', '.'), 4) AS prefix,     -- Bu
+        PARSENAME(REPLACE(item, '-', '.'), 3) AS category,   -- T / Dbl / Sgl
+        PARSENAME(REPLACE(item, '-', '.'), 2) AS mid_part,   -- Stg or suffix
+        PARSENAME(REPLACE(item, '-', '.'), 1) AS suffix_part -- W / Q / M / Y
+    FROM joined_items
+),
+normalized_items AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        CASE 
+            WHEN category = 'Sgl' THEN mid_part
+            ELSE suffix_part
+        END AS suffix_value,
+        CASE 
+            WHEN category = 'Sgl' THEN ''
+            ELSE mid_part
+        END AS mid_value
+    FROM item_parts
+),
+grouped_items AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        mid_value,
+        STRING_AGG(suffix_value, ',') WITHIN GROUP (ORDER BY suffix_value) AS aggregated_suffixes
+    FROM normalized_items
+    GROUP BY Batch_No, Report_Sort_Order, category, mid_value
+),
+formatted_items AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        CASE 
+            WHEN category = 'T' THEN 'T-' + mid_value + '-' + aggregated_suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-' + mid_value + '-' + aggregated_suffixes
+            ELSE 'Sgl-' + aggregated_suffixes
+        END AS formatted_segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_order
+    FROM grouped_items
+)
+,final as (
+SELECT 
+    Batch_No,
+    Report_Sort_Order,
+    'Bu-' + STRING_AGG(formatted_segment, ';') WITHIN GROUP (ORDER BY sort_order) AS transformed_Trade_Type_Details
+FROM formatted_items
+GROUP BY Batch_No, Report_Sort_Order
+-- ORDER BY Batch_No, Report_Sort_Order
+) 
+select * from final order by len(transformed_Trade_Type_Details) desc
+Bu-T-Stg-W;Dbl-Stg-M,Q,W;Sgl-M,Q,W,Y
+end;
+
+begin
+
+WITH split_items AS (
+    SELECT 
+        i.Batch_No,
+        i.Report_Sort_Order,
+        LTRIM(RTRIM(value)) AS item
+    FROM Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')
+    WHERE LTRIM(RTRIM(value)) != ''
+),
+joined_items AS (
+    SELECT 
+        s.Batch_No,
+        s.Report_Sort_Order,
+        s.item,
+        CAST(o.sno AS INT) AS sno
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o 
+        ON s.item = o.Description AND o.Batch_No = 1
+),
+parts AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        item,
+        PARSENAME(REPLACE(item, '-', '.'), 4) AS prefix,
+        PARSENAME(REPLACE(item, '-', '.'), 3) AS category,
+        PARSENAME(REPLACE(item, '-', '.'), 2) AS mid,
+        PARSENAME(REPLACE(item, '-', '.'), 1) AS suffix
+    FROM joined_items
+),
+normalized AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        CASE WHEN category = 'Sgl' THEN mid ELSE suffix END AS suffix_value,
+        CASE WHEN category = 'Sgl' THEN '' ELSE mid END AS mid_value
+    FROM parts
+),
+ordered_suffixes AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        mid_value,
+        suffix_value
+    FROM normalized
+),
+distinct_groups AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        mid_value,
+        suffix_value
+    FROM ordered_suffixes
+),
+xml_sort AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        mid_value,
+        (
+            SELECT suffix_value AS [*]
+            FROM ordered_suffixes x
+            WHERE x.Batch_No = g.Batch_No AND x.Report_Sort_Order = g.Report_Sort_Order
+              AND x.category = g.category AND x.mid_value = g.mid_value
+            ORDER BY suffix_value
+            FOR XML PATH('')
+        ) AS xml_suffixes
+    FROM distinct_groups g
+),
+final_format AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        mid_value,
+        REPLACE(REPLACE(REPLACE(CAST(xml_suffixes AS NVARCHAR(MAX)), '</suffix_value><suffix_value>', ','), '<suffix_value>', ''), '</suffix_value>', '') AS sorted_suffixes
+    FROM xml_sort
+),
+segments AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        CASE 
+            WHEN category = 'T' THEN 'T-' + mid_value + '-' + sorted_suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-' + mid_value + '-' + sorted_suffixes
+            ELSE 'Sgl-' + sorted_suffixes
+        END AS segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_order
+    FROM final_format
+)
+,final as (
+SELECT 
+    Batch_No,
+    Report_Sort_Order,
+    'Bu-' + STRING_AGG(segment, ';') WITHIN GROUP (ORDER BY sort_order) AS transformed_Trade_Type_Details
+FROM segments
+GROUP BY Batch_No, Report_Sort_Order
+--ORDER BY Batch_No, Report_Sort_Order
+)
+select * from final order by len(transformed_Trade_Type_Details) desc
+
+end
+begin
+-- Define suffix weight mapping
+WITH suffix_order AS (
+    SELECT 'Y' AS suffix, 4 AS sort_order UNION ALL
+    SELECT 'Q', 1 UNION ALL
+    SELECT 'M', 2 UNION ALL
+    SELECT 'W', 3
+),
+split_items AS (
+    SELECT 
+        i.Batch_No,
+        i.Report_Sort_Order,
+        LTRIM(RTRIM(value)) AS item
+    FROM Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')
+    WHERE LTRIM(RTRIM(value)) != ''
+),
+joined_items AS (
+    SELECT 
+        s.Batch_No,
+        s.Report_Sort_Order,
+        s.item,
+        CAST(o.sno AS INT) AS sno
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o 
+        ON s.item = o.Description AND o.Batch_No = 1
+),
+item_parts AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        item,
+        PARSENAME(REPLACE(item, '-', '.'), 4) AS prefix,
+        PARSENAME(REPLACE(item, '-', '.'), 3) AS category,
+        PARSENAME(REPLACE(item, '-', '.'), 2) AS mid,
+        PARSENAME(REPLACE(item, '-', '.'), 1) AS suffix
+    FROM joined_items
+),
+normalized AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        CASE WHEN category = 'Sgl' THEN mid ELSE suffix END AS suffix_value,
+        CASE WHEN category = 'Sgl' THEN '' ELSE mid END AS mid_value
+    FROM item_parts
+),
+ordered_suffixes AS (
+    SELECT 
+        n.Batch_No,
+        n.Report_Sort_Order,
+        n.category,
+        n.mid_value,
+        n.suffix_value,
+        so.sort_order
+    FROM normalized n
+    JOIN suffix_order so ON n.suffix_value = so.suffix
+),
+grouped_suffixes AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        mid_value,
+        STRING_AGG(DISTINCT suffix_value, ',') WITHIN GROUP (ORDER BY sort_order) AS sorted_suffixes
+    FROM ordered_suffixes
+    GROUP BY Batch_No, Report_Sort_Order, category, mid_value
+),
+formatted AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        CASE 
+            WHEN category = 'T' THEN 'T-' + mid_value + '-' + sorted_suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-' + mid_value + '-' + sorted_suffixes
+            ELSE 'Sgl-' + sorted_suffixes
+        END AS segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_priority
+    FROM grouped_suffixes
+)
+SELECT 
+    Batch_No,
+    Report_Sort_Order,
+    'Bu-' + STRING_AGG(segment, ';') WITHIN GROUP (ORDER BY sort_priority) AS transformed_Trade_Type_Details
+FROM formatted
+GROUP BY Batch_No, Report_Sort_Order
+ORDER BY Batch_No, Report_Sort_Order;
+end
+
+begin 
+WITH suffix_order AS (
+    SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
+    SELECT 'Q', 2 UNION ALL
+    SELECT 'M', 3 UNION ALL
+    SELECT 'W', 4
+),
+split_items AS (
+    SELECT 
+        i.Batch_No,
+        i.Report_Sort_Order,
+        LTRIM(RTRIM(value)) AS item
+    FROM Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')
+    WHERE LTRIM(RTRIM(value)) != ''
+),
+joined_items AS (
+    SELECT 
+        s.Batch_No,
+        s.Report_Sort_Order,
+        s.item,
+        CAST(o.sno AS INT) AS sno
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o 
+        ON s.item = o.Description AND o.Batch_No = 1
+),
+item_parts AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        item,
+        PARSENAME(REPLACE(item, '-', '.'), 4) AS prefix,
+        PARSENAME(REPLACE(item, '-', '.'), 3) AS category,
+        PARSENAME(REPLACE(item, '-', '.'), 2) AS mid,
+        PARSENAME(REPLACE(item, '-', '.'), 1) AS suffix
+    FROM joined_items
+),
+normalized AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        category,
+        CASE WHEN category = 'Sgl' THEN mid ELSE suffix END AS suffix_value,
+        CASE WHEN category = 'Sgl' THEN '' ELSE mid END AS mid_value
+    FROM item_parts
+),
+ordered_suffixes AS (
+    SELECT 
+        n.Batch_No,
+        n.Report_Sort_Order,
+        n.category,
+        n.mid_value,
+        n.suffix_value,
+        so.sort_order
+    FROM normalized n
+    JOIN suffix_order so ON n.suffix_value = so.suffix
+),
+grouped_suffixes AS (
+    SELECT 
+        g.Batch_No,
+        g.Report_Sort_Order,
+        g.category,
+        g.mid_value,
+        STUFF((
+            SELECT ',' + dx.suffix_value
+            FROM (
+                SELECT DISTINCT x.suffix_value
+                FROM ordered_suffixes x
+                WHERE x.Batch_No = g.Batch_No 
+                  AND x.Report_Sort_Order = g.Report_Sort_Order
+                  AND x.category = g.category 
+                  AND x.mid_value = g.mid_value
+            ) dx
+            JOIN suffix_order so ON dx.suffix_value = so.suffix
+            ORDER BY so.sort_order
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS sorted_suffixes
+    FROM ordered_suffixes g
+    GROUP BY g.Batch_No, g.Report_Sort_Order, g.category, g.mid_value
+),
+formatted AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        CASE 
+            WHEN category = 'T' THEN 'T-' + mid_value + '-' + sorted_suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-' + mid_value + '-' + sorted_suffixes
+            ELSE 'Sgl-' + sorted_suffixes
+        END AS segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_priority
+    FROM grouped_suffixes
+),
+final AS (
+    SELECT 
+        Batch_No,
+        Report_Sort_Order,
+        'Bu-' + STUFF((
+            SELECT ';' + segment
+            FROM formatted f2
+            WHERE f2.Batch_No = f1.Batch_No AND f2.Report_Sort_Order = f1.Report_Sort_Order
+            ORDER BY sort_priority
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS transformed_Trade_Type_Details
+    FROM formatted f1
+    GROUP BY Batch_No, Report_Sort_Order
+)
+SELECT * FROM final order by len(transformed_Trade_Type_Details) desc
+end
+begin -- final query to sort the string in trade type details and update
+WITH suffix_order AS (
+    SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
+    SELECT 'Q', 2 UNION ALL
+    SELECT 'M', 3 UNION ALL
+    SELECT 'W', 4
+),
+split_items AS (
+    SELECT 
+        i.Batch_No,
+        i.SNO,
+        LTRIM(RTRIM(value)) AS item
+    FROM Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')
+    WHERE LTRIM(RTRIM(value)) != ''
+),
+joined_items AS (
+    SELECT 
+        s.Batch_No,
+        s.SNO,
+        s.item
+        -- ,CAST(o.sno AS INT) AS sno_Order
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o 
+        ON s.item = o.Description AND o.Batch_No = 1
+),
+item_parts AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        item,
+        PARSENAME(REPLACE(item, '-', '.'), 4) AS prefix,
+        PARSENAME(REPLACE(item, '-', '.'), 3) AS category,
+        PARSENAME(REPLACE(item, '-', '.'), 2) AS mid,
+        PARSENAME(REPLACE(item, '-', '.'), 1) AS suffix
+    FROM joined_items
+),
+normalized AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        category,
+        CASE WHEN category = 'Sgl' THEN mid ELSE suffix END AS suffix_value,
+        CASE WHEN category = 'Sgl' THEN '' ELSE mid END AS mid_value
+    FROM item_parts
+),
+ordered_suffixes AS (
+    SELECT 
+        n.Batch_No,
+        n.SNO,
+        n.category,
+        n.mid_value,
+        n.suffix_value,
+        so.sort_order
+    FROM normalized n
+    JOIN suffix_order so ON n.suffix_value = so.suffix
+),
+grouped_suffixes AS (
+    SELECT 
+        g.Batch_No,
+        g.SNO,
+        g.category,
+        g.mid_value,
+        STUFF((
+            SELECT ',' + dx.suffix_value
+            FROM (
+                SELECT DISTINCT x.suffix_value
+                FROM ordered_suffixes x
+                WHERE x.Batch_No = g.Batch_No 
+                  AND x.SNO = g.SNO
+                  AND x.category = g.category 
+                  AND x.mid_value = g.mid_value
+            ) dx
+            JOIN suffix_order so ON dx.suffix_value = so.suffix
+            ORDER BY so.sort_order
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS sorted_suffixes
+    FROM ordered_suffixes g
+    GROUP BY g.Batch_No, g.SNO, g.category, g.mid_value
+),
+formatted AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        CASE 
+            WHEN category = 'T' THEN 'T-' + mid_value + '-' + sorted_suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-' + mid_value + '-' + sorted_suffixes
+            ELSE 'Sgl-' + sorted_suffixes
+        END AS segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_priority
+    FROM grouped_suffixes
+),
+final AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        'Bu-' + STUFF((
+            SELECT ';' + segment
+            FROM formatted f2
+            WHERE f2.Batch_No = f1.Batch_No AND f2.SNO = f1.SNO
+            ORDER BY sort_priority
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS transformed_Trade_Type_Details
+    FROM formatted f1
+    GROUP BY Batch_No, SNO
+)
+update a set trade_type_details = transformed_Trade_Type_Details
+from Analyse_Stocks a inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
+;
+end
+begin
+WITH suffix_order AS (
+    SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
+    SELECT 'Q', 2 UNION ALL
+    SELECT 'M', 3 UNION ALL
+    SELECT 'W', 4
+)
+,split_items AS (
+    SELECT 
+        i.Batch_No,
+        i.SNO,
+        LTRIM(RTRIM(value)) AS item
+    FROM Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')
+    WHERE LTRIM(RTRIM(value)) != ''
+) -- select * from split_items
+,joined_items AS (
+    SELECT 
+        s.Batch_No,
+        s.SNO,
+        s.item
+        ,CAST(o.sno AS INT) AS sno_Order
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o 
+        ON s.item = o.Description AND o.Batch_No = 1
+) -- select * from joined_items 
+,item_parts AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        item,
+        PARSENAME(REPLACE(item, '-', '.'), 4) AS prefix,
+        PARSENAME(REPLACE(item, '-', '.'), 3) AS category,
+        PARSENAME(REPLACE(item, '-', '.'), 2) AS mid,
+        PARSENAME(REPLACE(item, '-', '.'), 1) AS suffix
+    FROM joined_items
+) -- select * from item_parts -- 20294
+,normalized AS (
+    SELECT 
+        Batch_No,
+        SNO,
+		prefix,
+        category,
+        CASE WHEN category = 'Sgl' THEN mid ELSE suffix END AS suffix_value,
+        CASE WHEN category = 'Sgl' THEN '' ELSE mid END AS mid_value
+    FROM item_parts
+) select * from normalized
+,ordered_suffixes AS (
+    SELECT 
+        n.Batch_No,
+        n.SNO,
+        n.category,
+        n.mid_value,
+        n.suffix_value,
+        so.sort_order
+    FROM normalized n
+    JOIN suffix_order so ON n.suffix_value = so.suffix
+)
+,grouped_suffixes AS (
+    SELECT 
+        g.Batch_No,
+        g.SNO,
+        g.category,
+        g.mid_value,
+        STUFF((
+            SELECT ',' + dx.suffix_value
+            FROM (
+                SELECT DISTINCT x.suffix_value
+                FROM ordered_suffixes x
+                WHERE x.Batch_No = g.Batch_No 
+                  AND x.SNO = g.SNO
+                  AND x.category = g.category 
+                  AND x.mid_value = g.mid_value
+            ) dx
+            JOIN suffix_order so ON dx.suffix_value = so.suffix
+            ORDER BY so.sort_order
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS sorted_suffixes
+    FROM ordered_suffixes g
+    GROUP BY g.Batch_No, g.SNO, g.category, g.mid_value
+)
+,formatted AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        CASE 
+            WHEN category = 'T' THEN 'T-' + mid_value + '-' + sorted_suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-' + mid_value + '-' + sorted_suffixes
+            ELSE 'Sgl-' + sorted_suffixes
+        END AS segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_priority
+    FROM grouped_suffixes
+) --select * from formatted 
+,final AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        'Bu-' + STUFF((
+            SELECT ';' + segment
+            FROM formatted f2
+            WHERE f2.Batch_No = f1.Batch_No AND f2.SNO = f1.SNO
+            ORDER BY sort_priority
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS transformed_Trade_Type_Details
+    FROM formatted f1
+    GROUP BY Batch_No, SNO
+)
+select * from final 
+-- where transformed_Trade_Type_Details like '%Be-%'
+--update a set trade_type_details = transformed_Trade_Type_Details
+--from Analyse_Stocks a inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
+--;
+
+select * from Master_Screen_Name_Values order by batch_no,sno
+end
+begin
+-- sort the string in Trade type details 
+WITH suffix_order AS (
+    SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
+    SELECT 'Q', 2 UNION ALL
+    SELECT 'M', 3 UNION ALL
+    SELECT 'W', 4
+)
+,split_items AS (
+    SELECT 
+        i.Batch_No,
+        i.SNO,
+        LTRIM(RTRIM(value)) AS item
+    FROM dbo.Analyse_Stocks i 
+    CROSS APPLY STRING_SPLIT(i.Trade_Type_Details, ';')
+    WHERE LTRIM(RTRIM(value)) != '' -- and Trading_View = 'Bullish'
+) -- select * from split_items
+,joined_items AS (
+    SELECT 
+        s.Batch_No,
+        s.SNO,
+        s.item
+       ,CAST(o.sno AS INT) AS sno_Order
+    FROM split_items s
+    JOIN Master_Screen_Name_Values o 
+        ON s.item = o.Description AND o.Batch_No = 1
+)
+,item_parts AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        item,
+        PARSENAME(REPLACE(item, '-', '.'), 4) AS prefix,
+        PARSENAME(REPLACE(item, '-', '.'), 3) AS category,
+        PARSENAME(REPLACE(item, '-', '.'), 2) AS mid,
+        PARSENAME(REPLACE(item, '-', '.'), 1) AS suffix
+    FROM joined_items
+) -- select * from item_parts
+,normalized AS (
+    SELECT 
+        Batch_No,
+        SNO,
+		prefix,
+        category,
+        CASE WHEN category = 'Sgl' THEN mid ELSE suffix END AS suffix_value,
+        CASE WHEN category = 'Sgl' THEN '' ELSE mid END AS mid_value
+    FROM item_parts
+) -- select * from normalized 
+,ordered_suffixes AS (
+    SELECT 
+        n.Batch_No,
+        n.SNO,
+        n.prefix,
+		n.category,
+        n.mid_value,
+        n.suffix_value,
+        so.sort_order
+    FROM normalized n
+    JOIN suffix_order so ON n.suffix_value = so.suffix
+) -- select * from ordered_suffixes
+,grouped_suffixes AS (
+    SELECT 
+        g.Batch_No,
+        g.SNO,
+		g.prefix,
+        g.category,
+        g.mid_value,
+        STUFF((
+            SELECT ',' + dx.suffix_value
+            FROM (
+                SELECT DISTINCT x.suffix_value
+                FROM ordered_suffixes x
+                WHERE x.Batch_No = g.Batch_No 
+                  AND x.SNO = g.SNO
+                  AND x.category = g.category 
+                  AND x.mid_value = g.mid_value
+            ) dx
+            JOIN suffix_order so ON dx.suffix_value = so.suffix
+            ORDER BY so.sort_order
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS sorted_suffixes
+    FROM ordered_suffixes g
+    GROUP BY g.Batch_No, g.SNO, g.prefix, g.category, g.mid_value
+) -- select * from grouped_suffixes
+,formatted AS (
+    SELECT 
+        Batch_No,
+        SNO,
+		prefix,
+        CASE 
+            WHEN category = 'T' THEN 'T-' + mid_value + '-' + sorted_suffixes
+            WHEN category = 'Dbl' THEN 'Dbl-' + mid_value + '-' + sorted_suffixes
+            ELSE 'Sgl-' + sorted_suffixes
+        END AS segment,
+        CASE 
+            WHEN category = 'T' THEN 1
+            WHEN category = 'Dbl' THEN 2
+            ELSE 3
+        END AS sort_priority
+    FROM grouped_suffixes
+) -- select * from formatted
+,final AS (
+    SELECT 
+        Batch_No,
+        SNO,
+        max(isnull(prefix,'')) + '-' + STUFF((
+            SELECT ';' + segment
+            FROM formatted f2
+            WHERE f2.Batch_No = f1.Batch_No AND f2.SNO = f1.SNO
+            ORDER BY sort_priority
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS transformed_Trade_Type_Details
+    FROM formatted f1
+    GROUP BY Batch_No, SNO
+)
+select * from final
+--update a set trade_type_details = transformed_Trade_Type_Details
+--from dbo.Analyse_Stocks a inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
+--;
+end
+begin
+update a
+set Description = replace(Description,'-Sim','-Sim-')
+from Master_Screen_Name_Values a where Batch_No = 1 and Description like '%-sim%';
+select * from Master_Screen_Name_Values where Batch_No = 1 and Description like '%-Sgl-%'
+order by sno
+;
+end
+
+begin
+-- If using SQL Server 2016+, use STRING_SPLIT
+DECLARE @input NVARCHAR(MAX) = 'Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Be-Dbl-Stg-4H;Be-Dbl-Stg-1H;Be-Sgl-Sim-D;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;';
+
+WITH SplitCodes AS (
+    SELECT value AS Code
+    FROM STRING_SPLIT(@input, ';')
+    WHERE value <> ''
+),
+Parsed AS (
+    SELECT
+        -- Get first code segment (Bu or Be)
+        LEFT(Code, CHARINDEX('-', Code) - 1) AS Brand,
+        -- Get kind (Sgl-Sim or Dbl-Stg or Tri-Stg)
+        SUBSTRING(Code, CHARINDEX('-', Code) + 1,
+            CHARINDEX('-', Code + '-', CHARINDEX('-', Code) + 1) - CHARINDEX('-', Code) - 1) AS Type,
+        -- Last part
+        RIGHT(Code, LEN(Code) - LEN(LEFT(Code, CHARINDEX('-', Code + '-') - 1) + '-' +
+            SUBSTRING(Code, CHARINDEX('-', Code) + 1, 
+                CHARINDEX('-', Code + '-', CHARINDEX('-', Code) + 1) - CHARINDEX('-', Code) - 1)) - 1) AS SubType
+    FROM SplitCodes
+) -- select * from SplitCodes
+, TypeReplaced AS (
+    SELECT 
+        Brand,
+        CASE WHEN Type = 'Sgl-Sim' THEN 'Sgl-Sim' ELSE Type END AS Type, 
+        SubType
+    FROM Parsed
+)
+, Grouped AS (
+    SELECT
+        Brand,
+        Type,
+        STRING_AGG(SubType, ',') WITHIN GROUP (ORDER BY 
+           CASE SubType 
+             WHEN 'Y' THEN 1
+			 WHEN 'Q' THEN 2
+			 WHEN 'M' THEN 3
+			 WHEN 'W' THEN 4
+			 WHEN 'D' THEN 5
+             WHEN '4H' THEN 6
+             WHEN '1H' THEN 7
+             ELSE 100 END
+        ) AS SubTypes
+    FROM TypeReplaced
+    GROUP BY Brand, Type
+)
+, FinalAgg AS (
+    SELECT
+        Brand,
+        STRING_AGG(Type + '-' + SubTypes, ';') WITHIN GROUP (ORDER BY 
+            CASE Type 
+                WHEN 'Tri-Stg' THEN 1
+				WHEN 'Dbl-Stg' THEN 2
+                WHEN 'Sgl-Sim' THEN 3
+                ELSE 100 END
+            ) AS Val
+    FROM Grouped
+    GROUP BY Brand
+)
+SELECT STRING_AGG(Val, ';;') WITHIN GROUP (ORDER BY
+         CASE Brand WHEN 'Bu' THEN 1 WHEN 'Be' THEN 2 ELSE 100 END
+      ) AS Output
+FROM FinalAgg
+;
+end
+begin 
+DECLARE @input NVARCHAR(MAX) =
+'Bu-Tri-Stg-Y;Bu-Tri-Stg-Q;Bu-Tri-Stg-M;Bu-Tri-Stg-W;Bu-Tri-Stg-D,Bu-Tri-Stg-4H,Bu-Tri-Stg-1H,Bu-Tri-Stg-15;Bu-Dbl-Stg-Y;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D,Bu-Dbl-Stg-4H,Bu-Dbl-Stg-1H,Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D,Bu-Sgl-Sim-4H,Bu-Sgl-Sim-1H,Bu-Sgl-Sim-15;Be-Tri-Stg-Y;Be-Tri-Stg-Q;Be-Tri-Stg-M;Be-Tri-Stg-W;Be-Tri-Stg-D,Be-Tri-Stg-4H,Be-Tri-Stg-1H,Be-Tri-Stg-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D,Be-Dbl-Stg-4H,Be-Dbl-Stg-1H,Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-D,Be-Sgl-Sim-4H,Be-Sgl-Sim-1H,Be-Sgl-Sim-15;'
+
+-- 1. Split @input into rows using ';'
+;WITH Splits AS (
+    SELECT value AS GroupStr, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS grpOrder
+    FROM STRING_SPLIT(@input, ';')
+    WHERE value <> ''
+), Parsed AS (
+    -- Split each group, if it contains multiple codes by ','
+    SELECT
+        grpOrder,
+        TRIM(value) AS Code
+    FROM Splits
+    CROSS APPLY STRING_SPLIT(GroupStr, ',')
+    WHERE TRIM(value) <> ''
+), Parts AS (
+    -- Split code into Brand, Type, Stg, Subtype
+    SELECT *,
+        LEFT(Code, CHARINDEX('-', Code) - 1) AS Brand,
+        PARSENAME(REPLACE(Code, '-', '.'), 4) AS Type,
+        PARSENAME(REPLACE(Code, '-', '.'), 3) AS Stg,
+        PARSENAME(REPLACE(Code, '-', '.'), 1) AS SubTypeRest
+    FROM Parsed
+), FinalParts AS (
+    SELECT
+        Brand,
+        Type,
+        Stg,
+        SubTypeRest AS SubType,
+        grpOrder
+    FROM Parts
+), Grouped AS (
+    -- Aggregate subtypes (order: Y, Q, M, W, D, 4H, 1H, 15); skip empty
+    SELECT
+        Brand,
+        Type,
+        Stg,
+        STRING_AGG(SubType, ',') WITHIN GROUP (
+            ORDER BY 
+                CASE SubType WHEN 'Y' THEN 1 WHEN 'Q' THEN 2 WHEN 'M' THEN 3 WHEN 'W' THEN 4
+                WHEN 'D' THEN 5 WHEN '4H' THEN 6 WHEN '1H' THEN 7 WHEN '15' THEN 8 ELSE 100 END
+        ) AS SubTypes
+    FROM FinalParts
+    GROUP BY Brand, Type, Stg
+), BrandGroups AS (
+    -- Build each segment per Brand, e.g. Bu-Tri-Stg-[subtypes]
+    SELECT
+        Brand,
+        CONCAT(Type, '-', Stg, '-', SubTypes) AS Segment,
+        -- for ordering within the brand group
+        CASE 
+            WHEN Type='Tri' AND Stg='Stg' THEN 1
+            WHEN Type='Dbl' AND Stg='Stg' THEN 2
+            WHEN Type='Sgl' AND Stg='Sim' THEN 3
+            WHEN Type='Sgl' AND Stg='Stg' THEN 4
+            ELSE 100 
+        END as SubOrder
+    FROM Grouped
+), FinalAgg AS (
+    -- Within each brand, join the segments with ;
+    SELECT
+        Brand,
+        STRING_AGG(Segment, ';') WITHIN GROUP (ORDER BY SubOrder) AS BrandStr,
+        CASE Brand WHEN 'Bu' THEN 1 WHEN 'Be' THEN 2 ELSE 99 END as BrandOrder
+    FROM BrandGroups
+    GROUP BY Brand
+)
+-- Finally, join brands with ';;'
+SELECT STRING_AGG(BrandStr, ';;') WITHIN GROUP (ORDER BY BrandOrder) AS Output
+FROM FinalAgg
+end
+begin
+DECLARE @input NVARCHAR(MAX) =
+'Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Sgl-Sim-15;Be-Tri-Stg-Y;Be-Tri-Stg-Q;Be-Tri-Stg-M;Be-Tri-Stg-W;Be-Tri-Stg-D;Be-Tri-Stg-4H;Be-Tri-Stg-1H;Be-Tri-Stg-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D;Be-Dbl-Stg-4H;Be-Dbl-Stg-1H;Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-D;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;Be-Sgl-Sim-15;'
+
+-- 'Bu-Tri-Stg-Y;Bu-Tri-Stg-Q;Bu-Tri-Stg-M;Bu-Tri-Stg-W;Bu-Tri-Stg-D;Bu-Tri-Stg-4H;Bu-Tri-Stg-1H;Bu-Tri-Stg-15;Bu-Dbl-Stg-Y;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Sgl-Sim-15;Be-Tri-Stg-Y;Be-Tri-Stg-Q;Be-Tri-Stg-M;Be-Tri-Stg-W;Be-Tri-Stg-D;Be-Tri-Stg-4H;Be-Tri-Stg-1H;Be-Tri-Stg-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D;Be-Dbl-Stg-4H;Be-Dbl-Stg-1H;Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-D;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;Be-Sgl-Sim-15;'
+
+;WITH Split1 AS (
+    SELECT value AS GroupStr
+    FROM STRING_SPLIT(@input, ';')
+    WHERE value <> ''
+) -- select * from Split1
+, Split2 AS (
+    SELECT TRIM(value) AS Code
+    FROM Split1
+    CROSS APPLY STRING_SPLIT(GroupStr, ',')
+    WHERE TRIM(value) <> ''
+) 
+, Parts AS (
+    SELECT
+        Code,
+        LEFT(Code, CHARINDEX('-', Code) - 1) AS Brand,
+        PARSENAME(REPLACE(Code, '-', '.'), 3) AS Type,
+        PARSENAME(REPLACE(Code, '-', '.'), 2) AS Stg,
+        PARSENAME(REPLACE(Code, '-', '.'), 1) AS SubType
+    FROM Split2
+) -- select * from parts
+, Grouped AS (
+    SELECT
+        Brand, Type, Stg,
+        STRING_AGG(SubType, ',') WITHIN GROUP (
+            ORDER BY 
+                CASE SubType WHEN 'Y' THEN 1 WHEN 'Q' THEN 2 WHEN 'M' THEN 3 WHEN 'W' THEN 4
+                WHEN 'D' THEN 5 WHEN '4H' THEN 6 WHEN '1H' THEN 7 WHEN '15' THEN 8 ELSE 100 END
+        ) AS SubTypes
+    FROM Parts
+    GROUP BY Brand, Type, Stg
+) -- select * from Grouped
+, BrandOrderFix AS (
+    SELECT
+        Brand, Type, Stg, SubTypes,
+        CASE Brand WHEN 'Bu' THEN 1 WHEN 'Be' THEN 2 ELSE 99 END AS BrandOrder,
+        -- Tri first (1), Dbl (2), Sgl-Sim (3)
+        CASE WHEN Type='Tri' THEN 1 WHEN Type='Dbl' THEN 2 WHEN Type='Sgl' THEN 3 ELSE 99 END AS TypeOrder
+    FROM Grouped
+) -- select * from BrandOrderFix
+, SectionPrep AS (
+    SELECT
+        Brand, BrandOrder, TypeOrder,
+        CASE WHEN TypeOrder = 1 THEN CONCAT(Brand,'-',Type,'-',Stg,'-',SubTypes)
+             ELSE CONCAT(Type,'-',Stg,'-',SubTypes)
+        END AS SectionStr
+    FROM BrandOrderFix
+) -- select * from SectionPrep
+, BrandAggregate AS (
+    SELECT
+        Brand, BrandOrder,
+        STRING_AGG(SectionStr, ';') WITHIN GROUP (ORDER BY BrandOrder,TypeOrder) AS BrandSection
+    FROM SectionPrep
+    GROUP BY Brand, BrandOrder
+)
+SELECT STRING_AGG(BrandSection, ';;') WITHIN GROUP (ORDER BY BrandOrder) AS Output
+FROM BrandAggregate
+/* 
+Bu- Tri-Stg-Y,Q,M,W,D,4H,1H,15;
+	Dbl-Stg-Y,Q,M,W,D,4H,1H,15;
+	Sgl-Sim-Y,Q,M,W,D,4H,1H,15;;
+
+Be-	Tri-Stg-Y,Q,M,W,D,4H,1H,15;
+	Dbl-Stg-Y,Q,M,W,D,4H,1H,15;
+	Sgl-Sim-Y,Q,M,W,D,4H,1H,15;
+*/
+end
+begin
+DECLARE @input NVARCHAR(MAX) =
+'Bu-Dbl-Stg-Q;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Sgl-Sim-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D;Be-Dbl-Stg-4H;Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;Be-Sgl-Sim-15;'
+
+;WITH Split1 AS (
+    SELECT value AS GroupStr
+    FROM STRING_SPLIT(@input, ';')
+    WHERE value <> ''
+)
+, Split2 AS (
+    SELECT TRIM(value) AS Code
+    FROM Split1
+    CROSS APPLY STRING_SPLIT(GroupStr, ',')
+    WHERE TRIM(value) <> ''
+)
+, Parts AS (
+    SELECT distinct
+        Code,
+        LEFT(Code, CHARINDEX('-', Code) - 1) AS Brand,
+        PARSENAME(REPLACE(Code, '-', '.'), 3) AS Type,
+        PARSENAME(REPLACE(Code, '-', '.'), 2) AS Stg,
+        PARSENAME(REPLACE(Code, '-', '.'), 1) AS SubType
+    FROM Split2
+)
+, Grouped AS (
+    SELECT
+        Brand, Type, Stg,
+        STRING_AGG(SubType, ',') WITHIN GROUP (
+            ORDER BY 
+                CASE SubType WHEN 'Y' THEN 1 WHEN 'Q' THEN 2 WHEN 'M' THEN 3 WHEN 'W' THEN 4
+                WHEN 'D' THEN 5 WHEN '4H' THEN 6 WHEN '1H' THEN 7 WHEN '15' THEN 8 ELSE 100 END
+        ) AS SubTypes
+    FROM Parts
+    GROUP BY Brand, Type, Stg
+)
+, BrandOrderFix AS (
+    SELECT
+        Brand, Type, Stg, SubTypes,
+        CASE Brand WHEN 'Bu' THEN 1 WHEN 'Be' THEN 2 ELSE 99 END AS BrandOrder,
+        CASE 
+            WHEN Type='Tri' THEN 1
+            WHEN Type='Dbl' THEN 2
+            WHEN Type='Sgl' AND Stg='Sim' THEN 3
+            ELSE 99 
+        END AS TypeOrder
+    FROM Grouped
+)
+, SectionNumbered AS (
+    SELECT
+        Brand, BrandOrder, Type, TypeOrder, Stg, SubTypes,
+        ROW_NUMBER() OVER (PARTITION BY Brand ORDER BY TypeOrder) AS SeqInBrand
+    FROM BrandOrderFix
+), SectionPrep AS (
+    SELECT
+        Brand, BrandOrder, TypeOrder, SeqInBrand,
+        CASE WHEN SeqInBrand = 1 THEN CONCAT(Brand,'-',Type,'-',Stg,'-',SubTypes)
+             ELSE CONCAT(Type,'-',Stg,'-',SubTypes)
+        END AS SectionStr
+    FROM SectionNumbered
+), BrandAggregate AS (
+    SELECT
+        Brand, BrandOrder,
+        STRING_AGG(SectionStr, ';') WITHIN GROUP (ORDER BY BrandOrder,TypeOrder) AS BrandSection
+    FROM SectionPrep
+    GROUP BY Brand, BrandOrder
+)
+,Final as (
+SELECT STRING_AGG(BrandSection, ';;') WITHIN GROUP (ORDER BY BrandOrder,BrandSection) AS Output
+FROM BrandAggregate
+)
+select * from Final
+
+end
+begin -- final query to be used in the script
+;WITH InputData AS (
+    SELECT Batch_No, Sno, Trade_Type_Details
+    FROM dbo.Analyse_Stocks 
+	where Batch_No = (select distinct top 1 batch_no from Analyse_Stocks order by Batch_No desc )
+	and Trade_Type_Details != '' -- and sno = 24651
+	-- order by len(Trade_Type_Details ) desc
+), Split1 AS (		-- Split input strings per row into groups separated by ';'
+    SELECT	Batch_No, Sno,
+			value AS GroupStr
+    FROM InputData
+	cross apply STRING_SPLIT(Trade_Type_Details, ';')
+    WHERE value <> ''
+), Split2 AS (		-- Split groups further by ',' into individual codes
+    SELECT	Batch_No, Sno,
+			TRIM(value) AS Code
+    FROM Split1
+    CROSS APPLY STRING_SPLIT(GroupStr, ',')
+    WHERE TRIM(value) <> ''
+), Parts AS (	-- Parse code into Brand, Type, Stg, SubType
+    SELECT	Batch_No, Sno, Code,
+        -- LEFT(Code, CHARINDEX('-', Code) - 1) AS Brand,
+		PARSENAME(REPLACE(Code, '-', '.'), 4) AS Brand,
+        PARSENAME(REPLACE(Code, '-', '.'), 3) AS Type,
+        PARSENAME(REPLACE(Code, '-', '.'), 2) AS Stg,
+        PARSENAME(REPLACE(Code, '-', '.'), 1) AS SubType
+    FROM Split2
+), DistinctParts AS (		-- Remove duplicate Brand-Type-Stg-SubType combinations per Id
+    SELECT DISTINCT Batch_No, Sno, Brand, Type, Stg, SubType
+    FROM Parts
+), Grouped AS (		-- Aggregate subtypes, ordered and distinct, per Brand-Type-Stg for each Id
+    SELECT	Batch_No, Sno, Brand, Type, Stg,
+        STRING_AGG(SubType, ',') WITHIN GROUP (
+            ORDER BY 
+                CASE SubType 
+					WHEN 'Y' THEN 1 WHEN 'Q' THEN 2 WHEN 'M' THEN 3 WHEN 'W' THEN 4
+					WHEN 'D' THEN 5 WHEN '4H' THEN 6 WHEN '1H' THEN 7 WHEN '15' THEN 8 ELSE 100 END
+        ) AS SubTypes
+    FROM DistinctParts
+    GROUP BY Batch_No, Sno, Brand, Type, Stg
+), BrandOrderFix AS (		-- Assign ordering for brand and type to control output order
+    SELECT	Batch_No, Sno, Brand, Type, Stg, SubTypes,
+        CASE Brand WHEN 'Bu' THEN 1 WHEN 'Be' THEN 2 ELSE 99 END AS BrandOrder,
+        CASE WHEN Type='Tri' THEN 1 WHEN Type='Dbl' THEN 2 WHEN Type='Sgl' THEN 3 ELSE 99 END AS TypeOrder
+    FROM Grouped
+), SectionNumbered AS (		-- Number sections to know which is first for the brand and hence add prefix
+    SELECT	Batch_No, Sno, Brand, BrandOrder, Type, TypeOrder, Stg, SubTypes,
+			ROW_NUMBER() OVER (PARTITION BY Batch_No, Sno, Brand ORDER BY TypeOrder) AS SeqInBrand
+    FROM BrandOrderFix
+), SectionPrep AS (
+    SELECT Batch_No, Sno, Brand, BrandOrder, TypeOrder, SeqInBrand,
+        CASE WHEN SeqInBrand = 1 THEN CONCAT(Brand,'-',Type,'-',Stg,'-',SubTypes)
+             ELSE CONCAT(Type,'-',Stg,'-',SubTypes)
+        END AS SectionStr
+    FROM SectionNumbered
+), BrandAggregate AS (		-- Aggregate segments per brand per Id
+    SELECT Batch_No, Sno, Brand, BrandOrder,
+        STRING_AGG(SectionStr, ';') WITHIN GROUP (ORDER BY BrandOrder,TypeOrder) AS BrandSection
+    FROM SectionPrep
+    GROUP BY Batch_No, Sno, Brand, BrandOrder
+),Final as (		-- Aggregate full output per Id joining brands with ';;', ordered by BrandOrder (Bu then Be)
+SELECT Batch_No, Sno,
+	STRING_AGG(BrandSection, ';;') WITHIN GROUP (ORDER BY BrandOrder,BrandSection) AS Output
+FROM BrandAggregate
+group by Batch_No, Sno
+)
+select * from Final
 end

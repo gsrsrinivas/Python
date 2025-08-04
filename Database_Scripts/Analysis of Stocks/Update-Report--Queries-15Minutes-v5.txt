@@ -385,6 +385,76 @@ Volume_Shockers = isnull(Volume_Shockers,'') +
 from dbo.Analyse_15Minutes_Stocks a where a.Batch_No = @batch_no
 ;
 end
+begin -- sort the string in Trade type details 
+;WITH InputData AS (
+    SELECT Batch_No, Sno, Trade_Type_Details
+    FROM dbo.Analyse_15Minutes_Stocks 
+	where Batch_No = @batch_no
+	and Trade_Type_Details != ''
+), Split1 AS (		-- Split input strings per row into groups separated by ';'
+    SELECT	Batch_No, Sno,
+			value AS GroupStr
+    FROM InputData
+	cross apply STRING_SPLIT(Trade_Type_Details, ';')
+    WHERE value <> ''
+), Split2 AS (		-- Split groups further by ',' into individual codes
+    SELECT	Batch_No, Sno,
+			TRIM(value) AS Code
+    FROM Split1
+    CROSS APPLY STRING_SPLIT(GroupStr, ',')
+    WHERE TRIM(value) <> ''
+), Parts AS (	-- Parse code into Brand, Type, Stg, SubType
+    SELECT	Batch_No, Sno, Code,
+        -- LEFT(Code, CHARINDEX('-', Code) - 1) AS Brand,
+		PARSENAME(REPLACE(Code, '-', '.'), 4) AS Brand,
+        PARSENAME(REPLACE(Code, '-', '.'), 3) AS Type,
+        PARSENAME(REPLACE(Code, '-', '.'), 2) AS Stg,
+        PARSENAME(REPLACE(Code, '-', '.'), 1) AS SubType
+    FROM Split2
+), DistinctParts AS (		-- Remove duplicate Brand-Type-Stg-SubType combinations per Id
+    SELECT DISTINCT Batch_No, Sno, Brand, Type, Stg, SubType
+    FROM Parts
+), Grouped AS (		-- Aggregate subtypes, ordered and distinct, per Brand-Type-Stg for each Id
+    SELECT	Batch_No, Sno, Brand, Type, Stg,
+        STRING_AGG(SubType, ',') WITHIN GROUP (
+            ORDER BY 
+                CASE SubType 
+					WHEN 'Y' THEN 1 WHEN 'Q' THEN 2 WHEN 'M' THEN 3 WHEN 'W' THEN 4
+					WHEN 'D' THEN 5 WHEN '4H' THEN 6 WHEN '1H' THEN 7 WHEN '15' THEN 8 ELSE 100 END
+        ) AS SubTypes
+    FROM DistinctParts
+    GROUP BY Batch_No, Sno, Brand, Type, Stg
+), BrandOrderFix AS (		-- Assign ordering for brand and type to control output order
+    SELECT	Batch_No, Sno, Brand, Type, Stg, SubTypes,
+        CASE Brand WHEN 'Bu' THEN 1 WHEN 'Be' THEN 2 ELSE 99 END AS BrandOrder,
+        CASE WHEN Type='Tri' THEN 1 WHEN Type='Dbl' THEN 2 WHEN Type='Sgl' THEN 3 ELSE 99 END AS TypeOrder
+    FROM Grouped
+), SectionNumbered AS (		-- Number sections to know which is first for the brand and hence add prefix
+    SELECT	Batch_No, Sno, Brand, BrandOrder, Type, TypeOrder, Stg, SubTypes,
+			ROW_NUMBER() OVER (PARTITION BY Batch_No, Sno, Brand ORDER BY TypeOrder) AS SeqInBrand
+    FROM BrandOrderFix
+), SectionPrep AS (
+    SELECT Batch_No, Sno, Brand, BrandOrder, TypeOrder, SeqInBrand,
+        CASE WHEN SeqInBrand = 1 THEN CONCAT(Brand,'-',Type,'-',Stg,'-',SubTypes)
+             ELSE CONCAT(Type,'-',Stg,'-',SubTypes)
+        END AS SectionStr
+    FROM SectionNumbered
+), BrandAggregate AS (		-- Aggregate segments per brand per Id
+    SELECT Batch_No, Sno, Brand, BrandOrder,
+        STRING_AGG(SectionStr, ';') WITHIN GROUP (ORDER BY BrandOrder,TypeOrder) AS BrandSection
+    FROM SectionPrep
+    GROUP BY Batch_No, Sno, Brand, BrandOrder
+),Final as (		-- Aggregate full output per Id joining brands with ';;', ordered by BrandOrder (Bu then Be)
+SELECT Batch_No, Sno,
+	STRING_AGG(BrandSection, ';;') WITHIN GROUP (ORDER BY BrandOrder,BrandSection) AS transformed_Trade_Type_Details
+FROM BrandAggregate
+group by Batch_No, Sno
+) -- select * from Final
+update a set trade_type_details = transformed_Trade_Type_Details
+from dbo.Analyse_15Minutes_Stocks a inner join Final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
+;
+end
+
 begin -- update report_sort_order 
 ;WITH RankedRows AS (
     select batch_no,sno,

@@ -39,6 +39,16 @@
 *.iml
 out
 gen
+*.xls
+*.xlsx
+*.ods
+*.xlsm
+*.doc
+*.docx
+*.odt
+*.ppt
+*.pptx
+*.txt
 
 # Ignore log files
 *.log

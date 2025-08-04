@@ -31,35 +31,35 @@
           <AssociatedConnUserName />
           <FullPath>Insert-Script--15Minutes.sql</FullPath>
         </FileNode>
-        <FileNode Name="Reset-Script.sql">
+        <FileNode Name="Report-Update-Queries.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>Reset-Script.sql</FullPath>
+          <FullPath>Report-Update-Queries.sql</FullPath>
         </FileNode>
-        <FileNode Name="Update-Report--Queries.sql">
+        <FileNode Name="Report-Update-Queries--15Minutes.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>Update-Report--Queries.sql</FullPath>
+          <FullPath>Report-Update-Queries--15Minutes.sql</FullPath>
         </FileNode>
-        <FileNode Name="Update-Report--Queries-15Minutes.sql">
+        <FileNode Name="Script-Reset.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>Update-Report--Queries-15Minutes.sql</FullPath>
+          <FullPath>Script-Reset.sql</FullPath>
         </FileNode>
-        <FileNode Name="Working--All--Queries--V1.sql">
+        <FileNode Name="Working.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>Working--All--Queries--V1.sql</FullPath>
+          <FullPath>Working.sql</FullPath>
         </FileNode>
-        <FileNode Name="Working--Temp--Queries--V1.sql">
+        <FileNode Name="Working-ALL.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>Working--Temp--Queries--V1.sql</FullPath>
+          <FullPath>Working-ALL.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

@@ -65,35 +65,11 @@
     </LogicalFolder>
     <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
       <Items>
-        <FileNode Name="_ScreensExplained-v0.txt">
+        <FileNode Name="Screen_Name_Value-V1.xlsx">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
-          <FullPath>_ScreensExplained-v0.txt</FullPath>
-        </FileNode>
-        <FileNode Name="Calculation of Fields-v1.xlsx">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Calculation of Fields-v1.xlsx</FullPath>
-        </FileNode>
-        <FileNode Name="Screen-Values-v1.xlsx">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Screen-Values-v1.xlsx</FullPath>
-        </FileNode>
-        <FileNode Name="trending sorting-v1.xls">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>trending sorting-v1.xls</FullPath>
-        </FileNode>
-        <FileNode Name="Update-Report--Queries-15Minutes-v5.txt">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>Update-Report--Queries-15Minutes-v5.txt</FullPath>
+          <FullPath>Screen_Name_Value-V1.xlsx</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

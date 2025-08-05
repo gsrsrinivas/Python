@@ -9,7 +9,7 @@ def chart_ink_download_15minutes():
     try:
         print_start_timestamp()
         sys.exit() if trading_hours_check() == "exit" else None
-        chat_ink_xls2db('15Minutes')
+        chat_ink_xls2db(Path(__file__).stem)
         purge_tables('15Minutes_')
         purge_log_files('15Minutes-chart-ink')
     except Exception as e:

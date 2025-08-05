@@ -1,3 +1,6 @@
+begin transaction
+
+begin
 /* screen explanation 
 -- trend indication explanation
 ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -83,8 +86,9 @@ begin -- bearish screen
 end 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
  */
-begin -- shrink databases
-	-- shrink database log file
+end
+begin
+-- shrink databases -- shrink database log file
 	USE Stocks_Analysis;
 	ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
 	DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
@@ -93,8 +97,8 @@ begin -- shrink databases
 	ALTER DATABASE Stocks_db SET RECOVERY SIMPLE;
 	DBCC SHRINKFILE (Stocks_db_log, 1); -- Shrinks to 1MB
 end
-begin transaction
-begin -- all the running queries are stored  
+begin
+-- all the running queries are stored  
 DECLARE @Batch_no INT
 ------------------------------------------------------------------------------------------------------------
 -- C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\
@@ -121,7 +125,7 @@ SELECT
     CASE WHEN Indicator = 'Macd' AND TimeLine = '1 Hourly' AND Direction = 'Crosses Below' THEN 1 ELSE 0 END AS Macd_1_Hourly_Crosses_Below,
     CASE WHEN Indicator = 'Macd' AND TimeLine = '15 Minutes' AND Direction = 'Crosses Above' THEN 1 ELSE 0 END AS Macd_15_Minutes_Crosses_Above,
     CASE WHEN Indicator = 'Macd' AND TimeLine = '15 Minutes' AND Direction = 'Crosses Below' THEN 1 ELSE 0 END AS Macd_15_Minutes_Crosses_Below
-INTO #MacdIndicators
+--INTO #MacdIndicators
 FROM dbo.Cash_Stocks cs;
 
 -- Step 2: Update Analyse_Stocks in a single pass
@@ -1839,7 +1843,8 @@ select distinct batch_no from dbo.Cash_Stocks
 order by 1
 ;
 end
-begin -- purge the records from cash stocks tables 
+begin
+-- purge the records from cash stocks tables 
 select distinct batch_no from dbo.Cash_15Minutes_Stocks
 order by 1
 ;
@@ -1856,7 +1861,8 @@ order by 1
 select count(1) from dbo.Cash_Stocks
 ;
 end
-begin -- purge the records from analyse stocks tables
+begin
+-- purge the records from analyse stocks tables 
 select distinct batch_no from dbo.Analyse_Stocks order by 1
 ;
 delete from dbo.Analyse_Stocks where Batch_No <=(select 70-15)
@@ -1885,7 +1891,8 @@ select *
 --DELETE 
 FROM dbo.Cash_15Minutes_Stocks      where Batch_No <= (select count(distinct Batch_No) from dbo.Cash_15Minutes_Stocks) - 15;
 end
-begin -- shrink the log file of the database
+begin
+-- shrink the log file of the database 
 USE Stocks_Analysis;
 
 ALTER DATABASE Stocks_Analysis SET RECOVERY SIMPLE;
@@ -1894,7 +1901,8 @@ DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
 ;
 SELECT name, recovery_model_desc FROM sys.databases --WHERE name = 'Stocks_Analysis';
 end
-begin -- shrink the log file of the Trade Log database
+begin
+-- shrink the log file of the Trade Log database 
 USE [Trade Log];
 
 ALTER DATABASE [Trade Log] SET RECOVERY SIMPLE;
@@ -1926,7 +1934,8 @@ SELECT FORMAT(GETDATE(), 'yyyyMMddHHmmss'),
 --where Batch_No >= 20250724190000 
 --;
 end
-begin -- find the sizes of tables
+begin
+-- find the sizes of tables 
 SELECT 
     t.NAME AS TableName,
     SUM(p.rows) AS RowCounts,
@@ -1952,10 +1961,10 @@ SELECT 'ALTER SCHEMA dbo TRANSFER dbo.' + name
 FROM sys.objects 
 WHERE type = 'U' AND SCHEMA_NAME(schema_id) = 'dbo';
 end
-begin 
+begin
 DELETE FROM dbo.Cash_Stocks WHERE batch_no NOT IN (SELECT distinct TOP 15 batch_no FROM dbo.Cash_Stocks ORDER BY batch_no DESC);
 end
-begin 
+begin
 select * from dbo.Analyse_Stocks 
 where batch_no =  20250725085552 -- 20250725102550 
 and trade_view is not null
@@ -2160,7 +2169,7 @@ exec sp_rename 'Analyse_15Minutes_Stocks.Segments - Length'          ,Segments_L
 exec sp_rename 'Analyse_15Minutes_Stocks.Segments_Sum'             ,Segments_Sum             ,'column';
 
 end
-begin 
+begin
 EXEC sp_rename 'table_name.old_column_name', 'new_column_name', 'COLUMN';
 
 exec sp_rename 'Analyse_15Minutes_Stocks.Report_Sort_Order'			   ,Report_Sort_Order        ,'column';
@@ -2184,7 +2193,7 @@ exec sp_rename 'Analyse_15Minutes_Stocks.Segments_Sum'				   ,Segments_Sum      
 --segments - segments
 --end
 end
-begin 
+begin
 -- Value Pivot (numeric data)
 WITH ValueSource AS 
 (	SELECT Batch_No, Screen_Names, Value /*,TRY_CAST(Value AS NUMERIC(18,0)) AS Value*/ 
@@ -2210,7 +2219,8 @@ DescPivot AS
 SELECT 'Description' AS DataType, * FROM DescPivot
 ;
 end
-begin -- update screen values 
+begin
+-- update screen values 
 
 begin -- version 2 
 with SourceValues as 
@@ -2794,8 +2804,8 @@ JOIN ValuePivot vp ON vp.Batch_No = 1
 ;
 end
 end
-
-begin  -- multiple columns pivoting 
+begin
+-- multiple columns pivoting 
 
 SELECT Batch_No,Metric,[Bullish_Single_Screen_Yearly],[Bullish_Single_Screen_Quarterly],[Bullish_Single_Screen_Monthly],[Bullish_Single_Screen_Weekly],[Bullish_Single_Screen_Daily],[Bullish_Single_Screen_4_Hourly],[Bullish_Single_Screen_1_Hourly],[Bullish_Single_Screen_15_Minutes],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Yearly],[Bearish_Single_Screen_Quarterly],[Bearish_Single_Screen_Monthly],[Bearish_Single_Screen_Weekly],[Bearish_Single_Screen_Daily],[Bearish_Single_Screen_4_Hourly],[Bearish_Single_Screen_1_Hourly],[Bearish_Single_Screen_15_Minutes],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly]
 FROM (
@@ -2814,11 +2824,12 @@ where Batch_No = 1
 ORDER BY Batch_No, Metric;
 
 end
-
 begin
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- from reset script.sql 
-begin -- price action 
+end
+begin
+-- price action 
 ;WITH AdjustedValues AS (
     SELECT 
         symbol,
@@ -2896,10 +2907,11 @@ CROSS APPLY OPENJSON(outerJson.[value]) AS innerJson
 -- where s.Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 order by 3,4,5,abs(innerJson.[value])
 ;
-end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 -- from update_report_queries
-begin -- price action 
+end
+begin
+-- price action 
 ;WITH AdjustedValues AS (
     SELECT 
         symbol,
@@ -2977,8 +2989,8 @@ where s.Batch_No = (select MAX(Batch_No) from dbo.Analyse_Stocks)
 order by 3,4,5,abs(innerJson.[value])
 ;
 end
-
-begin -- from rest script.sql
+begin
+-- from rest script.sql
 
 begin -- sorted Trade_Type details
 ;WITH SplitSignals AS (
@@ -3046,10 +3058,6 @@ inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 end
 
 end
-
-
-rollback transaction
-end
 begin
 select top 2500 * from dbo.Analyse_Stocks
 where trade_view is not null
@@ -3065,7 +3073,8 @@ order by Volume_Shockers desc
 select coalesce(case when 1=1 then 'coalesce 1st part' else 'elsepart' end,'coalesce 2nd part') as checking
 ;
 end
-begin -- truncate tables
+begin
+-- truncate tables
 /*
 truncate table dbo.Analyse_15Minutes_Stocks;
 truncate table dbo.Analyse_Stocks;
@@ -3113,7 +3122,6 @@ where a.Industry is null
 
 select * from [dbo].[Symbol-IndustrySegment-Series]
 end
-
 begin
 DECLARE @StartTime DATETIME = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
@@ -3194,8 +3202,7 @@ exec sp_rename 'dbo.Analyse_Stocks.ema_50_200__15_minutes__crosses_above','ema_5
 exec sp_rename 'dbo.Analyse_Stocks.ema_50_200__15_minutes__crosses_below','ema_50_200_15_minutes_crosses_below'
 
 end
-
-begin 
+begin
  select * from dbo.Analyse_Stocks where Batch_No = 20250803070622 and Symbol = 'BEL'
 -- select * from [dbo].[Master_Screen_Name_Values]
 
@@ -3315,7 +3322,7 @@ Formatted AS (
 )
 SELECT 'Bu-' + STRING_AGG(segment, ';') WITHIN GROUP (ORDER BY sort_order) AS final_output;
 end
-
+begin
 'Bu-T-Stg-W;
 
 Bu-Dbl-Stg-Q;
@@ -3325,10 +3332,9 @@ Bu-Dbl-Stg-W;
 Bu-Sgl-Y;
 Bu-Sgl-Q;
 Bu-Sgl-M;
-Bu-Sgl-W';
-
-Bu-T-Stg-W;Dbl-Stg-Q,M,W;Sgl-Y,Q,M,W;
-
+Bu-Sgl-W
+Bu-T-Stg-W;Dbl-Stg-Q,M,W;Sgl-Y,Q,M,W;'
+end
 begin
 
 WITH split_items AS (
@@ -3358,7 +3364,6 @@ GROUP BY batch_no,report_sort_order
 order by batch_no,report_sort_order
 end
 begin
-
 WITH split_items AS (
     SELECT 
         i.Batch_No,
@@ -3442,9 +3447,8 @@ GROUP BY Batch_No, Report_Sort_Order
 -- ORDER BY Batch_No, Report_Sort_Order
 ) 
 select * from final order by len(transformed_Trade_Type_Details) desc
-Bu-T-Stg-W;Dbl-Stg-M,Q,W;Sgl-M,Q,W,Y
-end;
-
+-- Bu-T-Stg-W;Dbl-Stg-M,Q,W; Sgl-M,Q,W,Y 
+end
 begin
 
 WITH split_items AS (
@@ -3649,8 +3653,7 @@ FROM formatted
 GROUP BY Batch_No, Report_Sort_Order
 ORDER BY Batch_No, Report_Sort_Order;
 end
-
-begin 
+begin
 WITH suffix_order AS (
     SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
     SELECT 'Q', 2 UNION ALL
@@ -3762,7 +3765,8 @@ final AS (
 )
 SELECT * FROM final order by len(transformed_Trade_Type_Details) desc
 end
-begin -- final query to sort the string in trade type details and update
+begin
+-- final query to sort the string in trade type details and update
 WITH suffix_order AS (
     SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
     SELECT 'Q', 2 UNION ALL
@@ -4123,7 +4127,6 @@ select * from Master_Screen_Name_Values where Batch_No = 1 and Description like 
 order by sno
 ;
 end
-
 begin
 -- If using SQL Server 2016+, use STRING_SPLIT
 DECLARE @input NVARCHAR(MAX) = 'Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Be-Dbl-Stg-4H;Be-Dbl-Stg-1H;Be-Sgl-Sim-D;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;';
@@ -4190,7 +4193,7 @@ SELECT STRING_AGG(Val, ';;') WITHIN GROUP (ORDER BY
 FROM FinalAgg
 ;
 end
-begin 
+begin
 DECLARE @input NVARCHAR(MAX) =
 'Bu-Tri-Stg-Y;Bu-Tri-Stg-Q;Bu-Tri-Stg-M;Bu-Tri-Stg-W;Bu-Tri-Stg-D,Bu-Tri-Stg-4H,Bu-Tri-Stg-1H,Bu-Tri-Stg-15;Bu-Dbl-Stg-Y;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D,Bu-Dbl-Stg-4H,Bu-Dbl-Stg-1H,Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D,Bu-Sgl-Sim-4H,Bu-Sgl-Sim-1H,Bu-Sgl-Sim-15;Be-Tri-Stg-Y;Be-Tri-Stg-Q;Be-Tri-Stg-M;Be-Tri-Stg-W;Be-Tri-Stg-D,Be-Tri-Stg-4H,Be-Tri-Stg-1H,Be-Tri-Stg-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D,Be-Dbl-Stg-4H,Be-Dbl-Stg-1H,Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-D,Be-Sgl-Sim-4H,Be-Sgl-Sim-1H,Be-Sgl-Sim-15;'
 
@@ -4408,7 +4411,8 @@ FROM BrandAggregate
 select * from Final
 
 end
-begin -- final query to be used in the script
+begin
+-- final query to be used in the script
 ;WITH InputData AS (
     SELECT Batch_No, Sno, Trade_Type_Details
     FROM dbo.Analyse_Stocks 
@@ -4476,7 +4480,6 @@ group by Batch_No, Sno
 )
 select * from Final
 end
- 
 begin
 select  * from Analyse_Stocks where 1=1 
 -- and batch_no = 20250804063920 
@@ -4503,3 +4506,5 @@ EXEC sp_rename  'dbo.Master_Sector_Industory_Wise','zMaster_Sector_Industory_Wis
 EXEC sp_rename  'dbo.Master_ScreenSort','zMaster_ScreenSort'
 EXEC sp_rename  'dbo.Master_Sector_Table','zMaster_Sector_Table'
 end
+
+rollback transaction

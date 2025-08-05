@@ -1,6 +1,8 @@
 import os, sys, time, psutil, pyodbc, requests, pandas as pd, ctypes, logging
 from logging.handlers import RotatingFileHandler
 from concurrent.futures import ThreadPoolExecutor
+from selectors import SelectSelector
+
 from bs4 import BeautifulSoup as Bs
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -164,11 +166,11 @@ def get_database_connection():
         return None
 
 
-def insert_into_db_from_data_frame(data_frame, table_names):
+def insert_into_db_from_data_frame(data_frame, table_name):
     """ Inserts data from a DataFrame into an SQL Server database table using batch insert.
-    :param data_frame:
-    :param table_names:
-    :return:
+    :param data_frame: DataFrame containing the data to be inserted.
+    :param table_name: Name of the database table where data will be inserted.
+    :return: None
     """
     with get_database_connection() as conn:
         cursor = conn.cursor()
@@ -177,11 +179,11 @@ def insert_into_db_from_data_frame(data_frame, table_names):
         records = df_all[['sno', 'stock_name', 'symbol', 'bsecode', 'percent_change', 'price', 'volume',
                           'Indicator', 'TimeLine', 'Direction', 'segments', 'Batch_No']].values.tolist()
         # Define the insert statement
-        insert_query = f'''INSERT INTO dbo.{table_names[0]}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
+        insert_query = f'''INSERT INTO dbo.{table_name}(sno,stock_name,symbol,bsecode,Percent_Change,price,volume,Indicator,TimeLine,Direction,Segments,Batch_No)
         VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
         cursor.executemany(insert_query, records)
         conn.commit()
-        print(f"✅ {len(records)} records inserted in {table_names[0]} table using batch insert!")
+        print(f"✅ {len(records)} records inserted in {table_name} table using batch insert!")
         # end - Insert data into the database table using batch insert from DataFrame
 
 
@@ -219,17 +221,21 @@ def execute_sql_script(table_names):
         project_path = project_directory_path()
         input_folder_path = project_path + r"\Database_Scripts\Analysis of Stocks"
         file_paths = {
-            "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql"),
-            "update_report_sql_file": Path(f"{input_folder_path}/{table_names[2]}.sql")
-        }
+            "insert_script_sql_file": Path(f"{input_folder_path}/{table_names[0]}.sql"),
+            "update_report_sql_file": Path(f"{input_folder_path}/{table_names[1]}.sql") }
         # end - Get the file path of both SQL Script files
         # start - Execute both SQL Script files
+        script_timeframe = "15minutes" if '15min' in table_names[2] else "daily"
         for label, path in file_paths.items():
-            print(f"⏳ Executing {label.replace('_', ' ').capitalize()}")
+            print(f"⏳ Executing {label.replace('_', ' ').capitalize()} for {script_timeframe}")
             with open(path, 'r', encoding='utf-8') as file_path:
-                cursor.execute(file_path.read())
+                if '15min' in table_names[2]:
+                    sql_script = file_path.read().replace("_Stocks","_15Minutes_Stocks")
+                else:
+                    sql_script = file_path.read()
+                cursor.execute(sql_script)
             conn.commit()
-            print(f"✅ Committed {label.replace('_', ' ').capitalize()}")
+            print(f"✅ Committed {label.replace('_', ' ').capitalize()} for {script_timeframe}")
         # end - Execute both SQL Script files
     print("✅ Completed all script files execution\n")
 
@@ -247,9 +253,9 @@ def insert_into_database_tables(table_names, bulk_file_path=None, data_frame=Non
     """
     print(f'📥 started inserting into the database table')
     if bulk_file_path is not None:
-        bulk_insert_from_csv(bulk_file_path, table_names[0])  # Insert data from CSV file into the database table
+        bulk_insert_from_csv(bulk_file_path, table_names[2])  # Insert data from CSV file into the database table
     else:
-        insert_into_db_from_data_frame(data_frame, table_names)  # Insert data from DataFrame into the database table
+        insert_into_db_from_data_frame(data_frame, table_names[2])  # Insert data from DataFrame into the database table
     execute_sql_script(table_names)
 
 
@@ -324,7 +330,7 @@ def download_chart_ink_technical_analysis_scanner(key, data, segment_val, max_re
         return None
 
 
-def chart_ink_excel_file_download_and_insert_into_db(data_list):
+def chart_ink_file_download_and_insert_db(data_list):
     """
     Downloads technical analysis data from Chart ink for multiple segments and inserts it into a database.
     :param data_list: It contains the scan parameters for Chart ink.
@@ -367,7 +373,7 @@ def chart_ink_excel_file_download_and_insert_into_db(data_list):
 def chart_ink_to_csv(df, file_name):
     print(f"📥 started saving data to CSV file")
     str_datetime = datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
-    file_nm = f'{file_name}---{str_datetime}' if '15_min' not in file_name else file_name
+    file_nm = file_name if '15mins' in file_name else f'{file_name}---{str_datetime}'
     output_file = Path(project_directory_path()) / 'Chart_Ink/Source' / f'{file_nm}.csv'
     print(f"📥 Saving data to CSV file: {output_file}")
     if df.empty:
@@ -378,7 +384,7 @@ def chart_ink_to_csv(df, file_name):
     return output_file
 
 
-def chat_ink_xls2db(file_name=None):
+def chat_ink_xls2db(file_name=''):
     """
     Download Chart-ink Excel file and insert into a database.
     This function downloads the Chart Ink Excel file, processes it, and inserts the data into the database.
@@ -672,18 +678,15 @@ def chat_ink_xls2db(file_name=None):
         {'volume__15_minutes__shockers': {'scan_clause': '( {segments_filter} ( [0] 15 minute volume > [ 0 ] 15 minute sma( volume,20 ) * 5 ) )'}},
 
     ]
-
-    if '15Minutes' in file_name:
-        table_script_names = ["Cash_15minutes_Stocks","Insert-Script--15minutes","Report-Update-Queries--15Minutes",]
-        data_list = data_list2
-        csv_file = f"{Path(__file__).stem}-15Mins.csv"
+    data_list =  data_list2 if '15mins' in file_name else data_list1 + data_list2
+    table_script_names = ["Insert-Script", "Report-Update-Queries"]
+    if '15mins' in file_name:
+        table_script_names.append("Cash_15minutes_Stocks")
     else:
-        table_script_names = ["Cash_Stocks", "Insert-Script", "Report-Update-Queries"]
-        data_list = data_list1 + data_list2
-        csv_file = f"{Path(__file__).stem}.csv"
+        table_script_names.append("Cash_Stocks")
 
-    df_all = chart_ink_excel_file_download_and_insert_into_db(data_list)
-    file_path = chart_ink_to_csv(df_all, csv_file)
+    df_all = chart_ink_file_download_and_insert_db(data_list)
+    file_path = chart_ink_to_csv(df_all, file_name)
     insert_into_database_tables(table_script_names, bulk_file_path=file_path)
 
 

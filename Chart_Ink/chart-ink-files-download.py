@@ -10,7 +10,7 @@ def chart_ink_download():
         print_start_timestamp()
         # prevent_sleep()
         # sys.exit() if trading_hours_check() == "exit" else None
-        chat_ink_xls2db()
+        chat_ink_xls2db(Path(__file__).stem)
         purge_tables()
         shrink_databases()
         purge_log_files('daily_chart_ink')

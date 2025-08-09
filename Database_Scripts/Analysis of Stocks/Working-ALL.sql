@@ -4506,5 +4506,14 @@ EXEC sp_rename  'dbo.Master_Sector_Industory_Wise','zMaster_Sector_Industory_Wis
 EXEC sp_rename  'dbo.Master_ScreenSort','zMaster_ScreenSort'
 EXEC sp_rename  'dbo.Master_Sector_Table','zMaster_Sector_Table'
 end
-
+begin
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'yearly;','Y;' );
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'quarterly;','Q;' );
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'monthly;','M;' );
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'weekly;','W;' );
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'daily;','D;' );
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'4_hourly;','4H;');
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'1_hourly;','1H;');
+update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'15_minutes;','15;');
+end
 rollback transaction

@@ -229,44 +229,44 @@ WITH ValueSource AS
 -- SELECT a.Symbol, a.Batch_No, 
 UPDATE a SET 
 	Trade_Type = ISNULL(a.Trade_Type, '') + 
-			-- Bullish 
-			(case when a.Bullish_Triple_Screen_Strong_Monthly   > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Double_Screen_Strong_Daily     > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_Yearly           > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_Quarterly        > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_Monthly          > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_Weekly           > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_Daily            > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_4_Hourly         > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_1_Hourly         > 0 then 'Bullish;' else '' end) +
-			(case when a.Bullish_Single_Screen_15_Minutes       > 0 then 'Bullish;' else '' end) +
-			-- Bearish 
-			(case when a.Bearish_Triple_Screen_Strong_Monthly   > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then 'Bearish;' else '' end) + 
-			(case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Double_Screen_Strong_Daily     > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_Yearly           > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_Quarterly        > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_Monthly          > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_Weekly           > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_Daily            > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_4_Hourly         > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_1_Hourly         > 0 then 'Bearish;' else '' end) +
-			(case when a.Bearish_Single_Screen_15_Minutes       > 0 then 'Bearish;' else '' end) +
+			-- Bullish -- Bu
+			(case when a.Bullish_Triple_Screen_Strong_Monthly   > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Triple_Screen_Strong_Weekly    > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Triple_Screen_Strong_Daily     > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Triple_Screen_Strong_4_Hourly  > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Double_Screen_Strong_Quarterly > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Double_Screen_Strong_Monthly   > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Double_Screen_Strong_Weekly    > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Double_Screen_Strong_Daily     > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Double_Screen_Strong_4_Hourly  > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Double_Screen_Strong_1_Hourly  > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_Yearly           > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_Quarterly        > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_Monthly          > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_Weekly           > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_Daily            > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_4_Hourly         > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_1_Hourly         > 0 then 'Bu;' else '' end) +
+			(case when a.Bullish_Single_Screen_15_Minutes       > 0 then 'Bu;' else '' end) +
+			-- Bearish -- Be
+			(case when a.Bearish_Triple_Screen_Strong_Monthly   > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Triple_Screen_Strong_Weekly    > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Triple_Screen_Strong_Daily     > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Triple_Screen_Strong_4_Hourly  > 0 then 'Be;' else '' end) + 
+			(case when a.Bearish_Double_Screen_Strong_Quarterly > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Double_Screen_Strong_Monthly   > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Double_Screen_Strong_Weekly    > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Double_Screen_Strong_Daily     > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Double_Screen_Strong_4_Hourly  > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Double_Screen_Strong_1_Hourly  > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_Yearly           > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_Quarterly        > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_Monthly          > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_Weekly           > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_Daily            > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_4_Hourly         > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_1_Hourly         > 0 then 'Be;' else '' end) +
+			(case when a.Bearish_Single_Screen_15_Minutes       > 0 then 'Be;' else '' end) +
 			'',
 	Trade_Type_Details = ISNULL(a.Trade_Type_Details, '') +  
 			--- Bullish Screen 
@@ -396,14 +396,14 @@ end
 begin -- update all other calculated fields for sum and length 
 update a set 
 Volume_Shockers = isnull(Volume_Shockers,'') + 
-	(case when volume_yearly_shockers     = 1 then 'yearly;' 	 else '' end) +
-	(case when volume_quarterly_shockers  = 1 then 'quarterly;'  else '' end) +
-	(case when volume_monthly_shockers    = 1 then 'monthly;'	 else '' end) +
-	(case when volume_weekly_shockers     = 1 then 'weekly;' 	 else '' end) +
-	(case when volume_daily_shockers      = 1 then 'daily;'		 else '' end) +
-	(case when volume_4_hourly_shockers   = 1 then '4_hourly;'	 else '' end) +
-	(case when volume_1_hourly_shockers   = 1 then '1_hourly;'	 else '' end) +
-	(case when volume_15_minutes_shockers = 1 then '15_minutes;' else '' end) +
+	(case when volume_yearly_shockers     = 1 then 'Y;'	 else '' end) + /*Yearly;*/
+	(case when volume_quarterly_shockers  = 1 then 'Q;'	 else '' end) + /*quarterly;*/
+	(case when volume_monthly_shockers    = 1 then 'M;'	 else '' end) + /*monthly;*/
+	(case when volume_weekly_shockers     = 1 then 'W;'	 else '' end) + /*weekly;*/
+	(case when volume_daily_shockers      = 1 then 'D;'	 else '' end) + /*daily;*/
+	(case when volume_4_hourly_shockers   = 1 then '4H;' else '' end) + /*4_hourly;*/
+	(case when volume_1_hourly_shockers   = 1 then '1H;' else '' end) + /*1_hourly;*/
+	(case when volume_15_minutes_shockers = 1 then '15;' else '' end) + /*15_minutes;*/
 	''
 ,Trade_Type_Length = len(a.Trade_Type)
 ,Trade_Type_Details_Length = len(Trade_Type_Details)

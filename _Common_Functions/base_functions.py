@@ -96,8 +96,8 @@ def trading_hours_check():
         - "exit" if outside trading hours.
     """
     current_time = datetime.now().time()
-    start_time = datetime.strptime("07:00", "%H:%M").time()
-    end_time = datetime.strptime("15:30", "%H:%M").time()
+    start_time = datetime.strptime("09:00", "%H:%M").time()
+    end_time = datetime.strptime("16:00", "%H:%M").time()
 
     if start_time <= current_time <= end_time:
         print(f"⏱️ Trading hours are (07:00 to 15:30) and current time is {current_time} ")

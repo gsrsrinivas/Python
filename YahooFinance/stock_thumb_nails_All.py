@@ -13,15 +13,17 @@ def all_stock_thumb_nails():
     """
     # {'1d': '1y'}, {'1wk': '2y'}, {'1mo': '10y'} # noqa
 
-    setup_logger(__file__, f"15minutes_{Path(__file__).stem}.log")
+    setup_logger(__file__, f"{Path(__file__).stem}.log")
     try:
         print_start_timestamp()
+        prevent_sleep()
         # sys.exit() if trading_hours_check() == "exit" else None
         stock_thumb_nails('All')  #Call the function to create stock thumbnails
         purge_log_files('Stock_thumb_nails_All')
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
+        allow_sleep()
         print_end_timestamp()
 
 

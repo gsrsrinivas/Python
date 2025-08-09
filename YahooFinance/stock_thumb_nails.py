@@ -36,7 +36,7 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')} - {str(symbol_name).ljust(20,' ')} - {period_value.ljust(3,' ')} - {interval_value.ljust(3,' ')}")
 
 
-def valid_intervals_periods():
+def valid_intervals_periods(load_all=''):
     """
     Returns a list of dictionaries with valid intervals and periods for stock data.
     The intervals and periods are chosen based on the current date to ensure relevance.
@@ -48,26 +48,34 @@ def valid_intervals_periods():
     # Always add daily intervals
     today = datetime.today()
     weekday = today.weekday()  # Monday is 0, Sunday is 6
-    valid_interval_period  = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'},]
-    valid_interval_period += [{'1wk': '2y'},] if weekday == 0 else [] # Add weekly intervals at the start of the week (Monday)
-    valid_interval_period += [{'1mo': '10y'}] if today.day == 1 else [] # Add monthly intervals at the start of the month
-    valid_interval_period += [{'3mo': '5y'},{'3mo': '10y'},] if today.month in [1, 4, 7, 10] and today.day == 1 else [] # Add quarterly intervals at the start of a quarter
-    valid_interval_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else [] # Add half-yearly intervals at the start of a half-year
-    valid_interval_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else []     # Add yearly intervals at the start of the year
-    # valid_intervals_periods = [ {'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '3mo'},{'1wk': '6mo'}, {'1wk': '1y'},{'1mo':'5y'}, ]  # Valid periods and intervals
-    return valid_interval_period  # Return the list of valid intervals and periods
+    if load_all == 'All':
+        valid_int_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'}, {'1wk': '2y'},
+                                 {'1mo': '10y'}, {'3mo': '5y'}, {'3mo': '10y'}, {'6mo': '5y'}, {'6mo': '10y'},
+                                 {'1y': 'max'}, ]  # Valid periods and intervals
+    else:
+        valid_int_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'}, ]
+        valid_int_period += [{'1wk': '2y'},] if weekday == 0 else [] # Add weekly intervals at the start of the week (Monday)
+        valid_int_period += [{'1mo': '10y'}] if today.day == 1 else [] # Add monthly intervals at the start of the month
+        valid_int_period += [{'3mo': '5y'},{'3mo': '10y'},] if today.month in [1, 4, 7, 10] and today.day == 1 else [] # Add quarterly intervals at the start of a quarter
+        valid_int_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else [] # Add half-yearly intervals at the start of a half-year
+        valid_int_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else []     # Add yearly intervals at the start of the year
+
+    return valid_int_period  # Return the list of valid intervals and periods
 
 
-def connect_to_db():
+def connect_to_db(load_all=''):
     """
     Connect to the database and retrieve stock symbols.
     This function connects to the database, retrieves stock symbols,
     and returns a list of symbols and their count.
     """
+    if load_all == 'All':
+        sql_query = "select distinct Symbol from dbo.Master_Segments with (nolock)"
+    else:
+        sql_query = "select distinct Symbol from dbo.Analyse_Stocks_v with (nolock)"
     conn = get_database_connection()
     cursor = conn.cursor()
-    # cursor.execute("select distinct Symbol from dbo.Master_Segments")
-    cursor.execute("select distinct Symbol from dbo.Analyse_Stocks_v with (nolock)")
+    cursor.execute(sql_query)
     records = cursor.fetchall()  # Fetch all results into a variable
     first_elements = [str(item[0]) + ".NS" for item in records]  # Extract the first element from each tuple
     conn.close()
@@ -90,12 +98,19 @@ def stock_thumb_nails(timeframe=None):
     os.makedirs(thumb_dir, exist_ok=True) # Create thumbnails directory if it doesn't exist
     print(f'Thumbnails will be saved in: "{thumb_dir}"')
 
-    len_symbols, symbols = connect_to_db() # Connect to the database and get stock symbols
-    valid_interval_period = valid_intervals_periods() if timeframe is None else timeframe # Get valid intervals and periods and specific timeframe for every 15-minute screening
+    len_symbols, symbols = connect_to_db('All') if timeframe == 'All' else connect_to_db() # Connect to the database and get stock symbols
+    # valid_int_period = valid_intervals_periods() if timeframe is None else timeframe # Get valid intervals and periods and specific timeframe for every 15-minute screening
+    if timeframe == 'All':
+        valid_int_period = valid_intervals_periods('All')
+    elif timeframe is None:
+        valid_int_period = valid_intervals_periods()
+    else:
+        valid_int_period = timeframe
+    print(f"Valid intervals and periods: {valid_int_period}") # Print valid intervals and
 
-    len_valid_intervals_periods = len(valid_interval_period) # Count the number of valid intervals and periods
-    print(f"count of valid intervals and periods: {len_valid_intervals_periods}")
-    total_len = len_symbols * len_valid_intervals_periods
+    len_valid_int_period = len(valid_int_period) # Count the number of valid intervals and periods
+    print(f"count of valid intervals and periods: {len_valid_int_period}")
+    total_len = len_symbols * len_valid_int_period
     print(f"Total thumbnails to be created: {total_len}")
     # ------------------------------------------------------------------------------------
     try:
@@ -106,7 +121,7 @@ def stock_thumb_nails(timeframe=None):
     # ----- single file processing -------------------------------------------------------
     i = 1
     for symbol in symbols:
-        for interval_period_dict in valid_interval_period:
+        for interval_period_dict in valid_int_period:
             interval, period = next(iter(interval_period_dict.items()))
             plot_stock(thumb_dir, symbol, i, total_len, interval, period)
             i+=1
@@ -115,7 +130,7 @@ def stock_thumb_nails(timeframe=None):
     # with ThreadPoolExecutor(max_workers=50) as executor:
     #     i = 1
     #     for symbol in symbols:
-    #         for interval_period_dict in valid_interval_period:
+    #         for interval_period_dict in valid_int_period:
     #             interval, period = next(iter(interval_period_dict.items()))
     #             executor.submit(plot_stock, thumb_dir, symbol, i, total_len, interval, period)
     #             i+=1

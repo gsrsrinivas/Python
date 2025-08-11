@@ -1,11 +1,18 @@
-import os, sys, time, psutil, pyodbc, requests, pandas as pd, ctypes, logging
-from logging.handlers import RotatingFileHandler
+import ctypes
+import logging
+import os
+import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
-from selectors import SelectSelector
-
-from bs4 import BeautifulSoup as Bs
 from datetime import datetime, timedelta
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
+
+import pandas as pd
+import psutil
+import pyodbc
+import requests
+from bs4 import BeautifulSoup as Bs
 
 # Constants from Windows API
 ES_CONTINUOUS = 0x80000000
@@ -100,11 +107,11 @@ def trading_hours_check():
     end_time = datetime.strptime("16:00", "%H:%M").time()
 
     if start_time <= current_time <= end_time:
-        print(f"⏱️ Trading hours are (07:00 to 15:30) and current time is {current_time} ")
+        print(f"⏱️ Trading hours are (09:00 to 16:00) and current time is {current_time} ")
         print(f"Which is within trading hours. So continuing...")
         return "continue"
     else:
-        print(f"⏱️ Trading hours are (07:00 to 15:30) and current time is {current_time} ")
+        print(f"⏱️ Trading hours are (09:00 to 16:00) and current time is {current_time} ")
         print(f"Which is outside trading hours. So exiting...")
         return "exit"
 

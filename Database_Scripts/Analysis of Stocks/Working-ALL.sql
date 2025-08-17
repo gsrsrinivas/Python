@@ -89,6 +89,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------
  ' */
 end
+
 begin
 -- shrink databases -- shrink database log file
 	USE Stocks_Analysis;
@@ -99,6 +100,7 @@ begin
 	ALTER DATABASE Stocks_db SET RECOVERY SIMPLE;
 	DBCC SHRINKFILE (Stocks_db_log, 1); -- Shrinks to 1MB
 end
+
 begin
 -- C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\
 DECLARE @Batch_No INT
@@ -1746,6 +1748,7 @@ select distinct batch_no from Stocks_Analysis.dbo.Cash_Stocks
 order by 1
 ;
 end
+
 begin
 -- purge the records from cash stocks tables 
 select distinct batch_no from Stocks_Analysis.dbo.Cash_15Minutes_Stocks
@@ -1764,6 +1767,7 @@ order by 1
 select count(1) from Stocks_Analysis.dbo.Cash_Stocks
 ;
 end
+
 begin
 -- purge the records from analyse stocks tables 
 select distinct batch_no from Stocks_Analysis.dbo.Analyse_Stocks order by 1
@@ -1780,6 +1784,7 @@ delete from Stocks_Analysis.dbo.Analyse_15Minutes_Stocks where Batch_No <=(selec
 select count(1) from Stocks_Analysis.dbo.Analyse_15Minutes_Stocks
 ;
 end
+
 begin
 select *
 --DELETE 
@@ -1794,6 +1799,7 @@ select *
 --DELETE 
 FROM Stocks_Analysis.dbo.Cash_15Minutes_Stocks      where Batch_No <= (select count(distinct Batch_No) from Stocks_Analysis.dbo.Cash_15Minutes_Stocks) - 15;
 end
+
 begin
 -- shrink the log file of the database 
 USE Stocks_Analysis;
@@ -1804,6 +1810,7 @@ DBCC SHRINKFILE (Stocks_Analysis_log, 1); -- Shrinks to 1MB
 ;
 SELECT name, recovery_model_desc FROM sys.databases --WHERE name = 'Stocks_Analysis';
 end
+
 begin
 select distinct batch_no from Stocks_Analysis.dbo.Analyse_Stocks
 ;
@@ -1827,6 +1834,7 @@ SELECT FORMAT(GETDATE(), 'yyyyMMddHHmmss'),
 --where Batch_No >= 20250724190000 
 --;
 end
+
 begin
 -- find the sizes of tables 
 SELECT 
@@ -1854,9 +1862,11 @@ SELECT 'ALTER SCHEMA dbo TRANSFER Stocks_Analysis.dbo.' + name
 FROM sys.objects 
 WHERE type = 'U' AND SCHEMA_NAME(schema_id) = 'dbo';
 end
+
 begin
 DELETE FROM Stocks_Analysis.dbo.Cash_Stocks WHERE batch_no NOT IN (SELECT distinct TOP 15 batch_no FROM Stocks_Analysis.dbo.Cash_Stocks ORDER BY batch_no DESC);
 end
+
 begin
 select * from Stocks_Analysis.dbo.Analyse_Stocks 
 where batch_no =  20250725085552 -- 20250725102550 
@@ -1872,6 +1882,7 @@ union all
 select * from (select distinct top 3 batch_no,'Analyse_Stocks' as tblname from Analyse_Stocks order by 1 desc) b
 ;
 end
+
 begin
 with cse as (
 select *, indicator + '_' + timeline + '_' + replace(direction,' ','_') as ind_direction
@@ -1885,6 +1896,7 @@ select batch_no, symbol,ind_direction,sno
 from cse) as source
 pivot( max(sno) for ind_direction in ([01])) as pivoted
 end
+
 begin
 WITH cse AS (
     SELECT *,
@@ -1904,6 +1916,7 @@ PIVOT (
     FOR ind_direction IN (adx_daily_crosses_above, adx_quarterly_crosses_above)  -- Add more as needed
 ) AS pivoted;
 end
+
 begin
 DECLARE @cols NVARCHAR(MAX), @query NVARCHAR(MAX);
 
@@ -1947,6 +1960,7 @@ order by symbol';
 
 EXEC sp_executesql @query;
 end
+
 begin
 USE tempdb;
 
@@ -1959,12 +1973,14 @@ use Stocks_Analysis;
 EXEC sp_helpfile;
 DBCC SHRINKFILE (Stocks_Analysis_log, EMPTYFILE);
 end
+
 begin
 
 select count(1),batch_no from Analyse_Stocks -- where Trade_Type_Details_Sum is not null
 group by Batch_No
 ;
 end
+
 begin
 
 select * from (select distinct top 30 batch_no,'Cash_Stocks' as tblname from Cash_Stocks order by 1 desc) a
@@ -1976,6 +1992,7 @@ select * from Analyse_Stocks where Batch_No = 20250726145435
 order by Batch_No desc;
 select * from Stocks_Analysis.dbo.Analyse_Stocks_v;
 end
+
 begin
 EXEC sp_rename 'table_name.old_column_name', 'new_column_name', 'COLUMN';
 
@@ -1989,6 +2006,7 @@ exec sp_rename 'analyse_15minutes_stocks.volume__4_hourly__shockers','volume_4_h
 exec sp_rename 'analyse_15minutes_stocks.volume__1_hourly__shockers','volume_1_hourly_shockers', 'COLUMN';
 exec sp_rename 'analyse_15minutes_stocks.volume__15_minutes__shockers','volume_15_minutes_shockers', 'COLUMN';
 end
+
 begin
 select * from Analyse_Stocks_v order by 1;
 ;
@@ -2003,6 +2021,7 @@ Stocks_Analysis.dbo.Master_Segments a
 inner join Analyse_Stocks_v b on a.Symbol = b.Symbol
 ;
 end
+
 begin
 select * from Stocks_Analysis.dbo.Cash_Stocks 
 where Batch_No = (select max(batch_no) from Cash_Stocks)
@@ -2036,12 +2055,14 @@ PIVOT (
 ) AS pivoted
 order by symbol;
 end
+
 begin
 select * from Stocks_Analysis.dbo.ScreenSort
 select * from Stocks_Analysis.dbo.Sector_Table
 select * from Stocks_Analysis.dbo.master_segments
 select * from Stocks_Analysis.dbo.master_segments_distinct
 end
+
 begin
 EXEC sp_rename 'table_name.old_column_name', 'new_column_name', 'COLUMN';
 
@@ -2062,6 +2083,7 @@ exec sp_rename 'Analyse_15Minutes_Stocks.Segments - Length'          ,Segments_L
 exec sp_rename 'Analyse_15Minutes_Stocks.Segments_Sum'             ,Segments_Sum             ,'column';
 
 end
+
 begin
 EXEC sp_rename 'table_name.old_column_name', 'new_column_name', 'COLUMN';
 
@@ -2086,6 +2108,7 @@ exec sp_rename 'Analyse_15Minutes_Stocks.Segments_Sum'				   ,Segments_Sum      
 --segments - segments
 --end
 end
+
 begin
 -- Value Pivot (numeric data)
 WITH ValueSource AS 
@@ -2112,6 +2135,7 @@ DescPivot AS
 SELECT 'Description' AS DataType, * FROM DescPivot
 ;
 end
+
 begin
 -- update screen values 
 
@@ -2697,6 +2721,7 @@ JOIN ValuePivot vp ON vp.Batch_No = 1
 ;
 end
 end
+
 begin
 -- multiple columns pivoting 
 
@@ -2717,11 +2742,13 @@ where Batch_No = 1
 ORDER BY Batch_No, Metric;
 
 end
+
 begin
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- from reset script.sql 
 select 1
 end
+
 begin
 -- price action 
 ;WITH AdjustedValues AS (
@@ -2804,6 +2831,7 @@ order by 3,4,5,abs(innerJson.[value])
 ------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 -- from update_report_queries
 end
+
 begin
 -- price action 
 ;WITH AdjustedValues AS (
@@ -2883,6 +2911,7 @@ where s.Batch_No = (select MAX(Batch_No) from Stocks_Analysis.dbo.Analyse_Stocks
 order by 3,4,5,abs(innerJson.[value])
 ;
 end
+
 begin
 -- from rest script.sql
 
@@ -2952,6 +2981,7 @@ inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 end
 
 end
+
 begin
 select top 2500 * from Stocks_Analysis.dbo.Analyse_Stocks
 where trade_view is not null
@@ -2959,6 +2989,7 @@ order by Batch_No desc,Report_Sort_Order asc
 ;
 select * from Master_Screen_Name_Values where batch_no = 1 order by sno
 end
+
 begin
 select * from Analyse_Stocks where Batch_No = (select max(batch_no) from Analyse_Stocks)
 and Trade_Type_Details != ''
@@ -2967,6 +2998,7 @@ order by Volume_Shockers desc
 select coalesce(case when 1=1 then 'coalesce 1st part' else 'elsepart' end,'coalesce 2nd part') as checking
 ;
 end
+
 begin
 /*
 select *  from Stocks_Analysis.dbo.Analyse_15Minutes_Stocks;
@@ -2976,6 +3008,7 @@ select *  from Stocks_Analysis.dbo.Cash_Stocks;
 */
 select * from Analyse_Stocks_v order by Trade_View_Order, volume_shockers desc ,Report_Sort_Order;
 end
+
 begin
 
 -- column list
@@ -2989,6 +3022,7 @@ select distinct segments from [dbo].[Master_Segments] where Industry is null;
 select * from [dbo].[Master_Stocks_Industry_Sector_Wise_distinct];
 
 end
+
 begin
 select 
 Sno,Batch_No,Created_Date,Report_Sort_Order,Symbol,Segments_Order,Segments,Segments_Length,Segments_Sum,Volume_Shockers,Volume_Shockers_Sum,Trade_Type_Details_Length,Trade_Type_Details,Trade_Type_Details_Sum,Industry,Stock_Name,Percent_Change,Price,Volume,Series,trade_view,Trade_View_Order,Trade_Type,Trade_Type_Length,Trade_Type_Bullish_Sum,Trade_Type_Bearish_Sum,price_action,ISIN_Code
@@ -3012,6 +3046,7 @@ where a.Industry is null
 
 select * from [dbo].[Symbol-IndustrySegment-Series]
 end
+
 begin
 DECLARE @StartTime DATETIME = GETDATE();
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
@@ -3038,6 +3073,7 @@ PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00
 ; 
 
 end
+
 begin
 select * from Stocks_Analysis.dbo.Cash_Stocks where Batch_No = (select max(batch_no) from Stocks_Analysis.dbo.Cash_Stocks)
 -- 20250731180015
@@ -3055,6 +3091,7 @@ and Trade_Type_Details != ''
 order by Volume_Shockers desc
 ;
 end
+
 begin
 alter table Stocks_Analysis.dbo.Analyse_15Minutes_Stocks add  ema_50_200__yearly__crosses_above		 bit null ;
 alter table Stocks_Analysis.dbo.Analyse_15Minutes_Stocks add  ema_50_200__yearly__crosses_below		 bit null ;
@@ -3092,6 +3129,7 @@ exec sp_rename 'Stocks_Analysis.dbo.Analyse_Stocks.ema_50_200__15_minutes__cross
 exec sp_rename 'Stocks_Analysis.dbo.Analyse_Stocks.ema_50_200__15_minutes__crosses_below','ema_50_200_15_minutes_crosses_below'
 
 end
+
 begin
  select * from Stocks_Analysis.dbo.Analyse_Stocks where Batch_No = 20250803070622 and Symbol = 'BEL'
 -- select * from [dbo].[Master_Screen_Name_Values]
@@ -3103,6 +3141,7 @@ order by Batch_No desc,Report_Sort_Order asc
 ;
 select * from Stocks_Analysis.dbo.Analyse_15Minutes_Stocks
 end
+
 begin
 
 update Master_Screen_Name_Values
@@ -3124,6 +3163,7 @@ SELECT STUFF((
 ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS SortedString;
 
 end
+
 begin
 select count(sno),batch_no,description 
 from Master_Screen_Name_Values 
@@ -3134,6 +3174,7 @@ select * from Master_Screen_Name_Values where Description = 'Bu-T-Stg-Corr-M'
 update Master_Screen_Name_Values set Description = 'Bu-T-Stg-Corr-D'
 where sno = 9 and Batch_No = 1
 end
+
 begin
 
 DECLARE @raw_string NVARCHAR(MAX) = 
@@ -3212,6 +3253,7 @@ Formatted AS (
 )
 SELECT 'Bu-' + STRING_AGG(segments, ';') WITHIN GROUP (ORDER BY sort_order) AS final_output;
 end
+
 begin
 select 'Bu-T-Stg-W;
 
@@ -3225,6 +3267,7 @@ Bu-Sgl-M;
 Bu-Sgl-W
 Bu-T-Stg-W;Dbl-Stg-Q,M,W;Sgl-Y,Q,M,W;'
 end
+
 begin
 
 WITH split_items AS (
@@ -3253,6 +3296,7 @@ FROM joined_items
 GROUP BY batch_no,report_sort_order
 order by batch_no,report_sort_order
 end
+
 begin
 WITH split_items AS (
     SELECT 
@@ -3339,6 +3383,7 @@ GROUP BY Batch_No, Report_Sort_Order
 select * from final order by len(transformed_Trade_Type_Details) desc
 -- Bu-T-Stg-W;Dbl-Stg-M,Q,W; Sgl-M,Q,W,Y 
 end
+
 begin
 
 WITH split_items AS (
@@ -3451,6 +3496,7 @@ GROUP BY Batch_No, Report_Sort_Order
 select * from final order by len(transformed_Trade_Type_Details) desc
 
 end
+
 begin
 -- Define suffix weight mapping
 ;WITH suffix_order AS (
@@ -3539,6 +3585,7 @@ FROM formatted
 GROUP BY Batch_No, Report_Sort_Order
 ORDER BY Batch_No, Report_Sort_Order;
 end
+
 begin
 WITH suffix_order AS (
     SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
@@ -3651,6 +3698,7 @@ final AS (
 )
 SELECT * FROM final order by len(transformed_Trade_Type_Details) desc
 end
+
 begin
 -- final query to sort the string in trade type details and update
 WITH suffix_order AS (
@@ -3766,6 +3814,7 @@ update a set trade_type_details = transformed_Trade_Type_Details
 from Analyse_Stocks a inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 ;
 end
+
 begin
 WITH suffix_order AS (
     SELECT 'Y' AS suffix, 1 AS sort_order UNION ALL
@@ -3885,6 +3934,7 @@ select * from final
 
 select * from Master_Screen_Name_Values order by batch_no,sno
 end
+
 begin
 -- sort the string in Trade type details 
 WITH suffix_order AS (
@@ -4005,6 +4055,7 @@ select * from final
 --from Stocks_Analysis.dbo.Analyse_Stocks a inner join final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno
 --;
 end
+
 begin
 update a
 set Description = replace(Description,'-Sim','-Sim-')
@@ -4013,6 +4064,7 @@ select * from Master_Screen_Name_Values where Batch_No = 1 and Description like 
 order by sno
 ;
 end
+
 begin
 -- If using SQL Server 2016+, use STRING_SPLIT
 DECLARE @input NVARCHAR(MAX) = 'Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Be-Dbl-Stg-4H;Be-Dbl-Stg-1H;Be-Sgl-Sim-D;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;';
@@ -4079,6 +4131,7 @@ SELECT STRING_AGG(Val, ';;') WITHIN GROUP (ORDER BY
 FROM FinalAgg
 ;
 end
+
 begin
 DECLARE @input1 NVARCHAR(MAX) =
 'Bu-Tri-Stg-Y;Bu-Tri-Stg-Q;Bu-Tri-Stg-M;Bu-Tri-Stg-W;Bu-Tri-Stg-D,Bu-Tri-Stg-4H,Bu-Tri-Stg-1H,Bu-Tri-Stg-15;Bu-Dbl-Stg-Y;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D,Bu-Dbl-Stg-4H,Bu-Dbl-Stg-1H,Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D,Bu-Sgl-Sim-4H,Bu-Sgl-Sim-1H,Bu-Sgl-Sim-15;Be-Tri-Stg-Y;Be-Tri-Stg-Q;Be-Tri-Stg-M;Be-Tri-Stg-W;Be-Tri-Stg-D,Be-Tri-Stg-4H,Be-Tri-Stg-1H,Be-Tri-Stg-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D,Be-Dbl-Stg-4H,Be-Dbl-Stg-1H,Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-D,Be-Sgl-Sim-4H,Be-Sgl-Sim-1H,Be-Sgl-Sim-15;'
@@ -4152,6 +4205,7 @@ DECLARE @input1 NVARCHAR(MAX) =
 SELECT STRING_AGG(BrandStr, ';;') WITHIN GROUP (ORDER BY BrandOrder) AS Output
 FROM FinalAgg
 end
+
 begin
 DECLARE @input2 NVARCHAR(MAX) =
 'Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Sgl-Sim-15;Be-Tri-Stg-Y;Be-Tri-Stg-Q;Be-Tri-Stg-M;Be-Tri-Stg-W;Be-Tri-Stg-D;Be-Tri-Stg-4H;Be-Tri-Stg-1H;Be-Tri-Stg-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D;Be-Dbl-Stg-4H;Be-Dbl-Stg-1H;Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-D;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;Be-Sgl-Sim-15;'
@@ -4224,6 +4278,7 @@ Be-	Tri-Stg-Y,Q,M,W,D,4H,1H,15;
 	Sgl-Sim-Y,Q,M,W,D,4H,1H,15;
 '
 end
+
 begin
 DECLARE @input4 NVARCHAR(MAX) =
 'Bu-Dbl-Stg-Q;Bu-Dbl-Stg-Q;Bu-Dbl-Stg-M;Bu-Dbl-Stg-W;Bu-Dbl-Stg-D;Bu-Dbl-Stg-4H;Bu-Dbl-Stg-1H;Bu-Dbl-Stg-15;Bu-Sgl-Sim-Y;Bu-Sgl-Sim-Q;Bu-Sgl-Sim-M;Bu-Sgl-Sim-W;Bu-Sgl-Sim-D;Bu-Sgl-Sim-4H;Bu-Sgl-Sim-1H;Bu-Sgl-Sim-15;Be-Dbl-Stg-Y;Be-Dbl-Stg-Q;Be-Dbl-Stg-M;Be-Dbl-Stg-W;Be-Dbl-Stg-D;Be-Dbl-Stg-4H;Be-Dbl-Stg-15;Be-Sgl-Sim-Y;Be-Sgl-Sim-Q;Be-Sgl-Sim-M;Be-Sgl-Sim-W;Be-Sgl-Sim-4H;Be-Sgl-Sim-1H;Be-Sgl-Sim-15;'
@@ -4297,6 +4352,7 @@ FROM BrandAggregate
 select * from Final
 
 end
+
 begin
 -- final query to be used in the script
 ;WITH InputData AS (
@@ -4366,6 +4422,7 @@ group by Batch_No, Sno
 )
 select * from Final
 end
+
 begin
 select  * from Analyse_Stocks where 1=1 
 -- and batch_no = 20250804063920 
@@ -4379,6 +4436,7 @@ Volume_Shockers_Sum desc,
 trade_view desc
 ;
 end
+
 begin
 EXEC sp_rename  'Stocks_Analysis.dbo.Analyse_15Minutes_Stocks.Trading_View','Trade_View'
 EXEC sp_rename  'Stocks_Analysis.dbo.Analyse_15Minutes_Stocks.Trade_View_Order','Trade_View_Order'
@@ -4392,6 +4450,7 @@ EXEC sp_rename  'Stocks_Analysis.dbo.Master_Sector_Industory_Wise','zMaster_Sect
 EXEC sp_rename  'Stocks_Analysis.dbo.Master_ScreenSort','zMaster_ScreenSort'
 EXEC sp_rename  'Stocks_Analysis.dbo.Master_Sector_Table','zMaster_Sector_Table'
 end
+
 begin
 update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'yearly;','Y;' );
 update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'quarterly;','Q;' );
@@ -4402,6 +4461,7 @@ update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'4
 update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'1_hourly;','1H;');
 update Analyse_15minutes_Stocks set Volume_Shockers = REPLACE(Volume_Shockers,'15_minutes;','15;');
 end
+
 begin
 select * 
 -- into Stocks_Analysis.dbo.Master_Segments_temp 
@@ -4415,6 +4475,7 @@ inner join Stocks_Analysis.dbo.Master_Segments_temp b
 on a.Stock_Name = b.Symbol
 where a.Symbol like '% %'
 end
+
 begin
 select	'15mins' as TmFrm,Symbol,Trade_Type_Details,Volume_Shockers,Industry,Segments,
 		Stock_Name,Price,Percent_Change as [%cng],Volume,
@@ -4450,6 +4511,7 @@ order	by price_action
 		,Trade_View desc
 		--,Report_Sort_Order asc
 end
+
 begin
 with cte as (
 select row_number() over(partition by Symbol order by sno) as rn,
@@ -4461,6 +4523,7 @@ delete from Stocks_Analysis.dbo.Master_Segments where sno in (
 select distinct sno from cte where rn <> 1 
 )
 end
+
 begin
 select 
 * from Stocks_Analysis.dbo.Master_Segments
@@ -4471,10 +4534,405 @@ Symbol,count(1) from [dbo].[Master_Segments]
 group by Symbol having count(1) > 1
 ;
 end
+
 begin
 select symbol from dbo.Cash_Stocks where symbol like '% %' union all 
 select symbol from dbo.Cash_15Minutes_Stocks where symbol like '% %' union all 
 select symbol from dbo.Analyse_Stocks where symbol like '% %' union all 
 select symbol from dbo.Analyse_15Minutes_Stocks where symbol like '% %' 
 end
+
+begin
+with cte as (
+select	'D' as TM,Trade_View as Trd_vw,Symbol,Trade_Type_Details,Volume_Shockers as vol_sh,Industry,Segments,
+		Stock_Name,Price,Percent_Change as [%cng],Volume,
+		Report_Sort_Order as RSO,Batch_No,Sno,
+		Trade_View_Order as TVO,Trade_Type_Length as TTL,Trade_Type_Bullish_Sum as TTBuS,Trade_Type_Bearish_Sum as TTBeS,Trade_Type_Details_Length as TTDL,Trade_Type_Details_Sum as TTDS,Segments_Order as SO,Segments_Length as SL,Segments_Sum as SS,Volume_Shockers_Sum as VSS,price_action as pa -- Trade_Type,Series,ISIN_Code,
+		,row_number() over(partition by batch_no order by Batch_No,Trade_Type_Details_Sum desc,Volume_Shockers_Sum desc,Segments_Order desc,Trade_View desc,Report_Sort_Order asc) as row_no
+		,Created_Date
+from	Stocks_Analysis.dbo.Analyse_Stocks 
+where	1=1 
+	and	batch_no >= cast(Format(getdate(),'yyyyMMdd')+'050505' as bigint)
+	and	Trade_Type_Details_Sum > 15
+	and	Segments_Order > 500
+union all 
+select	'15',Trade_View,Symbol,Trade_Type_Details,Volume_Shockers,Industry,Segments,
+		Stock_Name,Price,Percent_Change as [%cng],Volume,
+		Report_Sort_Order as RSO,Batch_No,Sno,
+		Trade_View_Order as TVO,Trade_Type_Length as TTL,Trade_Type_Bullish_Sum as TTBuS,Trade_Type_Bearish_Sum as TTBeS,Trade_Type_Details_Length as TTDL,Trade_Type_Details_Sum as TTDS,Segments_Order as SO,Segments_Length as SL,Segments_Sum as SS,Volume_Shockers_Sum as VSS,price_action as pa -- ,Trade_Type,Series,ISIN_Code,
+		,10000+row_number() over(partition by batch_no order by Batch_No,Trade_Type_Details_Sum desc,Volume_Shockers_Sum desc,Segments_Order desc,Trade_View desc,Report_Sort_Order asc) as row_no
+		,Created_Date
+from	Stocks_Analysis.dbo.Analyse_15Minutes_Stocks 
+where	1=1 
+	and	batch_no = (select max(batch_no) from Stocks_Analysis.dbo.Analyse_15Minutes_Stocks)
+	and	Trade_Type_Details_Sum > 15
+	and	Segments_Order > 500
+)
+select * from cte order by row_no asc
+end
+
+begin
+select '
+sno	Screen_Names	Value	Batch_No	Description
+13	Bullish_Double_Screen_Strong_Quarterly	287	1	Bu-Dbl-Stg-Q
+20	Bullish_Double_Screen_Strong_Correction_Quarterly	43	1	Bu-Dbl-Stg-Corr-Q
+47	Bearish_Double_Screen_Strong_Quarterly	287	1	Be-Dbl-Stg-Q
+54	Bearish_Double_Screen_Strong_Correction_Quarterly	43	1	Be-Dbl-Stg-Corr-Q
+62	Bearish_Single_Screen_Quarterly	7	1	Be-Sgl-Sim-Q
+28	Bullish_Single_Screen_Quarterly	7	1	Bu-Sgl-Sim-Q
+
+sno	Screen_Names	Value	Batch_No	Description
+61	Bearish_Single_Screen_Yearly	8	1	Be-Sgl-Sim-Y
+27	Bullish_Single_Screen_Yearly	8	1	Bu-Sgl-Sim-Y
+
+sno	Screen_Names	Value	Batch_No	Description
+1	Bullish_Triple_Screen_Strong_Monthly	11955	1	Bu-Tri-Stg-M
+7	Bullish_Triple_Screen_Strong_Correction_Monthly	1994	1	Bu-Tri-Stg-Corr-M
+14	Bullish_Double_Screen_Strong_Monthly	286	1	Bu-Dbl-Stg-M
+21	Bullish_Double_Screen_Strong_Correction_Monthly	42	1	Bu-Dbl-Stg-Corr-M
+41	Bearish_Triple_Screen_Strong_Correction_Monthly	1994	1	Be-Tri-Stg-Corr-M
+48	Bearish_Double_Screen_Strong_Monthly	286	1	Be-Dbl-Stg-M
+55	Bearish_Double_Screen_Strong_Correction_Monthly	42	1	Be-Dbl-Stg-Corr-M
+63	Bearish_Single_Screen_Monthly	6	1	Be-Sgl-Sim-M
+29	Bullish_Single_Screen_Monthly	6	1	Bu-Sgl-Sim-M
+35	Bearish_Triple_Screen_Strong_Monthly	11955	1	Be-Tri-Stg-M
+';
+select * 
+-- update a set Value = 0 
+from [dbo].[Master_Screen_Name_Values] a
+where Batch_No = 1 and (Screen_Names like '%yearly%' or Screen_Names like '%quarterly%' or Screen_Names like '%monthly%')
+order by Batch_No
+;
+end
+
+begin
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Swing_Monthly       bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Swing_Weekly        bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Swing_Daily         bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Swing_4_Hourly      bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Swing_1_Hourly      bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Swing_15_Minutes	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Momentum_Monthly    bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Momentum_Weekly     bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Momentum_Daily      bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Monentum_4_Hourly   bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Momentum_1_Hourly   bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Triple_Screen_Momentum_15_Minutes bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Swing_Quarterly 	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Swing_Monthly   	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Swing_Weekly    	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Swing_Daily     	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Swing_4_Hourly  	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Swing_1_Hourly  	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Swing_15_Minutes	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Momentum_Quarterly  bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Momentum_Monthly    bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Momentum_Weekly     bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Momentum_Daily      bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Momentum_4_Hourly   bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Momentum_1_Hourly   bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Double_Screen_Momentum_15_Minutes bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_Yearly    	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_Quarterly 	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_Monthly   	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_Weekly    	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_Daily     	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_4_Hourly  	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_1_Hourly  	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Swing_15_Minutes	 bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_Yearly     bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_Quarterly  bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_Monthly    bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_Weekly     bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_Daily      bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_4_Hourly   bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_1_Hourly   bit null;
+alter table Analyse_15minutes_Stocks add Bullish_Single_Screen_Momentum_15_Minutes bit null;
+
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Yearly bit null;
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Quarterly bit null;
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_15_Minutes bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Quarterly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_15_Minutes bit null;
+
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_15_Minutes bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Quarterly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_15_Minutes bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Yearly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Quarterly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_15_Minutes bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Monentum_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_15_Minutes bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Quarterly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_15_Minutes bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Yearly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Quarterly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Monthly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Weekly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Daily bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_4_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_1_Hourly bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_15_Minutes bit null;
+alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_yearly bit null;
+
+/*
+insert into Master_Screen_Name_Values (Batch_No,Screen_Names) values 
+(1,'Bearish_Double_Screen_Momentum_1_Hourly'),
+(1,'Bearish_Double_Screen_Momentum_15_Minutes'),
+(1,'Bearish_Double_Screen_Momentum_4_Hourly'),
+(1,'Bearish_Double_Screen_Momentum_Daily'),
+(1,'Bearish_Double_Screen_Momentum_Monthly'),
+(1,'Bearish_Double_Screen_Momentum_Quarterly'),
+(1,'Bearish_Double_Screen_Momentum_Weekly'),
+(1,'Bearish_Double_Screen_Strong_15_Minutes'),
+(1,'Bearish_Double_Screen_Strong_Correction_1_Hourly'),
+(1,'Bearish_Double_Screen_Strong_Correction_15_Minutes'),
+(1,'Bearish_Double_Screen_Strong_Correction_4_Hourly'),
+(1,'Bearish_Double_Screen_Strong_Correction_Daily'),
+(1,'Bearish_Double_Screen_Strong_Correction_Monthly'),
+(1,'Bearish_Double_Screen_Strong_Correction_Quarterly'),
+(1,'Bearish_Double_Screen_Strong_Correction_Weekly'),
+(1,'Bearish_Double_Screen_Swing_1_Hourly'),
+(1,'Bearish_Double_Screen_Swing_15_Minutes'),
+(1,'Bearish_Double_Screen_Swing_4_Hourly'),
+(1,'Bearish_Double_Screen_Swing_Daily'),
+(1,'Bearish_Double_Screen_Swing_Monthly'),
+(1,'Bearish_Double_Screen_Swing_Quarterly'),
+(1,'Bearish_Double_Screen_Swing_Weekly'),
+(1,'Bearish_Single_Screen_Momentum_1_Hourly'),
+(1,'Bearish_Single_Screen_Momentum_15_Minutes'),
+(1,'Bearish_Single_Screen_Momentum_4_Hourly'),
+(1,'Bearish_Single_Screen_Momentum_Daily'),
+(1,'Bearish_Single_Screen_Momentum_Monthly'),
+(1,'Bearish_Single_Screen_Momentum_Quarterly'),
+(1,'Bearish_Single_Screen_Momentum_Weekly'),
+(1,'Bearish_Single_Screen_Momentum_Yearly'),
+(1,'Bearish_Single_Screen_Strong_Correction_1_Hourly'),
+(1,'Bearish_Single_Screen_Strong_Correction_15_Minutes'),
+(1,'Bearish_Single_Screen_Strong_Correction_4_Hourly'),
+(1,'Bearish_Single_Screen_Strong_Correction_Daily'),
+(1,'Bearish_Single_Screen_Strong_Correction_Monthly'),
+(1,'Bearish_Single_Screen_Strong_Correction_Quarterly'),
+(1,'Bearish_Single_Screen_Strong_Correction_Weekly'),
+(1,'Bearish_Single_Screen_Strong_Correction_yearly'),
+(1,'Bearish_Single_Screen_Swing_1_Hourly'),
+(1,'Bearish_Single_Screen_Swing_15_Minutes'),
+(1,'Bearish_Single_Screen_Swing_4_Hourly'),
+(1,'Bearish_Single_Screen_Swing_Daily'),
+(1,'Bearish_Single_Screen_Swing_Monthly'),
+(1,'Bearish_Single_Screen_Swing_Quarterly'),
+(1,'Bearish_Single_Screen_Swing_Weekly'),
+(1,'Bearish_Single_Screen_Swing_Yearly'),
+(1,'Bearish_Triple_Screen_Momentum_1_Hourly'),
+(1,'Bearish_Triple_Screen_Momentum_15_Minutes'),
+(1,'Bearish_Triple_Screen_Momentum_Daily'),
+(1,'Bearish_Triple_Screen_Momentum_Monthly'),
+(1,'Bearish_Triple_Screen_Momentum_Weekly'),
+(1,'Bearish_Triple_Screen_Monentum_4_Hourly'),
+(1,'Bearish_Triple_Screen_Strong_1_Hourly'),
+(1,'Bearish_Triple_Screen_Strong_15_Minutes'),
+(1,'Bearish_Triple_Screen_Strong_Correction_1_Hourly'),
+(1,'Bearish_Triple_Screen_Strong_Correction_15_Minutes'),
+(1,'Bearish_Triple_Screen_Strong_Correction_4_Hourly'),
+(1,'Bearish_Triple_Screen_Strong_Correction_Daily'),
+(1,'Bearish_Triple_Screen_Strong_Correction_Monthly'),
+(1,'Bearish_Triple_Screen_Strong_Correction_Weekly'),
+(1,'Bearish_Triple_Screen_Swing_1_Hourly'),
+(1,'Bearish_Triple_Screen_Swing_15_Minutes'),
+(1,'Bearish_Triple_Screen_Swing_4_Hourly'),
+(1,'Bearish_Triple_Screen_Swing_Daily'),
+(1,'Bearish_Triple_Screen_Swing_Monthly'),
+(1,'Bearish_Triple_Screen_Swing_Weekly'),
+(1,'Bullish_Double_Screen_Momentum_1_Hourly'),
+(1,'Bullish_Double_Screen_Momentum_15_Minutes'),
+(1,'Bullish_Double_Screen_Momentum_4_Hourly'),
+(1,'Bullish_Double_Screen_Momentum_Daily'),
+(1,'Bullish_Double_Screen_Momentum_Monthly'),
+(1,'Bullish_Double_Screen_Momentum_Quarterly'),
+(1,'Bullish_Double_Screen_Momentum_Weekly'),
+(1,'Bullish_Double_Screen_Strong_15_Minutes'),
+(1,'Bullish_Double_Screen_Strong_Correction_1_Hourly'),
+(1,'Bullish_Double_Screen_Strong_Correction_15_Minutes'),
+(1,'Bullish_Double_Screen_Strong_Correction_4_Hourly'),
+(1,'Bullish_Double_Screen_Strong_Correction_Daily'),
+(1,'Bullish_Double_Screen_Strong_Correction_Monthly'),
+(1,'Bullish_Double_Screen_Strong_Correction_Quarterly'),
+(1,'Bullish_Double_Screen_Strong_Correction_Weekly'),
+(1,'Bullish_Double_Screen_Swing_1_Hourly'),
+(1,'Bullish_Double_Screen_Swing_15_Minutes'),
+(1,'Bullish_Double_Screen_Swing_4_Hourly'),
+(1,'Bullish_Double_Screen_Swing_Daily'),
+(1,'Bullish_Double_Screen_Swing_Monthly'),
+(1,'Bullish_Double_Screen_Swing_Quarterly'),
+(1,'Bullish_Double_Screen_Swing_Weekly'),
+(1,'Bullish_Single_Screen_Momentum_1_Hourly'),
+(1,'Bullish_Single_Screen_Momentum_15_Minutes'),
+(1,'Bullish_Single_Screen_Momentum_4_Hourly'),
+(1,'Bullish_Single_Screen_Momentum_Daily'),
+(1,'Bullish_Single_Screen_Momentum_Monthly'),
+(1,'Bullish_Single_Screen_Momentum_Quarterly'),
+(1,'Bullish_Single_Screen_Momentum_Weekly'),
+(1,'Bullish_Single_Screen_Momentum_Yearly'),
+(1,'Bullish_Single_Screen_Strong_Correction_1_Hourly'),
+(1,'Bullish_Single_Screen_Strong_Correction_15_Minutes'),
+(1,'Bullish_Single_Screen_Strong_Correction_4_Hourly'),
+(1,'Bullish_Single_Screen_Strong_Correction_Daily'),
+(1,'Bullish_Single_Screen_Strong_Correction_Monthly'),
+(1,'Bullish_Single_Screen_Strong_Correction_Quarterly'),
+(1,'Bullish_Single_Screen_Strong_Correction_Weekly'),
+(1,'Bullish_Single_Screen_Strong_Correction_Yearly'),
+(1,'Bullish_Single_Screen_Swing_1_Hourly'),
+(1,'Bullish_Single_Screen_Swing_15_Minutes'),
+(1,'Bullish_Single_Screen_Swing_4_Hourly'),
+(1,'Bullish_Single_Screen_Swing_Daily'),
+(1,'Bullish_Single_Screen_Swing_Monthly'),
+(1,'Bullish_Single_Screen_Swing_Quarterly'),
+(1,'Bullish_Single_Screen_Swing_Weekly'),
+(1,'Bullish_Single_Screen_Swing_Yearly'),
+(1,'Bullish_Triple_Screen_Momentum_1_Hourly'),
+(1,'Bullish_Triple_Screen_Momentum_15_Minutes'),
+(1,'Bullish_Triple_Screen_Momentum_Daily'),
+(1,'Bullish_Triple_Screen_Momentum_Monthly'),
+(1,'Bullish_Triple_Screen_Momentum_Weekly'),
+(1,'Bullish_Triple_Screen_Monentum_4_Hourly'),
+(1,'Bullish_Triple_Screen_Strong_1_Hourly'),
+(1,'Bullish_Triple_Screen_Strong_15_Minutes'),
+(1,'Bullish_Triple_Screen_Strong_Correction_1_Hourly'),
+(1,'Bullish_Triple_Screen_Strong_Correction_15_Minutes'),
+(1,'Bullish_Triple_Screen_Strong_Correction_4_Hourly'),
+(1,'Bullish_Triple_Screen_Strong_Correction_Daily'),
+(1,'Bullish_Triple_Screen_Strong_Correction_Monthly'),
+(1,'Bullish_Triple_Screen_Strong_Correction_Weekly'),
+(1,'Bullish_Triple_Screen_Swing_1_Hourly'),
+(1,'Bullish_Triple_Screen_Swing_15_Minutes'),
+(1,'Bullish_Triple_Screen_Swing_4_Hourly'),
+(1,'Bullish_Triple_Screen_Swing_Daily'),
+(1,'Bullish_Triple_Screen_Swing_Monthly'),
+(1,'Bullish_Triple_Screen_Swing_Weekly')
+;
+*/
+end
+
+begin
+with cte as (
+select	'D' as TM,Trade_View as Trd_vw,Symbol,Trade_Type_Details,Volume_Shockers as vol_sh,Industry,Segments,
+		Stock_Name,Price,Percent_Change as [%cng],Volume,
+		Report_Sort_Order as RSO,Batch_No,Sno,
+		Trade_View_Order as TVO,Trade_Type_Length as TTL,Trade_Type_Bullish_Sum as TTBuS,Trade_Type_Bearish_Sum as TTBeS,Trade_Type_Details_Length as TTDL,Trade_Type_Details_Sum as TTDS,Segments_Order as SO,Segments_Length as SL,Segments_Sum as SS,Volume_Shockers_Sum as VSS,price_action as pa -- Trade_Type,Series,ISIN_Code,
+		,10000+row_number() over(partition by batch_no order by Batch_No,Trade_View desc,Trade_Type_Details_Sum desc,Volume_Shockers_Sum desc,Segments_Order desc,Report_Sort_Order asc) as row_no
+		,Created_Date
+from	Stocks_Analysis.dbo.Analyse_Stocks 
+where	1=1 
+	and	batch_no >= (select max(batch_no) from Stocks_Analysis.dbo.Analyse_Stocks)
+	and	Trade_Type_Details_Sum > 15
+	and	Segments_Order > 500
+union all 
+select	'15',Trade_View,Symbol,Trade_Type_Details,Volume_Shockers,Industry,Segments,
+		Stock_Name,Price,Percent_Change as [%cng],Volume,
+		Report_Sort_Order as RSO,Batch_No,Sno,
+		Trade_View_Order as TVO,Trade_Type_Length as TTL,Trade_Type_Bullish_Sum as TTBuS,Trade_Type_Bearish_Sum as TTBeS,Trade_Type_Details_Length as TTDL,Trade_Type_Details_Sum as TTDS,Segments_Order as SO,Segments_Length as SL,Segments_Sum as SS,Volume_Shockers_Sum as VSS,price_action as pa -- ,Trade_Type,Series,ISIN_Code,
+		,row_number() over(partition by batch_no order by Batch_No,Trade_View desc,Trade_Type_Details_Sum desc,Volume_Shockers_Sum desc,Segments_Order desc,Report_Sort_Order asc) as row_no
+		,Created_Date
+from	Stocks_Analysis.dbo.Analyse_15Minutes_Stocks 
+where	1=1 
+	and	batch_no = (select max(batch_no) from Stocks_Analysis.dbo.Analyse_15Minutes_Stocks)
+	and	Trade_Type_Details_Sum > 15
+	and	Segments_Order > 500
+)
+select * from cte order by row_no asc
+end
+begin
+	declare @Trade_Type nvarchar(max) 
+		,@Trade_Type_Details nvarchar(max) 
+		,@Trade_Type_Details_Sum  nvarchar(max)
+
+	SELECT
+	@Trade_Type = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then ''' + left(Screen_Names,2) + ';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+	,@Trade_Type_Details = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then dp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+	,@Trade_Type_Details_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+	from dbo.Master_Screen_Name_Values where Batch_No = 1;
+	select @Trade_Type,@Trade_Type_Details,@Trade_Type_Details_Sum;
+
+	declare @Trade_Type_Bullish_Sum nvarchar(max)
+	SELECT
+	@Trade_Type_Bullish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+	from dbo.Master_Screen_Name_Values where Batch_No = 1 and Screen_Names like 'Bullish%';
+	select @Trade_Type_Bullish_Sum;
+	declare @Trade_Type_Bearish_Sum nvarchar(max)
+	SELECT
+	@Trade_Type_Bearish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+	from dbo.Master_Screen_Name_Values where Batch_No = 1 and Screen_Names like 'Bearish%';
+	select @Trade_Type_Bearish_Sum;
+
+end
+
+begin -- update trade_type.... calculated fields 
+
+declare @Trade_Type nvarchar(max) ,@Trade_Type_Details nvarchar(max) ,@Trade_Type_Details_Sum  nvarchar(max),@ScreenNames nvarchar(max),@sql_query nvarchar(max)
+,@Trade_Type_Bullish_Sum nvarchar(max),@Trade_Type_Bearish_Sum nvarchar(max),@sql_query1 nvarchar(max)
+SELECT
+@ScreenNames = STRING_AGG(CAST(('[' + Screen_Names + ']') AS NVARCHAR(MAX)), ',')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then ''' + left(Screen_Names,2) + ';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type_Details = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then dp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type_Details_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = 1;
+-- select @ScreenNames,@Trade_Type,@Trade_Type_Details,@Trade_Type_Details_Sum;
+SELECT
+@Trade_Type_Bullish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = 1 and Screen_Names like 'Bullish%';
+-- select @Trade_Type_Bullish_Sum;
+SELECT
+@Trade_Type_Bearish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = 1 and Screen_Names like 'Bearish%';
+-- select @Trade_Type_Bearish_Sum;
+
+select @sql_query = cast('
+WITH ValueSource AS ( SELECT Batch_No, Screen_Names, Value FROM dbo.Master_Screen_Name_Values WHERE Batch_No = 1 )
+,ValuePivot AS ( SELECT * FROM ValueSource PIVOT (SUM(Value) FOR Screen_Names IN (' + @ScreenNames + ')) AS vp )
+,DescSource AS ( SELECT Batch_No, Screen_Names, Description FROM dbo.Master_Screen_Name_Values WHERE Batch_No = 1 )
+,DescPivot AS (SELECT * FROM DescSource a PIVOT (MAX(Description) FOR Screen_Names IN (' + @ScreenNames + ') ) AS dp )
+UPDATE a SET Trade_Type = ISNULL(a.Trade_Type, '') + ' + @Trade_Type + ' '''',
+Trade_Type_Details = ISNULL(a.Trade_Type_Details, '') +  ' + @Trade_Type_Details + ' '''',
+Trade_Type_Details_Sum = ISNULL(a.Trade_Type_Details_Sum, 0) + ' + @Trade_Type_Details_Sum + ' 0,
+Trade_Type_Bullish_Sum = ISNULL(a.Trade_Type_Bullish_Sum, 0) + ' + @Trade_Type_Bullish_Sum + ' 0,
+Trade_Type_Bearish_Sum = ISNULL(a.Trade_Type_Bearish_Sum, 0) + ' + @Trade_Type_Bearish_Sum + ' 0
+FROM dbo.Analyse_Stocks a JOIN DescPivot dp ON dp.Batch_No = 1 and a.Batch_No = @batch_no JOIN ValuePivot vp ON vp.Batch_No = 1;' as nvarchar(max))
+select @sql_query
+
+end
+
 rollback transaction

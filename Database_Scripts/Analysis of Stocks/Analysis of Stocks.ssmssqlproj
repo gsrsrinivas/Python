@@ -31,17 +31,17 @@
           <AssociatedConnUserName />
           <FullPath>Report-Update-Queries.sql</FullPath>
         </FileNode>
+        <FileNode Name="Report-Update-Queries--v11.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Report-Update-Queries--v11.sql</FullPath>
+        </FileNode>
         <FileNode Name="Script-Reset.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Script-Reset.sql</FullPath>
-        </FileNode>
-        <FileNode Name="SQLQuery1.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>SQLQuery1.sql</FullPath>
         </FileNode>
         <FileNode Name="Working.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>

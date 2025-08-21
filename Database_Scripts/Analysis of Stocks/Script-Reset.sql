@@ -1,13 +1,13 @@
-begin -- reset script 
---------------------------------------------------------------------------------------
+begin -- reset script
+DECLARE @StartTime DATETIME = GETDATE();
+-- print script start time 
+------------------------------------------------------------------------------------------------------------
 -- update all screen values fields and calculated fields to null and calculate once again 
 -- dbo.Master_Screen_Name_Values, dbo.Analyse_Stocks
---------------------------------------------------------------------------------------
-begin -- print script start time 
-DECLARE @StartTime DATETIME = GETDATE();
+------------------------------------------------------------------------------------------------------------
 PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 end
---------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
 begin -- update calculated fields to null 
 update dbo.Analyse_Stocks set 
  Trade_Type					= NULL
@@ -103,7 +103,6 @@ update dbo.Analyse_Stocks set
 ,Bearish_Single_Screen_15_Minutes                   = NULL
 ;
 end 
---------------------------------------------------------------------------------------
 begin -- create screen values temp table 
 drop table if exists dbo.Temp_Analyse_Stocks -- drop the temp table
 ;
@@ -550,7 +549,7 @@ ON a.Batch_No = b.Batch_No and a.sno = b.sno
 ;
 end
 end
---------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
 begin -- print script finish time and duration 
 DECLARE	 @EndTime DATETIME = GETDATE() -- ,@StartTime DATETIME = GETDATE()
 DECLARE	 @DurationMs INT = DATEDIFF(MILLISECOND, @StartTime, @EndTime);
@@ -561,5 +560,4 @@ PRINT 'Duration (ms)    : ' + CAST(@DurationMs AS VARCHAR);
 PRINT 'Duration         : ' + CAST(CAST(DATEADD(MILLISECOND, @DurationMs, '00:00:00.000') AS TIME) AS VARCHAR)
 ;
 end
---------------------------------------------------------------------------------------
-end 
+

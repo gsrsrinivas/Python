@@ -4875,6 +4875,7 @@ where	1=1
 )
 select * from cte order by row_no asc
 end
+
 begin
 	declare @Trade_Type nvarchar(max) 
 		,@Trade_Type_Details nvarchar(max) 
@@ -4900,7 +4901,8 @@ begin
 
 end
 
-begin -- update trade_type.... calculated fields 
+begin
+-- update trade_type.... calculated fields 
 
 declare @Trade_Type nvarchar(max) ,@Trade_Type_Details nvarchar(max) ,@Trade_Type_Details_Sum  nvarchar(max),@ScreenNames nvarchar(max),@sql_query nvarchar(max)
 ,@Trade_Type_Bullish_Sum nvarchar(max),@Trade_Type_Bearish_Sum nvarchar(max),@sql_query1 nvarchar(max)
@@ -4909,16 +4911,16 @@ SELECT
 ,@Trade_Type = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then ''' + left(Screen_Names,2) + ';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
 ,@Trade_Type_Details = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then dp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
 ,@Trade_Type_Details_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
-from dbo.Master_Screen_Name_Values where Batch_No = 1;
--- select @ScreenNames,@Trade_Type,@Trade_Type_Details,@Trade_Type_Details_Sum;
+from dbo.Master_Screen_Name_Values where Batch_No = 4;
+select @ScreenNames,@Trade_Type,@Trade_Type_Details,@Trade_Type_Details_Sum;
 SELECT
 @Trade_Type_Bullish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
 from dbo.Master_Screen_Name_Values where Batch_No = 1 and Screen_Names like 'Bullish%';
--- select @Trade_Type_Bullish_Sum;
+select @Trade_Type_Bullish_Sum;
 SELECT
 @Trade_Type_Bearish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS NVARCHAR(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
 from dbo.Master_Screen_Name_Values where Batch_No = 1 and Screen_Names like 'Bearish%';
--- select @Trade_Type_Bearish_Sum;
+select @Trade_Type_Bearish_Sum;
 
 select @sql_query = cast('
 WITH ValueSource AS ( SELECT Batch_No, Screen_Names, Value FROM dbo.Master_Screen_Name_Values WHERE Batch_No = 1 )
@@ -4931,8 +4933,889 @@ Trade_Type_Details_Sum = ISNULL(a.Trade_Type_Details_Sum, 0) + ' + @Trade_Type_D
 Trade_Type_Bullish_Sum = ISNULL(a.Trade_Type_Bullish_Sum, 0) + ' + @Trade_Type_Bullish_Sum + ' 0,
 Trade_Type_Bearish_Sum = ISNULL(a.Trade_Type_Bearish_Sum, 0) + ' + @Trade_Type_Bearish_Sum + ' 0
 FROM dbo.Analyse_Stocks a JOIN DescPivot dp ON dp.Batch_No = 1 and a.Batch_No = @batch_no JOIN ValuePivot vp ON vp.Batch_No = 1;' as nvarchar(max))
-select @sql_query
+select @sql_query;
 
 end
 
+begin
+with cte as (
+select row_number() over (partition by batch_no,screen_names order by screen_names,isnull(sno,999)) as rn
+,*
+from dbo.Master_Screen_Name_Values
+-- where Batch_No  = 1 
+)
+select * from cte where rn = 1
+;
+select count(1), batch_no from Master_Screen_Name_Values group by Batch_No
+;
+end
+
+begin
+
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_Yearly',    'Bearish_Single_Screen_Strong_Yearly1';
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_Quarterly', 'Bearish_Single_Screen_Strong_Quarterly1';
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_Monthly',   'Bearish_Single_Screen_Strong_Monthly1';
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_Weekly',    'Bearish_Single_Screen_Strong_Weekly1';
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_Daily',     'Bearish_Single_Screen_Strong_Daily1';
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_4_Hourly',  'Bearish_Single_Screen_Strong_4_Hourly1';
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_1_Hourly',  'Bearish_Single_Screen_Strong_1_Hourly1';
+exec sp_rename 'Analyse_Stocks.Bearish_Single_Screen_15_Minutes','Bearish_Single_Screen_Strong_15_Minutes1';
+
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Strong_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Strong_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Strong_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Momentum_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Momentum_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Momentum_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Triple_Screen_Swing_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Double_Screen_Swing_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bullish_Single_Screen_Swing_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Strong_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Strong_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Strong_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Momentum_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Momentum_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Momentum_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Triple_Screen_Swing_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Double_Screen_Swing_Correction_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_15_Minutes bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_Yearly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_Quarterly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_Monthly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_Weekly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_Daily bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_4_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_1_Hourly bit null';
+EXEC sp_executesql N'Alter table Analyse_15Minutes_Stocks add Bearish_Single_Screen_Swing_Correction_15_Minutes bit null';
+
+end
+
+begin
+select * from Master_Screen_Name_Values where Batch_No = 4;
+
+select Batch_No,Report_Sort_Order,Symbol,Trade_Type_Details,Trade_View,Volume_Shockers,Industry,Segments,Price,Percent_Change,Volume,Sno,Trade_View_Order,Trade_Type,Trade_Type_Length,Trade_Type_Bullish_Sum,Volume_Shockers_Sum,Trade_Type_Bearish_Sum,Trade_Type_Details_Length,Trade_Type_Details_Sum,Segments_Order,Segments_Length,Segments_Sum,Stock_Name,Series,ISIN_Code,price_action,Created_Date,Bullish_Triple_Screen_Strong_Yearly,Bullish_Triple_Screen_Strong_Quarterly,Bullish_Triple_Screen_Strong_Monthly,Bullish_Triple_Screen_Strong_Weekly,Bullish_Triple_Screen_Strong_Daily,Bullish_Triple_Screen_Strong_4_Hourly,Bullish_Triple_Screen_Strong_1_Hourly,Bullish_Triple_Screen_Strong_15_Minutes,Bullish_Triple_Screen_Strong_Correction_Yearly,Bullish_Triple_Screen_Strong_Correction_Quarterly,Bullish_Triple_Screen_Strong_Correction_Monthly,Bullish_Triple_Screen_Strong_Correction_Weekly,Bullish_Triple_Screen_Strong_Correction_Daily,Bullish_Triple_Screen_Strong_Correction_4_Hourly,Bullish_Triple_Screen_Strong_Correction_1_Hourly,Bullish_Triple_Screen_Strong_Correction_15_Minutes,Bullish_Double_Screen_Strong_Yearly,Bullish_Double_Screen_Strong_Quarterly,Bullish_Double_Screen_Strong_Monthly,Bullish_Double_Screen_Strong_Weekly,Bullish_Double_Screen_Strong_Daily,Bullish_Double_Screen_Strong_4_Hourly,Bullish_Double_Screen_Strong_1_Hourly,Bullish_Double_Screen_Strong_15_Minutes,Bullish_Double_Screen_Strong_Correction_Yearly,Bullish_Double_Screen_Strong_Correction_Quarterly,Bullish_Double_Screen_Strong_Correction_Monthly,Bullish_Double_Screen_Strong_Correction_Weekly,Bullish_Double_Screen_Strong_Correction_Daily,Bullish_Double_Screen_Strong_Correction_4_Hourly,Bullish_Double_Screen_Strong_Correction_1_Hourly,Bullish_Double_Screen_Strong_Correction_15_Minutes,Bullish_Single_Screen_Strong_Yearly,Bullish_Single_Screen_Strong_Quarterly,Bullish_Single_Screen_Strong_Monthly,Bullish_Single_Screen_Strong_Weekly,Bullish_Single_Screen_Strong_Daily,Bullish_Single_Screen_Strong_4_Hourly,Bullish_Single_Screen_Strong_1_Hourly,Bullish_Single_Screen_Strong_15_Minutes,Bullish_Single_Screen_Strong_Correction_Yearly,Bullish_Single_Screen_Strong_Correction_Quarterly,Bullish_Single_Screen_Strong_Correction_Monthly,Bullish_Single_Screen_Strong_Correction_Weekly,Bullish_Single_Screen_Strong_Correction_Daily,Bullish_Single_Screen_Strong_Correction_4_Hourly,Bullish_Single_Screen_Strong_Correction_1_Hourly,Bullish_Single_Screen_Strong_Correction_15_Minutes,Bullish_Triple_Screen_Momentum_Yearly,Bullish_Triple_Screen_Momentum_Quarterly,Bullish_Triple_Screen_Momentum_Monthly,Bullish_Triple_Screen_Momentum_Weekly,Bullish_Triple_Screen_Momentum_Daily,Bullish_Triple_Screen_Momentum_4_Hourly,Bullish_Triple_Screen_Momentum_1_Hourly,Bullish_Triple_Screen_Momentum_15_Minutes,Bullish_Triple_Screen_Momentum_Correction_Yearly,Bullish_Triple_Screen_Momentum_Correction_Quarterly,Bullish_Triple_Screen_Momentum_Correction_Monthly,Bullish_Triple_Screen_Momentum_Correction_Weekly,Bullish_Triple_Screen_Momentum_Correction_Daily,Bullish_Triple_Screen_Momentum_Correction_4_Hourly,Bullish_Triple_Screen_Momentum_Correction_1_Hourly,Bullish_Triple_Screen_Momentum_Correction_15_Minutes,Bullish_Double_Screen_Momentum_Yearly,Bullish_Double_Screen_Momentum_Quarterly,Bullish_Double_Screen_Momentum_Monthly,Bullish_Double_Screen_Momentum_Weekly,Bullish_Double_Screen_Momentum_Daily,Bullish_Double_Screen_Momentum_4_Hourly,Bullish_Double_Screen_Momentum_1_Hourly,Bullish_Double_Screen_Momentum_15_Minutes,Bullish_Double_Screen_Momentum_Correction_Yearly,Bullish_Double_Screen_Momentum_Correction_Quarterly,Bullish_Double_Screen_Momentum_Correction_Monthly,Bullish_Double_Screen_Momentum_Correction_Weekly,Bullish_Double_Screen_Momentum_Correction_Daily,Bullish_Double_Screen_Momentum_Correction_4_Hourly,Bullish_Double_Screen_Momentum_Correction_1_Hourly,Bullish_Double_Screen_Momentum_Correction_15_Minutes,Bullish_Single_Screen_Momentum_Yearly,Bullish_Single_Screen_Momentum_Quarterly,Bullish_Single_Screen_Momentum_Monthly,Bullish_Single_Screen_Momentum_Weekly,Bullish_Single_Screen_Momentum_Daily,Bullish_Single_Screen_Momentum_4_Hourly,Bullish_Single_Screen_Momentum_1_Hourly,Bullish_Single_Screen_Momentum_15_Minutes,Bullish_Single_Screen_Momentum_Correction_Yearly,Bullish_Single_Screen_Momentum_Correction_Quarterly,Bullish_Single_Screen_Momentum_Correction_Monthly,Bullish_Single_Screen_Momentum_Correction_Weekly,Bullish_Single_Screen_Momentum_Correction_Daily,Bullish_Single_Screen_Momentum_Correction_4_Hourly,Bullish_Single_Screen_Momentum_Correction_1_Hourly,Bullish_Single_Screen_Momentum_Correction_15_Minutes,Bullish_Triple_Screen_Swing_Yearly,Bullish_Triple_Screen_Swing_Quarterly,Bullish_Triple_Screen_Swing_Monthly,Bullish_Triple_Screen_Swing_Weekly,Bullish_Triple_Screen_Swing_Daily,Bullish_Triple_Screen_Swing_4_Hourly,Bullish_Triple_Screen_Swing_1_Hourly,Bullish_Triple_Screen_Swing_15_Minutes,Bullish_Triple_Screen_Swing_Correction_Yearly,Bullish_Triple_Screen_Swing_Correction_Quarterly,Bullish_Triple_Screen_Swing_Correction_Monthly,Bullish_Triple_Screen_Swing_Correction_Weekly,Bullish_Triple_Screen_Swing_Correction_Daily,Bullish_Triple_Screen_Swing_Correction_4_Hourly,Bullish_Triple_Screen_Swing_Correction_1_Hourly,Bullish_Triple_Screen_Swing_Correction_15_Minutes,Bullish_Double_Screen_Swing_Yearly,Bullish_Double_Screen_Swing_Quarterly,Bullish_Double_Screen_Swing_Monthly,Bullish_Double_Screen_Swing_Weekly,Bullish_Double_Screen_Swing_Daily,Bullish_Double_Screen_Swing_4_Hourly,Bullish_Double_Screen_Swing_1_Hourly,Bullish_Double_Screen_Swing_15_Minutes,Bullish_Double_Screen_Swing_Correction_Yearly,Bullish_Double_Screen_Swing_Correction_Quarterly,Bullish_Double_Screen_Swing_Correction_Monthly,Bullish_Double_Screen_Swing_Correction_Weekly,Bullish_Double_Screen_Swing_Correction_Daily,Bullish_Double_Screen_Swing_Correction_4_Hourly,Bullish_Double_Screen_Swing_Correction_1_Hourly,Bullish_Double_Screen_Swing_Correction_15_Minutes,Bullish_Single_Screen_Swing_Yearly,Bullish_Single_Screen_Swing_Quarterly,Bullish_Single_Screen_Swing_Monthly,Bullish_Single_Screen_Swing_Weekly,Bullish_Single_Screen_Swing_Daily,Bullish_Single_Screen_Swing_4_Hourly,Bullish_Single_Screen_Swing_1_Hourly,Bullish_Single_Screen_Swing_15_Minutes,Bullish_Single_Screen_Swing_Correction_Yearly,Bullish_Single_Screen_Swing_Correction_Quarterly,Bullish_Single_Screen_Swing_Correction_Monthly,Bullish_Single_Screen_Swing_Correction_Weekly,Bullish_Single_Screen_Swing_Correction_Daily,Bullish_Single_Screen_Swing_Correction_4_Hourly,Bullish_Single_Screen_Swing_Correction_1_Hourly,Bullish_Single_Screen_Swing_Correction_15_Minutes,Bearish_Triple_Screen_Strong_Yearly,Bearish_Triple_Screen_Strong_Quarterly,Bearish_Triple_Screen_Strong_Monthly,Bearish_Triple_Screen_Strong_Weekly,Bearish_Triple_Screen_Strong_Daily,Bearish_Triple_Screen_Strong_4_Hourly,Bearish_Triple_Screen_Strong_1_Hourly,Bearish_Triple_Screen_Strong_15_Minutes,Bearish_Triple_Screen_Strong_Correction_Yearly,Bearish_Triple_Screen_Strong_Correction_Quarterly,Bearish_Triple_Screen_Strong_Correction_Monthly,Bearish_Triple_Screen_Strong_Correction_Weekly,Bearish_Triple_Screen_Strong_Correction_Daily,Bearish_Triple_Screen_Strong_Correction_4_Hourly,Bearish_Triple_Screen_Strong_Correction_1_Hourly,Bearish_Triple_Screen_Strong_Correction_15_Minutes,Bearish_Double_Screen_Strong_Yearly,Bearish_Double_Screen_Strong_Quarterly,Bearish_Double_Screen_Strong_Monthly,Bearish_Double_Screen_Strong_Weekly,Bearish_Double_Screen_Strong_Daily,Bearish_Double_Screen_Strong_4_Hourly,Bearish_Double_Screen_Strong_1_Hourly,Bearish_Double_Screen_Strong_15_Minutes,Bearish_Double_Screen_Strong_Correction_Yearly,Bearish_Double_Screen_Strong_Correction_Quarterly,Bearish_Double_Screen_Strong_Correction_Monthly,Bearish_Double_Screen_Strong_Correction_Weekly,Bearish_Double_Screen_Strong_Correction_Daily,Bearish_Double_Screen_Strong_Correction_4_Hourly,Bearish_Double_Screen_Strong_Correction_1_Hourly,Bearish_Double_Screen_Strong_Correction_15_Minutes,Bearish_Single_Screen_Strong_Yearly,Bearish_Single_Screen_Strong_Quarterly,Bearish_Single_Screen_Strong_Monthly,Bearish_Single_Screen_Strong_Weekly,Bearish_Single_Screen_Strong_Daily,Bearish_Single_Screen_Strong_4_Hourly,Bearish_Single_Screen_Strong_1_Hourly,Bearish_Single_Screen_Strong_15_Minutes,Bearish_Single_Screen_Strong_Correction_yearly,Bearish_Single_Screen_Strong_Correction_Quarterly,Bearish_Single_Screen_Strong_Correction_Monthly,Bearish_Single_Screen_Strong_Correction_Weekly,Bearish_Single_Screen_Strong_Correction_Daily,Bearish_Single_Screen_Strong_Correction_4_Hourly,Bearish_Single_Screen_Strong_Correction_1_Hourly,Bearish_Single_Screen_Strong_Correction_15_Minutes,Bearish_Triple_Screen_Momentum_Yearly,Bearish_Triple_Screen_Momentum_Quarterly,Bearish_Triple_Screen_Momentum_Monthly,Bearish_Triple_Screen_Momentum_Weekly,Bearish_Triple_Screen_Momentum_Daily,Bearish_Triple_Screen_Momentum_4_Hourly,Bearish_Triple_Screen_Momentum_1_Hourly,Bearish_Triple_Screen_Momentum_15_Minutes,Bearish_Triple_Screen_Momentum_Correction_Yearly,Bearish_Triple_Screen_Momentum_Correction_Quarterly,Bearish_Triple_Screen_Momentum_Correction_Monthly,Bearish_Triple_Screen_Momentum_Correction_Weekly,Bearish_Triple_Screen_Momentum_Correction_Daily,Bearish_Triple_Screen_Momentum_Correction_4_Hourly,Bearish_Triple_Screen_Momentum_Correction_1_Hourly,Bearish_Triple_Screen_Momentum_Correction_15_Minutes,Bearish_Double_Screen_Momentum_Yearly,Bearish_Double_Screen_Momentum_Quarterly,Bearish_Double_Screen_Momentum_Monthly,Bearish_Double_Screen_Momentum_Weekly,Bearish_Double_Screen_Momentum_Daily,Bearish_Double_Screen_Momentum_4_Hourly,Bearish_Double_Screen_Momentum_1_Hourly,Bearish_Double_Screen_Momentum_15_Minutes,Bearish_Double_Screen_Momentum_Correction_Yearly,Bearish_Double_Screen_Momentum_Correction_Quarterly,Bearish_Double_Screen_Momentum_Correction_Monthly,Bearish_Double_Screen_Momentum_Correction_Weekly,Bearish_Double_Screen_Momentum_Correction_Daily,Bearish_Double_Screen_Momentum_Correction_4_Hourly,Bearish_Double_Screen_Momentum_Correction_1_Hourly,Bearish_Double_Screen_Momentum_Correction_15_Minutes,Bearish_Single_Screen_Momentum_Yearly,Bearish_Single_Screen_Momentum_Quarterly,Bearish_Single_Screen_Momentum_Monthly,Bearish_Single_Screen_Momentum_Weekly,Bearish_Single_Screen_Momentum_Daily,Bearish_Single_Screen_Momentum_4_Hourly,Bearish_Single_Screen_Momentum_1_Hourly,Bearish_Single_Screen_Momentum_15_Minutes,Bearish_Single_Screen_Momentum_Correction_Yearly,Bearish_Single_Screen_Momentum_Correction_Quarterly,Bearish_Single_Screen_Momentum_Correction_Monthly,Bearish_Single_Screen_Momentum_Correction_Weekly,Bearish_Single_Screen_Momentum_Correction_Daily,Bearish_Single_Screen_Momentum_Correction_4_Hourly,Bearish_Single_Screen_Momentum_Correction_1_Hourly,Bearish_Single_Screen_Momentum_Correction_15_Minutes,Bearish_Triple_Screen_Swing_Yearly,Bearish_Triple_Screen_Swing_Quarterly,Bearish_Triple_Screen_Swing_Monthly,Bearish_Triple_Screen_Swing_Weekly,Bearish_Triple_Screen_Swing_Daily,Bearish_Triple_Screen_Swing_4_Hourly,Bearish_Triple_Screen_Swing_1_Hourly,Bearish_Triple_Screen_Swing_15_Minutes,Bearish_Triple_Screen_Swing_Correction_Yearly,Bearish_Triple_Screen_Swing_Correction_Quarterly,Bearish_Triple_Screen_Swing_Correction_Monthly,Bearish_Triple_Screen_Swing_Correction_Weekly,Bearish_Triple_Screen_Swing_Correction_Daily,Bearish_Triple_Screen_Swing_Correction_4_Hourly,Bearish_Triple_Screen_Swing_Correction_1_Hourly,Bearish_Triple_Screen_Swing_Correction_15_Minutes,Bearish_Double_Screen_Swing_Yearly,Bearish_Double_Screen_Swing_Quarterly,Bearish_Double_Screen_Swing_Monthly,Bearish_Double_Screen_Swing_Weekly,Bearish_Double_Screen_Swing_Daily,Bearish_Double_Screen_Swing_4_Hourly,Bearish_Double_Screen_Swing_1_Hourly,Bearish_Double_Screen_Swing_15_Minutes,Bearish_Double_Screen_Swing_Correction_Yearly,Bearish_Double_Screen_Swing_Correction_Quarterly,Bearish_Double_Screen_Swing_Correction_Monthly,Bearish_Double_Screen_Swing_Correction_Weekly,Bearish_Double_Screen_Swing_Correction_Daily,Bearish_Double_Screen_Swing_Correction_4_Hourly,Bearish_Double_Screen_Swing_Correction_1_Hourly,Bearish_Double_Screen_Swing_Correction_15_Minutes,Bearish_Single_Screen_Swing_Yearly,Bearish_Single_Screen_Swing_Quarterly,Bearish_Single_Screen_Swing_Monthly,Bearish_Single_Screen_Swing_Weekly,Bearish_Single_Screen_Swing_Daily,Bearish_Single_Screen_Swing_4_Hourly,Bearish_Single_Screen_Swing_1_Hourly,Bearish_Single_Screen_Swing_15_Minutes,Bearish_Single_Screen_Swing_Correction_Yearly,Bearish_Single_Screen_Swing_Correction_Quarterly,Bearish_Single_Screen_Swing_Correction_Monthly,Bearish_Single_Screen_Swing_Correction_Weekly,Bearish_Single_Screen_Swing_Correction_Daily,Bearish_Single_Screen_Swing_Correction_4_Hourly,Bearish_Single_Screen_Swing_Correction_1_Hourly,Bearish_Single_Screen_Swing_Correction_15_Minutes,Macd_Yearly_Crosses_Above,Macd_Quarterly_Crosses_Above,Macd_Monthly_Crosses_Above,Macd_Weekly_Crosses_Above,Macd_Daily_Crosses_Above,Macd_4_Hourly_Crosses_Above,Macd_1_Hourly_Crosses_Above,Macd_15_Minutes_Crosses_Above,Macd_Yearly_Crosses_Below,Macd_Quarterly_Crosses_Below,Macd_Monthly_Crosses_Below,Macd_Weekly_Crosses_Below,Macd_Daily_Crosses_Below,Macd_4_Hourly_Crosses_Below,Macd_1_Hourly_Crosses_Below,Macd_15_Minutes_Crosses_Below,Rsi_Yearly_Crosses_Above,Rsi_Quarterly_Crosses_Above,Rsi_Monthly_Crosses_Above,Rsi_Weekly_Crosses_Above,Rsi_Daily_Crosses_Above,Rsi_4_Hourly_Crosses_Above,Rsi_1_Hourly_Crosses_Above,Rsi_15_Minutes_Crosses_Above,Rsi_Yearly_Crosses_Below,Rsi_Quarterly_Crosses_Below,Rsi_Monthly_Crosses_Below,Rsi_Weekly_Crosses_Below,Rsi_Daily_Crosses_Below,Rsi_4_Hourly_Crosses_Below,Rsi_1_Hourly_Crosses_Below,Rsi_15_Minutes_Crosses_Below,Stochastic_Yearly_Crosses_Above,Stochastic_Quarterly_Crosses_Above,Stochastic_Monthly_Crosses_Above,Stochastic_Weekly_Crosses_Above,Stochastic_Daily_Crosses_Above,Stochastic_4_Hourly_Crosses_Above,Stochastic_1_Hourly_Crosses_Above,Stochastic_15_Minutes_Crosses_Above,Stochastic_Yearly_Crosses_Below,Stochastic_Quarterly_Crosses_Below,Stochastic_Monthly_Crosses_Below,Stochastic_Weekly_Crosses_Below,Stochastic_Daily_Crosses_Below,Stochastic_4_Hourly_Crosses_Below,Stochastic_1_Hourly_Crosses_Below,Stochastic_15_Minutes_Crosses_Below,Ema_5_13_Yearly_Crosses_Above,Ema_5_13_Quarterly_Crosses_Above,Ema_5_13_Monthly_Crosses_Above,Ema_5_13_Weekly_Crosses_Above,Ema_5_13_Daily_Crosses_Above,Ema_5_13_4_Hourly_Crosses_Above,Ema_5_13_1_Hourly_Crosses_Above,Ema_5_13_15_Minutes_Crosses_Above,Ema_5_13_Yearly_Crosses_Below,Ema_5_13_Quarterly_Crosses_Below,Ema_5_13_Monthly_Crosses_Below,Ema_5_13_Weekly_Crosses_Below,Ema_5_13_Daily_Crosses_Below,Ema_5_13_4_Hourly_Crosses_Below,Ema_5_13_1_Hourly_Crosses_Below,Ema_5_13_15_Minutes_Crosses_Below,Ema_13_26_Yearly_Crosses_Above,Ema_13_26_Quarterly_Crosses_Above,Ema_13_26_Monthly_Crosses_Above,Ema_13_26_Weekly_Crosses_Above,Ema_13_26_Daily_Crosses_Above,Ema_13_26_4_Hourly_Crosses_Above,Ema_13_26_1_Hourly_Crosses_Above,Ema_13_26_15_Minutes_Crosses_Above,Ema_13_26_Yearly_Crosses_Below,Ema_13_26_Quarterly_Crosses_Below,Ema_13_26_Monthly_Crosses_Below,Ema_13_26_Weekly_Crosses_Below,Ema_13_26_Daily_Crosses_Below,Ema_13_26_4_Hourly_Crosses_Below,Ema_13_26_1_Hourly_Crosses_Below,Ema_13_26_15_Minutes_Crosses_Below,Ema_50_100_Yearly_Crosses_Above,Ema_50_100_Quarterly_Crosses_Above,Ema_50_100_Monthly_Crosses_Above,Ema_50_100_Weekly_Crosses_Above,Ema_50_100_Daily_Crosses_Above,Ema_50_100_4_Hourly_Crosses_Above,Ema_50_100_1_Hourly_Crosses_Above,Ema_50_100_15_Minutes_Crosses_Above,Ema_50_100_Yearly_Crosses_Below,Ema_50_100_Quarterly_Crosses_Below,Ema_50_100_Monthly_Crosses_Below,Ema_50_100_Weekly_Crosses_Below,Ema_50_100_Daily_Crosses_Below,Ema_50_100_4_Hourly_Crosses_Below,Ema_50_100_1_Hourly_Crosses_Below,Ema_50_100_15_Minutes_Crosses_Below,Ema_50_200_Yearly_Crosses_Above,Ema_50_200_Quarterly_Crosses_Above,Ema_50_200_Monthly_Crosses_Above,Ema_50_200_Weekly_Crosses_Above,Ema_50_200_Daily_Crosses_Above,Ema_50_200_4_Hourly_Crosses_Above,Ema_50_200_1_Hourly_Crosses_Above,Ema_50_200_15_Minutes_Crosses_Above,Ema_50_200_Yearly_Crosses_Below,Ema_50_200_Quarterly_Crosses_Below,Ema_50_200_Monthly_Crosses_Below,Ema_50_200_Weekly_Crosses_Below,Ema_50_200_Daily_Crosses_Below,Ema_50_200_4_Hourly_Crosses_Below,Ema_50_200_1_Hourly_Crosses_Below,Ema_50_200_15_Minutes_Crosses_Below,Ema_100_200_Yearly_Crosses_Above,Ema_100_200_Quarterly_Crosses_Above,Ema_100_200_Monthly_Crosses_Above,Ema_100_200_Weekly_Crosses_Above,Ema_100_200_Daily_Crosses_Above,Ema_100_200_4_Hourly_Crosses_Above,Ema_100_200_1_Hourly_Crosses_Above,Ema_100_200_15_Minutes_Crosses_Above,Ema_100_200_Yearly_Crosses_Below,Ema_100_200_Quarterly_Crosses_Below,Ema_100_200_Monthly_Crosses_Below,Ema_100_200_Weekly_Crosses_Below,Ema_100_200_Daily_Crosses_Below,Ema_100_200_4_Hourly_Crosses_Below,Ema_100_200_1_Hourly_Crosses_Below,Ema_100_200_15_Minutes_Crosses_Below,Upper_Bollinger_Band3_Yearly_Greater_Than_Equal_To,Upper_Bollinger_Band3_Quarterly_Greater_Than_Equal_To,Upper_Bollinger_Band3_Monthly_Greater_Than_Equal_To,Upper_Bollinger_Band3_Weekly_Greater_Than_Equal_To,Upper_Bollinger_Band3_Daily_Greater_Than_Equal_To,Upper_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To,Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To,Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To,Upper_Bollinger_Band3_Yearly_Less_Than_Equal_To,Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To,Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To,Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To,Upper_Bollinger_Band3_Daily_Less_Than_Equal_To,Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To,Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To,Upper_Bollinger_Band3_15_Minutes_Less_Than_Equal_To,Lower_Bollinger_Band3_Yearly_Less_Than_Equal_To,Lower_Bollinger_Band3_Quarterly_Less_Than_Equal_To,Lower_Bollinger_Band3_Monthly_Less_Than_Equal_To,Lower_Bollinger_Band3_Weekly_Less_Than_Equal_To,Lower_Bollinger_Band3_Daily_Less_Than_Equal_To,Lower_Bollinger_Band3_4_Hourly_Less_Than_Equal_To,Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To,Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To,Lower_Bollinger_Band3_Yearly_Greater_Than_Equal_To,Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To,Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To,Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To,Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To,Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To,Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To,Lower_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To,Upper_Bollinger_Band2_Yearly_Greater_Than_Equal_To,Upper_Bollinger_Band2_Quarterly_Greater_Than_Equal_To,Upper_Bollinger_Band2_Monthly_Greater_Than_Equal_To,Upper_Bollinger_Band2_Weekly_Greater_Than_Equal_To,Upper_Bollinger_Band2_Daily_Greater_Than_Equal_To,Upper_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To,Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To,Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To,Upper_Bollinger_Band2_Yearly_Less_Than_Equal_To,Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To,Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To,Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To,Upper_Bollinger_Band2_Daily_Less_Than_Equal_To,Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To,Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To,Upper_Bollinger_Band2_15_Minutes_Less_Than_Equal_To,Lower_Bollinger_Band2_Yearly_Less_Than_Equal_To,Lower_Bollinger_Band2_Quarterly_Less_Than_Equal_To,Lower_Bollinger_Band2_Monthly_Less_Than_Equal_To,Lower_Bollinger_Band2_Weekly_Less_Than_Equal_To,Lower_Bollinger_Band2_Daily_Less_Than_Equal_To,Lower_Bollinger_Band2_4_Hourly_Less_Than_Equal_To,Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To,Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To,Lower_Bollinger_Band2_Yearly_Greater_Than_Equal_To,Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To,Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To,Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To,Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To,Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To,Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To,Lower_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To,Adx_Yearly_Crosses_Above,Adx_Quarterly_Crosses_Above,Adx_Monthly_Crosses_Above,Adx_Weekly_Crosses_Above,Adx_Daily_Crosses_Above,Adx_4_Hourly_Crosses_Above,Adx_1_Hourly_Crosses_Above,Adx_15_Minutes_Crosses_Above,Adx_Yearly_Crosses_Below,Adx_Quarterly_Crosses_Below,Adx_Monthly_Crosses_Below,Adx_Weekly_Crosses_Below,Adx_Daily_Crosses_Below,Adx_4_Hourly_Crosses_Below,Adx_1_Hourly_Crosses_Below,Adx_15_Minutes_Crosses_Below,Adx_Up_Tick_Yearly_Greater_Than_Equal_To,Adx_Up_Tick_Quarterly_Greater_Than_Equal_To,Adx_Up_Tick_Monthly_Greater_Than_Equal_To,Adx_Up_Tick_Weekly_Greater_Than_Equal_To,Adx_Up_Tick_Daily_Greater_Than_Equal_To,Adx_Up_Tick_4_Hourly_Greater_Than_Equal_To,Adx_Up_Tick_1_Hourly_Greater_Than_Equal_To,Adx_Up_Tick_15_Minutes_Greater_Than_Equal_To,Adx_Down_Tick_Yearly_Less_Than_Equal_To,Adx_Down_Tick_Quarterly_Less_Than_Equal_To,Adx_Down_Tick_Monthly_Less_Than_Equal_To,Adx_Down_Tick_Weekly_Less_Than_Equal_To,Adx_Down_Tick_Daily_Less_Than_Equal_To,Adx_Down_Tick_4_Hourly_Less_Than_Equal_To,Adx_Down_Tick_1_Hourly_Less_Than_Equal_To,Adx_Down_Tick_15_Minutes_Less_Than_Equal_To,Volume_Yearly_Greater_Than_Equal_To,Volume_Quarterly_Greater_Than_Equal_To,Volume_Monthly_Greater_Than_Equal_To,Volume_Weekly_Greater_Than_Equal_To,Volume_Daily_Greater_Than_Equal_To,Volume_4_Hourly_Greater_Than_Equal_To,Volume_1_Hourly_Greater_Than_Equal_To,Volume_15_Minutes_Greater_Than_Equal_To,Volume_Yearly_Less_Than_Equal_To,Volume_Quarterly_Less_Than_Equal_To,Volume_Monthly_Less_Than_Equal_To,Volume_Weekly_Less_Than_Equal_To,Volume_Daily_Less_Than_Equal_To,Volume_4_Hourly_Less_Than_Equal_To,Volume_1_Hourly_Less_Than_Equal_To,Volume_15_Minutes_Less_Than_Equal_To,volume_yearly_shockers,volume_quarterly_shockers,volume_monthly_shockers,volume_weekly_shockers,volume_daily_shockers,volume_4_hourly_shockers,volume_1_hourly_shockers,volume_15_minutes_shockers
+into Analyse_15Minutes_Stocks1 
+from Analyse_15Minutes_Stocks
+end
+
+begin
+
+;WITH ValueSource AS 
+(   SELECT Batch_No, Screen_Names, Value
+	FROM dbo.Master_Screen_Name_Values WHERE Batch_No = 4 -- @batch_num
+)
+,ValuePivot AS 
+(   SELECT * FROM ValueSource
+	PIVOT (SUM(Value) FOR Screen_Names IN ([Bullish_Triple_Screen_Strong_Yearly],[Bullish_Triple_Screen_Strong_Quarterly],[Bullish_Triple_Screen_Strong_Monthly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bullish_Triple_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_15_Minutes],[Bullish_Triple_Screen_Strong_Correction_Yearly],[Bullish_Triple_Screen_Strong_Correction_Quarterly],[Bullish_Triple_Screen_Strong_Correction_Monthly],[Bullish_Triple_Screen_Strong_Correction_Weekly],[Bullish_Triple_Screen_Strong_Correction_Daily],[Bullish_Triple_Screen_Strong_Correction_4_Hourly],[Bullish_Triple_Screen_Strong_Correction_1_Hourly],[Bullish_Triple_Screen_Strong_Correction_15_Minutes],[Bullish_Double_Screen_Strong_Yearly],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Double_Screen_Strong_15_Minutes],[Bullish_Double_Screen_Strong_Correction_Yearly],[Bullish_Double_Screen_Strong_Correction_Quarterly],[Bullish_Double_Screen_Strong_Correction_Monthly],[Bullish_Double_Screen_Strong_Correction_Weekly],[Bullish_Double_Screen_Strong_Correction_Daily],[Bullish_Double_Screen_Strong_Correction_4_Hourly],[Bullish_Double_Screen_Strong_Correction_1_Hourly],[Bullish_Double_Screen_Strong_Correction_15_Minutes],[Bullish_Single_Screen_Strong_Yearly],[Bullish_Single_Screen_Strong_Quarterly],[Bullish_Single_Screen_Strong_Monthly],[Bullish_Single_Screen_Strong_Weekly],[Bullish_Single_Screen_Strong_Daily],[Bullish_Single_Screen_Strong_4_Hourly],[Bullish_Single_Screen_Strong_1_Hourly],[Bullish_Single_Screen_Strong_15_Minutes],[Bullish_Single_Screen_Strong_Correction_Yearly],[Bullish_Single_Screen_Strong_Correction_Quarterly],[Bullish_Single_Screen_Strong_Correction_Monthly],[Bullish_Single_Screen_Strong_Correction_Weekly],[Bullish_Single_Screen_Strong_Correction_Daily],[Bullish_Single_Screen_Strong_Correction_4_Hourly],[Bullish_Single_Screen_Strong_Correction_1_Hourly],[Bullish_Single_Screen_Strong_Correction_15_Minutes],[Bullish_Triple_Screen_Momentum_Yearly],[Bullish_Triple_Screen_Momentum_Quarterly],[Bullish_Triple_Screen_Momentum_Monthly],[Bullish_Triple_Screen_Momentum_Weekly],[Bullish_Triple_Screen_Momentum_Daily],[Bullish_Triple_Screen_Momentum_4_Hourly],[Bullish_Triple_Screen_Momentum_1_Hourly],[Bullish_Triple_Screen_Momentum_15_Minutes],[Bullish_Triple_Screen_Momentum_Correction_Yearly],[Bullish_Triple_Screen_Momentum_Correction_Quarterly],[Bullish_Triple_Screen_Momentum_Correction_Monthly],[Bullish_Triple_Screen_Momentum_Correction_Weekly],[Bullish_Triple_Screen_Momentum_Correction_Daily],[Bullish_Triple_Screen_Momentum_Correction_4_Hourly],[Bullish_Triple_Screen_Momentum_Correction_1_Hourly],[Bullish_Triple_Screen_Momentum_Correction_15_Minutes],[Bullish_Double_Screen_Momentum_Yearly],[Bullish_Double_Screen_Momentum_Quarterly],[Bullish_Double_Screen_Momentum_Monthly],[Bullish_Double_Screen_Momentum_Weekly],[Bullish_Double_Screen_Momentum_Daily],[Bullish_Double_Screen_Momentum_4_Hourly],[Bullish_Double_Screen_Momentum_1_Hourly],[Bullish_Double_Screen_Momentum_15_Minutes],[Bullish_Double_Screen_Momentum_Correction_Yearly],[Bullish_Double_Screen_Momentum_Correction_Quarterly],[Bullish_Double_Screen_Momentum_Correction_Monthly],[Bullish_Double_Screen_Momentum_Correction_Weekly],[Bullish_Double_Screen_Momentum_Correction_Daily],[Bullish_Double_Screen_Momentum_Correction_4_Hourly],[Bullish_Double_Screen_Momentum_Correction_1_Hourly],[Bullish_Double_Screen_Momentum_Correction_15_Minutes],[Bullish_Single_Screen_Momentum_Yearly],[Bullish_Single_Screen_Momentum_Quarterly],[Bullish_Single_Screen_Momentum_Monthly],[Bullish_Single_Screen_Momentum_Weekly],[Bullish_Single_Screen_Momentum_Daily],[Bullish_Single_Screen_Momentum_4_Hourly],[Bullish_Single_Screen_Momentum_1_Hourly],[Bullish_Single_Screen_Momentum_15_Minutes],[Bullish_Single_Screen_Momentum_Correction_Yearly],[Bullish_Single_Screen_Momentum_Correction_Quarterly],[Bullish_Single_Screen_Momentum_Correction_Monthly],[Bullish_Single_Screen_Momentum_Correction_Weekly],[Bullish_Single_Screen_Momentum_Correction_Daily],[Bullish_Single_Screen_Momentum_Correction_4_Hourly],[Bullish_Single_Screen_Momentum_Correction_1_Hourly],[Bullish_Single_Screen_Momentum_Correction_15_Minutes],[Bullish_Triple_Screen_Swing_Yearly],[Bullish_Triple_Screen_Swing_Quarterly],[Bullish_Triple_Screen_Swing_Monthly],[Bullish_Triple_Screen_Swing_Weekly],[Bullish_Triple_Screen_Swing_Daily],[Bullish_Triple_Screen_Swing_4_Hourly],[Bullish_Triple_Screen_Swing_1_Hourly],[Bullish_Triple_Screen_Swing_15_Minutes],[Bullish_Triple_Screen_Swing_Correction_Yearly],[Bullish_Triple_Screen_Swing_Correction_Quarterly],[Bullish_Triple_Screen_Swing_Correction_Monthly],[Bullish_Triple_Screen_Swing_Correction_Weekly],[Bullish_Triple_Screen_Swing_Correction_Daily],[Bullish_Triple_Screen_Swing_Correction_4_Hourly],[Bullish_Triple_Screen_Swing_Correction_1_Hourly],[Bullish_Triple_Screen_Swing_Correction_15_Minutes],[Bullish_Double_Screen_Swing_Yearly],[Bullish_Double_Screen_Swing_Quarterly],[Bullish_Double_Screen_Swing_Monthly],[Bullish_Double_Screen_Swing_Weekly],[Bullish_Double_Screen_Swing_Daily],[Bullish_Double_Screen_Swing_4_Hourly],[Bullish_Double_Screen_Swing_1_Hourly],[Bullish_Double_Screen_Swing_15_Minutes],[Bullish_Double_Screen_Swing_Correction_Yearly],[Bullish_Double_Screen_Swing_Correction_Quarterly],[Bullish_Double_Screen_Swing_Correction_Monthly],[Bullish_Double_Screen_Swing_Correction_Weekly],[Bullish_Double_Screen_Swing_Correction_Daily],[Bullish_Double_Screen_Swing_Correction_4_Hourly],[Bullish_Double_Screen_Swing_Correction_1_Hourly],[Bullish_Double_Screen_Swing_Correction_15_Minutes],[Bullish_Single_Screen_Swing_Yearly],[Bullish_Single_Screen_Swing_Quarterly],[Bullish_Single_Screen_Swing_Monthly],[Bullish_Single_Screen_Swing_Weekly],[Bullish_Single_Screen_Swing_Daily],[Bullish_Single_Screen_Swing_4_Hourly],[Bullish_Single_Screen_Swing_1_Hourly],[Bullish_Single_Screen_Swing_15_Minutes],[Bullish_Single_Screen_Swing_Correction_Yearly],[Bullish_Single_Screen_Swing_Correction_Quarterly],[Bullish_Single_Screen_Swing_Correction_Monthly],[Bullish_Single_Screen_Swing_Correction_Weekly],[Bullish_Single_Screen_Swing_Correction_Daily],[Bullish_Single_Screen_Swing_Correction_4_Hourly],[Bullish_Single_Screen_Swing_Correction_1_Hourly],[Bullish_Single_Screen_Swing_Correction_15_Minutes],[Bearish_Triple_Screen_Strong_Yearly],[Bearish_Triple_Screen_Strong_Quarterly],[Bearish_Triple_Screen_Strong_Monthly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly],[Bearish_Triple_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_15_Minutes],[Bearish_Triple_Screen_Strong_Correction_Yearly],[Bearish_Triple_Screen_Strong_Correction_Quarterly],[Bearish_Triple_Screen_Strong_Correction_Monthly],[Bearish_Triple_Screen_Strong_Correction_Weekly],[Bearish_Triple_Screen_Strong_Correction_Daily],[Bearish_Triple_Screen_Strong_Correction_4_Hourly],[Bearish_Triple_Screen_Strong_Correction_1_Hourly],[Bearish_Triple_Screen_Strong_Correction_15_Minutes],[Bearish_Double_Screen_Strong_Yearly],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Double_Screen_Strong_15_Minutes],[Bearish_Double_Screen_Strong_Correction_Yearly],[Bearish_Double_Screen_Strong_Correction_Quarterly],[Bearish_Double_Screen_Strong_Correction_Monthly],[Bearish_Double_Screen_Strong_Correction_Weekly],[Bearish_Double_Screen_Strong_Correction_Daily],[Bearish_Double_Screen_Strong_Correction_4_Hourly],[Bearish_Double_Screen_Strong_Correction_1_Hourly],[Bearish_Double_Screen_Strong_Correction_15_Minutes],[Bearish_Single_Screen_Strong_Yearly],[Bearish_Single_Screen_Strong_Quarterly],[Bearish_Single_Screen_Strong_Monthly],[Bearish_Single_Screen_Strong_Weekly],[Bearish_Single_Screen_Strong_Daily],[Bearish_Single_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Strong_1_Hourly],[Bearish_Single_Screen_Strong_15_Minutes],[Bearish_Single_Screen_Strong_Correction_Yearly],[Bearish_Single_Screen_Strong_Correction_Quarterly],[Bearish_Single_Screen_Strong_Correction_Monthly],[Bearish_Single_Screen_Strong_Correction_Weekly],[Bearish_Single_Screen_Strong_Correction_Daily],[Bearish_Single_Screen_Strong_Correction_4_Hourly],[Bearish_Single_Screen_Strong_Correction_1_Hourly],[Bearish_Single_Screen_Strong_Correction_15_Minutes],[Bearish_Triple_Screen_Momentum_Yearly],[Bearish_Triple_Screen_Momentum_Quarterly],[Bearish_Triple_Screen_Momentum_Monthly],[Bearish_Triple_Screen_Momentum_Weekly],[Bearish_Triple_Screen_Momentum_Daily],[Bearish_Triple_Screen_Momentum_4_Hourly],[Bearish_Triple_Screen_Momentum_1_Hourly],[Bearish_Triple_Screen_Momentum_15_Minutes],[Bearish_Triple_Screen_Momentum_Correction_Yearly],[Bearish_Triple_Screen_Momentum_Correction_Quarterly],[Bearish_Triple_Screen_Momentum_Correction_Monthly],[Bearish_Triple_Screen_Momentum_Correction_Weekly],[Bearish_Triple_Screen_Momentum_Correction_Daily],[Bearish_Triple_Screen_Momentum_Correction_4_Hourly],[Bearish_Triple_Screen_Momentum_Correction_1_Hourly],[Bearish_Triple_Screen_Momentum_Correction_15_Minutes],[Bearish_Double_Screen_Momentum_Yearly],[Bearish_Double_Screen_Momentum_Quarterly],[Bearish_Double_Screen_Momentum_Monthly],[Bearish_Double_Screen_Momentum_Weekly],[Bearish_Double_Screen_Momentum_Daily],[Bearish_Double_Screen_Momentum_4_Hourly],[Bearish_Double_Screen_Momentum_1_Hourly],[Bearish_Double_Screen_Momentum_15_Minutes],[Bearish_Double_Screen_Momentum_Correction_Yearly],[Bearish_Double_Screen_Momentum_Correction_Quarterly],[Bearish_Double_Screen_Momentum_Correction_Monthly],[Bearish_Double_Screen_Momentum_Correction_Weekly],[Bearish_Double_Screen_Momentum_Correction_Daily],[Bearish_Double_Screen_Momentum_Correction_4_Hourly],[Bearish_Double_Screen_Momentum_Correction_1_Hourly],[Bearish_Double_Screen_Momentum_Correction_15_Minutes],[Bearish_Single_Screen_Momentum_Yearly],[Bearish_Single_Screen_Momentum_Quarterly],[Bearish_Single_Screen_Momentum_Monthly],[Bearish_Single_Screen_Momentum_Weekly],[Bearish_Single_Screen_Momentum_Daily],[Bearish_Single_Screen_Momentum_4_Hourly],[Bearish_Single_Screen_Momentum_1_Hourly],[Bearish_Single_Screen_Momentum_15_Minutes],[Bearish_Single_Screen_Momentum_Correction_Yearly],[Bearish_Single_Screen_Momentum_Correction_Quarterly],[Bearish_Single_Screen_Momentum_Correction_Monthly],[Bearish_Single_Screen_Momentum_Correction_Weekly],[Bearish_Single_Screen_Momentum_Correction_Daily],[Bearish_Single_Screen_Momentum_Correction_4_Hourly],[Bearish_Single_Screen_Momentum_Correction_1_Hourly],[Bearish_Single_Screen_Momentum_Correction_15_Minutes],[Bearish_Triple_Screen_Swing_Yearly],[Bearish_Triple_Screen_Swing_Quarterly],[Bearish_Triple_Screen_Swing_Monthly],[Bearish_Triple_Screen_Swing_Weekly],[Bearish_Triple_Screen_Swing_Daily],[Bearish_Triple_Screen_Swing_4_Hourly],[Bearish_Triple_Screen_Swing_1_Hourly],[Bearish_Triple_Screen_Swing_15_Minutes],[Bearish_Triple_Screen_Swing_Correction_Yearly],[Bearish_Triple_Screen_Swing_Correction_Quarterly],[Bearish_Triple_Screen_Swing_Correction_Monthly],[Bearish_Triple_Screen_Swing_Correction_Weekly],[Bearish_Triple_Screen_Swing_Correction_Daily],[Bearish_Triple_Screen_Swing_Correction_4_Hourly],[Bearish_Triple_Screen_Swing_Correction_1_Hourly],[Bearish_Triple_Screen_Swing_Correction_15_Minutes],[Bearish_Double_Screen_Swing_Yearly],[Bearish_Double_Screen_Swing_Quarterly],[Bearish_Double_Screen_Swing_Monthly],[Bearish_Double_Screen_Swing_Weekly],[Bearish_Double_Screen_Swing_Daily],[Bearish_Double_Screen_Swing_4_Hourly],[Bearish_Double_Screen_Swing_1_Hourly],[Bearish_Double_Screen_Swing_15_Minutes],[Bearish_Double_Screen_Swing_Correction_Yearly],[Bearish_Double_Screen_Swing_Correction_Quarterly],[Bearish_Double_Screen_Swing_Correction_Monthly],[Bearish_Double_Screen_Swing_Correction_Weekly],[Bearish_Double_Screen_Swing_Correction_Daily],[Bearish_Double_Screen_Swing_Correction_4_Hourly],[Bearish_Double_Screen_Swing_Correction_1_Hourly],[Bearish_Double_Screen_Swing_Correction_15_Minutes],[Bearish_Single_Screen_Swing_Yearly],[Bearish_Single_Screen_Swing_Quarterly],[Bearish_Single_Screen_Swing_Monthly],[Bearish_Single_Screen_Swing_Weekly],[Bearish_Single_Screen_Swing_Daily],[Bearish_Single_Screen_Swing_4_Hourly],[Bearish_Single_Screen_Swing_1_Hourly],[Bearish_Single_Screen_Swing_15_Minutes],[Bearish_Single_Screen_Swing_Correction_Yearly],[Bearish_Single_Screen_Swing_Correction_Quarterly],[Bearish_Single_Screen_Swing_Correction_Monthly],[Bearish_Single_Screen_Swing_Correction_Weekly],[Bearish_Single_Screen_Swing_Correction_Daily],[Bearish_Single_Screen_Swing_Correction_4_Hourly],[Bearish_Single_Screen_Swing_Correction_1_Hourly],[Bearish_Single_Screen_Swing_Correction_15_Minutes]) 
+	) AS vp
+)
+,DescSource AS 
+(   SELECT sno,Batch_No, Screen_Names, Description 
+	FROM dbo.Master_Screen_Name_Values
+	WHERE Batch_No = 4 -- @batch_num
+	order by sno
+)
+,DescPivot AS 
+(   SELECT * FROM DescSource a 
+	PIVOT (MAX(Description) FOR Screen_Names IN ([Bullish_Triple_Screen_Strong_Yearly],[Bullish_Triple_Screen_Strong_Quarterly],[Bullish_Triple_Screen_Strong_Monthly],[Bullish_Triple_Screen_Strong_Weekly],[Bullish_Triple_Screen_Strong_Daily],[Bullish_Triple_Screen_Strong_4_Hourly],[Bullish_Triple_Screen_Strong_1_Hourly],[Bullish_Triple_Screen_Strong_15_Minutes],[Bullish_Triple_Screen_Strong_Correction_Yearly],[Bullish_Triple_Screen_Strong_Correction_Quarterly],[Bullish_Triple_Screen_Strong_Correction_Monthly],[Bullish_Triple_Screen_Strong_Correction_Weekly],[Bullish_Triple_Screen_Strong_Correction_Daily],[Bullish_Triple_Screen_Strong_Correction_4_Hourly],[Bullish_Triple_Screen_Strong_Correction_1_Hourly],[Bullish_Triple_Screen_Strong_Correction_15_Minutes],[Bullish_Double_Screen_Strong_Yearly],[Bullish_Double_Screen_Strong_Quarterly],[Bullish_Double_Screen_Strong_Monthly],[Bullish_Double_Screen_Strong_Weekly],[Bullish_Double_Screen_Strong_Daily],[Bullish_Double_Screen_Strong_4_Hourly],[Bullish_Double_Screen_Strong_1_Hourly],[Bullish_Double_Screen_Strong_15_Minutes],[Bullish_Double_Screen_Strong_Correction_Yearly],[Bullish_Double_Screen_Strong_Correction_Quarterly],[Bullish_Double_Screen_Strong_Correction_Monthly],[Bullish_Double_Screen_Strong_Correction_Weekly],[Bullish_Double_Screen_Strong_Correction_Daily],[Bullish_Double_Screen_Strong_Correction_4_Hourly],[Bullish_Double_Screen_Strong_Correction_1_Hourly],[Bullish_Double_Screen_Strong_Correction_15_Minutes],[Bullish_Single_Screen_Strong_Yearly],[Bullish_Single_Screen_Strong_Quarterly],[Bullish_Single_Screen_Strong_Monthly],[Bullish_Single_Screen_Strong_Weekly],[Bullish_Single_Screen_Strong_Daily],[Bullish_Single_Screen_Strong_4_Hourly],[Bullish_Single_Screen_Strong_1_Hourly],[Bullish_Single_Screen_Strong_15_Minutes],[Bullish_Single_Screen_Strong_Correction_Yearly],[Bullish_Single_Screen_Strong_Correction_Quarterly],[Bullish_Single_Screen_Strong_Correction_Monthly],[Bullish_Single_Screen_Strong_Correction_Weekly],[Bullish_Single_Screen_Strong_Correction_Daily],[Bullish_Single_Screen_Strong_Correction_4_Hourly],[Bullish_Single_Screen_Strong_Correction_1_Hourly],[Bullish_Single_Screen_Strong_Correction_15_Minutes],[Bullish_Triple_Screen_Momentum_Yearly],[Bullish_Triple_Screen_Momentum_Quarterly],[Bullish_Triple_Screen_Momentum_Monthly],[Bullish_Triple_Screen_Momentum_Weekly],[Bullish_Triple_Screen_Momentum_Daily],[Bullish_Triple_Screen_Momentum_4_Hourly],[Bullish_Triple_Screen_Momentum_1_Hourly],[Bullish_Triple_Screen_Momentum_15_Minutes],[Bullish_Triple_Screen_Momentum_Correction_Yearly],[Bullish_Triple_Screen_Momentum_Correction_Quarterly],[Bullish_Triple_Screen_Momentum_Correction_Monthly],[Bullish_Triple_Screen_Momentum_Correction_Weekly],[Bullish_Triple_Screen_Momentum_Correction_Daily],[Bullish_Triple_Screen_Momentum_Correction_4_Hourly],[Bullish_Triple_Screen_Momentum_Correction_1_Hourly],[Bullish_Triple_Screen_Momentum_Correction_15_Minutes],[Bullish_Double_Screen_Momentum_Yearly],[Bullish_Double_Screen_Momentum_Quarterly],[Bullish_Double_Screen_Momentum_Monthly],[Bullish_Double_Screen_Momentum_Weekly],[Bullish_Double_Screen_Momentum_Daily],[Bullish_Double_Screen_Momentum_4_Hourly],[Bullish_Double_Screen_Momentum_1_Hourly],[Bullish_Double_Screen_Momentum_15_Minutes],[Bullish_Double_Screen_Momentum_Correction_Yearly],[Bullish_Double_Screen_Momentum_Correction_Quarterly],[Bullish_Double_Screen_Momentum_Correction_Monthly],[Bullish_Double_Screen_Momentum_Correction_Weekly],[Bullish_Double_Screen_Momentum_Correction_Daily],[Bullish_Double_Screen_Momentum_Correction_4_Hourly],[Bullish_Double_Screen_Momentum_Correction_1_Hourly],[Bullish_Double_Screen_Momentum_Correction_15_Minutes],[Bullish_Single_Screen_Momentum_Yearly],[Bullish_Single_Screen_Momentum_Quarterly],[Bullish_Single_Screen_Momentum_Monthly],[Bullish_Single_Screen_Momentum_Weekly],[Bullish_Single_Screen_Momentum_Daily],[Bullish_Single_Screen_Momentum_4_Hourly],[Bullish_Single_Screen_Momentum_1_Hourly],[Bullish_Single_Screen_Momentum_15_Minutes],[Bullish_Single_Screen_Momentum_Correction_Yearly],[Bullish_Single_Screen_Momentum_Correction_Quarterly],[Bullish_Single_Screen_Momentum_Correction_Monthly],[Bullish_Single_Screen_Momentum_Correction_Weekly],[Bullish_Single_Screen_Momentum_Correction_Daily],[Bullish_Single_Screen_Momentum_Correction_4_Hourly],[Bullish_Single_Screen_Momentum_Correction_1_Hourly],[Bullish_Single_Screen_Momentum_Correction_15_Minutes],[Bullish_Triple_Screen_Swing_Yearly],[Bullish_Triple_Screen_Swing_Quarterly],[Bullish_Triple_Screen_Swing_Monthly],[Bullish_Triple_Screen_Swing_Weekly],[Bullish_Triple_Screen_Swing_Daily],[Bullish_Triple_Screen_Swing_4_Hourly],[Bullish_Triple_Screen_Swing_1_Hourly],[Bullish_Triple_Screen_Swing_15_Minutes],[Bullish_Triple_Screen_Swing_Correction_Yearly],[Bullish_Triple_Screen_Swing_Correction_Quarterly],[Bullish_Triple_Screen_Swing_Correction_Monthly],[Bullish_Triple_Screen_Swing_Correction_Weekly],[Bullish_Triple_Screen_Swing_Correction_Daily],[Bullish_Triple_Screen_Swing_Correction_4_Hourly],[Bullish_Triple_Screen_Swing_Correction_1_Hourly],[Bullish_Triple_Screen_Swing_Correction_15_Minutes],[Bullish_Double_Screen_Swing_Yearly],[Bullish_Double_Screen_Swing_Quarterly],[Bullish_Double_Screen_Swing_Monthly],[Bullish_Double_Screen_Swing_Weekly],[Bullish_Double_Screen_Swing_Daily],[Bullish_Double_Screen_Swing_4_Hourly],[Bullish_Double_Screen_Swing_1_Hourly],[Bullish_Double_Screen_Swing_15_Minutes],[Bullish_Double_Screen_Swing_Correction_Yearly],[Bullish_Double_Screen_Swing_Correction_Quarterly],[Bullish_Double_Screen_Swing_Correction_Monthly],[Bullish_Double_Screen_Swing_Correction_Weekly],[Bullish_Double_Screen_Swing_Correction_Daily],[Bullish_Double_Screen_Swing_Correction_4_Hourly],[Bullish_Double_Screen_Swing_Correction_1_Hourly],[Bullish_Double_Screen_Swing_Correction_15_Minutes],[Bullish_Single_Screen_Swing_Yearly],[Bullish_Single_Screen_Swing_Quarterly],[Bullish_Single_Screen_Swing_Monthly],[Bullish_Single_Screen_Swing_Weekly],[Bullish_Single_Screen_Swing_Daily],[Bullish_Single_Screen_Swing_4_Hourly],[Bullish_Single_Screen_Swing_1_Hourly],[Bullish_Single_Screen_Swing_15_Minutes],[Bullish_Single_Screen_Swing_Correction_Yearly],[Bullish_Single_Screen_Swing_Correction_Quarterly],[Bullish_Single_Screen_Swing_Correction_Monthly],[Bullish_Single_Screen_Swing_Correction_Weekly],[Bullish_Single_Screen_Swing_Correction_Daily],[Bullish_Single_Screen_Swing_Correction_4_Hourly],[Bullish_Single_Screen_Swing_Correction_1_Hourly],[Bullish_Single_Screen_Swing_Correction_15_Minutes],[Bearish_Triple_Screen_Strong_Yearly],[Bearish_Triple_Screen_Strong_Quarterly],[Bearish_Triple_Screen_Strong_Monthly],[Bearish_Triple_Screen_Strong_Weekly],[Bearish_Triple_Screen_Strong_Daily],[Bearish_Triple_Screen_Strong_4_Hourly],[Bearish_Triple_Screen_Strong_1_Hourly],[Bearish_Triple_Screen_Strong_15_Minutes],[Bearish_Triple_Screen_Strong_Correction_Yearly],[Bearish_Triple_Screen_Strong_Correction_Quarterly],[Bearish_Triple_Screen_Strong_Correction_Monthly],[Bearish_Triple_Screen_Strong_Correction_Weekly],[Bearish_Triple_Screen_Strong_Correction_Daily],[Bearish_Triple_Screen_Strong_Correction_4_Hourly],[Bearish_Triple_Screen_Strong_Correction_1_Hourly],[Bearish_Triple_Screen_Strong_Correction_15_Minutes],[Bearish_Double_Screen_Strong_Yearly],[Bearish_Double_Screen_Strong_Quarterly],[Bearish_Double_Screen_Strong_Monthly],[Bearish_Double_Screen_Strong_Weekly],[Bearish_Double_Screen_Strong_Daily],[Bearish_Double_Screen_Strong_4_Hourly],[Bearish_Double_Screen_Strong_1_Hourly],[Bearish_Double_Screen_Strong_15_Minutes],[Bearish_Double_Screen_Strong_Correction_Yearly],[Bearish_Double_Screen_Strong_Correction_Quarterly],[Bearish_Double_Screen_Strong_Correction_Monthly],[Bearish_Double_Screen_Strong_Correction_Weekly],[Bearish_Double_Screen_Strong_Correction_Daily],[Bearish_Double_Screen_Strong_Correction_4_Hourly],[Bearish_Double_Screen_Strong_Correction_1_Hourly],[Bearish_Double_Screen_Strong_Correction_15_Minutes],[Bearish_Single_Screen_Strong_Yearly],[Bearish_Single_Screen_Strong_Quarterly],[Bearish_Single_Screen_Strong_Monthly],[Bearish_Single_Screen_Strong_Weekly],[Bearish_Single_Screen_Strong_Daily],[Bearish_Single_Screen_Strong_4_Hourly],[Bearish_Single_Screen_Strong_1_Hourly],[Bearish_Single_Screen_Strong_15_Minutes],[Bearish_Single_Screen_Strong_Correction_Yearly],[Bearish_Single_Screen_Strong_Correction_Quarterly],[Bearish_Single_Screen_Strong_Correction_Monthly],[Bearish_Single_Screen_Strong_Correction_Weekly],[Bearish_Single_Screen_Strong_Correction_Daily],[Bearish_Single_Screen_Strong_Correction_4_Hourly],[Bearish_Single_Screen_Strong_Correction_1_Hourly],[Bearish_Single_Screen_Strong_Correction_15_Minutes],[Bearish_Triple_Screen_Momentum_Yearly],[Bearish_Triple_Screen_Momentum_Quarterly],[Bearish_Triple_Screen_Momentum_Monthly],[Bearish_Triple_Screen_Momentum_Weekly],[Bearish_Triple_Screen_Momentum_Daily],[Bearish_Triple_Screen_Momentum_4_Hourly],[Bearish_Triple_Screen_Momentum_1_Hourly],[Bearish_Triple_Screen_Momentum_15_Minutes],[Bearish_Triple_Screen_Momentum_Correction_Yearly],[Bearish_Triple_Screen_Momentum_Correction_Quarterly],[Bearish_Triple_Screen_Momentum_Correction_Monthly],[Bearish_Triple_Screen_Momentum_Correction_Weekly],[Bearish_Triple_Screen_Momentum_Correction_Daily],[Bearish_Triple_Screen_Momentum_Correction_4_Hourly],[Bearish_Triple_Screen_Momentum_Correction_1_Hourly],[Bearish_Triple_Screen_Momentum_Correction_15_Minutes],[Bearish_Double_Screen_Momentum_Yearly],[Bearish_Double_Screen_Momentum_Quarterly],[Bearish_Double_Screen_Momentum_Monthly],[Bearish_Double_Screen_Momentum_Weekly],[Bearish_Double_Screen_Momentum_Daily],[Bearish_Double_Screen_Momentum_4_Hourly],[Bearish_Double_Screen_Momentum_1_Hourly],[Bearish_Double_Screen_Momentum_15_Minutes],[Bearish_Double_Screen_Momentum_Correction_Yearly],[Bearish_Double_Screen_Momentum_Correction_Quarterly],[Bearish_Double_Screen_Momentum_Correction_Monthly],[Bearish_Double_Screen_Momentum_Correction_Weekly],[Bearish_Double_Screen_Momentum_Correction_Daily],[Bearish_Double_Screen_Momentum_Correction_4_Hourly],[Bearish_Double_Screen_Momentum_Correction_1_Hourly],[Bearish_Double_Screen_Momentum_Correction_15_Minutes],[Bearish_Single_Screen_Momentum_Yearly],[Bearish_Single_Screen_Momentum_Quarterly],[Bearish_Single_Screen_Momentum_Monthly],[Bearish_Single_Screen_Momentum_Weekly],[Bearish_Single_Screen_Momentum_Daily],[Bearish_Single_Screen_Momentum_4_Hourly],[Bearish_Single_Screen_Momentum_1_Hourly],[Bearish_Single_Screen_Momentum_15_Minutes],[Bearish_Single_Screen_Momentum_Correction_Yearly],[Bearish_Single_Screen_Momentum_Correction_Quarterly],[Bearish_Single_Screen_Momentum_Correction_Monthly],[Bearish_Single_Screen_Momentum_Correction_Weekly],[Bearish_Single_Screen_Momentum_Correction_Daily],[Bearish_Single_Screen_Momentum_Correction_4_Hourly],[Bearish_Single_Screen_Momentum_Correction_1_Hourly],[Bearish_Single_Screen_Momentum_Correction_15_Minutes],[Bearish_Triple_Screen_Swing_Yearly],[Bearish_Triple_Screen_Swing_Quarterly],[Bearish_Triple_Screen_Swing_Monthly],[Bearish_Triple_Screen_Swing_Weekly],[Bearish_Triple_Screen_Swing_Daily],[Bearish_Triple_Screen_Swing_4_Hourly],[Bearish_Triple_Screen_Swing_1_Hourly],[Bearish_Triple_Screen_Swing_15_Minutes],[Bearish_Triple_Screen_Swing_Correction_Yearly],[Bearish_Triple_Screen_Swing_Correction_Quarterly],[Bearish_Triple_Screen_Swing_Correction_Monthly],[Bearish_Triple_Screen_Swing_Correction_Weekly],[Bearish_Triple_Screen_Swing_Correction_Daily],[Bearish_Triple_Screen_Swing_Correction_4_Hourly],[Bearish_Triple_Screen_Swing_Correction_1_Hourly],[Bearish_Triple_Screen_Swing_Correction_15_Minutes],[Bearish_Double_Screen_Swing_Yearly],[Bearish_Double_Screen_Swing_Quarterly],[Bearish_Double_Screen_Swing_Monthly],[Bearish_Double_Screen_Swing_Weekly],[Bearish_Double_Screen_Swing_Daily],[Bearish_Double_Screen_Swing_4_Hourly],[Bearish_Double_Screen_Swing_1_Hourly],[Bearish_Double_Screen_Swing_15_Minutes],[Bearish_Double_Screen_Swing_Correction_Yearly],[Bearish_Double_Screen_Swing_Correction_Quarterly],[Bearish_Double_Screen_Swing_Correction_Monthly],[Bearish_Double_Screen_Swing_Correction_Weekly],[Bearish_Double_Screen_Swing_Correction_Daily],[Bearish_Double_Screen_Swing_Correction_4_Hourly],[Bearish_Double_Screen_Swing_Correction_1_Hourly],[Bearish_Double_Screen_Swing_Correction_15_Minutes],[Bearish_Single_Screen_Swing_Yearly],[Bearish_Single_Screen_Swing_Quarterly],[Bearish_Single_Screen_Swing_Monthly],[Bearish_Single_Screen_Swing_Weekly],[Bearish_Single_Screen_Swing_Daily],[Bearish_Single_Screen_Swing_4_Hourly],[Bearish_Single_Screen_Swing_1_Hourly],[Bearish_Single_Screen_Swing_15_Minutes],[Bearish_Single_Screen_Swing_Correction_Yearly],[Bearish_Single_Screen_Swing_Correction_Quarterly],[Bearish_Single_Screen_Swing_Correction_Monthly],[Bearish_Single_Screen_Swing_Correction_Weekly],[Bearish_Single_Screen_Swing_Correction_Daily],[Bearish_Single_Screen_Swing_Correction_4_Hourly],[Bearish_Single_Screen_Swing_Correction_1_Hourly],[Bearish_Single_Screen_Swing_Correction_15_Minutes]) 
+	) AS dp
+)
+UPDATE a SET -- select distinct a.Batch_No,a.sno,
+Trade_Type_Details = replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
+('' + ';Bu-Triple-Stg-' +
+(case when a.Bullish_Triple_Screen_Strong_Yearly                  > 0 then dp.Bullish_Triple_Screen_Strong_Yearly                  + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Quarterly               > 0 then dp.Bullish_Triple_Screen_Strong_Quarterly               + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Monthly                 > 0 then dp.Bullish_Triple_Screen_Strong_Monthly                 + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Weekly                  > 0 then dp.Bullish_Triple_Screen_Strong_Weekly                  + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Daily                   > 0 then dp.Bullish_Triple_Screen_Strong_Daily                   + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_4_Hourly                > 0 then dp.Bullish_Triple_Screen_Strong_4_Hourly                + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_1_Hourly                > 0 then dp.Bullish_Triple_Screen_Strong_1_Hourly                + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_15_Minutes              > 0 then dp.Bullish_Triple_Screen_Strong_15_Minutes              + ';' else '' end) +
+';Bu-Triple-Stg-Corr-' +
+(case when a.Bullish_Triple_Screen_Strong_Correction_Yearly       > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Yearly       + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Correction_Quarterly    > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Correction_Monthly      > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Monthly      + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Correction_Weekly       > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Weekly       + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Correction_Daily        > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Daily        + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bullish_Triple_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bullish_Triple_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bullish_Triple_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
+';Bu-Double-Stg-' + 
+(case when a.Bullish_Double_Screen_Strong_Yearly                  > 0 then dp.Bullish_Double_Screen_Strong_Yearly                  + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Quarterly               > 0 then dp.Bullish_Double_Screen_Strong_Quarterly               + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Monthly                 > 0 then dp.Bullish_Double_Screen_Strong_Monthly                 + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Weekly                  > 0 then dp.Bullish_Double_Screen_Strong_Weekly                  + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Daily                   > 0 then dp.Bullish_Double_Screen_Strong_Daily                   + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_4_Hourly                > 0 then dp.Bullish_Double_Screen_Strong_4_Hourly                + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_1_Hourly                > 0 then dp.Bullish_Double_Screen_Strong_1_Hourly                + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_15_Minutes              > 0 then dp.Bullish_Double_Screen_Strong_15_Minutes              + ';' else '' end) +
+';Bu-Double-Stg-Corr-' + 
+(case when a.Bullish_Double_Screen_Strong_Correction_Yearly       > 0 then dp.Bullish_Double_Screen_Strong_Correction_Yearly       + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Correction_Quarterly    > 0 then dp.Bullish_Double_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Correction_Monthly      > 0 then dp.Bullish_Double_Screen_Strong_Correction_Monthly      + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Correction_Weekly       > 0 then dp.Bullish_Double_Screen_Strong_Correction_Weekly       + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Correction_Daily        > 0 then dp.Bullish_Double_Screen_Strong_Correction_Daily        + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bullish_Double_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bullish_Double_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bullish_Double_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
+';Bu-Single-Stg-' +
+(case when a.Bullish_Single_Screen_Strong_Yearly                  > 0 then dp.Bullish_Single_Screen_Strong_Yearly                  + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Quarterly               > 0 then dp.Bullish_Single_Screen_Strong_Quarterly               + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Monthly                 > 0 then dp.Bullish_Single_Screen_Strong_Monthly                 + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Weekly                  > 0 then dp.Bullish_Single_Screen_Strong_Weekly                  + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Daily                   > 0 then dp.Bullish_Single_Screen_Strong_Daily                   + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_4_Hourly                > 0 then dp.Bullish_Single_Screen_Strong_4_Hourly                + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_1_Hourly                > 0 then dp.Bullish_Single_Screen_Strong_1_Hourly                + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_15_Minutes              > 0 then dp.Bullish_Single_Screen_Strong_15_Minutes              + ';' else '' end) +
+';Bu-Single-Stg-Corr-' +
+(case when a.Bullish_Single_Screen_Strong_Correction_Yearly       > 0 then dp.Bullish_Single_Screen_Strong_Correction_Yearly       + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Correction_Quarterly    > 0 then dp.Bullish_Single_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Correction_Monthly      > 0 then dp.Bullish_Single_Screen_Strong_Correction_Monthly      + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Correction_Weekly       > 0 then dp.Bullish_Single_Screen_Strong_Correction_Weekly       + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Correction_Daily        > 0 then dp.Bullish_Single_Screen_Strong_Correction_Daily        + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bullish_Single_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bullish_Single_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bullish_Single_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
+';Bu-Triple-Mom-' +
+(case when a.Bullish_Triple_Screen_Momentum_Yearly                > 0 then dp.Bullish_Triple_Screen_Momentum_Yearly                + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Quarterly             > 0 then dp.Bullish_Triple_Screen_Momentum_Quarterly             + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Monthly               > 0 then dp.Bullish_Triple_Screen_Momentum_Monthly               + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Weekly                > 0 then dp.Bullish_Triple_Screen_Momentum_Weekly                + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Daily                 > 0 then dp.Bullish_Triple_Screen_Momentum_Daily                 + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_4_Hourly              > 0 then dp.Bullish_Triple_Screen_Momentum_4_Hourly              + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_1_Hourly              > 0 then dp.Bullish_Triple_Screen_Momentum_1_Hourly              + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_15_Minutes            > 0 then dp.Bullish_Triple_Screen_Momentum_15_Minutes            + ';' else '' end) +
+';Bu-Triple-Mom-Corr-' +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_Yearly     > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_Monthly    > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_Weekly     > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Weekly     + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_Daily      > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Daily      + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
+';Bu-Double-Mom-' +
+(case when a.Bullish_Double_Screen_Momentum_Yearly                > 0 then dp.Bullish_Double_Screen_Momentum_Yearly                + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Quarterly             > 0 then dp.Bullish_Double_Screen_Momentum_Quarterly             + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Monthly               > 0 then dp.Bullish_Double_Screen_Momentum_Monthly               + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Weekly                > 0 then dp.Bullish_Double_Screen_Momentum_Weekly                + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Daily                 > 0 then dp.Bullish_Double_Screen_Momentum_Daily                 + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_4_Hourly              > 0 then dp.Bullish_Double_Screen_Momentum_4_Hourly              + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_1_Hourly              > 0 then dp.Bullish_Double_Screen_Momentum_1_Hourly              + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_15_Minutes            > 0 then dp.Bullish_Double_Screen_Momentum_15_Minutes            + ';' else '' end) +
+';Bu-Double-Mom-Corr-' +
+(case when a.Bullish_Double_Screen_Momentum_Correction_Yearly     > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Correction_Monthly    > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Correction_Weekly     > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Weekly     + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Correction_Daily      > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Daily      + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bullish_Double_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bullish_Double_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bullish_Double_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
+';Bu-Single-Mom-' +
+(case when a.Bullish_Single_Screen_Momentum_Yearly                > 0 then dp.Bullish_Single_Screen_Momentum_Yearly                + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Quarterly             > 0 then dp.Bullish_Single_Screen_Momentum_Quarterly             + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Monthly               > 0 then dp.Bullish_Single_Screen_Momentum_Monthly               + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Weekly                > 0 then dp.Bullish_Single_Screen_Momentum_Weekly                + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Daily                 > 0 then dp.Bullish_Single_Screen_Momentum_Daily                 + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_4_Hourly              > 0 then dp.Bullish_Single_Screen_Momentum_4_Hourly              + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_1_Hourly              > 0 then dp.Bullish_Single_Screen_Momentum_1_Hourly              + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_15_Minutes            > 0 then dp.Bullish_Single_Screen_Momentum_15_Minutes            + ';' else '' end) +
+';Bu-Single-Mom-Corr-' +
+(case when a.Bullish_Single_Screen_Momentum_Correction_Yearly     > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Correction_Monthly    > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Correction_Weekly     > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Weekly     + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Correction_Daily      > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Daily      + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bullish_Single_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bullish_Single_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bullish_Single_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
+';Bu-Triple-Swg-' +
+(case when a.Bullish_Triple_Screen_Swing_Yearly                   > 0 then dp.Bullish_Triple_Screen_Swing_Yearly                   + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Quarterly                > 0 then dp.Bullish_Triple_Screen_Swing_Quarterly                + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Monthly                  > 0 then dp.Bullish_Triple_Screen_Swing_Monthly                  + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Weekly                   > 0 then dp.Bullish_Triple_Screen_Swing_Weekly                   + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Daily                    > 0 then dp.Bullish_Triple_Screen_Swing_Daily                    + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_4_Hourly                 > 0 then dp.Bullish_Triple_Screen_Swing_4_Hourly                 + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_1_Hourly                 > 0 then dp.Bullish_Triple_Screen_Swing_1_Hourly                 + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_15_Minutes               > 0 then dp.Bullish_Triple_Screen_Swing_15_Minutes               + ';' else '' end) +
+';Bu-Triple-Swg-Corr-' +
+(case when a.Bullish_Triple_Screen_Swing_Correction_Yearly        > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Yearly        + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Correction_Quarterly     > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Correction_Monthly       > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Monthly       + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Correction_Weekly        > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Weekly        + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Correction_Daily         > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Daily         + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bullish_Triple_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bullish_Triple_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
+(case when a.Bullish_Triple_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bullish_Triple_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
+';Bu-Double-Swg-Corr-' +
+(case when a.Bullish_Double_Screen_Swing_Yearly                   > 0 then dp.Bullish_Double_Screen_Swing_Yearly                   + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Quarterly                > 0 then dp.Bullish_Double_Screen_Swing_Quarterly                + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Monthly                  > 0 then dp.Bullish_Double_Screen_Swing_Monthly                  + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Weekly                   > 0 then dp.Bullish_Double_Screen_Swing_Weekly                   + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Daily                    > 0 then dp.Bullish_Double_Screen_Swing_Daily                    + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_4_Hourly                 > 0 then dp.Bullish_Double_Screen_Swing_4_Hourly                 + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_1_Hourly                 > 0 then dp.Bullish_Double_Screen_Swing_1_Hourly                 + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_15_Minutes               > 0 then dp.Bullish_Double_Screen_Swing_15_Minutes               + ';' else '' end) +
+';Bu-Double-Swg-Corr-' +
+(case when a.Bullish_Double_Screen_Swing_Correction_Yearly        > 0 then dp.Bullish_Double_Screen_Swing_Correction_Yearly        + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Correction_Quarterly     > 0 then dp.Bullish_Double_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Correction_Monthly       > 0 then dp.Bullish_Double_Screen_Swing_Correction_Monthly       + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Correction_Weekly        > 0 then dp.Bullish_Double_Screen_Swing_Correction_Weekly        + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Correction_Daily         > 0 then dp.Bullish_Double_Screen_Swing_Correction_Daily         + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bullish_Double_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bullish_Double_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
+(case when a.Bullish_Double_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bullish_Double_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
+';Bu-Single-Swg-' +
+(case when a.Bullish_Single_Screen_Swing_Yearly                   > 0 then dp.Bullish_Single_Screen_Swing_Yearly                   + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Quarterly                > 0 then dp.Bullish_Single_Screen_Swing_Quarterly                + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Monthly                  > 0 then dp.Bullish_Single_Screen_Swing_Monthly                  + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Weekly                   > 0 then dp.Bullish_Single_Screen_Swing_Weekly                   + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Daily                    > 0 then dp.Bullish_Single_Screen_Swing_Daily                    + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_4_Hourly                 > 0 then dp.Bullish_Single_Screen_Swing_4_Hourly                 + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_1_Hourly                 > 0 then dp.Bullish_Single_Screen_Swing_1_Hourly                 + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_15_Minutes               > 0 then dp.Bullish_Single_Screen_Swing_15_Minutes               + ';' else '' end) +
+';Bu-Single-Swg-Corr-' +
+(case when a.Bullish_Single_Screen_Swing_Correction_Yearly        > 0 then dp.Bullish_Single_Screen_Swing_Correction_Yearly        + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Correction_Quarterly     > 0 then dp.Bullish_Single_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Correction_Monthly       > 0 then dp.Bullish_Single_Screen_Swing_Correction_Monthly       + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Correction_Weekly        > 0 then dp.Bullish_Single_Screen_Swing_Correction_Weekly        + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Correction_Daily         > 0 then dp.Bullish_Single_Screen_Swing_Correction_Daily         + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bullish_Single_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bullish_Single_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
+(case when a.Bullish_Single_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bullish_Single_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
++ ';' + CHAR(13) + CHAR(10) + ';Be-Triple-Stg-' +
+(case when a.Bearish_Triple_Screen_Strong_Yearly                  > 0 then dp.Bearish_Triple_Screen_Strong_Yearly                  + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Quarterly               > 0 then dp.Bearish_Triple_Screen_Strong_Quarterly               + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Monthly                 > 0 then dp.Bearish_Triple_Screen_Strong_Monthly                 + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Weekly                  > 0 then dp.Bearish_Triple_Screen_Strong_Weekly                  + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Daily                   > 0 then dp.Bearish_Triple_Screen_Strong_Daily                   + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_4_Hourly                > 0 then dp.Bearish_Triple_Screen_Strong_4_Hourly                + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_1_Hourly                > 0 then dp.Bearish_Triple_Screen_Strong_1_Hourly                + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_15_Minutes              > 0 then dp.Bearish_Triple_Screen_Strong_15_Minutes              + ';' else '' end) +
+';Be-Triple-Stg-Corr-' +
+(case when a.Bearish_Triple_Screen_Strong_Correction_Yearly       > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Yearly       + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Correction_Quarterly    > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Correction_Monthly      > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Monthly      + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Correction_Weekly       > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Weekly       + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Correction_Daily        > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Daily        + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bearish_Triple_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bearish_Triple_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bearish_Triple_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
+';Be-Double-Stg-' +
+(case when a.Bearish_Double_Screen_Strong_Yearly                  > 0 then dp.Bearish_Double_Screen_Strong_Yearly                  + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Quarterly               > 0 then dp.Bearish_Double_Screen_Strong_Quarterly               + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Monthly                 > 0 then dp.Bearish_Double_Screen_Strong_Monthly                 + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Weekly                  > 0 then dp.Bearish_Double_Screen_Strong_Weekly                  + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Daily                   > 0 then dp.Bearish_Double_Screen_Strong_Daily                   + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_4_Hourly                > 0 then dp.Bearish_Double_Screen_Strong_4_Hourly                + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_1_Hourly                > 0 then dp.Bearish_Double_Screen_Strong_1_Hourly                + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_15_Minutes              > 0 then dp.Bearish_Double_Screen_Strong_15_Minutes              + ';' else '' end) +
+';Be-Double-Stg-Corr-' +
+(case when a.Bearish_Double_Screen_Strong_Correction_Yearly       > 0 then dp.Bearish_Double_Screen_Strong_Correction_Yearly       + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Correction_Quarterly    > 0 then dp.Bearish_Double_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Correction_Monthly      > 0 then dp.Bearish_Double_Screen_Strong_Correction_Monthly      + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Correction_Weekly       > 0 then dp.Bearish_Double_Screen_Strong_Correction_Weekly       + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Correction_Daily        > 0 then dp.Bearish_Double_Screen_Strong_Correction_Daily        + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bearish_Double_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bearish_Double_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bearish_Double_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
+';Be-Single-Stg-' +
+(case when a.Bearish_Single_Screen_Strong_Yearly                  > 0 then dp.Bearish_Single_Screen_Strong_Yearly                  + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Quarterly               > 0 then dp.Bearish_Single_Screen_Strong_Quarterly               + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Monthly                 > 0 then dp.Bearish_Single_Screen_Strong_Monthly                 + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Weekly                  > 0 then dp.Bearish_Single_Screen_Strong_Weekly                  + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Daily                   > 0 then dp.Bearish_Single_Screen_Strong_Daily                   + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_4_Hourly                > 0 then dp.Bearish_Single_Screen_Strong_4_Hourly                + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_1_Hourly                > 0 then dp.Bearish_Single_Screen_Strong_1_Hourly                + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_15_Minutes              > 0 then dp.Bearish_Single_Screen_Strong_15_Minutes              + ';' else '' end) +
+';Be-Single-Stg-Corr-' +
+(case when a.Bearish_Single_Screen_Strong_Correction_Yearly       > 0 then dp.Bearish_Single_Screen_Strong_Correction_Yearly       + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Correction_Quarterly    > 0 then dp.Bearish_Single_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Correction_Monthly      > 0 then dp.Bearish_Single_Screen_Strong_Correction_Monthly      + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Correction_Weekly       > 0 then dp.Bearish_Single_Screen_Strong_Correction_Weekly       + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Correction_Daily        > 0 then dp.Bearish_Single_Screen_Strong_Correction_Daily        + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bearish_Single_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bearish_Single_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bearish_Single_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
+';Be-Triple-Mom-' +
+(case when a.Bearish_Triple_Screen_Momentum_Yearly                > 0 then dp.Bearish_Triple_Screen_Momentum_Yearly                + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Quarterly             > 0 then dp.Bearish_Triple_Screen_Momentum_Quarterly             + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Monthly               > 0 then dp.Bearish_Triple_Screen_Momentum_Monthly               + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Weekly                > 0 then dp.Bearish_Triple_Screen_Momentum_Weekly                + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Daily                 > 0 then dp.Bearish_Triple_Screen_Momentum_Daily                 + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_4_Hourly              > 0 then dp.Bearish_Triple_Screen_Momentum_4_Hourly              + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_1_Hourly              > 0 then dp.Bearish_Triple_Screen_Momentum_1_Hourly              + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_15_Minutes            > 0 then dp.Bearish_Triple_Screen_Momentum_15_Minutes            + ';' else '' end) +
+';Be-Triple-Mom-Corr-' +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_Yearly     > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_Monthly    > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_Weekly     > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Weekly     + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_Daily      > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Daily      + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
+';Be-Double-Mom-' +
+(case when a.Bearish_Double_Screen_Momentum_Yearly                > 0 then dp.Bearish_Double_Screen_Momentum_Yearly                + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Quarterly             > 0 then dp.Bearish_Double_Screen_Momentum_Quarterly             + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Monthly               > 0 then dp.Bearish_Double_Screen_Momentum_Monthly               + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Weekly                > 0 then dp.Bearish_Double_Screen_Momentum_Weekly                + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Daily                 > 0 then dp.Bearish_Double_Screen_Momentum_Daily                 + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_4_Hourly              > 0 then dp.Bearish_Double_Screen_Momentum_4_Hourly              + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_1_Hourly              > 0 then dp.Bearish_Double_Screen_Momentum_1_Hourly              + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_15_Minutes            > 0 then dp.Bearish_Double_Screen_Momentum_15_Minutes            + ';' else '' end) +
+';Be-Double-Mom-Corr-' +
+(case when a.Bearish_Double_Screen_Momentum_Correction_Yearly     > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Correction_Monthly    > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Correction_Weekly     > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Weekly     + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Correction_Daily      > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Daily      + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bearish_Double_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bearish_Double_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bearish_Double_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
+';Be-Single-Mom-' +
+(case when a.Bearish_Single_Screen_Momentum_Yearly                > 0 then dp.Bearish_Single_Screen_Momentum_Yearly                + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Quarterly             > 0 then dp.Bearish_Single_Screen_Momentum_Quarterly             + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Monthly               > 0 then dp.Bearish_Single_Screen_Momentum_Monthly               + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Weekly                > 0 then dp.Bearish_Single_Screen_Momentum_Weekly                + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Daily                 > 0 then dp.Bearish_Single_Screen_Momentum_Daily                 + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_4_Hourly              > 0 then dp.Bearish_Single_Screen_Momentum_4_Hourly              + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_1_Hourly              > 0 then dp.Bearish_Single_Screen_Momentum_1_Hourly              + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_15_Minutes            > 0 then dp.Bearish_Single_Screen_Momentum_15_Minutes            + ';' else '' end) +
+';Be-Single-Mom-Corr-' +
+(case when a.Bearish_Single_Screen_Momentum_Correction_Yearly     > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Correction_Monthly    > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Correction_Weekly     > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Weekly     + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Correction_Daily      > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Daily      + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bearish_Single_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bearish_Single_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bearish_Single_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
+';Be-Triple-Swg-' +
+(case when a.Bearish_Triple_Screen_Swing_Yearly                   > 0 then dp.Bearish_Triple_Screen_Swing_Yearly                   + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Quarterly                > 0 then dp.Bearish_Triple_Screen_Swing_Quarterly                + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Monthly                  > 0 then dp.Bearish_Triple_Screen_Swing_Monthly                  + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Weekly                   > 0 then dp.Bearish_Triple_Screen_Swing_Weekly                   + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Daily                    > 0 then dp.Bearish_Triple_Screen_Swing_Daily                    + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_4_Hourly                 > 0 then dp.Bearish_Triple_Screen_Swing_4_Hourly                 + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_1_Hourly                 > 0 then dp.Bearish_Triple_Screen_Swing_1_Hourly                 + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_15_Minutes               > 0 then dp.Bearish_Triple_Screen_Swing_15_Minutes               + ';' else '' end) +
+';Be-Triple-Swg-Corr-' +
+(case when a.Bearish_Triple_Screen_Swing_Correction_Yearly        > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Yearly        + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Correction_Quarterly     > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Correction_Monthly       > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Monthly       + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Correction_Weekly        > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Weekly        + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Correction_Daily         > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Daily         + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bearish_Triple_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bearish_Triple_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
+(case when a.Bearish_Triple_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bearish_Triple_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
+';Be-Double-Swg-' +
+(case when a.Bearish_Double_Screen_Swing_Yearly                   > 0 then dp.Bearish_Double_Screen_Swing_Yearly                   + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Quarterly                > 0 then dp.Bearish_Double_Screen_Swing_Quarterly                + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Monthly                  > 0 then dp.Bearish_Double_Screen_Swing_Monthly                  + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Weekly                   > 0 then dp.Bearish_Double_Screen_Swing_Weekly                   + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Daily                    > 0 then dp.Bearish_Double_Screen_Swing_Daily                    + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_4_Hourly                 > 0 then dp.Bearish_Double_Screen_Swing_4_Hourly                 + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_1_Hourly                 > 0 then dp.Bearish_Double_Screen_Swing_1_Hourly                 + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_15_Minutes               > 0 then dp.Bearish_Double_Screen_Swing_15_Minutes               + ';' else '' end) +
+';Be-Double-Swg-Corr-' +
+(case when a.Bearish_Double_Screen_Swing_Correction_Yearly        > 0 then dp.Bearish_Double_Screen_Swing_Correction_Yearly        + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Correction_Quarterly     > 0 then dp.Bearish_Double_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Correction_Monthly       > 0 then dp.Bearish_Double_Screen_Swing_Correction_Monthly       + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Correction_Weekly        > 0 then dp.Bearish_Double_Screen_Swing_Correction_Weekly        + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Correction_Daily         > 0 then dp.Bearish_Double_Screen_Swing_Correction_Daily         + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bearish_Double_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bearish_Double_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
+(case when a.Bearish_Double_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bearish_Double_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
+';Be-Single-Swg-' +
+(case when a.Bearish_Single_Screen_Swing_Yearly                   > 0 then dp.Bearish_Single_Screen_Swing_Yearly                   + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Quarterly                > 0 then dp.Bearish_Single_Screen_Swing_Quarterly                + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Monthly                  > 0 then dp.Bearish_Single_Screen_Swing_Monthly                  + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Weekly                   > 0 then dp.Bearish_Single_Screen_Swing_Weekly                   + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Daily                    > 0 then dp.Bearish_Single_Screen_Swing_Daily                    + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_4_Hourly                 > 0 then dp.Bearish_Single_Screen_Swing_4_Hourly                 + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_1_Hourly                 > 0 then dp.Bearish_Single_Screen_Swing_1_Hourly                 + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_15_Minutes               > 0 then dp.Bearish_Single_Screen_Swing_15_Minutes               + ';' else '' end) +
+';Be-Single-Swg-Corr-' +
+(case when a.Bearish_Single_Screen_Swing_Correction_Yearly        > 0 then dp.Bearish_Single_Screen_Swing_Correction_Yearly        + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Correction_Quarterly     > 0 then dp.Bearish_Single_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Correction_Monthly       > 0 then dp.Bearish_Single_Screen_Swing_Correction_Monthly       + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Correction_Weekly        > 0 then dp.Bearish_Single_Screen_Swing_Correction_Weekly        + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Correction_Daily         > 0 then dp.Bearish_Single_Screen_Swing_Correction_Daily         + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bearish_Single_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bearish_Single_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
+(case when a.Bearish_Single_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bearish_Single_Screen_Swing_Correction_15_Minutes    + ';' else '' end) + 
+';')
+,'Bu-Tri-Stg-',''),'Bu-Tri-Stg-Corr-',''),'Bu-Dbl-Stg-',''),'Bu-Dbl-Stg-Corr-',''),'Bu-Sgl-Stg-',''),'Bu-Sgl-Stg-Corr-',''),'Bu-Tri-Mom-',''),'Bu-Tri-Mom-Corr-',''),'Bu-Dbl-Mom-',''),'Bu-Dbl-Mom-Corr-',''),'Bu-Sgl-Mom-',''),'Bu-Sgl-Mom-Corr-',''),'Bu-Tri-Swg-',''),'Bu-Tri-Swg-Corr-',''),'Bu-Dbl-Swg-',''),'Bu-Dbl-Swg-Corr-',''),'Bu-Sgl-Swg-',''),'Bu-Sgl-Swg-Corr-',''),'Be-Tri-Stg-',''),'Be-Tri-Stg-Corr-',''),'Be-Dbl-Stg-',''),'Be-Dbl-Stg-Corr-',''),'Be-Sgl-Stg-',''),'Be-Sgl-Stg-Corr-',''),'Be-Tri-Mom-',''),'Be-Tri-Mom-Corr-',''),'Be-Dbl-Mom-',''),'Be-Dbl-Mom-Corr-',''),'Be-Sgl-Mom-',''),'Be-Sgl-Mom-Corr-',''),'Be-Tri-Swg-',''),'Be-Tri-Swg-Corr-',''),'Be-Dbl-Swg-',''),'Be-Dbl-Swg-Corr-',''),'Be-Sgl-Swg-',''),'Be-Sgl-Swg-Corr-',''),'Bu-Triple-Stg-;',''),'Bu-Triple-Stg-Corr-;',''),'Bu-Double-Stg-;',''),'Bu-Double-Stg-Corr-;',''),'Bu-Single-Stg-;',''),'Bu-Single-Stg-Corr-;',''),'Bu-Triple-Mom-;',''),'Bu-Triple-Mom-Corr-;',''),'Bu-Double-Mom-;',''),'Bu-Double-Mom-Corr-;',''),'Bu-Single-Mom-;',''),'Bu-Single-Mom-Corr-;',''),'Bu-Triple-Swg-;',''),'Bu-Triple-Swg-Corr-;',''),'Bu-Double-Swg-Corr-;',''),'Bu-Double-Swg-Corr-;',''),'Bu-Single-Swg-;',''),'Bu-Single-Swg-Corr-;',''),'Be-Triple-Stg-;',''),'Be-Triple-Stg-Corr-;',''),'Be-Double-Stg-;',''),'Be-Double-Stg-Corr-;',''),'Be-Single-Stg-;',''),'Be-Single-Stg-Corr-;',''),'Be-Triple-Mom-;',''),'Be-Triple-Mom-Corr-;',''),'Be-Double-Mom-;',''),'Be-Double-Mom-Corr-;',''),'Be-Single-Mom-;',''),'Be-Single-Mom-Corr-;',''),'Be-Triple-Swg-;',''),'Be-Triple-Swg-Corr-;',''),'Be-Double-Swg-;',''),'Be-Double-Swg-Corr-;',''),'Be-Single-Swg-;',''),'Be-Single-Swg-Corr-;',''),';;',';')
+
+FROM dbo.Analyse_Stocks a 
+JOIN DescPivot dp  ON dp.Batch_No = @batch_num 
+and a.Batch_No = @batch_no -- (select max(batch_no) from Analyse_Stocks) 
+JOIN ValuePivot vp ON vp.Batch_No = @batch_num
+;
+end
+
+begin -- update trade_type.... calculated fields 
+declare @batch_no bigint
+,@batch_num bigint = 4
+,@cteupdatequery nvarchar(max),@cteupdatequery1 nvarchar(max),@cteupdatequery2 nvarchar(max),@cteupdatequery3 nvarchar(max),@cteupdatequery4 nvarchar(max)
+,@updatequery nvarchar(max)
+,@Trade_Type nvarchar(max)
+,@Trade_Type_Details nvarchar(max)
+,@Trade_Type_Details_Sum nvarchar(max)
+,@ScreenNames nvarchar(max)
+,@Trade_Type_Bullish_Sum nvarchar(max)
+,@Trade_Type_Bearish_Sum nvarchar(max)
+
+SELECT -- + CHAR(13) + CHAR(10) 
+ @updatequery = STRING_AGG(CAST((Screen_Names + ' = b.'+ Screen_Names + CHAR(13) + CHAR(10)) AS nvarchar(MAX)), ',')  WITHIN GROUP (ORDER BY Sno)
+,@ScreenNames = STRING_AGG(CAST(('[' + Screen_Names + ']' /*+ CHAR(13) + CHAR(10)*/) AS nvarchar(MAX)), ',')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then ''' + left(Screen_Names,2) + ';'' else '''' end) +' + CHAR(13) + CHAR(10)) AS nvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type_Details = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then dp.' + Screen_Names + ' + '';'' else '''' end) +' + CHAR(13) + CHAR(10)) AS nvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type_Details_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' else 0 end) +' + CHAR(13) + CHAR(10)) AS nvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = @batch_num;
+
+SELECT @Trade_Type_Bullish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' else 0 end) +' + CHAR(13) + CHAR(10)) AS nvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = @batch_num and Screen_Names like 'Bullish%';
+
+SELECT @Trade_Type_Bearish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' else 0 end) +' + CHAR(13) + CHAR(10)) AS nvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = @batch_num and Screen_Names like 'Bearish%';
+select @batch_no = max(batch_no) from Analyse_Stocks;
+/*
+select @ScreenNames ScreenNames;
+select @updatequery updatequery;
+select @Trade_Type Trade_Type;
+select @Trade_Type_Details Trade_Type_Details;
+select @Trade_Type_Details_Sum Trade_Type_Details_Sum;
+select @Trade_Type_Bearish_Sum Trade_Type_Bearish_Sum;
+select @Trade_Type_Bullish_Sum Trade_Type_Bullish_Sum;
+select @batch_no batch_no
+UPDATE a SET 
+	Trade_Type = null
+	,Trade_Type_Details = null
+	,Trade_Type_Details_Sum = null
+	,Trade_Type_Bullish_Sum = null
+	,Trade_Type_Bearish_Sum = null
+FROM dbo.Analyse_Stocks a where a.Batch_No = @batch_no
+;
+select Trade_Type
+	,Trade_Type_Details
+	,Trade_Type_Details_Sum
+	,Trade_Type_Bullish_Sum
+	,Trade_Type_Bearish_Sum
+from dbo.Analyse_Stocks where Batch_No = (select max(batch_no) from Analyse_Stocks)
+;
+*/
+set @cteupdatequery = CAST('' AS NVARCHAR(MAX))  + '
+;WITH ValueSource AS 
+(   SELECT Batch_No, Screen_Names, Value
+	FROM dbo.Master_Screen_Name_Values WHERE Batch_No = ' + cast(@batch_num as nvarchar)+'
+)
+,ValuePivot AS 
+(   SELECT * FROM ValueSource
+	PIVOT (SUM(Value) FOR Screen_Names IN ('+ @ScreenNames +') ) AS vp
+)
+,DescSource AS 
+(   SELECT Batch_No, Screen_Names, Description 
+	FROM dbo.Master_Screen_Name_Values
+	WHERE Batch_No = ' + cast(@batch_num as nvarchar)+'
+)
+,DescPivot AS 
+(   SELECT * FROM DescSource a 
+	PIVOT (MAX(Description) FOR Screen_Names IN ('+  @ScreenNames +') ) AS dp
+)
+UPDATE a SET -- SELECT a.Symbol, a.Batch_No, 
+	Trade_Type = '+ @Trade_Type + '	''''
+	,Trade_Type_Details = ' + @Trade_Type_Details + '		''''
+	,Trade_Type_Details_Sum = ' + @Trade_Type_Details_Sum + '0
+	,Trade_Type_Bullish_Sum = ' + @Trade_Type_Bullish_Sum + '0
+	,Trade_Type_Bearish_Sum = ' + @Trade_Type_Bearish_Sum + '0
+FROM dbo.Analyse_Stocks a 
+JOIN DescPivot dp  ON dp.Batch_No = ' + cast(@batch_num as nvarchar) +' and a.Batch_No = ' + cast(@batch_no as nvarchar) +'
+JOIN ValuePivot vp ON vp.Batch_No =' + cast(@batch_num as nvarchar) +';'
+
+EXEC sp_executesql @cteupdatequery;
+----------------------------------------------------------------
+declare @ScreenNames nvarchar(max),@updatequery nvarchar(max)
+SELECT @ScreenNames = STRING_AGG(CAST((Screen_Names + ' = b.'+ Screen_Names + CHAR(13) + CHAR(10)) AS NVarchar(MAX)), ',')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = 4 -- @batch_num;
+select @ScreenNames 
+set @updatequery = 'update a set ' + CHAR(13) + CHAR(10) + @ScreenNames + '
+from dbo.Analyse_Stocks a
+inner join dbo.Temp_Analyse_Stocks b 
+on a.batch_no = b.batch_no 
+and a.symbol = b.symbol;'
+EXEC sp_executesql @updatequery;
+----------------------------------------------------------------
+
+declare @updatequery nvarchar(max), @Trade_Type nvarchar(max), @Trade_Type_Details nvarchar(max), @Trade_Type_Details_Sum nvarchar(max), @ScreenNames nvarchar(max)
+SELECT 
+@updatequery = STRING_AGG(CAST((Screen_Names + ' = b.'+ Screen_Names + CHAR(13) + CHAR(10)) AS Nnvarchar(MAX)), ',')  WITHIN GROUP (ORDER BY Sno)
+,@ScreenNames = STRING_AGG(CAST(('[' + Screen_Names + ']') AS Nnvarchar(MAX)), ',')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then ''' + left(Screen_Names,2) + ';'' else '''' end) +') AS Nnvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type_Details = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then dp.' + Screen_Names + ' + '';'' else '''' end) +') AS Nnvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+,@Trade_Type_Details_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS Nnvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = @batch_num;
+select @ScreenNames,@Trade_Type,@Trade_Type_Details,@Trade_Type_Details_Sum;
+
+declare @Trade_Type_Bullish_Sum nnvarchar(max)
+SELECT
+@Trade_Type_Bullish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS Nnvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = @batch_num and Screen_Names like 'Bullish%';
+select @Trade_Type_Bullish_Sum;
+declare @Trade_Type_Bearish_Sum nnvarchar(max)
+SELECT
+@Trade_Type_Bearish_Sum = STRING_AGG(CAST(('(case when a.' + Screen_Names + ' > 0 then vp.' + Screen_Names + ' + '';'' else '''' end) +') AS Nnvarchar(MAX)), '')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = @batch_num and Screen_Names like 'Bearish%';
+select @Trade_Type_Bearish_Sum;
+----------------------------------------------------------------
+
+end
+
+begin -- sort the string in Trade type details 
+;WITH InputData AS (
+    SELECT Batch_No, Sno, Trade_Type_Details
+    FROM dbo.Analyse_Stocks 
+	where 1=1
+	and Batch_No = @batch_no
+	and Trade_Type_Details != ''
+), Split1 AS (		-- Split input strings per row into groups separated by ';'
+    SELECT	Batch_No, Sno,
+			value AS GroupStr
+    FROM InputData
+	cross apply STRING_SPLIT(Trade_Type_Details, ';')
+    WHERE value <> ''
+), Split2 AS (		-- Split groups further by ',' into individual codes
+    SELECT	Batch_No, Sno,
+			TRIM(value) AS Code
+    FROM Split1
+    CROSS APPLY STRING_SPLIT(GroupStr, ',')
+    WHERE TRIM(value) <> ''
+), Parts AS (	-- Parse code into Brand, Type, Stg, SubType
+    SELECT	Batch_No, Sno, Code,
+        -- LEFT(Code, CHARINDEX('-', Code) - 1) AS Brand,
+		PARSENAME(REPLACE(Code, '-', '.'), 4) AS Brand,
+        PARSENAME(REPLACE(Code, '-', '.'), 3) AS Type,
+        PARSENAME(REPLACE(Code, '-', '.'), 2) AS Stg,
+        PARSENAME(REPLACE(Code, '-', '.'), 1) AS SubType
+    FROM Split2
+), DistinctParts AS (		-- Remove duplicate Brand-Type-Stg-SubType combinations per Id
+    SELECT DISTINCT Batch_No, Sno, Brand, Type, Stg, SubType
+    FROM Parts
+), Grouped AS (		-- Aggregate subtypes, ordered and distinct, per Brand-Type-Stg for each Id
+    SELECT	Batch_No, Sno, Brand, Type, Stg,
+        STRING_AGG(SubType, ',') WITHIN GROUP (
+            ORDER BY 
+                CASE SubType 
+					WHEN 'Y' THEN 1 WHEN 'Q' THEN 2 WHEN 'M' THEN 3 WHEN 'W' THEN 4
+					WHEN 'D' THEN 5 WHEN '4H' THEN 6 WHEN '1H' THEN 7 WHEN '15' THEN 8 ELSE 100 end
+        ) AS SubTypes
+    FROM DistinctParts
+    GROUP BY Batch_No, Sno, Brand, Type, Stg
+), BrandOrderFix AS (		-- Assign ordering for brand and type to control output order
+    SELECT	Batch_No, Sno, Brand, Type, Stg, SubTypes,
+        CASE Brand WHEN 'Bu' THEN 1 WHEN 'Be' THEN 2 ELSE 99 end AS BrandOrder,
+        CASE WHEN Type='Tri' THEN 1 WHEN Type='Dbl' THEN 2 WHEN Type='Sgl' THEN 3 ELSE 99 end AS TypeOrder
+    FROM Grouped
+), SectionNumbered AS (		-- Number sections to know which is first for the brand and hence add prefix
+    SELECT	Batch_No, Sno, Brand, BrandOrder, Type, TypeOrder, Stg, SubTypes,
+			ROW_NUMBER() OVER (PARTITION BY Batch_No, Sno, Brand ORDER BY TypeOrder) AS SeqInBrand
+    FROM BrandOrderFix
+), SectionPrep AS (
+    SELECT Batch_No, Sno, Brand, BrandOrder, TypeOrder, SeqInBrand,
+        CASE WHEN SeqInBrand = 1 THEN CONCAT(Brand,'-',Type,'-',Stg,'-',SubTypes)
+             ELSE CONCAT(Type,'-',Stg,'-',SubTypes)
+        end AS SectionStr
+    FROM SectionNumbered
+), BrandAggregate AS (		-- Aggregate segments per brand per Id
+    SELECT Batch_No, Sno, Brand, BrandOrder,
+        STRING_AGG(SectionStr, ';') WITHIN GROUP (ORDER BY BrandOrder,TypeOrder) AS BrandSection
+    FROM SectionPrep
+    GROUP BY Batch_No, Sno, Brand, BrandOrder
+),Final as (		-- Aggregate full output per Id joining brands with ';;', ordered by BrandOrder (Bu then Be)
+SELECT Batch_No, Sno,
+	STRING_AGG(BrandSection, ';;') WITHIN GROUP (ORDER BY BrandOrder,BrandSection) AS transformed_Trade_Type_Details
+FROM BrandAggregate
+group by Batch_No, Sno
+) -- select * from Final
+update a set trade_type_details = transformed_Trade_Type_Details
+from dbo.Analyse_Stocks a inner join Final b on a.Batch_No = b.Batch_No and a.Sno = b.Sno;
+end
+
+begin
+-- update a set Description = REPLACE(Description,'Swg-','Swg-Corr-')
+select * from Master_Screen_Name_Values a where Batch_No = 4 
+-- and Screen_Names like '%Correction%' and Description not like '%Corr%'
+order by sno
+end
+begin
+declare @ScreenNames nvarchar(max),@updatequery nvarchar(max)
+SELECT @ScreenNames = STRING_AGG(CAST((Screen_Names + ' = b.'+ Screen_Names + CHAR(13) + CHAR(10)) AS NVarchar(MAX)), ',')  WITHIN GROUP (ORDER BY Sno)
+from dbo.Master_Screen_Name_Values where Batch_No = 4 -- @batch_num;
+select @ScreenNames
+select * from dbo.Master_Screen_Name_Values where Batch_No = 4 -- @batch_num;
+end
 rollback transaction

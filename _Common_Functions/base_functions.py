@@ -591,6 +591,12 @@ def chat_ink_xls2db(file_name=''):
         {'price__weekly__above_50_Ema'      : {'scan_clause': '( {segments_filter} ( Weekly close > Weekly ema( Weekly close , 50 ) ) )'}},
         {'price__daily__above_50_Ema'       : {'scan_clause': '( {segments_filter} ( latest close > latest ema( latest close , 50 ) ) )'}},
 
+        {'price__yearly__below_50_Ema'      : {'scan_clause': '( {segments_filter} ( yearly close < yearly ema( yearly close , 50 ) ) )'}},
+        {'price__quarterly__below_50_Ema'   : {'scan_clause': '( {segments_filter} ( Quarterly close < Quarterly ema( Quarterly close , 50 ) ) )'}},
+        {'price__monthly__below_50_Ema'     : {'scan_clause': '( {segments_filter} ( Monthly close < Monthly ema( Monthly close , 50 ) ) )'}},
+        {'price__weekly__below_50_Ema'      : {'scan_clause': '( {segments_filter} ( Weekly close < Weekly ema( Weekly close , 50 ) ) )'}},
+        {'price__daily__below_50_Ema'       : {'scan_clause': '( {segments_filter} ( latest close < latest ema( latest close , 50 ) ) )'}},
+
         {'Elliott_4th_Wave_Completed__Yearly__setup'    : {'scan_clause': '( {segments_filter} ( yearly close <= yearly max( 250 , yearly close ) * 0.9 and yearly ema( yearly rsi( 9 ) , 3 ) > yearly wma( yearly rsi( 9 ) , 21 ) and 1 year ago ema( yearly rsi( 9 ) , 3 )<= 1 year ago wma( yearly rsi( 9 ) , 21 ) and yearly close >= yearly max( 250 , yearly close ) * 0.7 and yearly close >= yearly "ew 4 end" and yearly ema( yearly close , 200 ) < yearly close ) ) '}},
         {'Elliott_4th_Wave_Completed__Quarterly__setup' : {'scan_clause': '( {segments_filter} ( quarterly close <= quarterly max( 250 , quarterly close ) * 0.9 and quarterly ema( quarterly rsi( 9 ) , 3 ) > quarterly wma( quarterly rsi( 9 ) , 21 ) and 1 quarter ago ema( quarterly rsi( 9 ) , 3 )<= 1 quarter ago wma( quarterly rsi( 9 ) , 21 ) and quarterly close >= quarterly max( 250 , quarterly close ) * 0.7 and quarterly close >= quarterly "ew 4 end" and quarterly ema( quarterly close , 200 ) < quarterly close ) ) '}},
         {'Elliott_4th_Wave_Completed__monthly__setup'   : {'scan_clause': '( {segments_filter} ( monthly close <= monthly max( 250 , monthly close ) * 0.9 and monthly ema( monthly rsi( 9 ) , 3 ) > monthly wma( monthly rsi( 9 ) , 21 ) and 1 month ago ema( monthly rsi( 9 ) , 3 )<= 1 month ago wma( monthly rsi( 9 ) , 21 ) and monthly close >= monthly max( 250 , monthly close ) * 0.7 and monthly close >= monthly "ew 4 end" and monthly ema( monthly close , 200 ) < monthly close ) ) '}},
@@ -725,6 +731,10 @@ def chat_ink_xls2db(file_name=''):
         {'price__4_hourly__above_50_Ema'    : {'scan_clause': '( {segments_filter} ( [0] 4 hour close > [0] 4 hour ema( [0] 4 hour close , 50 ) ) )'}},
         {'price__1_hourly__above_50_Ema'    : {'scan_clause': '( {segments_filter} ( [0] 1 hour close > [0] 1 hour ema( [0] 1 hour close , 50 ) ) )'}},
         {'price__15_minutes__above_50_Ema'  : {'scan_clause': '( {segments_filter} ( [0] 15 minute close > [0] 15 minute ema( [0] 15 minute close , 50 ) ) )'}},
+
+        {'price__4_hourly__below_50_Ema'    : {'scan_clause': '( {segments_filter} ( [0] 4 hour close < [0] 4 hour ema( [0] 4 hour close , 50 ) ) )'}},
+        {'price__1_hourly__below_50_Ema'    : {'scan_clause': '( {segments_filter} ( [0] 1 hour close < [0] 1 hour ema( [0] 1 hour close , 50 ) ) )'}},
+        {'price__15_minutes__below_50_Ema'  : {'scan_clause': '( {segments_filter} ( [0] 15 minute close < [0] 15 minute ema( [0] 15 minute close , 50 ) ) )'}},
 
         {'Elliott_4th_Wave_Completed__4_hourly__setup'  : {'scan_clause': '( {segments_filter} ( [0] 4 hour close <= [0] 4 hour max( 250 , [0] 4 hour close ) * 0.9 and [0] 4 hour ema( [0] 4 hour rsi( 9 ) , 3 ) > [0] 4 hour wma( [0] 4 hour rsi( 9 ) , 21 ) and [-1] 4 hour ema( [0] 4 hour rsi( 9 ) , 3 )<= [-1] 4 hour wma( [0] 4 hour rsi( 9 ) , 21 ) and [0] 4 hour close >= [0] 4 hour max( 250 , [0] 4 hour close ) * 0.7 and [0] 4 hour close >= [0] 4 hour "ew 4 end" and [0] 4 hour ema( [0] 4 hour close , 200 ) < [0] 4 hour close ) ) '}},
         {'Elliott_4th_Wave_Completed__1_hourly__setup'  : {'scan_clause': '( {segments_filter} ( [0] 1 hour close <= [0] 1 hour max( 250 , [0] 1 hour close ) * 0.9 and [0] 1 hour ema( [0] 1 hour rsi( 9 ) , 3 ) > [0] 1 hour wma( [0] 1 hour rsi( 9 ) , 21 ) and [-1] 1 hour ema( [0] 1 hour rsi( 9 ) , 3 )<= [-1] 1 hour wma( [0] 1 hour rsi( 9 ) , 21 ) and [0] 1 hour close >= [0] 1 hour max( 250 , [0] 1 hour close ) * 0.7 and [0] 1 hour close >= [0] 1 hour "ew 4 end" and [0] 1 hour ema( [0] 1 hour close , 200 ) < [0] 1 hour close ) ) '}},

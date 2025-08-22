@@ -5305,6 +5305,23 @@ alter table Analyse_15Minutes_Stocks add Double_Top_with_RSI_4_Hourly_setup     
 alter table Analyse_15Minutes_Stocks add Double_Top_with_RSI_1_Hourly_setup          bit null; 
 alter table Analyse_15Minutes_Stocks add Double_Top_with_RSI_15_Minutes_setup        bit null; 
 
+alter table Analyse_Stocks add price_yearly_below_50_Ema     bit null;
+alter table Analyse_Stocks add price_quarterly_below_50_Ema  bit null;
+alter table Analyse_Stocks add price_monthly_below_50_Ema    bit null;
+alter table Analyse_Stocks add price_weekly_below_50_Ema     bit null;
+alter table Analyse_Stocks add price_daily_below_50_Ema      bit null;
+alter table Analyse_Stocks add price_4_hourly_below_50_Ema   bit null;
+alter table Analyse_Stocks add price_1_hourly_below_50_Ema   bit null;
+alter table Analyse_Stocks add price_15_minutes_below_50_Ema bit null;
+
+alter table Analyse_15Minutes_Stocks add price_yearly_below_50_Ema     bit null;
+alter table Analyse_15Minutes_Stocks add price_quarterly_below_50_Ema  bit null;
+alter table Analyse_15Minutes_Stocks add price_monthly_below_50_Ema    bit null;
+alter table Analyse_15Minutes_Stocks add price_weekly_below_50_Ema     bit null;
+alter table Analyse_15Minutes_Stocks add price_daily_below_50_Ema      bit null;
+alter table Analyse_15Minutes_Stocks add price_4_hourly_below_50_Ema   bit null;
+alter table Analyse_15Minutes_Stocks add price_1_hourly_below_50_Ema   bit null;
+alter table Analyse_15Minutes_Stocks add price_15_minutes_below_50_Ema bit null;
 end
 
 begin

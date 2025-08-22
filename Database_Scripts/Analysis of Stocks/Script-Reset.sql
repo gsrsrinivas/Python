@@ -19,7 +19,7 @@ update dbo.Analyse_Stocks set
 ,Trade_Type_Details			= NULL
 ,Trade_Type_Details_Length	= NULL
 ,Trade_Type_Details_Sum		= NULL
-,Volume_Shockers			= NULL
+,Other_Setups			= NULL
 ,Volume_Shockers_Sum		= NULL
 ,Report_Sort_Order			= NULL
 ,Industry 					= NULL 
@@ -496,7 +496,7 @@ JOIN ValuePivot vp ON vp.Batch_No = 1
 end
 begin -- update other calculated fields 
 update dbo.Analyse_Stocks set 
-Volume_Shockers = isnull(Volume_Shockers,'') + 
+Other_Setups = isnull(Other_Setups,'') +
     (case when volume_yearly_shockers     = 1 then 'Y;'  else '' end) +
     (case when volume_quarterly_shockers  = 1 then 'Q;'  else '' end) +
     (case when volume_monthly_shockers    = 1 then 'M;'	 else '' end) +
@@ -540,7 +540,7 @@ end
 begin -- update report_sort_order field 
 ;WITH RankedRows AS (
     select batch_no,sno,
-    row_number() over (partition by Batch_No order by Batch_No desc, Trade_View_Order asc, Segments_Order desc, Volume_Shockers desc, Trade_Type_Details_Sum desc ) as report_sort_order
+    row_number() over (partition by Batch_No order by Batch_No desc, Trade_View_Order asc, Segments_Order desc, Other_Setups desc, Trade_Type_Details_Sum desc ) as report_sort_order
     from dbo.Analyse_Stocks
 )
 UPDATE a SET Report_Sort_Order = b.report_sort_order

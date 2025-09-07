@@ -174,14 +174,14 @@ batch_no, symbol
 ,Bullish_Single_Screen_Strong_1_Hourly                     = case when Macd_1_Hourly_Crosses_Above                           = 1 and Rsi_1_Hourly_Crosses_Above                             = 1 and Adx_1_Hourly_Crosses_Above                             = 1 and Stochastic_1_Hourly_Crosses_Above                      = 1 and Ema_5_13_1_Hourly_Crosses_Above                        = 1 and Ema_13_26_1_Hourly_Crosses_Above                       = 1 and Ema_50_100_1_Hourly_Crosses_Above                      = 1 and Ema_50_200_1_Hourly_Crosses_Above                      = 1 and Ema_100_200_1_Hourly_Crosses_Above                     = 1 and Upper_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To   = 1 and Lower_Bollinger_Band3_1_Hourly_Less_Than_Equal_To      = 1 and Upper_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To   = 1 and Lower_Bollinger_Band2_1_Hourly_Less_Than_Equal_To      = 1 then 1 else null end 
 ,Bullish_Single_Screen_Strong_15_Minutes                   = case when Macd_15_Minutes_Crosses_Above                         = 1 and Rsi_15_Minutes_Crosses_Above                           = 1 and Adx_15_Minutes_Crosses_Above                           = 1 and Stochastic_15_Minutes_Crosses_Above                    = 1 and Ema_5_13_15_Minutes_Crosses_Above                      = 1 and Ema_13_26_15_Minutes_Crosses_Above                     = 1 and Ema_50_100_15_Minutes_Crosses_Above                    = 1 and Ema_50_200_15_Minutes_Crosses_Above                    = 1 and Ema_100_200_15_Minutes_Crosses_Above                   = 1 and Upper_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Less_Than_Equal_To    = 1 and Upper_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Less_Than_Equal_To    = 1 then 1 else null end 
 /*--------------------Bullish Single Screen Strong Correction*/
-,Bullish_Single_Screen_Strong_Correction_Yearly            = case when Macd_Yearly_Crosses_Above                             = 1 and Rsi_Yearly_Crosses_Above                               = 1 and Adx_Yearly_Crosses_Above                               = 1 and Stochastic_Yearly_Crosses_Above                        = 1 and Ema_5_13_Yearly_Crosses_Above                          = 1 and Ema_13_26_Yearly_Crosses_Above                         = 1 and Ema_50_100_Yearly_Crosses_Above                        = 1 and Ema_50_200_Yearly_Crosses_Above                        = 1 and Ema_100_200_Yearly_Crosses_Above                       = 1 and Upper_Bollinger_Band3_Yearly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band3_Yearly_Greater_Than_Equal_To        = 1 and Upper_Bollinger_Band2_Yearly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band2_Yearly_Greater_Than_Equal_To        = 1 then 1 else null end 
-,Bullish_Single_Screen_Strong_Correction_Quarterly         = case when Macd_Quarterly_Crosses_Above                          = 1 and Rsi_Quarterly_Crosses_Above                            = 1 and Adx_Quarterly_Crosses_Above                            = 1 and Stochastic_Quarterly_Crosses_Above                     = 1 and Ema_5_13_Quarterly_Crosses_Above                       = 1 and Ema_13_26_Quarterly_Crosses_Above                      = 1 and Ema_50_100_Quarterly_Crosses_Above                     = 1 and Ema_50_200_Quarterly_Crosses_Above                     = 1 and Ema_100_200_Quarterly_Crosses_Above                    = 1 and Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To  = 1 and Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To     = 1 and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To  = 1 and Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To     = 1 then 1 else null end 
-,Bullish_Single_Screen_Strong_Correction_Monthly           = case when Macd_Monthly_Crosses_Above                            = 1 and Rsi_Monthly_Crosses_Above                              = 1 and Adx_Monthly_Crosses_Above                              = 1 and Stochastic_Monthly_Crosses_Above                       = 1 and Ema_5_13_Monthly_Crosses_Above                         = 1 and Ema_13_26_Monthly_Crosses_Above                        = 1 and Ema_50_100_Monthly_Crosses_Above                       = 1 and Ema_50_200_Monthly_Crosses_Above                       = 1 and Ema_100_200_Monthly_Crosses_Above                      = 1 and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To    = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To       = 1 and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To    = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To       = 1 then 1 else null end 
-,Bullish_Single_Screen_Strong_Correction_Weekly            = case when Macd_Weekly_Crosses_Above                             = 1 and Rsi_Weekly_Crosses_Above                               = 1 and Adx_Weekly_Crosses_Above                               = 1 and Stochastic_Weekly_Crosses_Above                        = 1 and Ema_5_13_Weekly_Crosses_Above                          = 1 and Ema_13_26_Weekly_Crosses_Above                         = 1 and Ema_50_100_Weekly_Crosses_Above                        = 1 and Ema_50_200_Weekly_Crosses_Above                        = 1 and Ema_100_200_Weekly_Crosses_Above                       = 1 and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To        = 1 and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To        = 1 then 1 else null end 
-,Bullish_Single_Screen_Strong_Correction_Daily             = case when Macd_Daily_Crosses_Above                              = 1 and Rsi_Daily_Crosses_Above                                = 1 and Adx_Daily_Crosses_Above                                = 1 and Stochastic_Daily_Crosses_Above                         = 1 and Ema_5_13_Daily_Crosses_Above                           = 1 and Ema_13_26_Daily_Crosses_Above                          = 1 and Ema_50_100_Daily_Crosses_Above                         = 1 and Ema_50_200_Daily_Crosses_Above                         = 1 and Ema_100_200_Daily_Crosses_Above                        = 1 and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To      = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To         = 1 and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To      = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To         = 1 then 1 else null end 
-,Bullish_Single_Screen_Strong_Correction_4_Hourly          = case when Macd_4_Hourly_Crosses_Above                           = 1 and Rsi_4_Hourly_Crosses_Above                             = 1 and Adx_4_Hourly_Crosses_Above                             = 1 and Stochastic_4_Hourly_Crosses_Above                      = 1 and Ema_5_13_4_Hourly_Crosses_Above                        = 1 and Ema_13_26_4_Hourly_Crosses_Above                       = 1 and Ema_50_100_4_Hourly_Crosses_Above                      = 1 and Ema_50_200_4_Hourly_Crosses_Above                      = 1 and Ema_100_200_4_Hourly_Crosses_Above                     = 1 and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To      = 1 and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To      = 1 then 1 else null end 
-,Bullish_Single_Screen_Strong_Correction_1_Hourly          = case when Macd_1_Hourly_Crosses_Above                           = 1 and Rsi_1_Hourly_Crosses_Above                             = 1 and Adx_1_Hourly_Crosses_Above                             = 1 and Stochastic_1_Hourly_Crosses_Above                      = 1 and Ema_5_13_1_Hourly_Crosses_Above                        = 1 and Ema_13_26_1_Hourly_Crosses_Above                       = 1 and Ema_50_100_1_Hourly_Crosses_Above                      = 1 and Ema_50_200_1_Hourly_Crosses_Above                      = 1 and Ema_100_200_1_Hourly_Crosses_Above                     = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To      = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To      = 1 then 1 else null end 
-,Bullish_Single_Screen_Strong_Correction_15_Minutes        = case when Macd_15_Minutes_Crosses_Above                         = 1 and Rsi_15_Minutes_Crosses_Above                           = 1 and Adx_15_Minutes_Crosses_Above                           = 1 and Stochastic_15_Minutes_Crosses_Above                    = 1 and Ema_5_13_15_Minutes_Crosses_Above                      = 1 and Ema_13_26_15_Minutes_Crosses_Above                     = 1 and Ema_50_100_15_Minutes_Crosses_Above                    = 1 and Ema_50_200_15_Minutes_Crosses_Above                    = 1 and Ema_100_200_15_Minutes_Crosses_Above                   = 1 and Upper_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To    = 1 and Upper_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To    = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_Yearly            = case when Macd_Yearly_Crosses_Above                             = 1 and Rsi_Yearly_Crosses_Below                               = 1 and Adx_Yearly_Crosses_Below                               = 1 and Stochastic_Yearly_Crosses_Below                        = 1 and Ema_5_13_Yearly_Crosses_Below                          = 1 and Ema_13_26_Yearly_Crosses_Below                         = 1 and Ema_50_100_Yearly_Crosses_Below                        = 1 and Ema_50_200_Yearly_Crosses_Below                        = 1 and Ema_100_200_Yearly_Crosses_Below                       = 1 and Upper_Bollinger_Band3_Yearly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band3_Yearly_Greater_Than_Equal_To        = 1 and Upper_Bollinger_Band2_Yearly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band2_Yearly_Greater_Than_Equal_To        = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_Quarterly         = case when Macd_Quarterly_Crosses_Above                          = 1 and Rsi_Quarterly_Crosses_Below                            = 1 and Adx_Quarterly_Crosses_Below                            = 1 and Stochastic_Quarterly_Crosses_Below                     = 1 and Ema_5_13_Quarterly_Crosses_Below                       = 1 and Ema_13_26_Quarterly_Crosses_Below                      = 1 and Ema_50_100_Quarterly_Crosses_Below                     = 1 and Ema_50_200_Quarterly_Crosses_Below                     = 1 and Ema_100_200_Quarterly_Crosses_Below                    = 1 and Upper_Bollinger_Band3_Quarterly_Less_Than_Equal_To  = 1 and Lower_Bollinger_Band3_Quarterly_Greater_Than_Equal_To     = 1 and Upper_Bollinger_Band2_Quarterly_Less_Than_Equal_To  = 1 and Lower_Bollinger_Band2_Quarterly_Greater_Than_Equal_To     = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_Monthly           = case when Macd_Monthly_Crosses_Above                            = 1 and Rsi_Monthly_Crosses_Below                              = 1 and Adx_Monthly_Crosses_Below                              = 1 and Stochastic_Monthly_Crosses_Below                       = 1 and Ema_5_13_Monthly_Crosses_Below                         = 1 and Ema_13_26_Monthly_Crosses_Below                        = 1 and Ema_50_100_Monthly_Crosses_Below                       = 1 and Ema_50_200_Monthly_Crosses_Below                       = 1 and Ema_100_200_Monthly_Crosses_Below                      = 1 and Upper_Bollinger_Band3_Monthly_Less_Than_Equal_To    = 1 and Lower_Bollinger_Band3_Monthly_Greater_Than_Equal_To       = 1 and Upper_Bollinger_Band2_Monthly_Less_Than_Equal_To    = 1 and Lower_Bollinger_Band2_Monthly_Greater_Than_Equal_To       = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_Weekly            = case when Macd_Weekly_Crosses_Above                             = 1 and Rsi_Weekly_Crosses_Below                               = 1 and Adx_Weekly_Crosses_Below                               = 1 and Stochastic_Weekly_Crosses_Below                        = 1 and Ema_5_13_Weekly_Crosses_Below                          = 1 and Ema_13_26_Weekly_Crosses_Below                         = 1 and Ema_50_100_Weekly_Crosses_Below                        = 1 and Ema_50_200_Weekly_Crosses_Below                        = 1 and Ema_100_200_Weekly_Crosses_Below                       = 1 and Upper_Bollinger_Band3_Weekly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band3_Weekly_Greater_Than_Equal_To        = 1 and Upper_Bollinger_Band2_Weekly_Less_Than_Equal_To     = 1 and Lower_Bollinger_Band2_Weekly_Greater_Than_Equal_To        = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_Daily             = case when Macd_Daily_Crosses_Above                              = 1 and Rsi_Daily_Crosses_Below                                = 1 and Adx_Daily_Crosses_Below                                = 1 and Stochastic_Daily_Crosses_Below                         = 1 and Ema_5_13_Daily_Crosses_Below                           = 1 and Ema_13_26_Daily_Crosses_Below                          = 1 and Ema_50_100_Daily_Crosses_Below                         = 1 and Ema_50_200_Daily_Crosses_Below                         = 1 and Ema_100_200_Daily_Crosses_Below                        = 1 and Upper_Bollinger_Band3_Daily_Less_Than_Equal_To      = 1 and Lower_Bollinger_Band3_Daily_Greater_Than_Equal_To         = 1 and Upper_Bollinger_Band2_Daily_Less_Than_Equal_To      = 1 and Lower_Bollinger_Band2_Daily_Greater_Than_Equal_To         = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_4_Hourly          = case when Macd_4_Hourly_Crosses_Above                           = 1 and Rsi_4_Hourly_Crosses_Below                             = 1 and Adx_4_Hourly_Crosses_Below                             = 1 and Stochastic_4_Hourly_Crosses_Below                      = 1 and Ema_5_13_4_Hourly_Crosses_Below                        = 1 and Ema_13_26_4_Hourly_Crosses_Below                       = 1 and Ema_50_100_4_Hourly_Crosses_Below                      = 1 and Ema_50_200_4_Hourly_Crosses_Below                      = 1 and Ema_100_200_4_Hourly_Crosses_Below                     = 1 and Upper_Bollinger_Band3_4_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band3_4_Hourly_Greater_Than_Equal_To      = 1 and Upper_Bollinger_Band2_4_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band2_4_Hourly_Greater_Than_Equal_To      = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_1_Hourly          = case when Macd_1_Hourly_Crosses_Above                           = 1 and Rsi_1_Hourly_Crosses_Below                             = 1 and Adx_1_Hourly_Crosses_Below                             = 1 and Stochastic_1_Hourly_Crosses_Below                      = 1 and Ema_5_13_1_Hourly_Crosses_Below                        = 1 and Ema_13_26_1_Hourly_Crosses_Below                       = 1 and Ema_50_100_1_Hourly_Crosses_Below                      = 1 and Ema_50_200_1_Hourly_Crosses_Below                      = 1 and Ema_100_200_1_Hourly_Crosses_Below                     = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To      = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To      = 1 then 1 else null end 
+,Bullish_Single_Screen_Strong_Correction_15_Minutes        = case when Macd_15_Minutes_Crosses_Above                         = 1 and Rsi_15_Minutes_Crosses_Below                           = 1 and Adx_15_Minutes_Crosses_Below                           = 1 and Stochastic_15_Minutes_Crosses_Below                    = 1 and Ema_5_13_15_Minutes_Crosses_Below                      = 1 and Ema_13_26_15_Minutes_Crosses_Below                     = 1 and Ema_50_100_15_Minutes_Crosses_Below                    = 1 and Ema_50_200_15_Minutes_Crosses_Below                    = 1 and Ema_100_200_15_Minutes_Crosses_Below                   = 1 and Upper_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To    = 1 and Upper_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To    = 1 then 1 else null end 
 ----------------------Bearish Swing Setup-------------------------------------------------------------------
 /*--------------------Bearish Triple Screen Swing*/
 ,Bearish_Triple_Screen_Swing_Yearly                        = 0
@@ -348,7 +348,7 @@ batch_no, symbol
 ,Bearish_Single_Screen_Strong_Correction_1_Hourly          = case when Macd_1_Hourly_Crosses_Below                           = 1 and Rsi_1_Hourly_Crosses_Below                             = 1 and Adx_1_Hourly_Crosses_Below                             = 1 and Stochastic_1_Hourly_Crosses_Below                      = 1 and Ema_5_13_1_Hourly_Crosses_Below                        = 1 and Ema_13_26_1_Hourly_Crosses_Below                       = 1 and Ema_50_100_1_Hourly_Crosses_Below                      = 1 and Ema_50_200_1_Hourly_Crosses_Below                      = 1 and Ema_100_200_1_Hourly_Crosses_Below                     = 1 and Upper_Bollinger_Band3_1_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band3_1_Hourly_Greater_Than_Equal_To      = 1 and Upper_Bollinger_Band2_1_Hourly_Less_Than_Equal_To   = 1 and Lower_Bollinger_Band2_1_Hourly_Greater_Than_Equal_To      = 1 then 1 else null end 
 ,Bearish_Single_Screen_Strong_Correction_15_Minutes        = case when Macd_15_Minutes_Crosses_Below                         = 1 and Rsi_15_Minutes_Crosses_Below                           = 1 and Adx_15_Minutes_Crosses_Below                           = 1 and Stochastic_15_Minutes_Crosses_Below                    = 1 and Ema_5_13_15_Minutes_Crosses_Below                      = 1 and Ema_13_26_15_Minutes_Crosses_Below                     = 1 and Ema_50_100_15_Minutes_Crosses_Below                    = 1 and Ema_50_200_15_Minutes_Crosses_Below                    = 1 and Ema_100_200_15_Minutes_Crosses_Below                   = 1 and Upper_Bollinger_Band3_15_Minutes_Less_Than_Equal_To = 1 and Lower_Bollinger_Band3_15_Minutes_Greater_Than_Equal_To    = 1 and Upper_Bollinger_Band2_15_Minutes_Less_Than_Equal_To = 1 and Lower_Bollinger_Band2_15_Minutes_Greater_Than_Equal_To    = 1 then 1 else null end 
 ---------------------------------------------------------------------------------------------------------------------
-into dbo.Temp_Analyse_Stocks
+into #Temp_Analyse_Stocks
 from dbo.Analyse_Stocks
 where Batch_No                                             = @batch_no; 
 end
@@ -644,7 +644,7 @@ a Set
 ,Bearish_Single_Screen_Swing_Correction_1_Hourly      = b.Bearish_Single_Screen_Swing_Correction_1_Hourly
 ,Bearish_Single_Screen_Swing_Correction_15_Minutes    = b.Bearish_Single_Screen_Swing_Correction_15_Minutes
 from dbo.Analyse_Stocks a
-inner join dbo.Temp_Analyse_Stocks b 
+inner join #Temp_Analyse_Stocks b 
 on a.batch_no = b.batch_no 
 and a.symbol = b.symbol; 
 end
@@ -672,9 +672,9 @@ WHERE Batch_No = @batch_no;
 end
 end
 begin -- update trade_type.... calculated fields 
-IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Master_Screen_Name_Pivot_Values' AND TABLE_SCHEMA = 'dbo')
+IF NOT EXISTS (SELECT 1 FROM tempdb.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Master_Screen_Name_Pivot_Values' AND TABLE_SCHEMA = 'dbo')
 BEGIN 
-drop table if exists dbo.Master_Screen_Name_Values_Pivot;
+drop table if exists #Master_Screen_Name_Pivot_Values;
 ;WITH ValueSource AS 
 (   SELECT Batch_No, Screen_Names, Value
 	FROM dbo.Master_Screen_Name_Values WHERE Batch_No = @batch_num
@@ -685,13 +685,13 @@ drop table if exists dbo.Master_Screen_Name_Values_Pivot;
 		  ) AS vp
 )
 select * 
-into dbo.Master_Screen_Name_Pivot_Values
+into #Master_Screen_Name_Pivot_Values
 from ValuePivot
 ;
 end
-IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Master_Screen_Name_Pivot_Description' AND TABLE_SCHEMA = 'dbo')
+IF NOT EXISTS (SELECT 1 FROM tempdb.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Master_Screen_Name_Pivot_Description' AND TABLE_SCHEMA = 'dbo')
 Begin 
-drop table if exists dbo.Master_Screen_Name_Description_Pivot;
+drop table if exists #Master_Screen_Name_Pivot_Description;
 ;WITH DescSource AS 
 (   SELECT Batch_No, Screen_Names, Description 
 	FROM dbo.Master_Screen_Name_Values
@@ -703,7 +703,7 @@ drop table if exists dbo.Master_Screen_Name_Description_Pivot;
 		  ) AS dp
 )
 select * 
-into dbo.Master_Screen_Name_Pivot_Description
+into #Master_Screen_Name_Pivot_Description
 from DescPivot;
 end
 Update 
@@ -1000,7 +1000,7 @@ a SET Trade_Type = '' +
 FROM dbo.Analyse_Stocks a where a.Batch_No = @batch_no;
 Update 
 a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
-	('' + ';Bu-Triple-Stg-' +
+	('' + 'Bullish' + CHAR(13) + CHAR(10) + ';;Triple-Stg-' +
 	(case when a.Bullish_Triple_Screen_Strong_Yearly                  > 0 then dp.Bullish_Triple_Screen_Strong_Yearly                  + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_Quarterly               > 0 then dp.Bullish_Triple_Screen_Strong_Quarterly               + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_Monthly                 > 0 then dp.Bullish_Triple_Screen_Strong_Monthly                 + ';' else '' end) +
@@ -1009,7 +1009,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Triple_Screen_Strong_4_Hourly                > 0 then dp.Bullish_Triple_Screen_Strong_4_Hourly                + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_1_Hourly                > 0 then dp.Bullish_Triple_Screen_Strong_1_Hourly                + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_15_Minutes              > 0 then dp.Bullish_Triple_Screen_Strong_15_Minutes              + ';' else '' end) +
-	';Bu-Triple-Stg-Corr-' +
+	';Triple-Stg-Corr-' +
 	(case when a.Bullish_Triple_Screen_Strong_Correction_Yearly       > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Yearly       + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_Correction_Quarterly    > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_Correction_Monthly      > 0 then dp.Bullish_Triple_Screen_Strong_Correction_Monthly      + ';' else '' end) +
@@ -1018,7 +1018,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Triple_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bullish_Triple_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bullish_Triple_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bullish_Triple_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
-	';Bu-Double-Stg-' + 
+	';Double-Stg-' + 
 	(case when a.Bullish_Double_Screen_Strong_Yearly                  > 0 then dp.Bullish_Double_Screen_Strong_Yearly                  + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_Quarterly               > 0 then dp.Bullish_Double_Screen_Strong_Quarterly               + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_Monthly                 > 0 then dp.Bullish_Double_Screen_Strong_Monthly                 + ';' else '' end) +
@@ -1027,7 +1027,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Double_Screen_Strong_4_Hourly                > 0 then dp.Bullish_Double_Screen_Strong_4_Hourly                + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_1_Hourly                > 0 then dp.Bullish_Double_Screen_Strong_1_Hourly                + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_15_Minutes              > 0 then dp.Bullish_Double_Screen_Strong_15_Minutes              + ';' else '' end) +
-	';Bu-Double-Stg-Corr-' + 
+	';Double-Stg-Corr-' + 
 	(case when a.Bullish_Double_Screen_Strong_Correction_Yearly       > 0 then dp.Bullish_Double_Screen_Strong_Correction_Yearly       + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_Correction_Quarterly    > 0 then dp.Bullish_Double_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_Correction_Monthly      > 0 then dp.Bullish_Double_Screen_Strong_Correction_Monthly      + ';' else '' end) +
@@ -1036,7 +1036,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Double_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bullish_Double_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bullish_Double_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bullish_Double_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
-	';Bu-Single-Stg-' +
+	';Single-Stg-' +
 	(case when a.Bullish_Single_Screen_Strong_Yearly                  > 0 then dp.Bullish_Single_Screen_Strong_Yearly                  + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_Quarterly               > 0 then dp.Bullish_Single_Screen_Strong_Quarterly               + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_Monthly                 > 0 then dp.Bullish_Single_Screen_Strong_Monthly                 + ';' else '' end) +
@@ -1045,7 +1045,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Single_Screen_Strong_4_Hourly                > 0 then dp.Bullish_Single_Screen_Strong_4_Hourly                + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_1_Hourly                > 0 then dp.Bullish_Single_Screen_Strong_1_Hourly                + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_15_Minutes              > 0 then dp.Bullish_Single_Screen_Strong_15_Minutes              + ';' else '' end) +
-	';Bu-Single-Stg-Corr-' +
+	';Single-Stg-Corr-' +
 	(case when a.Bullish_Single_Screen_Strong_Correction_Yearly       > 0 then dp.Bullish_Single_Screen_Strong_Correction_Yearly       + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_Correction_Quarterly    > 0 then dp.Bullish_Single_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_Correction_Monthly      > 0 then dp.Bullish_Single_Screen_Strong_Correction_Monthly      + ';' else '' end) +
@@ -1054,7 +1054,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Single_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bullish_Single_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bullish_Single_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bullish_Single_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
-	';Bu-Triple-Mom-' +
+	';Triple-Mom-' +
 	(case when a.Bullish_Triple_Screen_Momentum_Yearly                > 0 then dp.Bullish_Triple_Screen_Momentum_Yearly                + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_Quarterly             > 0 then dp.Bullish_Triple_Screen_Momentum_Quarterly             + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_Monthly               > 0 then dp.Bullish_Triple_Screen_Momentum_Monthly               + ';' else '' end) +
@@ -1063,7 +1063,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Triple_Screen_Momentum_4_Hourly              > 0 then dp.Bullish_Triple_Screen_Momentum_4_Hourly              + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_1_Hourly              > 0 then dp.Bullish_Triple_Screen_Momentum_1_Hourly              + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_15_Minutes            > 0 then dp.Bullish_Triple_Screen_Momentum_15_Minutes            + ';' else '' end) +
-	';Bu-Triple-Mom-Corr-' +
+	';Triple-Mom-Corr-' +
 	(case when a.Bullish_Triple_Screen_Momentum_Correction_Yearly     > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_Correction_Monthly    > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
@@ -1072,7 +1072,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Triple_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bullish_Triple_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
-	';Bu-Double-Mom-' +
+	';Double-Mom-' +
 	(case when a.Bullish_Double_Screen_Momentum_Yearly                > 0 then dp.Bullish_Double_Screen_Momentum_Yearly                + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_Quarterly             > 0 then dp.Bullish_Double_Screen_Momentum_Quarterly             + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_Monthly               > 0 then dp.Bullish_Double_Screen_Momentum_Monthly               + ';' else '' end) +
@@ -1081,7 +1081,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Double_Screen_Momentum_4_Hourly              > 0 then dp.Bullish_Double_Screen_Momentum_4_Hourly              + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_1_Hourly              > 0 then dp.Bullish_Double_Screen_Momentum_1_Hourly              + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_15_Minutes            > 0 then dp.Bullish_Double_Screen_Momentum_15_Minutes            + ';' else '' end) +
-	';Bu-Double-Mom-Corr-' +
+	';Double-Mom-Corr-' +
 	(case when a.Bullish_Double_Screen_Momentum_Correction_Yearly     > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_Correction_Monthly    > 0 then dp.Bullish_Double_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
@@ -1090,7 +1090,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Double_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bullish_Double_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bullish_Double_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bullish_Double_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
-	';Bu-Single-Mom-' +
+	';Single-Mom-' +
 	(case when a.Bullish_Single_Screen_Momentum_Yearly                > 0 then dp.Bullish_Single_Screen_Momentum_Yearly                + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_Quarterly             > 0 then dp.Bullish_Single_Screen_Momentum_Quarterly             + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_Monthly               > 0 then dp.Bullish_Single_Screen_Momentum_Monthly               + ';' else '' end) +
@@ -1099,7 +1099,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Single_Screen_Momentum_4_Hourly              > 0 then dp.Bullish_Single_Screen_Momentum_4_Hourly              + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_1_Hourly              > 0 then dp.Bullish_Single_Screen_Momentum_1_Hourly              + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_15_Minutes            > 0 then dp.Bullish_Single_Screen_Momentum_15_Minutes            + ';' else '' end) +
-	';Bu-Single-Mom-Corr-' +
+	';Single-Mom-Corr-' +
 	(case when a.Bullish_Single_Screen_Momentum_Correction_Yearly     > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_Correction_Monthly    > 0 then dp.Bullish_Single_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
@@ -1108,7 +1108,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Single_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bullish_Single_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bullish_Single_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bullish_Single_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
-	';Bu-Triple-Swg-' +
+	';Triple-Swg-' +
 	(case when a.Bullish_Triple_Screen_Swing_Yearly                   > 0 then dp.Bullish_Triple_Screen_Swing_Yearly                   + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_Quarterly                > 0 then dp.Bullish_Triple_Screen_Swing_Quarterly                + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_Monthly                  > 0 then dp.Bullish_Triple_Screen_Swing_Monthly                  + ';' else '' end) +
@@ -1117,7 +1117,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Triple_Screen_Swing_4_Hourly                 > 0 then dp.Bullish_Triple_Screen_Swing_4_Hourly                 + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_1_Hourly                 > 0 then dp.Bullish_Triple_Screen_Swing_1_Hourly                 + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_15_Minutes               > 0 then dp.Bullish_Triple_Screen_Swing_15_Minutes               + ';' else '' end) +
-	';Bu-Triple-Swg-Corr-' +
+	';Triple-Swg-Corr-' +
 	(case when a.Bullish_Triple_Screen_Swing_Correction_Yearly        > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Yearly        + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_Correction_Quarterly     > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_Correction_Monthly       > 0 then dp.Bullish_Triple_Screen_Swing_Correction_Monthly       + ';' else '' end) +
@@ -1126,7 +1126,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Triple_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bullish_Triple_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bullish_Triple_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
 	(case when a.Bullish_Triple_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bullish_Triple_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
-	';Bu-Double-Swg-Corr-' +
+	';Double-Swg-' +
 	(case when a.Bullish_Double_Screen_Swing_Yearly                   > 0 then dp.Bullish_Double_Screen_Swing_Yearly                   + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_Quarterly                > 0 then dp.Bullish_Double_Screen_Swing_Quarterly                + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_Monthly                  > 0 then dp.Bullish_Double_Screen_Swing_Monthly                  + ';' else '' end) +
@@ -1135,7 +1135,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Double_Screen_Swing_4_Hourly                 > 0 then dp.Bullish_Double_Screen_Swing_4_Hourly                 + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_1_Hourly                 > 0 then dp.Bullish_Double_Screen_Swing_1_Hourly                 + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_15_Minutes               > 0 then dp.Bullish_Double_Screen_Swing_15_Minutes               + ';' else '' end) +
-	';Bu-Double-Swg-Corr-' +
+	';Double-Swg-Corr-' +
 	(case when a.Bullish_Double_Screen_Swing_Correction_Yearly        > 0 then dp.Bullish_Double_Screen_Swing_Correction_Yearly        + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_Correction_Quarterly     > 0 then dp.Bullish_Double_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_Correction_Monthly       > 0 then dp.Bullish_Double_Screen_Swing_Correction_Monthly       + ';' else '' end) +
@@ -1144,7 +1144,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Double_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bullish_Double_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bullish_Double_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
 	(case when a.Bullish_Double_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bullish_Double_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
-	';Bu-Single-Swg-' +
+	';Single-Swg-' +
 	(case when a.Bullish_Single_Screen_Swing_Yearly                   > 0 then dp.Bullish_Single_Screen_Swing_Yearly                   + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_Quarterly                > 0 then dp.Bullish_Single_Screen_Swing_Quarterly                + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_Monthly                  > 0 then dp.Bullish_Single_Screen_Swing_Monthly                  + ';' else '' end) +
@@ -1153,7 +1153,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Single_Screen_Swing_4_Hourly                 > 0 then dp.Bullish_Single_Screen_Swing_4_Hourly                 + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_1_Hourly                 > 0 then dp.Bullish_Single_Screen_Swing_1_Hourly                 + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_15_Minutes               > 0 then dp.Bullish_Single_Screen_Swing_15_Minutes               + ';' else '' end) +
-	';Bu-Single-Swg-Corr-' +
+	';Single-Swg-Corr-' +
 	(case when a.Bullish_Single_Screen_Swing_Correction_Yearly        > 0 then dp.Bullish_Single_Screen_Swing_Correction_Yearly        + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_Correction_Quarterly     > 0 then dp.Bullish_Single_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_Correction_Monthly       > 0 then dp.Bullish_Single_Screen_Swing_Correction_Monthly       + ';' else '' end) +
@@ -1162,7 +1162,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bullish_Single_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bullish_Single_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bullish_Single_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
 	(case when a.Bullish_Single_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bullish_Single_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
-	+ ';' + CHAR(13) + CHAR(10) + ';Be-Triple-Stg-' +
+	+ ';' + CHAR(13) + CHAR(10) + 'Bearish' + CHAR(13) + CHAR(10) + ';;Triple-Stg-' +
 	(case when a.Bearish_Triple_Screen_Strong_Yearly                  > 0 then dp.Bearish_Triple_Screen_Strong_Yearly                  + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_Quarterly               > 0 then dp.Bearish_Triple_Screen_Strong_Quarterly               + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_Monthly                 > 0 then dp.Bearish_Triple_Screen_Strong_Monthly                 + ';' else '' end) +
@@ -1171,7 +1171,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Triple_Screen_Strong_4_Hourly                > 0 then dp.Bearish_Triple_Screen_Strong_4_Hourly                + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_1_Hourly                > 0 then dp.Bearish_Triple_Screen_Strong_1_Hourly                + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_15_Minutes              > 0 then dp.Bearish_Triple_Screen_Strong_15_Minutes              + ';' else '' end) +
-	';Be-Triple-Stg-Corr-' +
+	';Triple-Stg-Corr-' +
 	(case when a.Bearish_Triple_Screen_Strong_Correction_Yearly       > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Yearly       + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_Correction_Quarterly    > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_Correction_Monthly      > 0 then dp.Bearish_Triple_Screen_Strong_Correction_Monthly      + ';' else '' end) +
@@ -1180,7 +1180,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Triple_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bearish_Triple_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bearish_Triple_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bearish_Triple_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
-	';Be-Double-Stg-' +
+	';Double-Stg-' +
 	(case when a.Bearish_Double_Screen_Strong_Yearly                  > 0 then dp.Bearish_Double_Screen_Strong_Yearly                  + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_Quarterly               > 0 then dp.Bearish_Double_Screen_Strong_Quarterly               + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_Monthly                 > 0 then dp.Bearish_Double_Screen_Strong_Monthly                 + ';' else '' end) +
@@ -1189,7 +1189,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Double_Screen_Strong_4_Hourly                > 0 then dp.Bearish_Double_Screen_Strong_4_Hourly                + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_1_Hourly                > 0 then dp.Bearish_Double_Screen_Strong_1_Hourly                + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_15_Minutes              > 0 then dp.Bearish_Double_Screen_Strong_15_Minutes              + ';' else '' end) +
-	';Be-Double-Stg-Corr-' +
+	';Double-Stg-Corr-' +
 	(case when a.Bearish_Double_Screen_Strong_Correction_Yearly       > 0 then dp.Bearish_Double_Screen_Strong_Correction_Yearly       + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_Correction_Quarterly    > 0 then dp.Bearish_Double_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_Correction_Monthly      > 0 then dp.Bearish_Double_Screen_Strong_Correction_Monthly      + ';' else '' end) +
@@ -1198,7 +1198,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Double_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bearish_Double_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bearish_Double_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bearish_Double_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
-	';Be-Single-Stg-' +
+	';Single-Stg-' +
 	(case when a.Bearish_Single_Screen_Strong_Yearly                  > 0 then dp.Bearish_Single_Screen_Strong_Yearly                  + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_Quarterly               > 0 then dp.Bearish_Single_Screen_Strong_Quarterly               + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_Monthly                 > 0 then dp.Bearish_Single_Screen_Strong_Monthly                 + ';' else '' end) +
@@ -1207,7 +1207,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Single_Screen_Strong_4_Hourly                > 0 then dp.Bearish_Single_Screen_Strong_4_Hourly                + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_1_Hourly                > 0 then dp.Bearish_Single_Screen_Strong_1_Hourly                + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_15_Minutes              > 0 then dp.Bearish_Single_Screen_Strong_15_Minutes              + ';' else '' end) +
-	';Be-Single-Stg-Corr-' +
+	';Single-Stg-Corr-' +
 	(case when a.Bearish_Single_Screen_Strong_Correction_Yearly       > 0 then dp.Bearish_Single_Screen_Strong_Correction_Yearly       + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_Correction_Quarterly    > 0 then dp.Bearish_Single_Screen_Strong_Correction_Quarterly    + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_Correction_Monthly      > 0 then dp.Bearish_Single_Screen_Strong_Correction_Monthly      + ';' else '' end) +
@@ -1216,7 +1216,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Single_Screen_Strong_Correction_4_Hourly     > 0 then dp.Bearish_Single_Screen_Strong_Correction_4_Hourly     + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_Correction_1_Hourly     > 0 then dp.Bearish_Single_Screen_Strong_Correction_1_Hourly     + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Strong_Correction_15_Minutes   > 0 then dp.Bearish_Single_Screen_Strong_Correction_15_Minutes   + ';' else '' end) +
-	';Be-Triple-Mom-' +
+	';Triple-Mom-' +
 	(case when a.Bearish_Triple_Screen_Momentum_Yearly                > 0 then dp.Bearish_Triple_Screen_Momentum_Yearly                + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_Quarterly             > 0 then dp.Bearish_Triple_Screen_Momentum_Quarterly             + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_Monthly               > 0 then dp.Bearish_Triple_Screen_Momentum_Monthly               + ';' else '' end) +
@@ -1225,7 +1225,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Triple_Screen_Momentum_4_Hourly              > 0 then dp.Bearish_Triple_Screen_Momentum_4_Hourly              + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_1_Hourly              > 0 then dp.Bearish_Triple_Screen_Momentum_1_Hourly              + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_15_Minutes            > 0 then dp.Bearish_Triple_Screen_Momentum_15_Minutes            + ';' else '' end) +
-	';Be-Triple-Mom-Corr-' +
+	';Triple-Mom-Corr-' +
 	(case when a.Bearish_Triple_Screen_Momentum_Correction_Yearly     > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_Correction_Monthly    > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
@@ -1234,7 +1234,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Triple_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bearish_Triple_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
-	';Be-Double-Mom-' +
+	';Double-Mom-' +
 	(case when a.Bearish_Double_Screen_Momentum_Yearly                > 0 then dp.Bearish_Double_Screen_Momentum_Yearly                + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_Quarterly             > 0 then dp.Bearish_Double_Screen_Momentum_Quarterly             + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_Monthly               > 0 then dp.Bearish_Double_Screen_Momentum_Monthly               + ';' else '' end) +
@@ -1243,7 +1243,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Double_Screen_Momentum_4_Hourly              > 0 then dp.Bearish_Double_Screen_Momentum_4_Hourly              + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_1_Hourly              > 0 then dp.Bearish_Double_Screen_Momentum_1_Hourly              + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_15_Minutes            > 0 then dp.Bearish_Double_Screen_Momentum_15_Minutes            + ';' else '' end) +
-	';Be-Double-Mom-Corr-' +
+	';Double-Mom-Corr-' +
 	(case when a.Bearish_Double_Screen_Momentum_Correction_Yearly     > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_Correction_Monthly    > 0 then dp.Bearish_Double_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
@@ -1252,7 +1252,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Double_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bearish_Double_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bearish_Double_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bearish_Double_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
-	';Be-Single-Mom-' +
+	';Single-Mom-' +
 	(case when a.Bearish_Single_Screen_Momentum_Yearly                > 0 then dp.Bearish_Single_Screen_Momentum_Yearly                + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_Quarterly             > 0 then dp.Bearish_Single_Screen_Momentum_Quarterly             + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_Monthly               > 0 then dp.Bearish_Single_Screen_Momentum_Monthly               + ';' else '' end) +
@@ -1261,7 +1261,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Single_Screen_Momentum_4_Hourly              > 0 then dp.Bearish_Single_Screen_Momentum_4_Hourly              + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_1_Hourly              > 0 then dp.Bearish_Single_Screen_Momentum_1_Hourly              + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_15_Minutes            > 0 then dp.Bearish_Single_Screen_Momentum_15_Minutes            + ';' else '' end) +
-	';Be-Single-Mom-Corr-' +
+	';Single-Mom-Corr-' +
 	(case when a.Bearish_Single_Screen_Momentum_Correction_Yearly     > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Yearly     + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_Correction_Quarterly  > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Quarterly  + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_Correction_Monthly    > 0 then dp.Bearish_Single_Screen_Momentum_Correction_Monthly    + ';' else '' end) +
@@ -1270,7 +1270,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Single_Screen_Momentum_Correction_4_Hourly   > 0 then dp.Bearish_Single_Screen_Momentum_Correction_4_Hourly   + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_Correction_1_Hourly   > 0 then dp.Bearish_Single_Screen_Momentum_Correction_1_Hourly   + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Momentum_Correction_15_Minutes > 0 then dp.Bearish_Single_Screen_Momentum_Correction_15_Minutes + ';' else '' end) +
-	';Be-Triple-Swg-' +
+	';Triple-Swg-' +
 	(case when a.Bearish_Triple_Screen_Swing_Yearly                   > 0 then dp.Bearish_Triple_Screen_Swing_Yearly                   + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_Quarterly                > 0 then dp.Bearish_Triple_Screen_Swing_Quarterly                + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_Monthly                  > 0 then dp.Bearish_Triple_Screen_Swing_Monthly                  + ';' else '' end) +
@@ -1279,7 +1279,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Triple_Screen_Swing_4_Hourly                 > 0 then dp.Bearish_Triple_Screen_Swing_4_Hourly                 + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_1_Hourly                 > 0 then dp.Bearish_Triple_Screen_Swing_1_Hourly                 + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_15_Minutes               > 0 then dp.Bearish_Triple_Screen_Swing_15_Minutes               + ';' else '' end) +
-	';Be-Triple-Swg-Corr-' +
+	';Triple-Swg-Corr-' +
 	(case when a.Bearish_Triple_Screen_Swing_Correction_Yearly        > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Yearly        + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_Correction_Quarterly     > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_Correction_Monthly       > 0 then dp.Bearish_Triple_Screen_Swing_Correction_Monthly       + ';' else '' end) +
@@ -1288,7 +1288,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Triple_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bearish_Triple_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bearish_Triple_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
 	(case when a.Bearish_Triple_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bearish_Triple_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
-	';Be-Double-Swg-' +
+	';Double-Swg-' +
 	(case when a.Bearish_Double_Screen_Swing_Yearly                   > 0 then dp.Bearish_Double_Screen_Swing_Yearly                   + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_Quarterly                > 0 then dp.Bearish_Double_Screen_Swing_Quarterly                + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_Monthly                  > 0 then dp.Bearish_Double_Screen_Swing_Monthly                  + ';' else '' end) +
@@ -1297,7 +1297,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Double_Screen_Swing_4_Hourly                 > 0 then dp.Bearish_Double_Screen_Swing_4_Hourly                 + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_1_Hourly                 > 0 then dp.Bearish_Double_Screen_Swing_1_Hourly                 + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_15_Minutes               > 0 then dp.Bearish_Double_Screen_Swing_15_Minutes               + ';' else '' end) +
-	';Be-Double-Swg-Corr-' +
+	';Double-Swg-Corr-' +
 	(case when a.Bearish_Double_Screen_Swing_Correction_Yearly        > 0 then dp.Bearish_Double_Screen_Swing_Correction_Yearly        + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_Correction_Quarterly     > 0 then dp.Bearish_Double_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_Correction_Monthly       > 0 then dp.Bearish_Double_Screen_Swing_Correction_Monthly       + ';' else '' end) +
@@ -1306,7 +1306,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Double_Screen_Swing_Correction_4_Hourly      > 0 then dp.Bearish_Double_Screen_Swing_Correction_4_Hourly      + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bearish_Double_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
 	(case when a.Bearish_Double_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bearish_Double_Screen_Swing_Correction_15_Minutes    + ';' else '' end) +
-	';Be-Single-Swg-' +
+	';Single-Swg-' +
 	(case when a.Bearish_Single_Screen_Swing_Yearly                   > 0 then dp.Bearish_Single_Screen_Swing_Yearly                   + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Swing_Quarterly                > 0 then dp.Bearish_Single_Screen_Swing_Quarterly                + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Swing_Monthly                  > 0 then dp.Bearish_Single_Screen_Swing_Monthly                  + ';' else '' end) +
@@ -1315,7 +1315,7 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Single_Screen_Swing_4_Hourly                 > 0 then dp.Bearish_Single_Screen_Swing_4_Hourly                 + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Swing_1_Hourly                 > 0 then dp.Bearish_Single_Screen_Swing_1_Hourly                 + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Swing_15_Minutes               > 0 then dp.Bearish_Single_Screen_Swing_15_Minutes               + ';' else '' end) +
-	';Be-Single-Swg-Corr-' +
+	';Single-Swg-Corr-' +
 	(case when a.Bearish_Single_Screen_Swing_Correction_Yearly        > 0 then dp.Bearish_Single_Screen_Swing_Correction_Yearly        + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Swing_Correction_Quarterly     > 0 then dp.Bearish_Single_Screen_Swing_Correction_Quarterly     + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Swing_Correction_Monthly       > 0 then dp.Bearish_Single_Screen_Swing_Correction_Monthly       + ';' else '' end) +
@@ -1325,9 +1325,9 @@ a set Trade_Type_Details = replace(replace(replace(replace(replace(replace(repla
 	(case when a.Bearish_Single_Screen_Swing_Correction_1_Hourly      > 0 then dp.Bearish_Single_Screen_Swing_Correction_1_Hourly      + ';' else '' end) +
 	(case when a.Bearish_Single_Screen_Swing_Correction_15_Minutes    > 0 then dp.Bearish_Single_Screen_Swing_Correction_15_Minutes    + ';' else '' end) + 
 	';')
-	,'Bu-Tri-Stg-Corr-',''),'Bu-Tri-Stg-',''),'Bu-Dbl-Stg-Corr-',''),'Bu-Dbl-Stg-',''),'Bu-Sgl-Stg-Corr-',''),'Bu-Sgl-Stg-',''),'Bu-Tri-Mom-Corr-',''),'Bu-Tri-Mom-',''),'Bu-Dbl-Mom-Corr-',''),'Bu-Dbl-Mom-',''),'Bu-Sgl-Mom-Corr-',''),'Bu-Sgl-Mom-',''),'Bu-Tri-Swg-Corr-',''),'Bu-Tri-Swg-',''),'Bu-Dbl-Swg-Corr-',''),'Bu-Dbl-Swg-',''),'Bu-Sgl-Swg-Corr-',''),'Bu-Sgl-Swg-',''),'Be-Tri-Stg-Corr-',''),'Be-Tri-Stg-',''),'Be-Dbl-Stg-Corr-',''),'Be-Dbl-Stg-',''),'Be-Sgl-Stg-Corr-',''),'Be-Sgl-Stg-',''),'Be-Tri-Mom-Corr-',''),'Be-Tri-Mom-',''),'Be-Dbl-Mom-Corr-',''),'Be-Dbl-Mom-',''),'Be-Sgl-Mom-Corr-',''),'Be-Sgl-Mom-',''),'Be-Tri-Swg-Corr-',''),'Be-Tri-Swg-',''),'Be-Dbl-Swg-Corr-',''),'Be-Dbl-Swg-',''),'Be-Sgl-Swg-Corr-',''),'Be-Sgl-Swg-',''),'Bu-Triple-Stg-;',''),'Bu-Triple-Stg-Corr-;',''),'Bu-Double-Stg-;',''),'Bu-Double-Stg-Corr-;',''),'Bu-Single-Stg-;',''),'Bu-Single-Stg-Corr-;',''),'Bu-Triple-Mom-;',''),'Bu-Triple-Mom-Corr-;',''),'Bu-Double-Mom-;',''),'Bu-Double-Mom-Corr-;',''),'Bu-Single-Mom-;',''),'Bu-Single-Mom-Corr-;',''),'Bu-Triple-Swg-;',''),'Bu-Triple-Swg-Corr-;',''),'Bu-Double-Swg-Corr-;',''),'Bu-Double-Swg-Corr-;',''),'Bu-Single-Swg-;',''),'Bu-Single-Swg-Corr-;',''),'Be-Triple-Stg-;',''),'Be-Triple-Stg-Corr-;',''),'Be-Double-Stg-;',''),'Be-Double-Stg-Corr-;',''),'Be-Single-Stg-;',''),'Be-Single-Stg-Corr-;',''),'Be-Triple-Mom-;',''),'Be-Triple-Mom-Corr-;',''),'Be-Double-Mom-;',''),'Be-Double-Mom-Corr-;',''),'Be-Single-Mom-;',''),'Be-Single-Mom-Corr-;',''),'Be-Triple-Swg-;',''),'Be-Triple-Swg-Corr-;',''),'Be-Double-Swg-;',''),'Be-Double-Swg-Corr-;',''),'Be-Single-Swg-;',''),'Be-Single-Swg-Corr-;',''),';;',';')
+	,'Bu-Tri-Stg-Corr-',''),'Bu-Tri-Stg-',''),'Bu-Dbl-Stg-Corr-',''),'Bu-Dbl-Stg-',''),'Bu-Sgl-Stg-Corr-',''),'Bu-Sgl-Stg-',''),'Bu-Tri-Mom-Corr-',''),'Bu-Tri-Mom-',''),'Bu-Dbl-Mom-Corr-',''),'Bu-Dbl-Mom-',''),'Bu-Sgl-Mom-Corr-',''),'Bu-Sgl-Mom-',''),'Bu-Tri-Swg-Corr-',''),'Bu-Tri-Swg-',''),'Bu-Dbl-Swg-Corr-',''),'Bu-Dbl-Swg-',''),'Bu-Sgl-Swg-Corr-',''),'Bu-Sgl-Swg-',''),'Be-Tri-Stg-Corr-',''),'Be-Tri-Stg-',''),'Be-Dbl-Stg-Corr-',''),'Be-Dbl-Stg-',''),'Be-Sgl-Stg-Corr-',''),'Be-Sgl-Stg-',''),'Be-Tri-Mom-Corr-',''),'Be-Tri-Mom-',''),'Be-Dbl-Mom-Corr-',''),'Be-Dbl-Mom-',''),'Be-Sgl-Mom-Corr-',''),'Be-Sgl-Mom-',''),'Be-Tri-Swg-Corr-',''),'Be-Tri-Swg-',''),'Be-Dbl-Swg-Corr-',''),'Be-Dbl-Swg-',''),'Be-Sgl-Swg-Corr-',''),'Be-Sgl-Swg-',''),'Triple-Stg-;',''),'Triple-Stg-Corr-;',''),'Double-Stg-;',''),'Double-Stg-Corr-;',''),'Single-Stg-;',''),'Single-Stg-Corr-;',''),'Triple-Mom-;',''),'Triple-Mom-Corr-;',''),'Double-Mom-;',''),'Double-Mom-Corr-;',''),'Single-Mom-;',''),'Single-Mom-Corr-;',''),'Triple-Swg-;',''),'Triple-Swg-Corr-;',''),'Double-Swg-;',''),'Double-Swg-Corr-;',''),'Single-Swg-;',''),'Single-Swg-Corr-;',''),'Triple-Stg-;',''),'Triple-Stg-Corr-;',''),'Double-Stg-;',''),'Double-Stg-Corr-;',''),'Single-Stg-;',''),'Single-Stg-Corr-;',''),'Triple-Mom-;',''),'Triple-Mom-Corr-;',''),'Double-Mom-;',''),'Double-Mom-Corr-;',''),'Single-Mom-;',''),'Single-Mom-Corr-;',''),'Triple-Swg-;',''),'Triple-Swg-Corr-;',''),'Double-Swg-;',''),'Double-Swg-Corr-;',''),'Single-Swg-;',''),'Single-Swg-Corr-;',''),';;',';')
 FROM dbo.Analyse_Stocks a 
-JOIN Master_Screen_Name_Pivot_Description dp  
+JOIN #Master_Screen_Name_Pivot_Description dp  
 ON dp.Batch_No = @batch_num and a.Batch_No = @batch_no;
 Update 
 a set Trade_Type_Details_Sum = 0 + 
@@ -1913,7 +1913,7 @@ Trade_Type_Bearish_Sum = 0 +
 	(case when a.Bearish_Single_Screen_Swing_Correction_15_Minutes    > 0 then vp.Bearish_Single_Screen_Swing_Correction_15_Minutes    else 0 end) +
 	0
 FROM dbo.Analyse_Stocks a 
-JOIN Master_Screen_Name_Pivot_Values vp 
+JOIN #Master_Screen_Name_Pivot_Values vp 
 ON vp.Batch_No = @batch_num and a.Batch_No = @batch_no;
 end 
 begin -- update all other calculated fields for sum and length 
@@ -1921,12 +1921,12 @@ update a set
  Trade_Type_Length = len(a.Trade_Type)
 ,Trade_Type_Details_Length = len(Trade_Type_Details)
 ,trade_view = (case
-	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 'Bullish'
-	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 'Bearish'
+	when abs(isnull(Trade_Type_Bullish_Sum,0)) - abs(isnull(Trade_Type_Bearish_Sum,0)) > 0 then 'Bullish'
+	when abs(isnull(Trade_Type_Bullish_Sum,0)) - abs(isnull(Trade_Type_Bearish_Sum,0)) < 0 then 'Bearish'
 	else NULL end)
 ,Trade_View_Order = (case
-	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) > 0 then 0
-	when isnull(Trade_Type_Bullish_Sum,0) - isnull(Trade_Type_Bearish_Sum,0) < 0 then 1
+	WHEN abs(isnull(Trade_Type_Bullish_Sum,0)) - abs(isnull(Trade_Type_Bearish_Sum,0)) > 0 then 0
+	when abs(isnull(Trade_Type_Bullish_Sum,0)) - abs(isnull(Trade_Type_Bearish_Sum,0)) < 0 then 1
 	else NULL end)
 ,Other_Setups = replace(replace(replace(replace(replace(
 	('Vol_Shckr-' + 

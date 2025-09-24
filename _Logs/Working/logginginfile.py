@@ -24,3 +24,5 @@ def setup_rotating_logger(script_name, max_bytes=1024*1024, backup_count=5):
 # Example usage
 logger = setup_rotating_logger(__file__)
 logger.info("Script1 started execution")
+
+

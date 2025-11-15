@@ -5836,4 +5836,39 @@ SELECT * FROM [dbo].[temp_sheet1]
 SELECT * FROM [_TS].[Shares] WHERE sno IS NOT NULL
 
 end
+begin
+
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_yearly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_quarterly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_monthly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_weekly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_daily_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_4_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_1_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_200_EMI_15_minutes_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_yearly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_quarterly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_monthly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_weekly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_daily_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_4_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_1_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_200_EMI_15_minutes_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_yearly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_quarterly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_monthly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_weekly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_daily_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_4_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_1_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_above_50_EMI_15_minutes_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_yearly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_quarterly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_monthly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_weekly_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_daily_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_4_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_1_hour_setup   bit;
+alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_15_minutes_setup   bit;
+end
 rollback transaction

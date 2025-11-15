@@ -1928,7 +1928,7 @@ update a set
 	WHEN abs(isnull(Trade_Type_Bullish_Sum,0)) - abs(isnull(Trade_Type_Bearish_Sum,0)) > 0 then 0
 	when abs(isnull(Trade_Type_Bullish_Sum,0)) - abs(isnull(Trade_Type_Bearish_Sum,0)) < 0 then 1
 	else NULL end)
-,Other_Setups = replace(replace(replace(replace(replace(
+,Other_Setups = replace(replace(replace(replace(replace(replace(replace(replace(replace(
 	('Vol_Shckr-' + 
 	(case when volume_yearly_shockers                 = 1 then 'Y;'	 else '' end) + 
 	(case when volume_quarterly_shockers              = 1 then 'Q;'	 else '' end) + 
@@ -1973,8 +1973,44 @@ update a set
 	(case when Double_Top_with_RSI_Daily_setup             = 1 then 'D;'  else '' end) + 
 	(case when Double_Top_with_RSI_4_Hourly_setup          = 1 then '4H;' else '' end) + 
 	(case when Double_Top_with_RSI_1_Hourly_setup          = 1 then '1H;' else '' end) + 
-	(case when Double_Top_with_RSI_15_Minutes_setup        = 1 then '15;' else '' end) + 	
-	';'),'Vol_Shckr-;',''),'dbl-bttm-;',''),'dbl-top-;',''),'Ell-4-cmp-;',''),'dbl-top-RSI-;','')
+	(case when Double_Top_with_RSI_15_Minutes_setup        = 1 then '15;' else '' end) +
+	';price-abv-200-emi-' +
+	(case when Price_above_200_EMI_yearly_setup       = 1 then 'Y;' else '' end) + 
+	(case when Price_above_200_EMI_quarterly_setup    = 1 then 'Q;' else '' end) + 
+	(case when Price_above_200_EMI_monthly_setup      = 1 then 'M;' else '' end) + 
+	(case when Price_above_200_EMI_weekly_setup       = 1 then 'W;' else '' end) + 
+	(case when Price_above_200_EMI_daily_setup        = 1 then 'D;' else '' end) + 
+	(case when Price_above_200_EMI_4_hourly_setup       = 1 then '4H;' else '' end) + 
+	(case when Price_above_200_EMI_1_hourly_setup       = 1 then '1H;' else '' end) + 
+	(case when Price_above_200_EMI_15_minutes_setup   = 1 then '15M;' else '' end) + 
+	';price-blw-200-emi-' +
+	(case when Price_below_200_EMI_yearly_setup       = 1 then 'Y;' else '' end) + 
+	(case when Price_below_200_EMI_quarterly_setup    = 1 then 'Q;' else '' end) + 
+	(case when Price_below_200_EMI_monthly_setup      = 1 then 'M;' else '' end) + 
+	(case when Price_below_200_EMI_weekly_setup       = 1 then 'W;' else '' end) + 
+	(case when Price_below_200_EMI_daily_setup        = 1 then 'D;' else '' end) + 
+	(case when Price_below_200_EMI_4_hourly_setup       = 1 then '4H;' else '' end) + 
+	(case when Price_below_200_EMI_1_hourly_setup       = 1 then '1H;' else '' end) + 
+	(case when Price_below_200_EMI_15_minutes_setup   = 1 then '15H;' else '' end) + 
+	';price-abv-50-emi-' +
+	(case when Price_above_50_EMI_yearly_setup        = 1 then 'Y;' else '' end) + 
+	(case when Price_above_50_EMI_quarterly_setup     = 1 then 'Q;' else '' end) + 
+	(case when Price_above_50_EMI_monthly_setup       = 1 then 'M;' else '' end) + 
+	(case when Price_above_50_EMI_weekly_setup        = 1 then 'W;' else '' end) + 
+	(case when Price_above_50_EMI_daily_setup         = 1 then 'D;' else '' end) + 
+	(case when Price_above_50_EMI_4_hourly_setup        = 1 then '4H;' else '' end) + 
+	(case when Price_above_50_EMI_1_hourly_setup        = 1 then '1H;' else '' end) + 
+	(case when Price_above_50_EMI_15_minutes_setup    = 1 then '15M;' else '' end) + 
+	';price-blw-50-emi-' +
+	(case when Price_below_50_EMI_yearly_setup        = 1 then 'Y;' else '' end) + 
+	(case when Price_below_50_EMI_quarterly_setup     = 1 then 'Q;' else '' end) + 
+	(case when Price_below_50_EMI_monthly_setup       = 1 then 'M;' else '' end) + 
+	(case when Price_below_50_EMI_weekly_setup        = 1 then 'W;' else '' end) + 
+	(case when Price_below_50_EMI_daily_setup         = 1 then 'D;' else '' end) + 
+	(case when Price_below_50_EMI_4_hourly_setup        = 1 then '4H;' else '' end) + 
+	(case when Price_below_50_EMI_1_hourly_setup        = 1 then '1H;' else '' end) + 
+	(case when Price_below_50_EMI_15_minutes_setup    = 1 then '15M;' else '' end) + 
+	';'),'Vol_Shckr-;',''),'dbl-bttm-;',''),'dbl-top-;',''),'Ell-4-cmp-;',''),'dbl-top-RSI-;',''),';price-abv-200-emi-;',''),';price-blw-200-emi-;',''),';price-abv-50-emi-;',''),';price-blw-50-emi-;','')
 ,Volume_Shockers_Sum = 0 +
 	(case when volume_yearly_shockers     = 1 then 525600 else 0 end) +
 	(case when volume_quarterly_shockers  = 1 then 131400 else 0 end) +

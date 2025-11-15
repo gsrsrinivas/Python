@@ -1938,7 +1938,7 @@ update a set
 	(case when volume_4_hourly_shockers               = 1 then '4H;' else '' end) + 
 	(case when volume_1_hourly_shockers               = 1 then '1H;' else '' end) + 
 	(case when volume_15_minutes_shockers             = 1 then '15;' else '' end) + 
-	';dbl-bttm-' +
+	';' + 'dbl-bttm-' +
 	(case when double_bottom_yearly_setup             = 1 then 'Y;'  else '' end) + 
 	(case when double_bottom_quarterly_setup          = 1 then 'Q;'  else '' end) + 
 	(case when double_bottom_monthly_setup            = 1 then 'M;'  else '' end) + 
@@ -1947,7 +1947,7 @@ update a set
 	(case when double_bottom_4_hourly_setup           = 1 then '4H;' else '' end) + 
 	(case when double_bottom_1_hourly_setup           = 1 then '1H;' else '' end) + 
 	(case when double_bottom_15_minutes_setup         = 1 then '15;' else '' end) + 
-	';dbl-top-' +
+	';' + 'dbl-top-' +
 	(case when double_top_yearly_setup                = 1 then 'Y;'  else '' end) + 
 	(case when double_top_quarterly_setup             = 1 then 'Q;'  else '' end) + 
 	(case when double_top_monthly_setup               = 1 then 'M;'  else '' end) + 
@@ -1956,7 +1956,7 @@ update a set
 	(case when double_top_4_hourly_setup              = 1 then '4H;' else '' end) + 
 	(case when double_top_1_hourly_setup              = 1 then '1H;' else '' end) + 
 	(case when double_top_15_minutes_setup            = 1 then '15;' else '' end) + 
-	';Ell-4-cmp-' + 	
+	';' + 'Ell-4-cmp-' + 	
 	(case when Elliott_4th_Wave_Completed_Yearly_setup     = 1 then 'Y;'  else '' end) + 
 	(case when Elliott_4th_Wave_Completed_Quarterly_setup  = 1 then 'Q;'  else '' end) + 
 	(case when Elliott_4th_Wave_Completed_Monthly_setup    = 1 then 'M;'  else '' end) + 
@@ -1965,7 +1965,7 @@ update a set
 	(case when Elliott_4th_Wave_Completed_4_Hourly_setup   = 1 then '4H;' else '' end) + 
 	(case when Elliott_4th_Wave_Completed_1_Hourly_setup   = 1 then '1H;' else '' end) + 
 	(case when Elliott_4th_Wave_Completed_15_Minutes_setup = 1 then '15;' else '' end) + 
-	';dbl-top-RSI-' + 
+	';' + 'dbl-top-RSI-' + 
 	(case when Double_Top_with_RSI_Yearly_setup            = 1 then 'Y;'  else '' end) + 
 	(case when Double_Top_with_RSI_Quarterly_setup         = 1 then 'Q;'  else '' end) + 
 	(case when Double_Top_with_RSI_Monthly_setup           = 1 then 'M;'  else '' end) + 
@@ -1974,7 +1974,7 @@ update a set
 	(case when Double_Top_with_RSI_4_Hourly_setup          = 1 then '4H;' else '' end) + 
 	(case when Double_Top_with_RSI_1_Hourly_setup          = 1 then '1H;' else '' end) + 
 	(case when Double_Top_with_RSI_15_Minutes_setup        = 1 then '15;' else '' end) +
-	';prc-abv-200-emi-' +
+	';' + 'prc-abv-200-emi-' +
 	(case when Price_above_200_EMI_yearly_setup       = 1 then 'Y;' else '' end) + 
 	(case when Price_above_200_EMI_quarterly_setup    = 1 then 'Q;' else '' end) + 
 	(case when Price_above_200_EMI_monthly_setup      = 1 then 'M;' else '' end) + 
@@ -1983,7 +1983,7 @@ update a set
 	(case when Price_above_200_EMI_4_hourly_setup       = 1 then '4H;' else '' end) + 
 	(case when Price_above_200_EMI_1_hourly_setup       = 1 then '1H;' else '' end) + 
 	(case when Price_above_200_EMI_15_minutes_setup   = 1 then '15M;' else '' end) + 
-	';prc-blw-200-emi-' +
+	';' + 'prc-blw-200-emi-' +
 	(case when Price_below_200_EMI_yearly_setup       = 1 then 'Y;' else '' end) + 
 	(case when Price_below_200_EMI_quarterly_setup    = 1 then 'Q;' else '' end) + 
 	(case when Price_below_200_EMI_monthly_setup      = 1 then 'M;' else '' end) + 
@@ -1992,7 +1992,7 @@ update a set
 	(case when Price_below_200_EMI_4_hourly_setup       = 1 then '4H;' else '' end) + 
 	(case when Price_below_200_EMI_1_hourly_setup       = 1 then '1H;' else '' end) + 
 	(case when Price_below_200_EMI_15_minutes_setup   = 1 then '15H;' else '' end) + 
-	';prc-abv-50-emi-' +
+	';' + 'prc-abv-50-emi-' +
 	(case when Price_above_50_EMI_yearly_setup        = 1 then 'Y;' else '' end) + 
 	(case when Price_above_50_EMI_quarterly_setup     = 1 then 'Q;' else '' end) + 
 	(case when Price_above_50_EMI_monthly_setup       = 1 then 'M;' else '' end) + 
@@ -2001,7 +2001,7 @@ update a set
 	(case when Price_above_50_EMI_4_hourly_setup        = 1 then '4H;' else '' end) + 
 	(case when Price_above_50_EMI_1_hourly_setup        = 1 then '1H;' else '' end) + 
 	(case when Price_above_50_EMI_15_minutes_setup    = 1 then '15M;' else '' end) + 
-	';prc-blw-50-emi-' +
+	';' + 'prc-blw-50-emi-' +
 	(case when Price_below_50_EMI_yearly_setup        = 1 then 'Y;' else '' end) + 
 	(case when Price_below_50_EMI_quarterly_setup     = 1 then 'Q;' else '' end) + 
 	(case when Price_below_50_EMI_monthly_setup       = 1 then 'M;' else '' end) + 
@@ -2020,6 +2020,11 @@ update a set
 	(case when volume_4_hourly_shockers   = 1 then 240 else 0 end) +
 	(case when volume_1_hourly_shockers   = 1 then 60 else 0 end) +
 	(case when volume_15_minutes_shockers = 1 then 15 else 0 end)
+from dbo.Analyse_Stocks a 
+where a.Batch_No = @batch_no;
+
+update a set 
+	Other_Setups = replace(Other_Setups,';;',';'+ CHAR(13) + CHAR(10))
 from dbo.Analyse_Stocks a 
 where a.Batch_No = @batch_no;
 end

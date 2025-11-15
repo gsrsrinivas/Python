@@ -16,7 +16,16 @@ SELECT STRING_AGG(CAST(QUOTENAME(REPLACE(indicator, ' ', '_') + '_' + REPLACE(ti
 		FROM dbo.Cash_Stocks
 	   WHERE Batch_No ='20251115120737' ) AS temp
 ;
-select top 10 * from dbo.Analyse_15Minutes_Stocks 
+select * from dbo.Analyse_Stocks 
+where Symbol = 'Reliance' 
+and Batch_No = (select max(batch_no) from dbo.Analyse_Stocks)
+
+SELECT *
+FROM dbo.Cash_Stocks
+WHERE Symbol like 'RELIABLE' and 
+indicator like 'price%emi%'
+AND Batch_No = (SELECT MAX(batch_no) FROM dbo.Analyse_Stocks)
+
 ;
 select * from dbo.Cash_Stocks order by 1 desc
 ;
@@ -26,3 +35,6 @@ select  * from dbo.Cash_Stocks
 where Indicator like 'Price%EMI%' 
 -- and TimeLine like '%Hour%'
 order by 1 desc
+
+
+

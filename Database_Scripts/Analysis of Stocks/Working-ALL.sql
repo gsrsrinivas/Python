@@ -5871,4 +5871,282 @@ alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_4_hour_setup   
 alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_1_hour_setup   bit;
 alter table dbo.Analyse_15Minutes_Stocks add  Price_below_50_EMI_15_minutes_setup   bit;
 end
+begin
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD symbol varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD quoteType varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD quoteSourceName varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD typeDisp varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD website varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD industry varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD industryKey varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD industryDisp varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD sector varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD sectorKey varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD sectorDisp varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD recommendationKey varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD tradeable varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD exchange varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fullExchangeName varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD market varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD regularMarketPrice float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD shortName varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD longName varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD postMarketPrice float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD postMarketChange float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD regularMarketChange float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD regularMarketDayRange varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekLowChange float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekLowChangePercent float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekRange varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekHighChange float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekHighChangePercent float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekChangePercent float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD dividendDate float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD earningsTimestamp float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD epsTrailingTwelveMonths float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD epsForward float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD epsCurrentYear float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD priceEpsCurrentYear float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD averageAnalystRating varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD cryptoTradeable varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD marketState varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD corporateActions varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD displayName varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD trailingPegRatio float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD city varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD state varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD country varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD region varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD longBusinessSummary varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD currency varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD lastSplitFactor varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD lastSplitDate datetime NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD exDividendDate datetime NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD maxAge float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD priceHint float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD previousClose float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD open float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD dayLow float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD dayHigh float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD regularMarketPreviousClose float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD regularMarketOpen float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD regularMarketDayLow float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD regularMarketDayHigh float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD dividendRate float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD dividendYield float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD payoutRatio float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD beta float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD trailingPE float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD forwardPE float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD volume float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD marketCap float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekLow float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyTwoWeekHigh float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD allTimeHigh float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD allTimeLow float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD fiftyDayAverage float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD twoHundredDayAverage float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD trailingAnnualDividendRate float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD trailingAnnualDividendYield float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD enterpriseValue float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD profitMargins float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD sharesShort float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD sharesShortPriorMonth float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD sharesShortPreviousMonthDate float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD heldPercentInsiders float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD heldPercentInstitutions float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD bookValue float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD priceToBook float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD lastFiscalYearEnd float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD nextFiscalYearEnd float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD mostRecentQuarter float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD earningsQuarterlyGrowth float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD netIncomeToCommon float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD trailingEps float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD forwardEps float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD enterpriseToRevenue float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD enterpriseToEbitda float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD 52WeekChange float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD SandP52WeekChange float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD lastDividendValue float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD lastDividendDate float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD currentPrice float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD targetHighPrice float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD targetLowPrice float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD targetMeanPrice float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD targetMedianPrice float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD recommendationMean float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD numberOfAnalystOpinions float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD ebitda float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD quickRatio float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD currentRatio float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD totalRevenue float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD debtToEquity float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD revenuePerShare float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD returnOnAssets float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD returnOnEquity float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD grossProfits float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD earningsGrowth float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD revenueGrowth float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD grossMargins float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD ebitdaMargins float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD operatingMargins float NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD messageBoardId varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD financialCurrency varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD language varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD triggerable varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD customPriceAlertConfidence varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD exchangeTimezoneName varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD exchangeTimezoneShortName varchar(255) NULL;
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ADD hasPrePostMarketData varchar(255) NULL;
+
+ALTER TABLE Stocks_Analysis.dbo.Master_Stock_Details ALTER COLUMN MarketCap float NULL;
+
+end
+begin
+
+-- DROP TABLE Stocks_Analysis.dbo.Master_Stock_Details;
+
+CREATE TABLE Stocks_Analysis.dbo.Master_Stock_Details (
+	Symbol varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+
+	Segment varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+
+	Sector varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	SectorKey varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	SectorDisp varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	
+	Industry varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	IndustryKey varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	IndustryDisp varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+
+	MarketCap float NULL,
+	RegularMarketPrice float NULL,	
+	postMarketPrice float NULL,
+	postMarketChange float NULL,
+	regularMarketChange float NULL,
+	regularMarketDayRange varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	fiftyTwoWeekLowChange float NULL,
+	fiftyTwoWeekLowChangePercent float NULL,
+	fiftyTwoWeekRange varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	fiftyTwoWeekHighChange float NULL,
+	fiftyTwoWeekHighChangePercent float NULL,
+	fiftyTwoWeekChangePercent float NULL,
+	
+	DividendYield varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,	
+	TrailingPE varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	ForwardPE varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	PegRatio varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	TotalRevenue varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	GrossProfits varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	ProfitMargins varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	PriceToBook varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	recommendationKey varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	averageAnalystRating varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+
+	Website varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	shortName varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	longName varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	quoteType varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	quoteSourceName varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	typeDisp varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+
+	tradeable varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	exchange varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	fullExchangeName varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	market varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+
+	dividendDate varchar(255) NULL,
+	dividendRate float NULL,
+	
+	priceHint float NULL,
+	previousClose float NULL,
+	dayLow float NULL,
+	dayHigh float NULL,
+	regularMarketPreviousClose float NULL,
+	regularMarketOpen float NULL,
+	regularMarketDayLow float NULL,
+	regularMarketDayHigh float NULL,	
+
+	earningsTimestamp float NULL,
+	epsTrailingTwelveMonths float NULL,
+	epsForward float NULL,
+	epsCurrentYear float NULL,
+	priceEpsCurrentYear float NULL,
+	cryptoTradeable varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	marketState varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	corporateActions varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	displayName varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	trailingPegRatio float NULL,
+	city varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	state varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	country varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	region varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	longBusinessSummary varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	currency varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	lastSplitFactor varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	lastSplitDate datetime NULL,
+	exDividendDate datetime NULL,
+	maxAge float NULL,
+
+	payoutRatio float NULL,
+	beta float NULL,
+	volume float NULL,
+	fiftyTwoWeekLow float NULL,
+	fiftyTwoWeekHigh float NULL,
+	allTimeHigh float NULL,
+	allTimeLow float NULL,
+	fiftyDayAverage float NULL,
+	twoHundredDayAverage float NULL,
+	trailingAnnualDividendRate float NULL,
+	trailingAnnualDividendYield float NULL,
+	enterpriseValue float NULL,
+	sharesShort float NULL,
+	sharesShortPriorMonth float NULL,
+	sharesShortPreviousMonthDate float NULL,
+	heldPercentInsiders float NULL,
+	heldPercentInstitutions float NULL,
+	bookValue float NULL,
+	lastFiscalYearEnd float NULL,
+	nextFiscalYearEnd float NULL,
+	mostRecentQuarter float NULL,
+	earningsQuarterlyGrowth float NULL,
+	netIncomeToCommon float NULL,
+	trailingEps float NULL,
+	forwardEps float NULL,
+	enterpriseToRevenue float NULL,
+	enterpriseToEbitda float NULL,
+	SandP52WeekChange float NULL,
+	lastDividendValue float NULL,
+	lastDividendDate float NULL,
+	currentPrice float NULL,
+	targetHighPrice float NULL,
+	targetLowPrice float NULL,
+	targetMeanPrice float NULL,
+	targetMedianPrice float NULL,
+	recommendationMean float NULL,
+	numberOfAnalystOpinions float NULL,
+	ebitda float NULL,
+	quickRatio float NULL,
+	currentRatio float NULL,
+	debtToEquity float NULL,
+	revenuePerShare float NULL,
+	returnOnAssets float NULL,
+	returnOnEquity float NULL,
+	earningsGrowth float NULL,
+	revenueGrowth float NULL,
+	grossMargins float NULL,
+	ebitdaMargins float NULL,
+	operatingMargins float NULL,
+	messageBoardId varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	financialCurrency varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	triggerable varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	customPriceAlertConfidence varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	exchangeTimezoneName varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	exchangeTimezoneShortName varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	hasPrePostMarketData varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+);
+end
+
+end
 rollback transaction

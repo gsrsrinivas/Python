@@ -263,7 +263,8 @@ def insert_into_database_tables(table_names, bulk_file_path=None, data_frame=Non
         bulk_insert_from_csv(bulk_file_path, table_names[2])  # Insert data from CSV file into the database table
     else:
         insert_into_db_from_data_frame(data_frame, table_names[2])  # Insert data from DataFrame into the database table
-    execute_sql_script(table_names)
+    if table_names[0]!='':
+        execute_sql_script(table_names)
 
 
 def insert_new_columns_in_data_frame(df, tf_l_i, each_segment_list):

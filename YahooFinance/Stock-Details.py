@@ -15,7 +15,7 @@ def stock_details_yahoofinance():
         df = pd.DataFrame()
         with get_database_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(""" select distinct top 10 ms.Symbol ,ms.Symbol_YF from Stocks_Analysis.dbo.Master_Segments ms
+            cursor.execute(""" select distinct ms.Symbol ,ms.Symbol_YF from Stocks_Analysis.dbo.Master_Segments ms
             -- where ms.Symbol_YF is not null and ms.Symbol_YF <> '' 
             order by 2 ASC; """)
             column_values  = cursor.fetchall()
@@ -24,6 +24,9 @@ def stock_details_yahoofinance():
         batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
         print(f"Total symbols to process: {total_stock}")
         for i,symbol in enumerate(column_values, start=1):
+            if i % 500 == 0:
+                print("Sleeping for 2 minutes...")
+                time.sleep(120)  # 120 seconds = 2 minutes
             for sym in symbol:
                 try:
                     if sym is None or sym.strip() == '':
@@ -91,11 +94,14 @@ def stock_details_yahoofinance():
             # except:
             #     print(f"Error processing symbol: {symbol[1]} - {e}")
             #     continue
-
         df = df.where(pd.notna(df), None)
         for col in df.columns:
             if df[col].dtype == 'object':
-                df[col] = df[col].str.replace(',', ' ', regex=False)
+                try:
+                    df[col] = df[col].str.replace(',', ' ', regex=False)
+                except Exception as e:
+                    print(f"Could not replace commas in column {col}: {e}")
+                    continue
         # df['longBusinessSummary'] = df['longBusinessSummary'].str.replace(',', ' ', regex=False)
 
         selected_columns = ['symbol_db', 'sector', 'sectorKey', 'sectorDisp', 'industry', 'industryKey', 'industryDisp',
@@ -123,7 +129,12 @@ def stock_details_yahoofinance():
                             'grossMargins', 'ebitdaMargins', 'operatingMargins', 'messageBoardId', 'financialCurrency',
                             'triggerable', 'customPriceAlertConfidence', 'exchangeTimezoneName',
                             'exchangeTimezoneShortName', 'hasPrePostMarketData', 'batch_no', 'symbol_yf']
-        df_selected = df.loc[:, selected_columns]
+        df_selected = pd.DataFrame(columns=selected_columns)
+        # df_selected = df.reindex(columns=df_selected.columns)
+        # Get common columns only
+        common_cols = [col for col in df_selected.columns if col in df.columns]
+        df_selected[common_cols] = df[common_cols].values
+        # df_selected = df.loc[:, selected_columns]
         file_path = chart_ink_to_csv(df_selected, "StockListFromYahoo",False)
         table_script_names = ["","","Master_Stock_Details"]
         insert_into_database_tables(table_script_names, bulk_file_path=file_path)

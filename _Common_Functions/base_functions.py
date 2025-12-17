@@ -73,6 +73,7 @@ def retry_on_error(max_retries=3, delay=60):
         return wrapper
     return decorator
 
+
 @retry_on_error(max_retries=3)
 def safe_ticker(symbol):
     return yf.Ticker(symbol)
@@ -229,14 +230,15 @@ def bulk_insert_from_csv(bulk_file_path, table_name):
         bulk_insert_query = (
                 f" BULK INSERT dbo.{table_name} FROM '{bulk_file_path}' WITH \n"  # noqa
                 + f" (   FIELDTERMINATOR = ',',  -- Column delimiter, e.g., comma for CSV \n"  # noqa
-                + f"     ROWTERMINATOR = '\\n',   -- Row delimiter, newline character \n"  # noqa
+                + f"     ROWTERMINATOR = '\\n',  -- Row delimiter, newline character \n"  # noqa
                 + f"     FIRSTROW = 2,           -- Skip header row if present (start at row 2) \n"  # noqa
                 + f"     TABLOCK,                -- Optional: improve performance by locking the table \n"  # noqa
                 + f"     KEEPIDENTITY            -- keep identity values from file \n"  # noqa
                 + f" );")
         cursor.execute(bulk_insert_query)
         conn.commit()
-        print(f"✅ Data inserted into {table_name} table using BULK INSERT!")
+        print(f"✅ Data inserted into {table_name} table using BULK INSERT! "
+              f"and inserted record count is {cursor.rowcount}\n")
         # end - Bulk insert data from CSV file into the database table
 
 
@@ -396,7 +398,9 @@ def chart_ink_file_download_and_insert_db(data_list):
             df_all = pd.concat([df_all, df], ignore_index=True)
     print(f"\n🔄 downloading data from the website is complete.")
     batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
+    created_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     df_all['Batch_No'] = batch_no  # Add batch number to the DataFrame
+    df_all['created_datetime'] = created_datetime
     # insert_into_database_tables(df_all, table_names)
     return df_all
 

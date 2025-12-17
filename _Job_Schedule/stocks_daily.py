@@ -1,5 +1,7 @@
-import sys, subprocess
+import subprocess
+import sys
 from pathlib import Path
+
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from _Common_Functions.base_functions import *
 
@@ -17,8 +19,10 @@ def stocks_daily():
         # sys.exit() if trading_hours_check() == "exit" else None
 
         project_folder_path = str(project_directory_path())
-        scripts = [project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
-                   project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py']
+        scripts = [project_folder_path + f'\\YahooFinance\\Stock-Details.py',
+                   project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
+                   project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
+                   ]
 
         processes = []
         for script in scripts:

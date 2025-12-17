@@ -2,13 +2,13 @@ from datetime import datetime
 
 import yfinance as yf
 from ta.momentum import RSIIndicator, StochasticOscillator, WilliamsRIndicator
-from ta.others import ROCIndicator, MomentumIndicator
+# from ta.others import ROCIndicator, MomentumIndicator
 from ta.trend import MACD, ADXIndicator
 from ta.volatility import BollingerBands
 from ta.volume import OnBalanceVolumeIndicator, ChaikinMoneyFlowIndicator, VolumeWeightedAveragePrice
 
 # Download historical data
-data = yf.download("AAPL", start="2023-01-01", end=datetime.today().strftime('%Y-%m-%d'))
+data = yf.download("TCS", start="2022-01-01", end=datetime.today().strftime('%Y-%m-%d'))
 
 # Calculate technical indicators
 data['RSI'] = RSIIndicator(data['Adj Close']).rsi()
@@ -32,11 +32,15 @@ data['VWAP'] = VolumeWeightedAveragePrice(data['High'], data['Low'], data['Adj C
 data['CCI'] = data['Adj Close'].rolling(window=20).apply(lambda x: (x[-1] - x.mean()) / (0.015 * x.std()), raw=False)
 data['WPR'] = WilliamsRIndicator(data['High'], data['Low'], data['Adj Close']).williams_r()
 
-data['ROC'] = ROCIndicator(data['Adj Close']).roc()
-data['Momentum'] = MomentumIndicator(data['Adj Close']).momentum()
+# data['ROC'] = ROCIndicator(data['Adj Close']).roc()
+# data['Momentum'] = MomentumIndicator(data['Adj Close']).momentum()
 
 # View the last few rows with indicator values
+# print(data[[
+#     'RSI', 'MACD', 'MACD_signal', 'MACD_diff', 'Stoch_K', 'Stoch_D', 'BB_upper', 'BB_lower',
+#     'ADX', 'OBV', 'Chaikin_MF', 'VWAP', 'CCI', 'WPR', 'ROC', 'Momentum'
+# ]].tail())
 print(data[[
     'RSI', 'MACD', 'MACD_signal', 'MACD_diff', 'Stoch_K', 'Stoch_D', 'BB_upper', 'BB_lower',
-    'ADX', 'OBV', 'Chaikin_MF', 'VWAP', 'CCI', 'WPR', 'ROC', 'Momentum'
+    'ADX', 'OBV', 'Chaikin_MF', 'VWAP', 'CCI', 'WPR'
 ]].tail())

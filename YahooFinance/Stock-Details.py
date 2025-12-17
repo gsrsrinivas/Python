@@ -3,8 +3,7 @@ import warnings
 
 from _Common_Functions.base_functions import *
 
-# Suppress only the specific FutureWarning related to concatenation
-warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=FutureWarning)  # Suppress only the specific FutureWarning related to concatenation
 
 
 def stock_details_yahoofinance():
@@ -22,9 +21,10 @@ def stock_details_yahoofinance():
 
         total_stock = len(column_values)
         batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
+        created_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         print(f"Total symbols to process: {total_stock}")
         for i,symbol in enumerate(column_values, start=1):
-            if i % 500 == 0:
+            if i % 900 == 0:
                 print("Sleeping for 2 minutes...")
                 time.sleep(120)  # 120 seconds = 2 minutes
             for sym in symbol:
@@ -50,7 +50,8 @@ def stock_details_yahoofinance():
                     else:
                         break_for_loop = 1
                     df1 = pd.DataFrame([ticker.info])
-                    df2 = pd.DataFrame([{'symbol_db': symbol[0], 'symbol_yf': symbol[1], 'batch_no': batch_no}])
+                    df2 = pd.DataFrame([{'symbol_db': symbol[0], 'symbol_yf': symbol[1], 'batch_no': batch_no,
+                                         'created_datetime': created_datetime}])
                     df = pd.concat([df, pd.concat([df1, df2], axis=1)], axis=0, ignore_index=True)
                     if break_for_loop == 1:
                         break
@@ -58,42 +59,6 @@ def stock_details_yahoofinance():
                     print(f"Error processing symbol: {sym} - {e}")
                     continue
 
-            # below code is giving message for each symbol which is not required
-            # for sym in symbol:
-            #     try:
-            #         if sym is None or sym.strip() == '':
-            #             continue
-            #         print(f"{i} out of {total_stock}: Processing: {sym}")
-            #         ticker = safe_ticker(sym)
-            #         if not ticker.info or 'regularMarketPrice' not in ticker.info:
-            #             print(f"No data found for symbol: {sym}")
-            #             continue
-            #         df1 = pd.DataFrame([ticker.info])
-            #         df2 = pd.DataFrame([{'symbol_db': symbol[2], 'symbol_yf': symbol[5], 'batch_no': batch_no}])
-            #         df = pd.concat([df, pd.concat([df1, df2], axis=1)], axis=0, ignore_index=True)
-            #     except Exception as e:
-            #         print(f"Error processing symbol: {sym} - {e}")
-            #         continue
-
-            # below code is checking only 1 column fetched from db which is not sufficient
-            # symbol_ns = symbol[1] + ".NS"
-            # symbol_bo = symbol[1] + ".BO"
-            # print(f"{i} out of {total_stock}: Processing: {symbol[1]}")
-            # try:
-            #     ticker = safe_ticker(symbol_ns)
-            #     if not ticker.info or 'regularMarketPrice' not in ticker.info:
-            #         ticker = safe_ticker(symbol_bo)
-            #         if not ticker.info or 'regularMarketPrice' not in ticker.info:
-            #             ticker = safe_ticker(symbol[1])
-            #             if not ticker.info or 'regularMarketPrice' not in ticker.info:
-            #                 print(f"No data found for symbol: {symbol[1]}")
-            #                 continue
-            #     df1 = pd.DataFrame([ticker.info])
-            #     df2 = pd.DataFrame([{'symbol_db': symbol[0], 'symbol_yf': symbol[1], 'batch_no': batch_no}])
-            #     df = pd.concat([df, pd.concat([df1, df2], axis=1)], axis=0, ignore_index=True)
-            # except:
-            #     print(f"Error processing symbol: {symbol[1]} - {e}")
-            #     continue
         df = df.where(pd.notna(df), None)
         for col in df.columns:
             if df[col].dtype == 'object':
@@ -102,7 +67,6 @@ def stock_details_yahoofinance():
                 except Exception as e:
                     print(f"Could not replace commas in column {col}: {e}")
                     continue
-        # df['longBusinessSummary'] = df['longBusinessSummary'].str.replace(',', ' ', regex=False)
 
         selected_columns = ['symbol_db', 'sector', 'sectorKey', 'sectorDisp', 'industry', 'industryKey', 'industryDisp',
                             'marketCap', 'regularMarketPrice', 'regularMarketChange', 'regularMarketDayRange',
@@ -128,13 +92,12 @@ def stock_details_yahoofinance():
                             'revenuePerShare', 'returnOnAssets', 'returnOnEquity', 'earningsGrowth', 'revenueGrowth',
                             'grossMargins', 'ebitdaMargins', 'operatingMargins', 'messageBoardId', 'financialCurrency',
                             'triggerable', 'customPriceAlertConfidence', 'exchangeTimezoneName',
-                            'exchangeTimezoneShortName', 'hasPrePostMarketData', 'batch_no', 'symbol_yf']
+                            'exchangeTimezoneShortName', 'hasPrePostMarketData', 'batch_no', 'symbol_yf','created_datetime']
         df_selected = pd.DataFrame(columns=selected_columns)
         # df_selected = df.reindex(columns=df_selected.columns)
-        # Get common columns only
-        common_cols = [col for col in df_selected.columns if col in df.columns]
+        common_cols = [col for col in df_selected.columns if col in df.columns] # Get common columns only
         df_selected[common_cols] = df[common_cols].values
-        # df_selected = df.loc[:, selected_columns]
+
         file_path = chart_ink_to_csv(df_selected, "StockListFromYahoo",False)
         table_script_names = ["","","Master_Stock_Details"]
         insert_into_database_tables(table_script_names, bulk_file_path=file_path)
@@ -143,6 +106,7 @@ def stock_details_yahoofinance():
     finally:
         # allow_sleep()
         print_end_timestamp()
+
 
 if __name__ == "__main__":
     stock_details_yahoofinance()

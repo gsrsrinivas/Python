@@ -47,13 +47,19 @@ def project_directory_path():
 
 def prevent_sleep():
     # This tells Windows: “Stay awake while this process is running”
-    ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAY_MODE_REQUIRED)
+    # ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAY_MODE_REQUIRED)
+    # Load kernel32.dll
+    kernel32 = ctypes.WinDLL('kernel32')
+    kernel32.SetThreadExecutionState(window_flags)
     print("☀️ System will stay awake while task is running...")
 
 
 def allow_sleep():
     # Restore the system’s sleep settings
-    ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)
+    # ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)
+    # Load kernel32.dll
+    kernel32 = ctypes.WinDLL('kernel32')
+    kernel32.SetThreadExecutionState(ES_CONTINUOUS)
     print("🌙 System can now sleep normally.")
 
 

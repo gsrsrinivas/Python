@@ -1,10 +1,12 @@
 import matplotlib
-matplotlib.rcParams['figure.max_open_warning'] = 100  # or any number you prefer
-matplotlib.use('Agg')  # Use a non-GUI backend # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
+# or any number you prefer
+matplotlib.rcParams['figure.max_open_warning'] = 100
+# Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import yfinance as yf
 import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
+# Get parent directory of current file # Add it to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from _Common_Functions.base_functions import *
 
 
@@ -33,7 +35,9 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
     plt.close(fig) # Close the figure to free memory
-    print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')} - {str(symbol_name).ljust(20,' ')} - {period_value.ljust(3,' ')} - {interval_value.ljust(3,' ')}")
+    print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')} -"
+          f"{str(symbol_name).ljust(20,' ')} - {period_value.ljust(3,' ')} - "
+          f"{interval_value.ljust(3,' ')}")
 
 
 def valid_intervals_periods(load_all=''):
@@ -58,7 +62,7 @@ def valid_intervals_periods(load_all=''):
         valid_int_period += [{'1mo': '10y'}] if today.day == 1 else [] # Add monthly intervals at the start of the month
         valid_int_period += [{'3mo': '5y'},{'3mo': '10y'},] if today.month in [1, 4, 7, 10] and today.day == 1 else [] # Add quarterly intervals at the start of a quarter
         valid_int_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else [] # Add half-yearly intervals at the start of a half-year
-        valid_int_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else []     # Add yearly intervals at the start of the year
+        valid_int_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else [] # Add yearly intervals at the start of the year
 
     return valid_int_period  # Return the list of valid intervals and periods
 
@@ -94,21 +98,22 @@ def stock_thumb_nails(timeframe=None):
     The function also handles different intervals and periods based on the current date,
     ensuring that the thumbnails are relevant to the current trading conditions.
     """
-    thumb_dir = os.path.dirname(os.path.dirname(project_directory_path())) + r'\Pictures\Thumbnails' # Get the path to the Pictures folder; Folder to save thumbnails
+    # Get the path to the Pictures folder; Folder to save thumbnails
+    thumb_dir = os.path.dirname(os.path.dirname(project_directory_path())) + r'\Pictures\Thumbnails'
     os.makedirs(thumb_dir, exist_ok=True) # Create thumbnails directory if it doesn't exist
     print(f'Thumbnails will be saved in: "{thumb_dir}"')
-
-    len_symbols, symbols = connect_to_db('All') if timeframe == 'All' else connect_to_db() # Connect to the database and get stock symbols
-    # valid_int_period = valid_intervals_periods() if timeframe is None else timeframe # Get valid intervals and periods and specific timeframe for every 15-minute screening
+    # Connect to the database and get stock symbols
+    len_symbols, symbols = connect_to_db('All') if timeframe == 'All' else connect_to_db()
     if timeframe == 'All':
         valid_int_period = valid_intervals_periods('All')
     elif timeframe is None:
         valid_int_period = valid_intervals_periods()
     else:
         valid_int_period = timeframe
-    print(f"Valid intervals and periods: {valid_int_period}") # Print valid intervals and
-
-    len_valid_int_period = len(valid_int_period) # Count the number of valid intervals and periods
+    # Print valid intervals and
+    print(f"Valid intervals and periods: {valid_int_period}")
+    # Count the number of valid intervals and periods
+    len_valid_int_period = len(valid_int_period)
     print(f"count of valid intervals and periods: {len_valid_int_period}")
     total_len = len_symbols * len_valid_int_period
     print(f"Total thumbnails to be created: {total_len}")

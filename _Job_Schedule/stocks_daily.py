@@ -19,14 +19,14 @@ def stocks_daily():
         # sys.exit() if trading_hours_check() == "exit" else None
 
         project_folder_path = str(project_directory_path())
-        scripts = [project_folder_path + f'\\YahooFinance\\stock-detail-tickers.py',
-                   project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
+        scripts = [project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
                    project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
+                   project_folder_path + f'\\YahooFinance\\stock_detail_tickers.py',
                    ]
 
         processes = []
         for script in scripts:
-            title = f'"Running {os.path.basename(script)}"'  # Title for the window
+            title = f'"{os.path.basename(script)} Running"'  # Title for the window
             # Each process opens in a new window and waits until it finishes
             cmd = f'start /wait {title} cmd /c "python {script}"'
             proc = subprocess.Popen(cmd, shell=True)

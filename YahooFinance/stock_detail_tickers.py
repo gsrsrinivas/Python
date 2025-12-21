@@ -7,6 +7,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)  # Suppress only 
 
 
 def stock_details_yahoofinance():
+    setup_logger(__file__, f"daily_{Path(__file__).stem}.log")
     try:
         print_start_timestamp()
         print("Fetching stock data from Yahoo Finance...")

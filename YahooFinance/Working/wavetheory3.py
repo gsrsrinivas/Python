@@ -1,8 +1,8 @@
-import yfinance as yf
-import pandas as pd
-import numpy as np
-from scipy.signal import argrelextrema
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import yfinance as yf
+from scipy.signal import argrelextrema
 from ta.trend import MACD
 
 # --- 1. Download Stock Data ---
@@ -58,7 +58,7 @@ plt.scatter(df.index[max_idx], df['Close'].iloc[max_idx], color='red', label='Sw
 
 # Plot wave numbers
 for i, (idx, price) in enumerate(wave_points):
-    plt.text(idx, price * 1.01, f'Wave {i+1}', fontsize=10, fontweight='bold', color='blue')
+    plt.text(idx, price * 1.01, f'Wave {i + 1}', fontsize=10, fontweight='bold', color='blue')
 
 plt.title(f"{ticker} - Elliott Wave Labeling (Heuristic 1–5)")
 plt.legend()

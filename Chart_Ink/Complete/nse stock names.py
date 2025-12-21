@@ -1,4 +1,6 @@
 from nsepython import nse_eq
+
+
 def nse_equity():
     # Fetch the list of stock names
     stock_list = nse_eq("TCS")

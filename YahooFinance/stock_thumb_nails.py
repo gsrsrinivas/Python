@@ -1,10 +1,12 @@
 import matplotlib
+
 # or any number you prefer
 matplotlib.rcParams['figure.max_open_warning'] = 100
 # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys, os
+
 # Get parent directory of current file # Add it to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from _Common_Functions.base_functions import *
@@ -34,10 +36,10 @@ def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', pe
     plt.yticks([], [])
     plt.tight_layout()
     plt.savefig(os.path.join(thumb_dir, f'{symbol_name}_{interval_value}_{period_value}.png'), dpi=100, format='png')
-    plt.close(fig) # Close the figure to free memory
-    print(f"{str(i).zfill(4)}/{str(total_len).ljust(5,' ')} -"
-          f"{str(symbol_name).ljust(20,' ')} - {period_value.ljust(3,' ')} - "
-          f"{interval_value.ljust(3,' ')}")
+    plt.close(fig)  # Close the figure to free memory
+    print(f"{str(i).zfill(4)}/{str(total_len).ljust(5, ' ')} -"
+          f"{str(symbol_name).ljust(20, ' ')} - {period_value.ljust(3, ' ')} - "
+          f"{interval_value.ljust(3, ' ')}")
 
 
 def valid_intervals_periods(load_all=''):
@@ -54,15 +56,20 @@ def valid_intervals_periods(load_all=''):
     weekday = today.weekday()  # Monday is 0, Sunday is 6
     if load_all == 'All':
         valid_int_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'}, {'1wk': '2y'},
-                                 {'1mo': '10y'}, {'3mo': '5y'}, {'3mo': '10y'}, {'6mo': '5y'}, {'6mo': '10y'},
-                                 {'1y': 'max'}, ]  # Valid periods and intervals
+                            {'1mo': '10y'}, {'3mo': '5y'}, {'3mo': '10y'}, {'6mo': '5y'}, {'6mo': '10y'},
+                            {'1y': 'max'}, ]  # Valid periods and intervals
     else:
         valid_int_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'}, ]
-        valid_int_period += [{'1wk': '2y'},] if weekday == 0 else [] # Add weekly intervals at the start of the week (Monday)
-        valid_int_period += [{'1mo': '10y'}] if today.day == 1 else [] # Add monthly intervals at the start of the month
-        valid_int_period += [{'3mo': '5y'},{'3mo': '10y'},] if today.month in [1, 4, 7, 10] and today.day == 1 else [] # Add quarterly intervals at the start of a quarter
-        valid_int_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else [] # Add half-yearly intervals at the start of a half-year
-        valid_int_period += [{'1y': 'max'},] if today.month == 1 and today.day == 1 else [] # Add yearly intervals at the start of the year
+        valid_int_period += [
+            {'1wk': '2y'}, ] if weekday == 0 else []  # Add weekly intervals at the start of the week (Monday)
+        valid_int_period += [
+            {'1mo': '10y'}] if today.day == 1 else []  # Add monthly intervals at the start of the month
+        valid_int_period += [{'3mo': '5y'}, {'3mo': '10y'}, ] if today.month in [1, 4, 7,
+                                                                                 10] and today.day == 1 else []  # Add quarterly intervals at the start of a quarter
+        valid_int_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1,
+                                                                               7] and today.day == 1 else []  # Add half-yearly intervals at the start of a half-year
+        valid_int_period += [{
+                                 '1y': 'max'}, ] if today.month == 1 and today.day == 1 else []  # Add yearly intervals at the start of the year
 
     return valid_int_period  # Return the list of valid intervals and periods
 
@@ -100,7 +107,7 @@ def stock_thumb_nails(timeframe=None):
     """
     # Get the path to the Pictures folder; Folder to save thumbnails
     thumb_dir = os.path.dirname(os.path.dirname(project_directory_path())) + r'\Pictures\Thumbnails'
-    os.makedirs(thumb_dir, exist_ok=True) # Create thumbnails directory if it doesn't exist
+    os.makedirs(thumb_dir, exist_ok=True)  # Create thumbnails directory if it doesn't exist
     print(f'Thumbnails will be saved in: "{thumb_dir}"')
     # Connect to the database and get stock symbols
     len_symbols, symbols = connect_to_db('All') if timeframe == 'All' else connect_to_db()
@@ -129,7 +136,7 @@ def stock_thumb_nails(timeframe=None):
         for interval_period_dict in valid_int_period:
             interval, period = next(iter(interval_period_dict.items()))
             plot_stock(thumb_dir, symbol, i, total_len, interval, period)
-            i+=1
+            i += 1
     # ------ single file processing ------------------------------------------------------
     # ------------------------------------------------------------------------------------
     # with ThreadPoolExecutor(max_workers=50) as executor:

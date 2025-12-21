@@ -1,5 +1,8 @@
-import sys, concurrent.futures, subprocess
+import concurrent.futures
+import subprocess
+import sys
 from pathlib import Path
+
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from _Common_Functions.base_functions import *
 
@@ -10,6 +13,7 @@ def run_script(script):
     except Exception as e:
         print(f"Execution failed for {script}: {e}")
         return None
+
 
 def stocks_daily_15min():
     """
@@ -24,8 +28,9 @@ def stocks_daily_15min():
         # sys.exit() if trading_hours_check() == "exit" else None
 
         project_folder_path = str(project_directory_path())
-        scripts = [project_folder_path + f'\\Chart_Ink\\chart_ink_excel_file_download_every_15_minutes_and_insert_into_db.py',
-                   project_folder_path + f'\\YahooFinance\\stock_thumb_nails_15minutes.py']
+        scripts = [
+            project_folder_path + f'\\Chart_Ink\\chart_ink_excel_file_download_every_15_minutes_and_insert_into_db.py',
+            project_folder_path + f'\\YahooFinance\\stock_thumb_nails_15minutes.py']
         print(f"Running scripts: {scripts}")
         with concurrent.futures.ProcessPoolExecutor() as executor:
             futures = [executor.submit(run_script, script) for script in scripts]

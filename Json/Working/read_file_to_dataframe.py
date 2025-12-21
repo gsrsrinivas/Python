@@ -1,7 +1,10 @@
-import pandas as pd
-from Get_Input_Output_Paths import get_file_paths
-from Get_Folder_FilePaths import list_files_by_extensions
 import os
+
+import pandas as pd
+
+from Get_Folder_FilePaths import list_files_by_extensions
+from Get_Input_Output_Paths import get_file_paths
+
 
 def read_file(file_path, file_types):
     """ read the file and output the data as Data Frame."""
@@ -19,6 +22,7 @@ def read_file(file_path, file_types):
         raise ValueError("Unsupported file type")
     return df
 
+
 def read_file_example():
     in_path, out_path = get_file_paths()
     file_list = list_files_by_extensions(in_path)
@@ -26,6 +30,7 @@ def read_file_example():
         _, ext = os.path.splitext(each_file)
         df1 = read_file(each_file, ext)
         print(f"file details are as follows:\n{df1}")
+
 
 if __name__ == "__main__":
     read_file_example()

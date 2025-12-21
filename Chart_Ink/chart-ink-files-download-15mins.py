@@ -6,7 +6,7 @@ from _Common_Functions.base_functions import *
 
 
 def chart_ink_download_15minutes():
-    setup_logger(__file__,f"15Minutes-{Path(__file__).stem}.log")
+    setup_logger(__file__, f"15Minutes-{Path(__file__).stem}.log")
     try:
         print_start_timestamp()
         sys.exit() if trading_hours_check() == "exit" else None
@@ -22,5 +22,3 @@ def chart_ink_download_15minutes():
 
 if __name__ == "__main__":
     chart_ink_download_15minutes()
-
-

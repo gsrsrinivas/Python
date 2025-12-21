@@ -1,8 +1,8 @@
-import yfinance as yf
-import pandas as pd
-import numpy as np
-from scipy.signal import argrelextrema
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import yfinance as yf
+from scipy.signal import argrelextrema
 from ta.trend import MACD
 
 # ---------- 1. Download Stock Data ----------
@@ -13,7 +13,6 @@ data = yf.download(ticker, start='2022-01-01', end='2025-01-01')
 if data.empty or 'Close' not in data.columns:
     print("Data not available. Check ticker or internet connection.")
     exit()
-
 
 # ---------- 2. Prepare DataFrame ----------
 df = pd.DataFrame(data['Close'])  # Only the 'Close' Series, as DataFrame
@@ -66,4 +65,3 @@ plt.show()
 # Ensure you have the required libraries installed:
 # pip install yfinance pandas numpy scipy matplotlib ta
 # This script is a complete example of wave theory analysis using Python.
-

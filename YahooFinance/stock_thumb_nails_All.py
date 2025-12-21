@@ -4,6 +4,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent directory of current file # Add it to sys.path
 from YahooFinance.stock_thumb_nails import *
 
+
 def all_stock_thumb_nails():
     """
     Create stock thumbnails for all stocks names from the database into a folder.
@@ -18,7 +19,7 @@ def all_stock_thumb_nails():
         print_start_timestamp()
         prevent_sleep()
         # sys.exit() if trading_hours_check() == "exit" else None
-        stock_thumb_nails('All')  #Call the function to create stock thumbnails
+        stock_thumb_nails('All')  # Call the function to create stock thumbnails
         purge_log_files('Stock_thumb_nails_All')
     except Exception as e:
         print(f"An error occurred: {e}")

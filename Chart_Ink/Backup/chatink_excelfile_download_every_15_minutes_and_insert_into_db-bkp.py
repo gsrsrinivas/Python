@@ -632,8 +632,10 @@ def chat_ink_excel_file_download_every_15_minutes_and_insert_into_db():
     VALUES (?, ?, ?, ? ,? , ?, ?, ? ,? , ?, ?, ?)'''
     # Iterate over the DataFrame and insert data into the SQL Server table
     for index, row in df_all.iterrows():
-        cursor.execute(insert_query, row['sno'], row['stock_name'], row['symbol'], row['bsecode'], row['percent_change'],
-                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['segments'],
+        cursor.execute(insert_query, row['sno'], row['stock_name'], row['symbol'], row['bsecode'],
+                       row['percent_change'],
+                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'],
+                       row['segments'],
                        row['Batch_No'])
         sys.stdout.write(f"\r{index} records inserted out of {df_all.shape[0] - 1}")
         sys.stdout.flush()

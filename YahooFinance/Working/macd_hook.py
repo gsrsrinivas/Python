@@ -1,8 +1,8 @@
 # code is not working
-import pandas as pd
-import yfinance as yf
-import ta
 import matplotlib.pyplot as plt
+import pandas as pd
+import ta
+import yfinance as yf
 
 # Download historical stock data
 symbol = "HAL"
@@ -12,6 +12,7 @@ df = yf.download(symbol, start="2023-01-01", end="2025-12-31")
 macd = ta.trend.MACD(close=df['Close'])
 df['macd_line'] = macd.macd()
 df['macd_signal'] = macd.macd_signal()
+
 
 # Function to find MACD hooks (upturn after N declines)
 def find_macd_hooks(df, window=3):
@@ -25,6 +26,7 @@ def find_macd_hooks(df, window=3):
         if is_declining and is_hook:
             hooks.append(i + 1)
     return df.iloc[hooks]
+
 
 # Find and display hooks
 hook_df = find_macd_hooks(df)

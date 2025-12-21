@@ -3,7 +3,8 @@ import warnings
 
 from _Common_Functions.base_functions import *
 
-warnings.simplefilter(action='ignore', category=FutureWarning)  # Suppress only the specific FutureWarning related to concatenation
+# Suppress only the specific FutureWarning related to concatenation
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 def stock_details_yahoofinance():
@@ -18,13 +19,13 @@ def stock_details_yahoofinance():
             cursor.execute(""" select distinct ms.Symbol ,ms.Symbol_YF from Stocks_Analysis.dbo.Master_Segments ms
             -- where ms.Symbol_YF is not null and ms.Symbol_YF <> '' 
             order by 2 ASC; """)
-            column_values  = cursor.fetchall()
+            column_values = cursor.fetchall()
 
         total_stock = len(column_values)
         batch_no = datetime.now().strftime('%Y%m%d%H%M%S')
         created_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         print(f"Total symbols to process: {total_stock}")
-        for i,symbol in enumerate(column_values, start=1):
+        for i, symbol in enumerate(column_values, start=1):
             if i % 900 == 0:
                 print("Sleeping for 2 minutes...")
                 time.sleep(120)  # 120 seconds = 2 minutes
@@ -33,7 +34,7 @@ def stock_details_yahoofinance():
                     if sym is None or sym.strip() == '':
                         continue
                     print(f"{i} out of {total_stock}: Processing: {sym}")
-                    sym  = sym + '.NS'
+                    sym = sym + '.NS'
                     ticker = safe_ticker(sym)
                     if not ticker.info or 'regularMarketPrice' not in ticker.info:
                         sym = sym.replace('.NS', '.BO')
@@ -74,33 +75,39 @@ def stock_details_yahoofinance():
                             'fiftyTwoWeekLowChange', 'fiftyTwoWeekLowChangePercent', 'fiftyTwoWeekRange',
                             'fiftyTwoWeekHighChange', 'fiftyTwoWeekHighChangePercent', 'fiftyTwoWeekChangePercent',
                             'dividendYield', 'trailingPE', 'forwardPE', 'totalRevenue', 'grossProfits', 'profitMargins',
-                            'priceToBook', 'recommendationKey', 'averageAnalystRating', 'website', 'shortName', 'longName',
+                            'priceToBook', 'recommendationKey', 'averageAnalystRating', 'website', 'shortName',
+                            'longName',
                             'quoteType', 'quoteSourceName', 'typeDisp', 'tradeable', 'exchange', 'fullExchangeName',
                             'market', 'dividendRate', 'priceHint', 'previousClose', 'dayLow', 'dayHigh',
                             'regularMarketPreviousClose', 'regularMarketOpen', 'regularMarketDayLow',
                             'regularMarketDayHigh', 'earningsTimestamp', 'epsTrailingTwelveMonths', 'epsForward',
-                            'epsCurrentYear', 'priceEpsCurrentYear', 'cryptoTradeable', 'marketState', 'corporateActions',
+                            'epsCurrentYear', 'priceEpsCurrentYear', 'cryptoTradeable', 'marketState',
+                            'corporateActions',
                             'trailingPegRatio', 'city', 'country', 'region', 'currency',
-                            'lastSplitFactor', 'lastSplitDate', 'exDividendDate', 'maxAge', 'payoutRatio', 'beta', 'volume',
+                            'lastSplitFactor', 'lastSplitDate', 'exDividendDate', 'maxAge', 'payoutRatio', 'beta',
+                            'volume',
                             'fiftyTwoWeekLow', 'fiftyTwoWeekHigh', 'allTimeHigh', 'allTimeLow', 'fiftyDayAverage',
                             'twoHundredDayAverage', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
                             'enterpriseValue', 'heldPercentInsiders', 'heldPercentInstitutions', 'bookValue',
                             'lastFiscalYearEnd', 'nextFiscalYearEnd', 'mostRecentQuarter', 'earningsQuarterlyGrowth',
-                            'netIncomeToCommon', 'trailingEps', 'forwardEps', 'enterpriseToRevenue', 'enterpriseToEbitda',
-                            'SandP52WeekChange', 'lastDividendValue', 'lastDividendDate', 'currentPrice', 'targetHighPrice',
+                            'netIncomeToCommon', 'trailingEps', 'forwardEps', 'enterpriseToRevenue',
+                            'enterpriseToEbitda',
+                            'SandP52WeekChange', 'lastDividendValue', 'lastDividendDate', 'currentPrice',
+                            'targetHighPrice',
                             'targetLowPrice', 'targetMeanPrice', 'targetMedianPrice', 'recommendationMean',
                             'numberOfAnalystOpinions', 'ebitda', 'quickRatio', 'currentRatio', 'debtToEquity',
                             'revenuePerShare', 'returnOnAssets', 'returnOnEquity', 'earningsGrowth', 'revenueGrowth',
                             'grossMargins', 'ebitdaMargins', 'operatingMargins', 'messageBoardId', 'financialCurrency',
                             'triggerable', 'customPriceAlertConfidence', 'exchangeTimezoneName',
-                            'exchangeTimezoneShortName', 'hasPrePostMarketData', 'batch_no', 'symbol_yf','created_datetime']
+                            'exchangeTimezoneShortName', 'hasPrePostMarketData', 'batch_no', 'symbol_yf',
+                            'created_datetime']
         df_selected = pd.DataFrame(columns=selected_columns)
         # df_selected = df.reindex(columns=df_selected.columns)
-        common_cols = [col for col in df_selected.columns if col in df.columns] # Get common columns only
+        common_cols = [col for col in df_selected.columns if col in df.columns]  # Get common columns only
         df_selected[common_cols] = df[common_cols].values
 
-        file_path = chart_ink_to_csv(df_selected, "StockListFromYahoo",False)
-        table_script_names = ["","","Master_Stock_Details"]
+        file_path = chart_ink_to_csv(df_selected, "StockListFromYahoo", False)
+        table_script_names = ["", "", "Master_Stock_Details"]
         insert_into_database_tables(table_script_names, bulk_file_path=file_path)
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -111,4 +118,3 @@ def stock_details_yahoofinance():
 
 if __name__ == "__main__":
     stock_details_yahoofinance()
-

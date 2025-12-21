@@ -123,29 +123,35 @@ def stock_details_yahoofinance():
                             'fiftyTwoWeekLowChange', 'fiftyTwoWeekLowChangePercent', 'fiftyTwoWeekRange',
                             'fiftyTwoWeekHighChange', 'fiftyTwoWeekHighChangePercent', 'fiftyTwoWeekChangePercent',
                             'dividendYield', 'trailingPE', 'forwardPE', 'totalRevenue', 'grossProfits', 'profitMargins',
-                            'priceToBook', 'recommendationKey', 'averageAnalystRating', 'website', 'shortName', 'longName',
+                            'priceToBook', 'recommendationKey', 'averageAnalystRating', 'website', 'shortName',
+                            'longName',
                             'quoteType', 'quoteSourceName', 'typeDisp', 'tradeable', 'exchange', 'fullExchangeName',
                             'market', 'dividendRate', 'priceHint', 'previousClose', 'dayLow', 'dayHigh',
                             'regularMarketPreviousClose', 'regularMarketOpen', 'regularMarketDayLow',
                             'regularMarketDayHigh', 'earningsTimestamp', 'epsTrailingTwelveMonths', 'epsForward',
-                            'epsCurrentYear', 'priceEpsCurrentYear', 'cryptoTradeable', 'marketState', 'corporateActions',
+                            'epsCurrentYear', 'priceEpsCurrentYear', 'cryptoTradeable', 'marketState',
+                            'corporateActions',
                             'trailingPegRatio', 'city', 'country', 'region', 'currency',
-                            'lastSplitFactor', 'lastSplitDate', 'exDividendDate', 'maxAge', 'payoutRatio', 'beta', 'volume',
+                            'lastSplitFactor', 'lastSplitDate', 'exDividendDate', 'maxAge', 'payoutRatio', 'beta',
+                            'volume',
                             'fiftyTwoWeekLow', 'fiftyTwoWeekHigh', 'allTimeHigh', 'allTimeLow', 'fiftyDayAverage',
                             'twoHundredDayAverage', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
                             'enterpriseValue', 'heldPercentInsiders', 'heldPercentInstitutions', 'bookValue',
                             'lastFiscalYearEnd', 'nextFiscalYearEnd', 'mostRecentQuarter', 'earningsQuarterlyGrowth',
-                            'netIncomeToCommon', 'trailingEps', 'forwardEps', 'enterpriseToRevenue', 'enterpriseToEbitda',
-                            'SandP52WeekChange', 'lastDividendValue', 'lastDividendDate', 'currentPrice', 'targetHighPrice',
+                            'netIncomeToCommon', 'trailingEps', 'forwardEps', 'enterpriseToRevenue',
+                            'enterpriseToEbitda',
+                            'SandP52WeekChange', 'lastDividendValue', 'lastDividendDate', 'currentPrice',
+                            'targetHighPrice',
                             'targetLowPrice', 'targetMeanPrice', 'targetMedianPrice', 'recommendationMean',
                             'numberOfAnalystOpinions', 'ebitda', 'quickRatio', 'currentRatio', 'debtToEquity',
                             'revenuePerShare', 'returnOnAssets', 'returnOnEquity', 'earningsGrowth', 'revenueGrowth',
                             'grossMargins', 'ebitdaMargins', 'operatingMargins', 'messageBoardId', 'financialCurrency',
                             'triggerable', 'customPriceAlertConfidence', 'exchangeTimezoneName',
-                            'exchangeTimezoneShortName', 'hasPrePostMarketData', 'batch_no', 'symbol_yf','created_datetime']
+                            'exchangeTimezoneShortName', 'hasPrePostMarketData', 'batch_no', 'symbol_yf',
+                            'created_datetime']
         df_selected = pd.DataFrame(columns=selected_columns)
         # df_selected = df.reindex(columns=df_selected.columns)
-        common_cols = [col for col in df_selected.columns if col in df.columns] # Get common columns only
+        common_cols = [col for col in df_selected.columns if col in df.columns]  # Get common columns only
         df_selected[common_cols] = df[common_cols].values
         # # 5. Clean numeric columns for SQL bulk load
         # numeric_cols = ['marketCap', 'regularMarketPrice', 'regularMarketChange', 'fiftyTwoWeekLowChange',

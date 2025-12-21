@@ -1,8 +1,6 @@
-import pandas as pd
 import numpy as np
 import yfinance as yf
 from scipy.signal import argrelextrema
-import matplotlib.pyplot as plt
 
 # Download Nifty or any stock
 ticker = 'RELIANCE.NS'  # Change to your preferred stock
@@ -50,7 +48,7 @@ df.loc[df.index[max_idx], 'max'] = df['Close'].iloc[max_idx]
 # (Example conceptually, not automated yet)
 wave_labels = ['1', '2', '3', '4', '5', 'A', 'B', 'C']
 
-from ta.trend import macd, ema_indicator
+from ta.trend import ema_indicator
 
 df['EMA50'] = ema_indicator(df['Close'].iloc[min_idx], window=50)
 

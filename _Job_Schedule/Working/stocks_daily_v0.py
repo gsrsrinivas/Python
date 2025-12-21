@@ -14,4 +14,3 @@ if __name__ == "__main__":
             print("Both processes have finished.")
             break
         time.sleep(1)
-

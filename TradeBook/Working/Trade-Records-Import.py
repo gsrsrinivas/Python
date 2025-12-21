@@ -90,9 +90,10 @@ overall_profit_loss_perc = ((total_sell_val - total_buy_val) / total_buy_val) * 
 
 # Reorder columns
 outdf = outdf[['Symbol',
-               'Buy Date',  'Buy Qty',  'Buy Rate',  'Buy Value',
+               'Buy Date', 'Buy Qty', 'Buy Rate', 'Buy Value',
                'Sell Date', 'Sell Qty', 'Sell Rate', 'Sell Value',
-               'ISIN','Exchange','Segment', 'Series','trade_id','Order_id','Order_Execution_Time','Profit/Loss %']]
+               'ISIN', 'Exchange', 'Segment', 'Series', 'trade_id', 'Order_id', 'Order_Execution_Time',
+               'Profit/Loss %']]
 
 outdf.to_csv(outdf, 'Tradebookformated.csv', index=False)
 

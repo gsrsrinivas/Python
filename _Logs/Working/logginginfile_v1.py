@@ -2,6 +2,7 @@ import logging
 import sys
 from logging.handlers import RotatingFileHandler
 
+
 class CustomFormatter(logging.Formatter):
     # ANSI escape codes for colors
     grey = "\x1b[38;21m"
@@ -24,7 +25,8 @@ class CustomFormatter(logging.Formatter):
         formatter = logging.Formatter(log_fmt)
         return formatter.format(record)
 
-def setup_logger(name, log_file, max_bytes=1024*1024, backup_count=5):
+
+def setup_logger(name, log_file, max_bytes=1024 * 1024, backup_count=5):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
@@ -47,6 +49,7 @@ def setup_logger(name, log_file, max_bytes=1024*1024, backup_count=5):
         logger.addHandler(console_handler)
 
     return logger
+
 
 # Example usage
 logger = setup_logger("my_script", "my_script.log")

@@ -11,7 +11,7 @@ def find_duplicates(folder_path):
         print("Scanning folder:", dirpath)
         for filename in filenames:
             # print("Processing file:", filename)
-        # for filename in os.listdir(folder_path):
+            # for filename in os.listdir(folder_path):
             if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                 # image_path = os.path.join(folder_path, filename)
                 image_path = os.path.join(dirpath, filename)

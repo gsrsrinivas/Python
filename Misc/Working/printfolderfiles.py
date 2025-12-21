@@ -1,5 +1,6 @@
 import os
 
+
 def list_directory_contents(path='.'):
     """
     Lists all files and subdirectories in the given path.
@@ -13,6 +14,7 @@ def list_directory_contents(path='.'):
         print(f"Error: Directory not found at '{path}'")
     except Exception as e:
         print(f"An error occurred: {e}")
+
 
 # Example usage:
 # List contents of the current directory

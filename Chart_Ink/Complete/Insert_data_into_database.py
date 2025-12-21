@@ -25,8 +25,10 @@ def insert_data_into_database():
 
     # Iterate over the DataFrame and insert data into the SQL Server table
     for index, row in df.iterrows():
-        cursor.execute(insert_query, row['sno'], row['stock_name'], row['symbol'], row['bsecode'], row['percent_change'],
-                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'], row['segments'],
+        cursor.execute(insert_query, row['sno'], row['stock_name'], row['symbol'], row['bsecode'],
+                       row['percent_change'],
+                       row['price'], row['volume'], row['Indicator'], row['TimeLine'], row['Direction'],
+                       row['segments'],
                        row['Batch_No'])
 
     # Commit the transaction

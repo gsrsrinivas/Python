@@ -1,7 +1,8 @@
 # this is working fine
 # can be used to prevent sleep during long-running tasks
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Get parent dir of this file and add to sys.path
 from _Common_Functions.base_functions import *
 

@@ -1,8 +1,8 @@
-import yfinance as yf
-import pandas as pd
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 import numpy as np
-from datetime import datetime
+import yfinance as yf
 
 # Define symbol and date range
 symbol = 'HAL.NS'

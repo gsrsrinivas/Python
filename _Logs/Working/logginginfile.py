@@ -1,14 +1,15 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-def setup_rotating_logger(script_name, max_bytes=1024*1024, backup_count=5):
+
+def setup_rotating_logger(script_name, max_bytes=1024 * 1024, backup_count=5):
     logger = logging.getLogger(script_name)
     logger.setLevel(logging.INFO)
 
     log_file = f"{script_name}.log"
     handler = RotatingFileHandler(
         log_file,
-        maxBytes=max_bytes,       # Rotate when file reaches 1MB
+        maxBytes=max_bytes,  # Rotate when file reaches 1MB
         backupCount=backup_count  # Keep last 5 logs
     )
 
@@ -21,8 +22,7 @@ def setup_rotating_logger(script_name, max_bytes=1024*1024, backup_count=5):
 
     return logger
 
+
 # Example usage
 logger = setup_rotating_logger(__file__)
 logger.info("Script1 started execution")
-
-

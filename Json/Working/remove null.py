@@ -1,5 +1,6 @@
 import json
 
+
 def remove_nulls(value):
     """ this function removes all the null pairs from a json string recursively
     and the out is same as input
@@ -12,6 +13,7 @@ def remove_nulls(value):
         return [remove_nulls(item) for item in value if item is not None]
     else:
         return value
+
 
 def remove_nulls_example():
     # Example usage:
@@ -39,5 +41,6 @@ def remove_nulls_example():
     result_json_str = json.dumps(cleaned_data, indent=2)
     print(result_json_str)
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     remove_nulls_example()

@@ -40,7 +40,8 @@ def process_dataframe(df):
     # Group sells by symbol and reset index for positional access
     sells_grouped = sells.groupby('Symbol')
     for symbol, buys_sub in buys.groupby('Symbol'):
-        sells_sub = sells_grouped.get_group(symbol).copy().reset_index(drop=True) if symbol in sells_grouped.groups else pd.DataFrame(columns=sells.columns)
+        sells_sub = sells_grouped.get_group(symbol).copy().reset_index(
+            drop=True) if symbol in sells_grouped.groups else pd.DataFrame(columns=sells.columns)
         sell_pointer = 0
         for _, buy_row in buys_sub.iterrows():
             remain_buy = buy_row['Quantity']
@@ -159,16 +160,24 @@ def format_trade_book():
     output_df = process_dataframe(df)
     out_df = pd.DataFrame(output_df)
     out_df.loc[(out_df['Account'] == ''), ['Account', ]] = ['LD3666', ]
-    out_df.loc[(out_df['Sell Exch'] == 'MCX') & (out_df['Symbol'].str.contains('PE')), ['Sgmt', ]] = ['ComOpt',]
+    out_df.loc[(out_df['Sell Exch'] == 'MCX') & (out_df['Symbol'].str.contains('PE')), ['Sgmt', ]] = ['ComOpt', ]
     out_df.loc[(out_df['Buy Exch'] == 'MCX') & (out_df['Symbol'].str.contains('CE')), ['Sgmt', ]] = ['ComOpt', ]
     out_df.loc[(out_df['Buy Exch'] == 'MCX') & (out_df['Symbol'].str.contains('FUT')), ['Sgmt', ]] = ['ComFut', ]
-    out_df.loc[(out_df['Buy Exch'].str.contains('SE')) & (out_df['Symbol'].str.contains('FUT')) & (out_df['Sgmt']=='FO'), ['Sgmt', ]] = ['Fut', ]
-    out_df.loc[(out_df['Buy Exch'].str.contains('SE')) & (out_df['Symbol'].str.contains('PE')) & (out_df['Sgmt']=='FO'), ['Sgmt', ]] = ['Opt', ]
-    out_df.loc[(out_df['Buy Exch'].str.contains('SE')) & (out_df['Symbol'].str.contains('CE')) & (out_df['Sgmt']=='FO'), ['Sgmt', ]] = ['Opt', ]
+    out_df.loc[
+        (out_df['Buy Exch'].str.contains('SE')) & (out_df['Symbol'].str.contains('FUT')) & (out_df['Sgmt'] == 'FO'), [
+            'Sgmt', ]] = ['Fut', ]
+    out_df.loc[
+        (out_df['Buy Exch'].str.contains('SE')) & (out_df['Symbol'].str.contains('PE')) & (out_df['Sgmt'] == 'FO'), [
+            'Sgmt', ]] = ['Opt', ]
+    out_df.loc[
+        (out_df['Buy Exch'].str.contains('SE')) & (out_df['Symbol'].str.contains('CE')) & (out_df['Sgmt'] == 'FO'), [
+            'Sgmt', ]] = ['Opt', ]
     # total_buy_val = out_df['Buy Value'].sum()
     # total_sell_val = pd.to_numeric(out_df['Sell Value'], errors='coerce').fillna(0).sum()
     # overall_profit_loss_perc = ((total_sell_val - total_buy_val) / total_buy_val) * 100 if total_buy_val != 0 else 0
-    out_df = out_df[['Symbol','Buy Price','Buy Qty','Sell Price','Sell Qty','Buy Date','Sell Date','Account','Buy Exch','Sell Exch','Sgmt',]]
+    out_df = out_df[
+        ['Symbol', 'Buy Price', 'Buy Qty', 'Sell Price', 'Sell Qty', 'Buy Date', 'Sell Date', 'Account', 'Buy Exch',
+         'Sell Exch', 'Sgmt', ]]
     # out_df = out_df[['Buy Symbol', 'Buy Date', 'Buy Qty', 'Buy Price', 'Buy Value'
     #     ,'Buy ISIN','Buy Exch','Buy Sgmt', 'Buy Series','Buy Trade ID','Buy Order ID','Buy Order Execution Time'
     #     ,'Sell Symbol', 'Sell Date', 'Sell Qty', 'Sell Price', 'Sell Value'

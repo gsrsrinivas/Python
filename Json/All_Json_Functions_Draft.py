@@ -1007,6 +1007,4 @@ def generate_sample_json_example():
     df = pd.DataFrame({"json_data": sample_data})
     df.to_excel("../Output/100_sample_json_strings.xlsx", index=False)
 
-
 ##----------------------------------------------------------------------------------------------------------------------
-

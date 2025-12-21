@@ -1,5 +1,6 @@
 import tkinter as tk
 
+
 class BorderlessApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -18,6 +19,7 @@ class BorderlessApp(tk.Tk):
 
     def show_title_bar(self, event=None):
         self.overrideredirect(False)
+
 
 if __name__ == "__main__":
     app = BorderlessApp()

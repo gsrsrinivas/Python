@@ -1,10 +1,11 @@
 import matplotlib
+
 matplotlib.use('Agg')  # Use a non-GUI backend
 import matplotlib.pyplot as plt
 import yfinance as yf
 import os
 
-symbols = ['HAL.NS',]
+symbols = ['HAL.NS', ]
 thumb_dir = 'thumbnails'  # Folder to save thumbnails
 os.makedirs(thumb_dir, exist_ok=True)  # Create thumbnails directory if it doesn't exist
 

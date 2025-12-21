@@ -1,7 +1,7 @@
 import logging
 import sys
-import functools
 from logging.handlers import RotatingFileHandler
+
 
 # 🌈 Custom formatter for color-coded console output
 class CustomFormatter(logging.Formatter):
@@ -25,8 +25,9 @@ class CustomFormatter(logging.Formatter):
         formatter = logging.Formatter(log_fmt)
         return formatter.format(record)
 
+
 # 🔁 Setup logger with rotating file + color console + print/sys.stderr redirection
-def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024, backup_count=5):
+def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024 * 1024, backup_count=5):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
@@ -49,6 +50,7 @@ def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024*1024
 
     return logger
 
+
 # 🔄 Redirect print and stderr to logger
 class StreamToLogger:
     def __init__(self, logger, log_level=logging.INFO):
@@ -62,6 +64,7 @@ class StreamToLogger:
 
     def flush(self):
         pass
+
 
 # # 🧠 Decorator to log function calls and returns
 # def log_calls(func):
@@ -79,10 +82,12 @@ class StreamToLogger:
 def greet(name):
     print(f"Hello, {name}!")
 
+
 # @log_calls
 def add(a, b):
     print(f"Adding {a} + {b}")
     return a + b
+
 
 # 🚀 Main function
 def main():
@@ -91,6 +96,7 @@ def main():
     result = add(5, 7)
     print(f"Result: {result}")
     raise ValueError("This is a test error for stderr logging")
+
 
 if __name__ == "__main__":
     try:

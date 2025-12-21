@@ -1,11 +1,14 @@
-import yfinance as yf
-import pandas as pd
-import numpy as np
-from scipy.signal import argrelextrema
 import matplotlib
+import numpy as np
+import pandas as pd
+import yfinance as yf
+from scipy.signal import argrelextrema
+
 matplotlib.rcParams['figure.max_open_warning'] = 100  # or any number you prefer
-matplotlib.use('Agg')  # Use a non-GUI backend # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
+matplotlib.use(
+    'Agg')  # Use a non-GUI backend # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 import matplotlib.pyplot as plt
+
 
 def find_double_top(df, order=8, tolerance=0.03):
     # Find local maxima and minima
@@ -22,9 +25,15 @@ def find_double_top(df, order=8, tolerance=0.03):
         if len(trough_range) == 0:
             continue  # Need a trough between two tops
         trough = trough_range[0]
-        price1 = float(df['Close'].iloc[first_top].iloc[0]) if isinstance(df['Close'].iloc[first_top],pd.Series) else float(df['Close'].iloc[first_top])
-        price2 = float(df['Close'].iloc[second_top].iloc[0]) if isinstance(df['Close'].iloc[second_top],pd.Series) else float(df['Close'].iloc[second_top])
-        trough_price = float(df['Close'].iloc[trough].iloc[0]) if isinstance(df['Close'].iloc[trough],pd.Series) else float(df['Close'].iloc[trough])
+        price1 = float(df['Close'].iloc[first_top].iloc[0]) if isinstance(df['Close'].iloc[first_top],
+                                                                          pd.Series) else float(
+            df['Close'].iloc[first_top])
+        price2 = float(df['Close'].iloc[second_top].iloc[0]) if isinstance(df['Close'].iloc[second_top],
+                                                                           pd.Series) else float(
+            df['Close'].iloc[second_top])
+        trough_price = float(df['Close'].iloc[trough].iloc[0]) if isinstance(df['Close'].iloc[trough],
+                                                                             pd.Series) else float(
+            df['Close'].iloc[trough])
 
         # Check price proximity of peaks
         if abs(price1 - price2) / max(price1, price2) <= tolerance:

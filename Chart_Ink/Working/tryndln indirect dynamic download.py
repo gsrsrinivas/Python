@@ -1,8 +1,9 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-import time
 import os
+import time
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 
 # Set up Chrome options to specify the download directory
 download_dir = os.path.abspath("Output")
@@ -31,7 +32,8 @@ try:
     driver.get('https://trendlyne.com/page-with-download-link/')  # Replace with actual page URL
 
     # 4. Click the download button
-    download_button = driver.find_element(By.XPATH, '//button[contains(text(), "Download")]')  # Adjust selector as needed
+    download_button = driver.find_element(By.XPATH,
+                                          '//button[contains(text(), "Download")]')  # Adjust selector as needed
     download_button.click()
 
     # 5. Wait for download to finish (better to check file system in production)

@@ -26,8 +26,10 @@ data['BB_lower'] = BollingerBands(data['Adj Close']).bollinger_lband()
 
 data['ADX'] = ADXIndicator(data['High'], data['Low'], data['Adj Close']).adx()
 data['OBV'] = OnBalanceVolumeIndicator(data['Adj Close'], data['Volume']).on_balance_volume()
-data['Chaikin_MF'] = ChaikinMoneyFlowIndicator(data['High'], data['Low'], data['Adj Close'], data['Volume']).chaikin_money_flow()
-data['VWAP'] = VolumeWeightedAveragePrice(data['High'], data['Low'], data['Adj Close'], data['Volume']).volume_weighted_average_price()
+data['Chaikin_MF'] = ChaikinMoneyFlowIndicator(data['High'], data['Low'], data['Adj Close'],
+                                               data['Volume']).chaikin_money_flow()
+data['VWAP'] = VolumeWeightedAveragePrice(data['High'], data['Low'], data['Adj Close'],
+                                          data['Volume']).volume_weighted_average_price()
 
 data['CCI'] = data['Adj Close'].rolling(window=20).apply(lambda x: (x[-1] - x.mean()) / (0.015 * x.std()), raw=False)
 data['WPR'] = WilliamsRIndicator(data['High'], data['Low'], data['Adj Close']).williams_r()

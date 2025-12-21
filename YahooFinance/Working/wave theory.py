@@ -1,13 +1,11 @@
 # Install if required:
 # pip install yfinance matplotlib pandas taew
 
-import yfinance as yf
-import pandas as pd
-import matplotlib.pyplot as plt
-import taew
-import numpy as np
-import sys
 import os
+import sys
+
+import numpy as np
+import taew
 
 # Add your custom module path if needed
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # Adjust according to your filepath

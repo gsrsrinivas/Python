@@ -39,7 +39,8 @@ def process_dataframe(df):
     # Group sells by symbol and reset index for positional access
     sells_grouped = sells.groupby('symbol')
     for symbol, buys_sub in buys.groupby('symbol'):
-        sells_sub = sells_grouped.get_group(symbol).copy().reset_index(drop=True) if symbol in sells_grouped.groups else pd.DataFrame(columns=sells.columns)
+        sells_sub = sells_grouped.get_group(symbol).copy().reset_index(
+            drop=True) if symbol in sells_grouped.groups else pd.DataFrame(columns=sells.columns)
         sell_pointer = 0
         for _, buy_row in buys_sub.iterrows():
             remain_buy = buy_row['qty']
@@ -97,14 +98,22 @@ def format_trade_book():
 
     out_df.loc[(out_df['Buy Exch'] == 'MCX') & (out_df['symbol'].str.contains('CF')), ['Sgmt', ]] = ['ComOpt', ]
 
-    out_df.loc[(out_df['Sell Exch'] == 'MCX') & (out_df['symbol'].str.contains('PE')), ['Sgmt', ]] = ['ComOpt',]
+    out_df.loc[(out_df['Sell Exch'] == 'MCX') & (out_df['symbol'].str.contains('PE')), ['Sgmt', ]] = ['ComOpt', ]
     out_df.loc[(out_df['Buy Exch'] == 'MCX') & (out_df['symbol'].str.contains('CE')), ['Sgmt', ]] = ['ComOpt', ]
     out_df.loc[(out_df['Buy Exch'] == 'MCX') & (out_df['symbol'].str.contains('FUT')), ['Sgmt', ]] = ['ComFut', ]
 
-    out_df.loc[(out_df['Buy Exch'].str.contains('SE')) & (out_df['symbol'].str.contains('FUT')) & (out_df['Sgmt']=='FO'), ['Sgmt', ]] = ['Fut', ]
-    out_df.loc[(out_df['Buy Exch'].str.contains('SE')) & (out_df['symbol'].str.contains('PE')) & (out_df['Sgmt']=='FO'), ['Sgmt', ]] = ['Opt', ]
-    out_df.loc[(out_df['Buy Exch'].str.contains('SE')) & (out_df['symbol'].str.contains('CE')) & (out_df['Sgmt']=='FO'), ['Sgmt', ]] = ['Opt', ]
-    out_df = out_df[['symbol','Buy trade_price','Buy qty','Sell trade_price','Sell qty','Buy date','Sell date','Account','Buy Exch','Sell Exch','Sgmt',]]
+    out_df.loc[
+        (out_df['Buy Exch'].str.contains('SE')) & (out_df['symbol'].str.contains('FUT')) & (out_df['Sgmt'] == 'FO'), [
+            'Sgmt', ]] = ['Fut', ]
+    out_df.loc[
+        (out_df['Buy Exch'].str.contains('SE')) & (out_df['symbol'].str.contains('PE')) & (out_df['Sgmt'] == 'FO'), [
+            'Sgmt', ]] = ['Opt', ]
+    out_df.loc[
+        (out_df['Buy Exch'].str.contains('SE')) & (out_df['symbol'].str.contains('CE')) & (out_df['Sgmt'] == 'FO'), [
+            'Sgmt', ]] = ['Opt', ]
+    out_df = out_df[
+        ['symbol', 'Buy trade_price', 'Buy qty', 'Sell trade_price', 'Sell qty', 'Buy date', 'Sell date', 'Account',
+         'Buy Exch', 'Sell Exch', 'Sgmt', ]]
 
     output_file = get_output_file_path()
     out_df.to_excel(output_file, index=False)

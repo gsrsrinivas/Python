@@ -29,8 +29,7 @@ def fetch_ticker_info_indefinite_429(symbol: str, base_delay: float = 2.0, max_a
             if e.response and e.response.status_code == 429:
                 attempt += 1
                 wait_time = base_delay * (1.5 ** min(attempt, 10))  # Progressive backoff, caps at ~2min
-                print(
-                    f"⏳ 429 {symbol} #{attempt}/{max_attempts}. Waiting {wait_time:.0f}s... (total wait: {attempt * base_delay:.0f}s)")
+                print(f"⏳ 429 {symbol} #{attempt}/{max_attempts}. Waiting {wait_time:.0f}s... (total wait: {attempt * base_delay:.0f}s)")
                 time.sleep(wait_time)
                 continue
             else:

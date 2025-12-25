@@ -31,6 +31,7 @@ def stocks_daily():
             cmd = f'start /wait {title} cmd /c "python {script}"'
             proc = subprocess.Popen(cmd, shell=True)
             processes.append(proc)
+            time.sleep(5)  # Stagger the starts slightly
 
         # Wait for all to complete
         for proc in processes:

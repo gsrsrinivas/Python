@@ -15,6 +15,7 @@ import pyodbc
 import requests
 import yfinance as yf
 from bs4 import BeautifulSoup as Bs
+from requests.exceptions import HTTPError
 
 # Constants from Windows API
 ES_CONTINUOUS = 0x80000000
@@ -85,8 +86,35 @@ def retry_on_error(max_retries=3, delay=60):
 
 
 @retry_on_error(max_retries=3)
-def safe_ticker(symbol):
+def safe_ticker_simple(symbol):
     return yf.Ticker(symbol)
+
+
+@retry_on_error(max_retries=3)
+def safe_ticker(symbol, max_retries=3, base_delay=5):
+    delay = base_delay
+    for attempt in range(1, max_retries + 1):
+        try:
+            # print(f"Processing: {symbol}, attempt {attempt}")
+            # data = yf.download(symbol, period="1y", interval="1d")
+            data = yf.Ticker(symbol)
+            # optional: validate data here
+            return data
+        except HTTPError as e:
+            if e.response and e.response.status_code == 429:
+                attempt += 1
+                wait_time = base_delay * (1.5 ** min(attempt, 10))  # Progressive backoff, caps at ~2min
+                print(f"⏳ 429 {symbol} #{attempt}/{max_retries}. Waiting {wait_time:.0f}s... (total wait: {attempt * base_delay:.0f}s)")
+                time.sleep(wait_time)
+                # print(f"Rate limited for {symbol}: {e}. Sleeping {delay}s, attempt {attempt}")
+                # time.sleep(delay)
+                # delay *= 2  # exponential backoff
+                continue
+        except Exception as e:
+            # other errors: decide if you want to retry or not
+            print(f"Error for {symbol}: {e}")
+            raise
+    raise RuntimeError(f"Failed to fetch {symbol} after {max_retries} retries.")
 
 
 class StreamToLogger:

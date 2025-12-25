@@ -50,33 +50,34 @@ def save_ticker_info_to_csv(ticker_info: Dict[str, Dict], filename: str):
         filename: Output CSV filename
     """
     df = pd.DataFrame([info for info in ticker_info.values() if info])
-    df.to_csv(filename, index=False)
+    file_path = chart_ink_to_csv(df, filename, False)
+    # df.to_csv(filename, index=False)
     print(f"Saved {len(df)} tickers to {filename}")
+    table_script_names = ["", "", "Master_Stock_Details"]
+    insert_into_database_tables(table_script_names, bulk_file_path=file_path)
 
 
 def stocks_detail_tickers():
     try:
         print_start_timestamp()
         print("Fetching stock data from Yahoo Finance...")
-
         with get_database_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""select distinct ms.Symbol, ms.Symbol_YF from Stocks_Analysis.dbo.Master_Segments ms;""")
             database_symbols = cursor.fetchall()
             total_stock = len(database_symbols)
-
         print(f"Total symbols to process: {total_stock}")
         # Example usage for your NSE stocks
-        nse_symbols = [
-            sym[1] for sym in database_symbols
-            if sym[1] and sym[1].endswith('.NS')
-        ]
+        nse_symbol = []
+        for sym in database_symbols:
+            nse_symbol.extend([sym[0] + '.NS'])
+            if sym[1] and sym[1] != sym[0] and sym[1].strip() != '' and sym[1].upper() != 'N/A' and sym[1] is not None:
+                nse_symbol.extend([sym[1] + '.NS'])
+        print(f"after consolidating all values from database: {len(nse_symbol)}")
+        nse_symbols = list(set(nse_symbol))  # Optional: Remove duplicates if any
+        print(f"after removing duplicates: {len(nse_symbols)}")
         info_data = batch_tickers_info(nse_symbols, batch_size=50, delay=0.2)
         save_ticker_info_to_csv(info_data, 'nse_ticker_info.csv')
-        # # Save to DataFrame
-        # df_info = pd.DataFrame([info_data[sym] for sym in info_data if info_data[sym]])
-        # df_info.to_csv('ticker_info.csv', index=False)
-        # print(f"Saved {len(df_info)} tickers to ticker_info.csv")
     except Exception as e:
         print(f"Database error: {e}")
         return

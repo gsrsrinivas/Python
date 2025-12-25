@@ -1,12 +1,11 @@
 # stock data details from yahoo finance
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parents[1])) # Get parent directory of current file # Add it to sys.path
 import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning) # Suppress only specific FutureWarning related to concatenation
 
 from _Common_Functions.base_functions import *
-
-# Suppress only the specific FutureWarning related to concatenation
-warnings.simplefilter(action='ignore', category=FutureWarning)
-# Get parent directory of current file # Add it to sys.path
-sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 
 def stock_details_yahoofinance():

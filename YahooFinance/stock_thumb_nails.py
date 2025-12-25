@@ -1,14 +1,13 @@
-import matplotlib
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parents[1])) # Get parent directory of current file # Add it to sys.path
 
-# or any number you prefer
-matplotlib.rcParams['figure.max_open_warning'] = 100
-# Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
-matplotlib.use('Agg')
+import matplotlib
+matplotlib.rcParams['figure.max_open_warning'] = 100 # or any number you prefer
+matplotlib.use('Agg') # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 import matplotlib.pyplot as plt
 
 from _Common_Functions.base_functions import *
-# Get parent directory of current file # Add it to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 
 def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', period_value='30d'):

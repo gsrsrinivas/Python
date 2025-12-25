@@ -1,9 +1,8 @@
 import subprocess
-
-from _Common_Functions.base_functions import *
-
+import sys
+from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-
+from _Common_Functions.base_functions import *
 
 def stocks_daily():
     """
@@ -19,9 +18,9 @@ def stocks_daily():
 
         project_folder_path = str(project_directory_path())
         scripts = [
-            # project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
+            project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
             project_folder_path + f'\\YahooFinance\\stock_detail_tickers.py',
-            # project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
+            project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
         ]
 
         processes = []

@@ -5,11 +5,10 @@ matplotlib.rcParams['figure.max_open_warning'] = 100
 # Ensure matplotlib uses a non-GUI backend to avoid display issues in headless environments
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import sys, os
 
+from _Common_Functions.base_functions import *
 # Get parent directory of current file # Add it to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from _Common_Functions.base_functions import *
 
 
 def plot_stock(thumb_dir, symbol_name, i=0, total_len=0, interval_value='1d', period_value='30d'):
@@ -60,16 +59,16 @@ def valid_intervals_periods(load_all=''):
                             {'1y': 'max'}, ]  # Valid periods and intervals
     else:
         valid_int_period = [{'15m': '5d'}, {'1h': '5d'}, {'4h': '1mo'}, {'1d': '1y'}, ]
-        valid_int_period += [
-            {'1wk': '2y'}, ] if weekday == 0 else []  # Add weekly intervals at the start of the week (Monday)
-        valid_int_period += [
-            {'1mo': '10y'}] if today.day == 1 else []  # Add monthly intervals at the start of the month
-        valid_int_period += [{'3mo': '5y'}, {'3mo': '10y'}, ] if today.month in [1, 4, 7,
-                                                                                 10] and today.day == 1 else []  # Add quarterly intervals at the start of a quarter
-        valid_int_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1,
-                                                                               7] and today.day == 1 else []  # Add half-yearly intervals at the start of a half-year
-        valid_int_period += [{
-                                 '1y': 'max'}, ] if today.month == 1 and today.day == 1 else []  # Add yearly intervals at the start of the year
+        # Add weekly intervals at the start of the week (Monday)
+        valid_int_period += [{'1wk': '2y'}, ] if weekday == 0 else []
+        # Add monthly intervals at the start of the month
+        valid_int_period += [{'1mo': '10y'}] if today.day == 1 else []
+        # Add quarterly intervals at the start of a quarter
+        valid_int_period += [{'3mo': '5y'}, {'3mo': '10y'}, ] if today.month in [1, 4, 7, 10] and today.day == 1 else []
+        # Add half-yearly intervals at the start of a half-year
+        valid_int_period += [{'6mo': '5y'}, {'6mo': '10y'}] if today.month in [1, 7] and today.day == 1 else []
+        # Add yearly intervals at the start of the year
+        valid_int_period += [{'1y': 'max'}, ] if today.month == 1 and today.day == 1 else []
 
     return valid_int_period  # Return the list of valid intervals and periods
 

@@ -1,9 +1,8 @@
 import subprocess
-import sys
-from pathlib import Path
+
+from _Common_Functions.base_functions import *
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from _Common_Functions.base_functions import *
 
 
 def stocks_daily():
@@ -19,10 +18,11 @@ def stocks_daily():
         # sys.exit() if trading_hours_check() == "exit" else None
 
         project_folder_path = str(project_directory_path())
-        scripts = [project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
-                   project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
-                   project_folder_path + f'\\YahooFinance\\stock_detail_tickers.py',
-                   ]
+        scripts = [
+            # project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
+            project_folder_path + f'\\YahooFinance\\stock_detail_tickers.py',
+            # project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
+        ]
 
         processes = []
         for script in scripts:
@@ -31,7 +31,7 @@ def stocks_daily():
             cmd = f'start /wait {title} cmd /c "python {script}"'
             proc = subprocess.Popen(cmd, shell=True)
             processes.append(proc)
-            time.sleep(5)  # Stagger the starts slightly
+            # time.sleep(5)  # Stagger the starts slightly
 
         # Wait for all to complete
         for proc in processes:

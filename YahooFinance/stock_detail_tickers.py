@@ -5,6 +5,8 @@ from _Common_Functions.base_functions import *
 
 # Suppress only the specific FutureWarning related to concatenation
 warnings.simplefilter(action='ignore', category=FutureWarning)
+# Get parent directory of current file # Add it to sys.path
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 
 def stock_details_yahoofinance():

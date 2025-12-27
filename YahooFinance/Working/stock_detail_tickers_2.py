@@ -3,7 +3,7 @@ from typing import List, Dict
 from _Common_Functions.base_functions import *
 
 
-def batch_tickers_info(tickers: List[str], batch_size: int = 50, delay: float = 0.2) -> Dict[str, Dict]:
+def batch_tickers_info(tickers: List[str], batch_size: int = 25, delay: float = 0.2) -> Dict[str, Dict]:
     """
     Batch download ticker info using yf.Tickers to avoid rate limits.
     Splits large lists into batches of batch_size symbols.
@@ -76,7 +76,7 @@ def stocks_detail_tickers():
         print(f"after consolidating all values from database: {len(nse_symbol)}")
         nse_symbols = list(set(nse_symbol))  # Optional: Remove duplicates if any
         print(f"after removing duplicates: {len(nse_symbols)}")
-        info_data = batch_tickers_info(nse_symbols, batch_size=50, delay=0.2)
+        info_data = batch_tickers_info(nse_symbols, batch_size=25, delay=0.5)
         save_ticker_info_to_csv(info_data, 'nse_ticker_info.csv')
     except Exception as e:
         print(f"Database error: {e}")

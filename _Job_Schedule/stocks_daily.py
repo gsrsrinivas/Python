@@ -18,8 +18,8 @@ def stocks_daily():
 
         project_folder_path = str(project_directory_path())
         scripts = [
-            project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
             project_folder_path + f'\\YahooFinance\\stock_detail_tickers.py',
+            project_folder_path + f'\\Chart_Ink\\chart-ink-files-download.py',
             project_folder_path + f'\\YahooFinance\\stock_thumb_nails.py',
         ]
 

@@ -36,42 +36,16 @@ def stock_details_yahoofinance():
         #         column_values[i] = (column_values[i][0], None)
 
         for i, symbol in enumerate(column_values, start=1):
-            # if i % 800 == 0:
-            #     print("Sleeping for 20 seconds...")
-            #     time.sleep(20)  # 20 seconds
-            # for sym in symbol:
             sym = symbol[1]
             try:
                 if sym is None or sym.strip() == '':
                     continue
-                print(f"{i} out of {total_stock}: Processing: {sym}")
-                # sym = sym + '.NS'
-                ticker = safe_ticker(sym)
-                # break_for_loop = 0
-                # if not ticker.info or 'regularMarketPrice' not in ticker.info:
-                #     sym = sym.replace('.NS', '.BO')
-                #     ticker = safe_ticker(sym)
-                #     if not ticker.info or 'regularMarketPrice' not in ticker.info:
-                #         sym = sym.replace('.BO', '')
-                #         ticker = safe_ticker(sym)
-                #         if not ticker.info or 'regularMarketPrice' not in ticker.info:
-                #             print(f"No data found for symbol: {sym}")
-                #             continue
-                #         else:
-                #             print(f"{i} out of {total_stock}: Processing: {sym}")
-                #             break_for_loop = 1
-                #     else:
-                #         print(f"{i} out of {total_stock}: Processing: {sym}")
-                #         break_for_loop = 1
-                # else:
-                #     print(f"{i} out of {total_stock}: Processing: {sym}")
-                #     break_for_loop = 1
+                # print(f"{i} out of {total_stock}: Processing: {sym}")
+                ticker = safe_ticker(sym,i, total_stock)
                 df1 = pd.DataFrame([ticker.info])
                 df2 = pd.DataFrame([{'symbol_db': symbol[0], 'symbol_yf': symbol[1], 'batch_no': batch_no,
                                      'created_datetime': created_datetime}])
                 df = pd.concat([df, pd.concat([df1, df2], axis=1)], axis=0, ignore_index=True)
-                # if break_for_loop == 1:
-                #     break
             except Exception as e:
                 print(f"Error processing symbol: {sym} - {e}")
                 continue

@@ -1,18 +1,11 @@
-# import pandas as pd
-# import yfinance as yf
 # from requests.exceptions import HTTPError
-# import time
-# from concurrent.futures import ThreadPoolExecutor, as_completed
-
-import sys
 import threading
 from concurrent.futures import as_completed
-from pathlib import Path
-from typing import List, Dict
-
-sys.path.append(str(Path(__file__).resolve().parents[1])) # Get parent directory of current file # Add it to sys.path
+from typing import List
 
 from _Common_Functions.base_functions import *
+
+sys.path.append(str(Path(__file__).resolve().parents[1])) # Get parent directory of current file # Add it to sys.path
 
 
 def fetch_ticker_info_indefinite_429(symbol: str, position: int = None, total: int = None, base_delay: float = 5.0, max_attempts: int = 100) -> Dict[str, Dict]:

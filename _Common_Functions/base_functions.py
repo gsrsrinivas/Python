@@ -15,7 +15,6 @@ import pyodbc
 import requests
 import yfinance as yf
 from bs4 import BeautifulSoup as Bs
-from requests.exceptions import HTTPError
 
 # Constants from Windows API
 ES_CONTINUOUS = 0x80000000
@@ -91,7 +90,7 @@ def safe_ticker_simple(symbol):
 
 
 @retry_on_error(max_retries=3)
-def safe_ticker(symbol, max_retries=3, base_delay=5):
+def safe_ticker_1(symbol, max_retries=3, base_delay=5):
     delay = base_delay
     for attempt in range(1, max_retries + 1):
         try:
@@ -100,8 +99,9 @@ def safe_ticker(symbol, max_retries=3, base_delay=5):
             data = yf.Ticker(symbol)
             # optional: validate data here
             return data
-        except HTTPError as e:
-            if e.response and e.response.status_code == 429:
+        except Exception as e:
+        # except HTTPError as e:
+            if "Too Many Requests. Rate limited." in str(e):
                 attempt += 1
                 wait_time = base_delay * (1.5 ** min(attempt, 10))  # Progressive backoff, caps at ~2min
                 print(f"⏳ 429 {symbol} #{attempt}/{max_retries}. Waiting {wait_time:.0f}s... (total wait: {attempt * base_delay:.0f}s)")
@@ -110,11 +110,39 @@ def safe_ticker(symbol, max_retries=3, base_delay=5):
                 # time.sleep(delay)
                 # delay *= 2  # exponential backoff
                 continue
-        except Exception as e:
             # other errors: decide if you want to retry or not
             print(f"Error for {symbol}: {e}")
             raise
     raise RuntimeError(f"Failed to fetch {symbol} after {max_retries} retries.")
+
+
+def safe_ticker(symbol: str, position: int = None, total: int = None, base_delay: float = 5.0, max_attempts: int = 100):
+    """
+    Fetch single ticker info with INDEFINITE 429 retry.
+    Retries FOREVER until success or max_attempts reached.
+    """
+    attempt = 0
+    while attempt < max_attempts:
+        pos_text = f"{position}/{total}" if position is not None and total is not None else ""
+        try:
+            ticker = yf.Ticker(symbol)
+            info = ticker.info
+            # Check if response is valid
+            if info and len(info) > 0:
+                print(f"✅ {pos_text:<4}:{symbol:<20} SUCCESS (attempt {attempt + 1})")
+                return ticker
+        except Exception as e:
+            if "Too Many Requests. Rate limited." in str(e):
+                attempt += 1
+                wait_time = base_delay * (1.5 ** min(attempt, 10))  # Progressive backoff, caps at ~2min
+                print(f"⏳ 429 {pos_text:<4}:{symbol:<20} #{attempt}/{max_attempts}. Waiting {wait_time:.0f}s... (total wait: {attempt * base_delay:.0f}s)")
+                time.sleep(wait_time)
+                continue
+            else:
+                print(f"❌ Error {symbol}: {str(e)[:40]}")
+                break
+    print(f"💥 {symbol} FAILED after {max_attempts} attempts (~{max_attempts * base_delay / 60:.1f}min)")
+    return None
 
 
 class StreamToLogger:

@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def get_input_folder_path():
-    input_file = r'C:\Users\gsrsr\Downloads\Fyers'  # Replace with your file path
+    input_file = r'C:\Users\gsrsr\Downloads\Fyers\Input'  # Replace with your file path
     return input_file
 
 

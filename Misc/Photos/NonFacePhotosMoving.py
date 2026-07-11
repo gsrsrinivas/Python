@@ -9,8 +9,8 @@ face_cascade = cv2.CascadeClassifier(
 )
 
 # Folder paths
-source_folder = "photos"
-no_face_folder = "no_faces"
+source_folder = r"C:\Users\gsrsr\Downloads\Google.Photos - GsrSrinivas08@gmail.com\Google Photos\Trash"
+no_face_folder = r"C:\Users\gsrsr\Downloads\Google.Photos - GsrSrinivas08@gmail.com\Google Photos\no_faces"
 
 # Create destination folder if not exists
 os.makedirs(no_face_folder, exist_ok=True)

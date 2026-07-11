@@ -1,0 +1,997 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="1/28/2024 2:20:31 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-EP99LTB"
+  DTS:CreatorName="DESKTOP-EP99LTB\Cnu"
+  DTS:Description="SSIS Package Description"
+  DTS:DTSID="{F7338C32-B9D2-4A69-9933-742A80BC2627}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5107.6"
+  DTS:LocaleID="1033"
+  DTS:MaxErrorCount="0"
+  DTS:ObjectName="New Package"
+  DTS:ProtectionLevel="0"
+  DTS:VersionGUID="{6158EBA6-54AF-4092-833B-F74BAD60B2E3}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{D699DB7C-9195-4C75-9F11-3DD910C7F197}"
+      DTS:ObjectName="DestinationConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DESKTOP-EP99LTB;Initial Catalog=Stocks_db;Provider=SQLOLEDB;Integrated Security=SSPI;Auto Translate=false;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SourceConnectionExcel]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{E9CC4683-A5A0-40F5-875F-5669A462F558}"
+      DTS:ObjectName="SourceConnectionExcel">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="0"
+          DTS:ConnectRetryInterval="0"
+          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\gsrsr\Downloads\mstock trade book.xlsx;Extended Properties=&quot;Excel 12.0 XML;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Data Flow Task 1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:DTSID="{5A99DD25-E66C-4C79-8F3D-80011AF6F2C5}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Data Flow Task 1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          defaultBufferSize="3145728"
+          version="1">
+          <components>
+            <component
+              refId="Package\Data Flow Task 1\Data Conversion 0 - 0"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion 0 - 0"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input].Columns[Quantity]"
+                      cachedDataType="r8"
+                      cachedName="Quantity"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Quantity]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input].Columns[Trade ID]"
+                      cachedDataType="r8"
+                      cachedName="Trade ID"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade ID]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input].Columns[Order ID]"
+                      cachedDataType="r8"
+                      cachedName="Order ID"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Order ID]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input].Columns[Sno]"
+                      cachedDataType="r8"
+                      cachedName="Sno"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Sno]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Quantity]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Quantity]"
+                      name="Quantity"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Quantity]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Trade ID]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Trade ID]"
+                      name="Trade ID"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade ID]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Order ID]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Order ID]"
+                      name="Order ID"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Order ID]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Sno]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Sno]"
+                      name="Sno"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Sno]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task 1\Destination - Sheet2$"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Destination - Sheet2$"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Sheet2$]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task 1\Destination - Sheet2$.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Symbol]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Symbol"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Symbol]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Symbol]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[ISIN]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ISIN"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[ISIN]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[ISIN]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Trade Date]"
+                      cachedDataType="date"
+                      cachedName="Trade Date"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade Date]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Date]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Exchange]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Exchange"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Exchange]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Exchange]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Segment]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Segment"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Segment]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Segment]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Series]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Series"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Series]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Series]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Trade Type]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Trade Type"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade Type]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Type]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Auction]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Auction"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Auction]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Auction]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Quantity]"
+                      cachedDataType="i8"
+                      cachedName="Quantity"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Quantity]"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Quantity]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Price]"
+                      cachedDataType="r8"
+                      cachedName="Price"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Price]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Price]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Trade ID]"
+                      cachedDataType="i8"
+                      cachedName="Trade ID"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade ID]"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Trade ID]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Order ID]"
+                      cachedDataType="i8"
+                      cachedName="Order ID"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Order ID]"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Order ID]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Order Execution Time]"
+                      cachedDataType="date"
+                      cachedName="Order Execution Time"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Order Execution Time]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Order Execution Time]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Sno]"
+                      cachedDataType="i8"
+                      cachedName="Sno"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Sno]"
+                      lineageId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output].Columns[Sno]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Period]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Period"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Period]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Period]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Account]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Account"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Account]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Account]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Trade Value]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Trade Value"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade Value]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Value]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].Columns[Comments]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Comments"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Comments]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Comments]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Symbol]"
+                      dataType="wstr"
+                      length="255"
+                      name="Symbol" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[ISIN]"
+                      dataType="wstr"
+                      length="255"
+                      name="ISIN" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade Date]"
+                      dataType="dbTimeStamp"
+                      name="Trade Date" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Exchange]"
+                      dataType="wstr"
+                      length="255"
+                      name="Exchange" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Segment]"
+                      dataType="wstr"
+                      length="255"
+                      name="Segment" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Series]"
+                      dataType="wstr"
+                      length="255"
+                      name="Series" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade Type]"
+                      dataType="wstr"
+                      length="255"
+                      name="Trade Type" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Auction]"
+                      dataType="wstr"
+                      length="255"
+                      name="Auction" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Quantity]"
+                      dataType="i8"
+                      name="Quantity" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Price]"
+                      dataType="r8"
+                      name="Price" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade ID]"
+                      dataType="i8"
+                      name="Trade ID" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Order ID]"
+                      dataType="i8"
+                      name="Order ID" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Order Execution Time]"
+                      dataType="dbTimeStamp"
+                      name="Order Execution Time" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Sno]"
+                      dataType="i8"
+                      name="Sno" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Period]"
+                      dataType="wstr"
+                      length="255"
+                      name="Period" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Account]"
+                      dataType="wstr"
+                      length="255"
+                      name="Account" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Trade Value]"
+                      dataType="wstr"
+                      length="255"
+                      name="Trade Value" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input].ExternalColumns[Comments]"
+                      dataType="wstr"
+                      length="255"
+                      name="Comments" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task 1\Destination - Sheet2$.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task 1\Destination - Sheet2$.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Destination - Sheet2$.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task 1\Destination - Sheet2$.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task 1\Source - Sheet2$"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="Source - Sheet2$"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">Sheet2$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task 1\Source - Sheet2$.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SourceConnectionExcel]"
+                  connectionManagerRefId="Package.ConnectionManagers[SourceConnectionExcel]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Symbol]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Symbol]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Symbol]"
+                      name="Symbol"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[ISIN]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[ISIN]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[ISIN]"
+                      name="ISIN"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Date]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade Date]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Date]"
+                      name="Trade Date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Exchange]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Exchange]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Exchange]"
+                      name="Exchange"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Segment]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Segment]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Segment]"
+                      name="Segment"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Series]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Series]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Series]"
+                      name="Series"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Type]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade Type]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Type]"
+                      name="Trade Type"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Auction]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Auction]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Auction]"
+                      name="Auction"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Quantity]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Quantity]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Quantity]"
+                      name="Quantity"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Price]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Price]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Price]"
+                      name="Price"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade ID]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade ID]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade ID]"
+                      name="Trade ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Order ID]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Order ID]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Order ID]"
+                      name="Order ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Order Execution Time]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Order Execution Time]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Order Execution Time]"
+                      name="Order Execution Time"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Sno]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Sno]"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Sno]"
+                      name="Sno"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Period]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Period]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Period]"
+                      name="Period"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Account]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Account]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Account]"
+                      name="Account"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Value]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade Value]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Trade Value]"
+                      name="Trade Value"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Comments]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Comments]"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].Columns[Comments]"
+                      name="Comments"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Symbol]"
+                      dataType="wstr"
+                      length="255"
+                      name="Symbol" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[ISIN]"
+                      dataType="wstr"
+                      length="255"
+                      name="ISIN" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade Date]"
+                      dataType="date"
+                      name="Trade Date" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Exchange]"
+                      dataType="wstr"
+                      length="255"
+                      name="Exchange" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Segment]"
+                      dataType="wstr"
+                      length="255"
+                      name="Segment" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Series]"
+                      dataType="wstr"
+                      length="255"
+                      name="Series" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade Type]"
+                      dataType="wstr"
+                      length="255"
+                      name="Trade Type" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Auction]"
+                      dataType="wstr"
+                      length="255"
+                      name="Auction" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Quantity]"
+                      dataType="r8"
+                      name="Quantity" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Price]"
+                      dataType="r8"
+                      name="Price" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade ID]"
+                      dataType="r8"
+                      name="Trade ID" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Order ID]"
+                      dataType="r8"
+                      name="Order ID" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Order Execution Time]"
+                      dataType="date"
+                      name="Order Execution Time" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Sno]"
+                      dataType="r8"
+                      name="Sno" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Period]"
+                      dataType="wstr"
+                      length="255"
+                      name="Period" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Account]"
+                      dataType="wstr"
+                      length="255"
+                      name="Account" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Trade Value]"
+                      dataType="wstr"
+                      length="255"
+                      name="Trade Value" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output].ExternalColumns[Comments]"
+                      dataType="wstr"
+                      length="255"
+                      name="Comments" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Symbol]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Symbol]"
+                      name="Symbol" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[ISIN]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[ISIN]"
+                      name="ISIN" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade Date]"
+                      dataType="date"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade Date]"
+                      name="Trade Date" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Exchange]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Exchange]"
+                      name="Exchange" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Segment]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Segment]"
+                      name="Segment" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Series]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Series]"
+                      name="Series" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade Type]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade Type]"
+                      name="Trade Type" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Auction]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Auction]"
+                      name="Auction" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Quantity]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Quantity]"
+                      name="Quantity" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Price]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Price]"
+                      name="Price" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade ID]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade ID]"
+                      name="Trade ID" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Order ID]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Order ID]"
+                      name="Order ID" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Order Execution Time]"
+                      dataType="date"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Order Execution Time]"
+                      name="Order Execution Time" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Sno]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Sno]"
+                      name="Sno" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Period]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Period]"
+                      name="Period" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Account]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Account]"
+                      name="Account" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade Value]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Trade Value]"
+                      name="Trade Value" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Comments]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[Comments]"
+                      name="Comments" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Data Flow Task 1.Paths[Data Conversion Output]"
+              endId="Package\Data Flow Task 1\Destination - Sheet2$.Inputs[Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Data Flow Task 1\Data Conversion 0 - 0.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Data Flow Task 1.Paths[Excel Source Output]"
+              endId="Package\Data Flow Task 1\Data Conversion 0 - 0.Inputs[Data Conversion Input]"
+              name="Excel Source Output"
+              startId="Package\Data Flow Task 1\Source - Sheet2$.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Preparation SQL Task 1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{33429C0D-33DC-4FF5-8FFE-E43B93332000}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Preparation SQL Task 1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{D699DB7C-9195-4C75-9F11-3DD910C7F197}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE [dbo].[Sheet2$]&#xA;GO&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[{5113D665-86D7-473C-B923-A67EC351FB5B\}]"
+      DTS:CreationName=""
+      DTS:DTSID="{5113D665-86D7-473C-B923-A67EC351FB5B}"
+      DTS:From="Package\Preparation SQL Task 1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="{5113D665-86D7-473C-B923-A67EC351FB5B}"
+      DTS:To="Package\Data Flow Task 1" />
+  </DTS:PrecedenceConstraints>
+</DTS:Executable>

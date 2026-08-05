@@ -249,26 +249,185 @@ update CTE set sno = rn
 -- ,@var = sno = @var + 1
 
 
-select n.*,o.*
-from [dbo].[Sheet1] n
-inner join _ts.Shares o
-on  o.[Symbol]				= n.[Symbol]
-AND o.[ISIN]				= n.[ISIN]
-AND o.[Trade Date]			= cast(n.[Trade Date] as datetime)
-AND o.[Exchange]			= n.[Exchange]
-AND o.[Segment]				= n.[Segment]
-AND o.[Series]				= n.[Series]
-AND o.[Trade Type]			= n.[Trade Type]
-AND o.[Auction]				= cast(n.[Auction] as bit)
-AND o.[Quantity]			= cast(n.[Quantity] as float)
-AND o.[Price]				= cast(n.[Price] as float)
-AND cast(o.[Trade ID] as varchar) = cast(n.[Trade ID] as varchar)
-AND o.[Order ID]			= n.[Order ID]
-AND o.[Order Execution Time] = cast(n.[Order Execution Time] as datetime)
-AND o.[Sno]					= cast(n.[Sno] as float)
-AND o.[Period]				= n.[Period]
-AND o.[Account]				= n.[Account]
-AND o.[Trade Value]			= n.[Trade Value]
-AND o.[Comments]			= n.[Comments]
+SELECT n.*, o.*
+FROM [dbo].[Sheet1] n
+	 INNER JOIN _ts.Shares o ON o.[Symbol]				= n.[Symbol]
+	 AND o.[ISIN]				= n.[ISIN]
+	 AND o.[Trade Date]			= CAST(n.[Trade Date] AS DATETIME)
+	 AND o.[Exchange]			= n.[Exchange]
+	 AND o.[Segment]				= n.[Segment]
+	 AND o.[Series]				= n.[Series]
+	 AND o.[Trade Type]			= n.[Trade Type]
+	 AND o.[Auction]				= CAST(n.[Auction] AS BIT)
+	 AND o.[Quantity]			= CAST(n.[Quantity] AS FLOAT)
+	 AND o.[Price]				= CAST(n.[Price] AS FLOAT)
+	 AND CAST(o.[Trade ID] AS VARCHAR) = CAST(n.[Trade ID] AS VARCHAR)
+	 AND o.[Order ID]			= n.[Order ID]
+	 AND o.[Order Execution Time] = CAST(n.[Order Execution Time] AS DATETIME)
+	 AND o.[Sno]					= CAST(n.[Sno] AS FLOAT)
+	 AND o.[Period]				= n.[Period]
+	 AND o.[Account]				= n.[Account]
+	 AND o.[Trade Value]			= n.[Trade Value]
+	 AND o.[Comments]			= n.[Comments]
+;
+
+--create procedure [Trade-log-Query] as begin
+--SET NOCOUNT ON
+
+SELECT (ROUND(SUM(x.Sell_price) - SUM(x.Pur_Price), 2)) - (ROUND((SUM(x.Pur_Price) * 10 * x.[Number of Days]/365)/ 100, 2)) AS profit_over_interest1, x.Symbol, x.Pur_Date, x.Pur_Price, SUM(x.BuyQuantity) AS BuyQty, SUM(x.Pur_Price) AS Total_Pur_Value, x.Sell_Date, x.Sell_Price, SUM(x.SellQuantity) AS SellQty, SUM(x.Sell_Price) AS Total_Sell_value, x.[Number of Days], ROUND(SUM(x.Sell_price) - SUM(x.Pur_Price), 2) AS [Profit or Loss], ROUND((SUM(x.Pur_Price) * 10 * x.[Number of Days]/365)/ 100, 2) AS [interest calculation]
+FROM (SELECT a.row_num, a.Symbol, a.Trade_Date AS Pur_Date, a.Price AS Pur_Price
+-- ,a.Buy_Average_Price
+, a.SingleQuantity AS BuyQuantity, b.Trade_Date AS Sell_Date, b.Price AS Sell_Price
+-- ,b.Sell_Average_Price
+, b.SingleQuantity AS SellQuantity, DATEDIFF("d", a.Trade_Date, b.Trade_Date)+1 AS [number of days]
+	FROM (SELECT ROW_NUMBER() OVER (PARTITION BY symbol ORDER BY symbol, Trade_Type, Trade_Date, Order_execution_Time, price) AS row_num, 1 AS SingleQuantity, *
+		--,avg(Price) over(partition by symbol,Trade_Type order by symbol,Trade_Type) as Buy_Average_Price
+		FROM Stocks_db.dbo.Shares_Transaction st
+		JOIN master.dbo.spt_values t2 ON t2.type = 'P' AND t2.number < st.Quantity
+		WHERE Trade_Type = 'Buy' -- and Symbol = 'ANANDRATHI'
+	) a
+	LEFT JOIN (SELECT ROW_NUMBER() OVER (PARTITION BY symbol ORDER BY symbol, Trade_Type, Trade_Date, Order_execution_Time, price) AS row_num, 1 AS SingleQuantity, *
+		--,avg(Price) over(partition by symbol,Trade_Type order by symbol,Trade_Type) as Sell_Average_Price
+		FROM Stocks_db.dbo.Shares_Transaction st
+		JOIN master.dbo.spt_values t2 ON t2.type = 'P' AND t2.number < st.Quantity
+		WHERE Trade_Type = 'Sell'
+	-- and Symbol = 'ANANDRATHI'
+	) b ON a.row_num = b.row_num
+		AND a.Symbol = b.Symbol) x
+GROUP BY x.Symbol, x.Pur_Date, x.Pur_Price, x.Sell_Date, x.Sell_Price, x.[number of days]
+ORDER BY x.Symbol, x.Pur_Date, x.Pur_Price, x.Sell_Date, x.Sell_Price, x.[number of days]
+
+--create procedure sqlquery2 as begin
+--SET NOCOUNT ON
+ 
+/*
+SELECT * FROM [dbo].[temp_sheet1];
+
+insert INTO dbo.TradeBook ( Symbol, ISIN, [Trade Date], Exchange, Segment, Series, [Trade Type], Auction, Quantity, Price, [Trade ID], [Order ID], [Order Execution Time] )
+SELECT * FROM [dbo].[temp_sheet1];
+
+UPDATE dbo.TradeBook SET Auction = 1 WHERE Account is NULL;
+
+UPDATE dbo.TradeBook SET [Order Execution Time] = REPLACE([Order Execution Time],'T',' ') WHERE account is NULL;
+
+UPDATE TB SET [Order Execution Time] = replace(cast([Order Execution Time] AS varchar)+'.0000000','T',' ')
+FROM dbo.TradeBook tb WHERE cast(tb.[Order Execution Time] AS varchar) LIKE '%T%'
+;
+
+WITH cte AS ( 
+SELECT ROW_NUMBER() over(PARTITION BY tb.Symbol,tb.ISIN,tb.[Trade Date],tb.Exchange,tb.Segment,tb.Series,tb.[Trade Type],tb.Quantity,tb.Price,tb.[Trade ID],tb.[Order ID],tb.[Order Execution Time]
+ ORDER BY tb.account desc, tb.period desc,tb.Symbol,tb.ISIN,tb.[Trade Date],tb.Exchange,tb.Segment,tb.Series,tb.[Trade Type],tb.Quantity,tb.Price,tb.[Trade ID],tb.[Order ID],tb.[Order Execution Time]) AS rn
+ ,*
+FROM dbo.TradeBook tb
+) 
+-- delete FROM cte WHERE rn = 2
+SELECT * FROM cte WHERE rn = 1
+ORDER BY cast([Order Execution Time] AS DATETIME2)
+;
+SELECT CASE 
+WHEN [Order Execution Time] >= '2020-04-01' AND [Order Execution Time] <= '2021-04-01' THEN '2020-04-01 to 2021-03-31'
+WHEN [Order Execution Time] >= '2021-04-01' AND [Order Execution Time] <= '2022-04-01' THEN '2021-04-01 to 2022-03-31'
+WHEN [Order Execution Time] >= '2022-04-01' AND [Order Execution Time] <= '2023-04-01' THEN '2022-04-01 to 2023-03-31'
+WHEN [Order Execution Time] >= '2023-04-01' AND [Order Execution Time] <= '2024-04-01' THEN '2023-04-01 to 2024-03-31'
+WHEN [Order Execution Time] >= '2024-04-01' AND [Order Execution Time] <= '2025-04-01' THEN '2024-04-01 to 2025-03-31'
+WHEN [Order Execution Time] >= '2025-04-01' AND [Order Execution Time] <= '2026-04-01' THEN '2025-04-01 to 2026-03-31'
+END AS period,[Order Execution Time],* 
+FROM dbo.TradeBook
+;
+
+UPDATE dbo.TradeBook
+SET PERIOD = CASE 
+WHEN [Order Execution Time] >= '2020-04-01' AND [Order Execution Time] <= '2021-04-01' THEN '2020-04-01 to 2021-03-31'
+WHEN [Order Execution Time] >= '2021-04-01' AND [Order Execution Time] <= '2022-04-01' THEN '2021-04-01 to 2022-03-31'
+WHEN [Order Execution Time] >= '2022-04-01' AND [Order Execution Time] <= '2023-04-01' THEN '2022-04-01 to 2023-03-31'
+WHEN [Order Execution Time] >= '2023-04-01' AND [Order Execution Time] <= '2024-04-01' THEN '2023-04-01 to 2024-03-31'
+WHEN [Order Execution Time] >= '2024-04-01' AND [Order Execution Time] <= '2025-04-01' THEN '2024-04-01 to 2025-03-31'
+WHEN [Order Execution Time] >= '2025-04-01' AND [Order Execution Time] <= '2026-04-01' THEN '2025-04-01 to 2026-03-31'
+END
+WHERE period is NULL
+;
+UPDATE dbo.TradeBook SET Account = 'LD3666' WHERE account is NULL
+;
+UPDATE _ts.Shares SET Auction = 0 WHERE Auction is NULL
+;
+alter TABLE _TS.Shares ALTER COLUMN [Auction] int
+;
+
+WITH cte AS ( 
+SELECT ROW_NUMBER() over(PARTITION BY tb.account,tb.period,tb.Symbol,tb.ISIN,tb.[Trade Date],tb.Exchange,tb.Segment,tb.Series,tb.[Trade Type],tb.Quantity,tb.Price,tb.[Trade ID],tb.[Order ID],tb.[Order Execution Time]
+ ORDER BY tb.account desc, tb.period desc,tb.Symbol,tb.ISIN,tb.[Trade Date],tb.Exchange,tb.Segment,tb.Series,tb.[Trade Type],tb.Quantity,tb.Price,tb.[Trade ID],tb.[Order ID],tb.[Order Execution Time]) AS rn
+ ,*
+FROM _ts.Shares tb WHERE account <> 'MA4342'
+) 
+-- delete FROM cte WHERE rn = 2 AND sno IS null
+SELECT * FROM cte WHERE rn = 2 AND sno IS null
+ORDER BY cast([Order Execution Time] AS DATETIME2)
+;
+SELECT CASE 
+WHEN [Order Execution Time] >= '2020-04-01' AND [Order Execution Time] <= '2021-04-01' THEN '2020-04-01 to 2021-03-31'
+WHEN [Order Execution Time] >= '2021-04-01' AND [Order Execution Time] <= '2022-04-01' THEN '2021-04-01 to 2022-03-31'
+WHEN [Order Execution Time] >= '2022-04-01' AND [Order Execution Time] <= '2023-04-01' THEN '2022-04-01 to 2023-03-31'
+WHEN [Order Execution Time] >= '2023-04-01' AND [Order Execution Time] <= '2024-04-01' THEN '2023-04-01 to 2024-03-31'
+WHEN [Order Execution Time] >= '2024-04-01' AND [Order Execution Time] <= '2025-04-01' THEN '2024-04-01 to 2025-03-31'
+WHEN [Order Execution Time] >= '2025-04-01' AND [Order Execution Time] <= '2026-04-01' THEN '2025-04-01 to 2026-03-31'
+END AS period,[Order Execution Time],* 
+FROM _ts.Shares
+;
+
+UPDATE _ts.Shares
+SET PERIOD = CASE 
+WHEN [Order Execution Time] >= '2020-04-01' AND [Order Execution Time] <= '2021-04-01' THEN '2020-04-01 to 2021-03-31'
+WHEN [Order Execution Time] >= '2021-04-01' AND [Order Execution Time] <= '2022-04-01' THEN '2021-04-01 to 2022-03-31'
+WHEN [Order Execution Time] >= '2022-04-01' AND [Order Execution Time] <= '2023-04-01' THEN '2022-04-01 to 2023-03-31'
+WHEN [Order Execution Time] >= '2023-04-01' AND [Order Execution Time] <= '2024-04-01' THEN '2023-04-01 to 2024-03-31'
+WHEN [Order Execution Time] >= '2024-04-01' AND [Order Execution Time] <= '2025-04-01' THEN '2024-04-01 to 2025-03-31'
+WHEN [Order Execution Time] >= '2025-04-01' AND [Order Execution Time] <= '2026-04-01' THEN '2025-04-01 to 2026-03-31'
+END
+;
+-- SELECT DISTINCT account FROM _ts.Shares s;
+WITH cte AS ( 
+SELECT ROW_NUMBER() over(PARTITION BY tb.account,tb.period,tb.Symbol,tb.ISIN,tb.[Trade Date],tb.Exchange,tb.Segment,tb.Series,tb.[Trade Type],tb.Quantity,tb.Price,tb.[Trade ID],tb.[Order ID],tb.[Order Execution Time]
+ORDER BY tb.account desc, tb.period desc,tb.Symbol,tb.ISIN,tb.[Trade Date],tb.Exchange,tb.Segment,tb.Series,tb.[Trade Type],tb.Quantity,tb.Price,tb.[Trade ID],tb.[Order ID],tb.[Order Execution Time]) AS rn
+ ,*
+FROM _ts.Shares tb WHERE account NOT IN ('MA4342','XLH244')
+) 
+--delete FROM cte WHERE rn > 1 AND sno IS null
+SELECT * FROM cte WHERE rn > 1 -- AND sno IS null
+ORDER BY cast([Order Execution Time] AS DATETIME2)
+;
+SELECT count(1),CASE WHEN s.Sno is NULL THEN 1 ELSE 0 end FROM _ts.Shares s
+group BY CASE WHEN s.Sno is NULL THEN 1 ELSE 0 end
+*/
+
+--end;
+
+--END;
+
+-- Symbol,ISIN,Trade_Date,Exchange,Segment,Series,Trade_Type,Auction,Quantity,Price,Trade_ID,Order_ID,Order_Execution_Time
+
+SELECT * FROM dbo.Shares_Transaction
+
+SELECT [Symbol], [ISIN], [Trade Date], [Exchange], [Segment], [Series], [Trade Type], [Auction], [Quantity], [Price], [Trade ID], [Order ID], [Order Execution Time], [Period], [Account], [Trade Value], [Comments]
+FROM [_TS].[Shares];
+
+SELECT [Symbol], [ISIN], [Trade Date], [Exchange], [Segment], [Series], [Trade Type], [Auction], [Quantity], [Price], [Trade ID], [Order ID], [Order Execution Time], [Period], [Account], NULL AS [Trade Value], NULL AS [Comments]
+FROM dbo.TradeBook;
+
+SELECT account, MAX([Order Execution Time])
+FROM Stocks_db._TS.Shares
+GROUP BY Account
+ORDER BY 2 DESC;
+/*
+account	date
+XG14162	2026-06-18 09:07:59
+LD3666	2026-06-02 09:17:05
+MA4342	2023-12-08 00:00:00
+XLH244	2022-09-08 11:28:17
+*/
+
+
+
+
+
 
 --end;

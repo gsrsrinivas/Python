@@ -37,41 +37,11 @@
           <AssociatedConnUserName />
           <FullPath>3. All Queries.sql</FullPath>
         </FileNode>
-        <FileNode Name="SQLQuery1.sql">
+        <FileNode Name="SQL Query.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>SQLQuery1.sql</FullPath>
-        </FileNode>
-        <FileNode Name="SQLQuery2.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>SQLQuery2.sql</FullPath>
-        </FileNode>
-        <FileNode Name="SQLQuery3.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>SQLQuery3.sql</FullPath>
-        </FileNode>
-        <FileNode Name="Trade-Log-Query.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>Trade-Log-Query.sql</FullPath>
-        </FileNode>
-        <FileNode Name="Trade-Log-SQLQuery2.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>Trade-Log-SQLQuery2.sql</FullPath>
-        </FileNode>
-        <FileNode Name="Trade-Log-SQLQuery-Insert.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-EP99LTB:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>DESKTOP-EP99LTB</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>Trade-Log-SQLQuery-Insert.sql</FullPath>
+          <FullPath>SQL Query.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

@@ -20,11 +20,15 @@ Order by Account,[Order Execution Time] desc
 ;
 select * from dbo.TradeBook order by [Order Execution Time] desc
 ;
-select distinct account from _ts.Shares
-/*MA4342 - 2023-12-08 00:00:00.000 -deactive
-XLH244 - 2022-09-08 00:00:00.000 - deactive
-LD3666 - 2024-03-28 00:00:00.000 -- active
-*/
+SELECT account, MAX([Order Execution Time])
+FROM Stocks_db._TS.Shares
+GROUP BY Account 
+order by 2 desc;
+--account	(No column name)
+--XG14162	2026-06-18 09:07:59.000
+--LD3666	2026-06-02 09:17:05.000
+--MA4342	2023-12-08 00:00:00.000
+--XLH244	2022-09-08 11:28:17.000
 
 */
 BEGIN TRAN t1
@@ -44,11 +48,12 @@ SET sno = rn -- sno = @var, @var = @var + 1 -- , @var = sno = @var + 1
 ;
 SELECT [Sno], [Period], [Account], [Symbol], [Order Execution Time], [ISIN], [Trade Date], [Exchange], [Segment], [Series], [Trade Type], [Auction], [Quantity], [Price], [Trade ID], [Order ID], [Trade Value], [Comments]
 FROM _ts.Shares a
-WHERE Account = 'LD3666' AND [Order Execution Time] >= '2023-04-01'
+WHERE Account = 'LD3666' AND [Order Execution Time] >= '2026-04-01'
 ORDER BY sno ASC;
+
 COMMIT TRAN t1
 ;
-select * from _ts.Shares where Account = 'LD3666'
+select * from _ts.Shares where Account = 'LD3666'  AND [Order Execution Time] >= '2026-04-01'
 order by [trade date] DESC
 
 --END;

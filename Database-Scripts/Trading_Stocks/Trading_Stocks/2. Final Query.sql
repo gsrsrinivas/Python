@@ -1,27 +1,27 @@
 -- execute TradeFinalQuery 1
 select  
-	x.Symbol
-	,x.Pur_Price
-	,sum(x.BuyQuantity) as BuyQty
-	,x.Sell_Price
-	,sum(x.SellQuantity) as SellQty
-	,FORMAT(CAST(x.Pur_Date AS DATETIME), 'dd MMM yyyy') AS Pur_Date
-	--,x.Pur_Date
-	,FORMAT(CAST(x.Sell_Date AS DATETIME), 'dd MMM yyyy') AS Sell_Date
-	-- ,x.Sell_Date
-	,x.Account
-	,x.Buy_Exchange
-	,x.Sell_Exchange	
-	,case when x.buy_segment = 'FO' then 'Opt' else x.buy_segment end as buy_segment
-	,case when x.sell_segment = 'FO' then 'Opt' else x.buy_segment end as sell_segment
-	,sum(x.Pur_Price) as Total_Pur_Value
-	,sum(x.Sell_Price) as Total_Sell_value
-	--,x.Buy_Average_Price
-	--,x.Sell_Average_Price
-	,x.[Number of Days]
-	,round((sum(x.Pur_Price) * 10 * x.[Number of Days]/365)/ 100, 2) as [interest calculation]
-	,(round(sum(x.Sell_price) - sum(x.Pur_Price),2)) - (round((sum(x.Pur_Price) * 10 * x.[Number of Days]/365)/ 100, 2)) as profit_over_interest
-	,round(sum(x.Sell_price) - sum(x.Pur_Price),2) as [Profit or Loss]
+	COALESCE(NULLIF(x.Symbol, NULL), '') as Symbol
+	,COALESCE(NULLIF(x.Pur_Price, NULL), '') as Pur_Price
+	,COALESCE(NULLIF(sum(x.BuyQuantity), NULL), '') as BuyQty
+	,COALESCE(NULLIF(x.Sell_Price, NULL), '') as Sell_Price
+	,COALESCE(NULLIF(sum(x.SellQuantity), NULL), '') as SellQty
+	,COALESCE(NULLIF(FORMAT(CAST(x.Pur_Date AS DATETIME), 'dd MMM yyyy'), 'NULL'), '') AS Pur_Date
+	--,COALESCE(NULLIF(x.Pur_Date, NULL), '') as Pur_Date
+	,COALESCE(NULLIF(FORMAT(CAST(x.Sell_Date AS DATETIME), 'dd MMM yyyy'), 'NULL'), '') AS Sell_Date
+	--,COALESCE(NULLIF(x.Sell_Date, NULL), '') as Sell_Date
+	,COALESCE(NULLIF(x.Account, 'NULL'), '') as Account
+	,COALESCE(NULLIF(x.Buy_Exchange, 'NULL'), '') as Buy_Exchange
+	,COALESCE(NULLIF(x.Sell_Exchange, 'NULL'), '') as Sell_Exchange
+	,COALESCE(NULLIF(case when x.buy_segment = 'FO' then 'Opt' else x.buy_segment end, 'NULL'), '') as buy_segment
+	,COALESCE(NULLIF(case when x.sell_segment = 'FO' then 'Opt' else x.buy_segment end, 'NULL'), '') as sell_segment
+	,COALESCE(NULLIF(sum(x.Pur_Price), NULL), '') as Total_Pur_Value
+	,COALESCE(NULLIF(sum(x.Sell_Price), NULL), '') as Total_Sell_value
+	--,COALESCE(NULLIF(x.Buy_Average_Price, NULL), '') as Buy_Average_Price
+	--,COALESCE(NULLIF(x.Sell_Average_Price, NULL), '') as Sell_Average_Price
+	,COALESCE(NULLIF(x.[Number of Days], NULL), '') as [Number of Days]
+	,COALESCE(NULLIF(round((sum(x.Pur_Price) * 10 * x.[Number of Days]/365)/ 100, 2), NULL), '') as [interest calculation]
+	,COALESCE(NULLIF((round(sum(x.Sell_price) - sum(x.Pur_Price),2)) - (round((sum(x.Pur_Price) * 10 * x.[Number of Days]/365)/ 100, 2)), NULL), '') as profit_over_interest
+	,COALESCE(NULLIF(round(sum(x.Sell_price) - sum(x.Pur_Price),2), NULL), '') as [Profit or Loss]
 from 
 (
 	select 
@@ -50,7 +50,7 @@ from
 		from Stocks_db._TS.Shares st JOIN Stocks_db._TS.Numbers t2 ON t2.number < st.Quantity
 		where upper(st.[Trade Type]) = 'BUY' 
 		--and Symbol not like '%NIFTY%' 
-		--and st.Account = 'LD3666' 
+		--and st.Account = 'MA4342' 
 		-- and Symbol = 'BSE' 
 	) a
 	LEFT JOIN 
@@ -63,7 +63,7 @@ from
 		from Stocks_db._TS.Shares st JOIN Stocks_db._TS.Numbers t2 ON t2.number < st.Quantity
 		where upper(st.[Trade Type]) = 'SELL' 
 		--and Symbol not like '%NIFTY%' 
-		--and st.Account = 'LD3666' 
+		--and st.Account = 'MA4342' 
 		-- and Symbol = 'BSE' 
 	) b
 	on a.Symbol = b.Symbol

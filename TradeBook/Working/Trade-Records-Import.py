@@ -11,7 +11,7 @@ import pandas as pd
 # IREDA,24-Sep-24,165,222,35520,sell
 # IEX,05-Aug-24,160,190,30400,buy'''
 
-input_file = r'C:\Users\gsrsr\Downloads\Zerodha\TradeBook\Tradebookcsv.csv'  # Replace with your file path
+input_file = r'C:\Users\gsrsr\MyDrive\Downloads\Zerodha\TradeBook\Tradebookcsv.csv'  # Replace with your file path
 # df = pd.read_csv(StringIO(data))
 df = pd.read_csv(input_file)
 df['Trade_Date'] = pd.to_datetime(df['Trade_Date'], format='%d-%b-%y')

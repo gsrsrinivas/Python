@@ -4,12 +4,12 @@ import pandas as pd
 
 
 def get_input_folder_path():
-    input_file = r'C:\Users\gsrsr\Downloads\Zerodha'  # Replace with your file path
+    input_file = r'C:\Users\gsrsr\MyDrive\Downloads\Zerodha'  # Replace with your file path
     return input_file
 
 
 def get_output_file_path():
-    output_file = r'C:\Users\gsrsr\Downloads\Zerodha\Zerodha-Processed-File.xlsx'  # Replace with your file path
+    output_file = r'C:\Users\gsrsr\MyDrive\Downloads\Zerodha\Zerodha-Processed-File.xlsx'  # Replace with your file path
     return output_file
 
 

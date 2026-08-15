@@ -3016,7 +3016,7 @@ PRINT 'Script started at: ' + CONVERT(VARCHAR, @StartTime, 121);
 
 -- delete from Stocks_Analysis.dbo.Cash_Stocks where Batch_No = 20250731180015;
 
-BULK INSERT Stocks_Analysis.dbo.cash_stocks FROM 'C:\Users\gsrsr\Documents\PythonProject\Chart_Ink\Source\chart_ink_daily1.csv'
+BULK INSERT Stocks_Analysis.dbo.cash_stocks FROM 'C:\Users\gsrsr\MyDrive\Documents\PythonProject\Chart_Ink\Source\chart_ink_daily1.csv'
 WITH ( 
 	FIELDTERMINATOR = ',',   -- Column delimiter, e.g., comma for CSV
 	ROWTERMINATOR = '\n',       -- Row delimiter, newline character

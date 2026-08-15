@@ -5,7 +5,7 @@ from pydub import AudioSegment
 
 def merge_files():
     global merged_audio
-    folder_path = r"C:\Users\gsrsr\Downloads"
+    folder_path = r"C:\Users\gsrsr\MyDrive\Downloads"
     mp3_files = []
     # Get all .mp3 files in the folder
     # files = glob.glob(folder_path + "/*.mp3")

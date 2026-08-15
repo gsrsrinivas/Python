@@ -5,7 +5,7 @@ from pathlib import Path
 # print("Pictures folder :", str(pictures_path))
 # Get the path to the Pictures folder
 # pictures_path = os.path.join(os.environ["USERPROFILE"], "Pictures").replace("gsrsr", r"gsrsr\OneDrive")
-pictures_path = os.path.dirname(os.path.dirname(Path(r'C:\Users\gsrsr\OneDrive\Documents\PythonProject')))
+pictures_path = os.path.dirname(os.path.dirname(Path(r'C:\Users\gsrsr\MyDrive\OneDrive\Documents\PythonProject')))
 # Folder to save thumbnails
 thumb_dir = pictures_path + r'\Pictures\Thumbnails'
 # Create thumbnails directory if it doesn't exist
@@ -15,5 +15,5 @@ documents_path = os.path.join(os.environ["USERPROFILE"], "Documents").replace("g
 input_folder_path = documents_path + r"\SQL Server Management Studio\Analysis of Stocks\Analysis of Stocks"
 print("Documents folder after appended thumbnails folder is:", documents_path)
 
-folder_path = os.path.dirname(Path(r'C:\Users\gsrsr\OneDrive\Documents\PythonProject'))
+folder_path = os.path.dirname(Path(r'C:\Users\gsrsr\MyDrive\OneDrive\Documents\PythonProject'))
 print("Folder path is:", folder_path)

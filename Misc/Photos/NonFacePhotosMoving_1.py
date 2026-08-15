@@ -8,8 +8,8 @@ from PIL import Image
 
 # ---------------- CONFIG ---------------- #
 
-SOURCE_ROOT = r"C:\Users\gsrsr\Downloads\Google.Photos - GsrSrinivas08@gmail.com"        # Folder to scan (with subfolders)
-NON_HUMAN_FOLDER = r"C:\Users\gsrsr\Downloads\Google.Photos--GsrSrinivas08@gmail.com--non_human_images"     # Destination folder
+SOURCE_ROOT = r"C:\Users\gsrsr\MyDrive\Downloads\Google.Photos - GsrSrinivas08@gmail.com"        # Folder to scan (with subfolders)
+NON_HUMAN_FOLDER = r"C:\Users\gsrsr\MyDrive\Downloads\Google.Photos--GsrSrinivas08@gmail.com--non_human_images"     # Destination folder
 
 SUPPORTED_EXTENSIONS = (
     ".jpg", ".jpeg", ".png", ".bmp",

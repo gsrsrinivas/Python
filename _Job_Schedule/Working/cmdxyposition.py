@@ -7,7 +7,7 @@ from _Common_Functions.base_functions import *
 
 processes = []
 title = "test_cmd_window"
-script = r"C:\Users\gsrsr\Documents\PythonProject\YahooFinance\stock_thumb_nails_All.py"  # Replace with your actual script path
+script = r"C:\Users\gsrsr\MyDrive\Documents\PythonProject\YahooFinance\stock_thumb_nails_All.py"  # Replace with your actual script path
 # Launch your cmd/python
 cmd = f'start /wait {title} cmd /c "python {script}"'
 proc = subprocess.Popen(cmd, shell=True)

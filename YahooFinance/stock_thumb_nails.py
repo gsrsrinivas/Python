@@ -104,7 +104,7 @@ def stock_thumb_nails(timeframe=None):
     ensuring that the thumbnails are relevant to the current trading conditions.
     """
     # Get the path to the Pictures folder; Folder to save thumbnails
-    thumb_dir = os.path.dirname(os.path.dirname(project_directory_path())) + r'\Pictures\Thumbnails'
+    thumb_dir = os.path.dirname(os.path.dirname(project_directory_path())) + r'\MyDocuments\PythonOutput\Thumbnails'
     os.makedirs(thumb_dir, exist_ok=True)  # Create thumbnails directory if it doesn't exist
     print(f'Thumbnails will be saved in: "{thumb_dir}"')
     # Connect to the database and get stock symbols

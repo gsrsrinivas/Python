@@ -171,7 +171,7 @@ def setup_logger(name="my_logger", log_file="execution.log", max_bytes=1024 * 10
     # project_directory_path() + '\\_Logs\\' + file_name
     # log_file_path = os.path.join(project_directory_path(), '_Logs', file_name)
     project_root_directory = os.path.dirname(os.path.dirname(project_directory_path()))
-    log_file_path = project_root_directory + '\\MyDocuments\\PythonOutput\\Logs\\' + file_name
+    log_file_path = project_root_directory + '\\MyDocs\\Documents\\PythonOutput\\Logs\\' + file_name
     # 📝 Rotating file handler (UTF-8 compatible)
     file_handler = RotatingFileHandler(log_file_path, maxBytes=max_bytes, backupCount=backup_count, encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)

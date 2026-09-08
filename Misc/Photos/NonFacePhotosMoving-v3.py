@@ -11,9 +11,9 @@ from ultralytics import YOLO
 
 # ---------------- CONFIG ---------------- #
 
-SOURCE_ROOT = r"D:\.TeraBoxDownload\Camera"          # Root folder with images
-NON_HUMAN_FOLDER = r"D:\.TeraBoxDownload\User - Documents\MISC-1"       # Destination folder
-CSV_LOG_FILE = r"D:\.TeraBoxDownload\User - Documents\MISC-1\image_classification_log.csv"
+SOURCE_ROOT = r"D:\TeraBoxDownload\Media"          # Root folder with images
+NON_HUMAN_FOLDER = r"D:\TeraBoxDownload\Documents\.Miscellaneous"       # Destination folder
+CSV_LOG_FILE = r"D:\TeraBoxDownload\image_classification_log.csv"
 
 SUPPORTED_EXTENSIONS = (
     ".jpg", ".jpeg", ".png", ".bmp",
